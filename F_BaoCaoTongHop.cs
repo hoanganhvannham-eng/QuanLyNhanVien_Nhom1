@@ -16,5 +16,10 @@ namespace QuanLyNhanVien3
         {
             InitializeComponent();
         }
+
+        private void F_BaoCaoTongHop_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

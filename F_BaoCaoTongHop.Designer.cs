@@ -31,9 +31,9 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.dtGridViewBCTongHop = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -57,7 +57,7 @@
             this.label1.Font = new System.Drawing.Font("Times New Roman", 25.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(502, 58);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(359, 51);
+            this.label1.Size = new System.Drawing.Size(357, 49);
             this.label1.TabIndex = 0;
             this.label1.Text = "Báo Cáo Tổng Hợp";
             // 
@@ -71,14 +71,14 @@
             this.panel2.Size = new System.Drawing.Size(1402, 238);
             this.panel2.TabIndex = 4;
             // 
-            // panel3
+            // button2
             // 
-            this.panel3.Controls.Add(this.dtGridViewBCTongHop);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 360);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1402, 462);
-            this.panel3.TabIndex = 5;
+            this.button2.Location = new System.Drawing.Point(713, 88);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(214, 65);
+            this.button2.TabIndex = 1;
+            this.button2.Text = "Nhân viên có nhiều dự án nhất";
+            this.button2.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
@@ -89,14 +89,14 @@
             this.button1.Text = "Tổng số nhân viên, tổng số phòng ban, tổng số dự án";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // panel3
             // 
-            this.button2.Location = new System.Drawing.Point(713, 88);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(214, 65);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Nhân viên có nhiều dự án nhất";
-            this.button2.UseVisualStyleBackColor = true;
+            this.panel3.Controls.Add(this.dtGridViewBCTongHop);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(0, 360);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(1402, 462);
+            this.panel3.TabIndex = 5;
             // 
             // dtGridViewBCTongHop
             // 
@@ -124,6 +124,7 @@
             this.Name = "F_BaoCaoTongHop";
             this.Text = "F_BaoCaoTongHop";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.F_BaoCaoTongHop_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
