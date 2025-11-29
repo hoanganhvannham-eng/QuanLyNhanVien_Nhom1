@@ -543,12 +543,67 @@ namespace QuanLyNhanVien3
 
         private void dgvLuong_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
+            int i = e.RowIndex;
+            if (i >= 0)
+            {
+                DataGridViewRow row = dgvLuong.Rows[i];
 
+                cbMaLuong.Text = row.Cells["Mã Lương"].Value?.ToString();
+                cbMaNV.Text = row.Cells["Mã Nhân Viên"].Value?.ToString();
+
+                cbThang.Text = row.Cells["Tháng"].Value?.ToString();
+
+                if (int.TryParse(row.Cells["Năm"].Value?.ToString(), out int nam))
+                    numNam.Value = nam;
+
+                txtLuongCoBan.Text = row.Cells["Lương Cơ Bản"].Value?.ToString();
+                txtSoNgayCong.Text = row.Cells["Số Ngày Công"].Value?.ToString();
+                txtPhuCap.Text = row.Cells["Phụ cấp"].Value?.ToString();
+                txtKhauTru.Text = row.Cells["Khấu Trừ"].Value?.ToString();
+                txtGhiChu.Text = row.Cells["Ghi Chú"].Value?.ToString();
+            }
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void cbMaNV_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (cbMaNV.SelectedValue == null) return;
+
+            try
+            {
+                cn.connect();
+
+                string sql = @"SELECT TOP 1 LuongCoBan 
+                       FROM tblHopDong 
+                       WHERE MaNV = @MaNV AND DeletedAt = 0
+                       ORDER BY NgayBatDau DESC";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaNV", cbMaNV.SelectedValue.ToString());
+                    object result = cmd.ExecuteScalar();
+
+                    txtLuongCoBan.Text = (result != null && result != DBNull.Value)
+                                         ? result.ToString()
+                                         : "";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi lấy lương cơ bản: " + ex.Message);
+            }
+            finally
+            {
+                cn.disconnect();
+            }
+        }
+
+        private void txtLuongCoBan_TextChanged(object sender, EventArgs e)
+        {
         }
     }
 
