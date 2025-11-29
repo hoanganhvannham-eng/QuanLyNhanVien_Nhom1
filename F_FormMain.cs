@@ -122,7 +122,37 @@ namespace QuanLyNhanVien3
 
         private void ThongKe_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new F_ThongKeNhanVien());
+            //OpenChildForm(new F_ThongKeNhanVien());
+        }
+
+        private void báoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new F_BaoCaoNhanVien());
+
+        }
+
+        private void báoCáoLươngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new F_BaoCaoLuong());
+
+        }
+
+        private void báoCáoDựÁnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new F_BaoCaoDuAn());
+
+        }
+
+        private void báoCáoChấmCôngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new F_BaoCaoChamCong());
+
+        }
+
+        private void tổngHợpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new F_BaoCaoTongHop());
+
         }
     }
 }

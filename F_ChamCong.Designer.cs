@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(F_ChamCong));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnThoat = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.btnDungQuetCam = new System.Windows.Forms.Button();
             this.btnChonAnh = new System.Windows.Forms.Button();
@@ -67,7 +68,6 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.dtGridViewChamCong = new System.Windows.Forms.DataGridView();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btnThoat = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxChamCong)).BeginInit();
             this.panel2.SuspendLayout();
@@ -91,8 +91,20 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1406, 366);
+            this.panel1.Size = new System.Drawing.Size(1406, 177);
             this.panel1.TabIndex = 0;
+            // 
+            // btnThoat
+            // 
+            this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThoat.Location = new System.Drawing.Point(1209, -58);
+            this.btnThoat.Name = "btnThoat";
+            this.btnThoat.Size = new System.Drawing.Size(163, 50);
+            this.btnThoat.TabIndex = 168;
+            this.btnThoat.Text = "Thoát";
+            this.btnThoat.UseVisualStyleBackColor = true;
+            this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
             // label7
             // 
@@ -115,6 +127,7 @@
             this.btnDungQuetCam.TabIndex = 166;
             this.btnDungQuetCam.Text = "Dừng Quét";
             this.btnDungQuetCam.UseVisualStyleBackColor = true;
+            this.btnDungQuetCam.Visible = false;
             this.btnDungQuetCam.Click += new System.EventHandler(this.btnDungQuetCam_Click);
             // 
             // btnChonAnh
@@ -127,6 +140,7 @@
             this.btnChonAnh.TabIndex = 165;
             this.btnChonAnh.Text = "Chon tu thu vien";
             this.btnChonAnh.UseVisualStyleBackColor = true;
+            this.btnChonAnh.Visible = false;
             this.btnChonAnh.Click += new System.EventHandler(this.btnChonAnh_Click);
             // 
             // btnQuetma
@@ -139,6 +153,7 @@
             this.btnQuetma.TabIndex = 164;
             this.btnQuetma.Text = "Quet ma";
             this.btnQuetma.UseVisualStyleBackColor = true;
+            this.btnQuetma.Visible = false;
             this.btnQuetma.Click += new System.EventHandler(this.btnQuetma_Click_1);
             // 
             // btnChamCong
@@ -150,6 +165,7 @@
             this.btnChamCong.TabIndex = 162;
             this.btnChamCong.Text = "Cham Cong";
             this.btnChamCong.UseVisualStyleBackColor = true;
+            this.btnChamCong.Visible = false;
             this.btnChamCong.Click += new System.EventHandler(this.btnChamCong_Click);
             // 
             // pictureBoxChamCong
@@ -162,6 +178,7 @@
             this.pictureBoxChamCong.Size = new System.Drawing.Size(454, 267);
             this.pictureBoxChamCong.TabIndex = 1;
             this.pictureBoxChamCong.TabStop = false;
+            this.pictureBoxChamCong.Visible = false;
             // 
             // panel2
             // 
@@ -170,7 +187,7 @@
             this.panel2.Controls.Add(this.panel5);
             this.panel2.Controls.Add(this.panel4);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 366);
+            this.panel2.Location = new System.Drawing.Point(0, 177);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1406, 321);
             this.panel2.TabIndex = 1;
@@ -458,9 +475,9 @@
             // 
             this.panel3.Controls.Add(this.dtGridViewChamCong);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 687);
+            this.panel3.Location = new System.Drawing.Point(0, 498);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1406, 153);
+            this.panel3.Size = new System.Drawing.Size(1406, 342);
             this.panel3.TabIndex = 2;
             // 
             // dtGridViewChamCong
@@ -475,7 +492,7 @@
             this.dtGridViewChamCong.ReadOnly = true;
             this.dtGridViewChamCong.RowHeadersWidth = 51;
             this.dtGridViewChamCong.RowTemplate.Height = 24;
-            this.dtGridViewChamCong.Size = new System.Drawing.Size(1406, 153);
+            this.dtGridViewChamCong.Size = new System.Drawing.Size(1406, 342);
             this.dtGridViewChamCong.TabIndex = 121;
             this.dtGridViewChamCong.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewChamCong_CellClick);
             // 
@@ -483,18 +500,6 @@
             // 
             this.timer1.Interval = 300;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // btnThoat
-            // 
-            this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThoat.Location = new System.Drawing.Point(1209, 37);
-            this.btnThoat.Name = "btnThoat";
-            this.btnThoat.Size = new System.Drawing.Size(163, 50);
-            this.btnThoat.TabIndex = 168;
-            this.btnThoat.Text = "Thoát";
-            this.btnThoat.UseVisualStyleBackColor = true;
-            this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
             // F_ChamCong
             // 

@@ -305,6 +305,9 @@ namespace QuanLyNhanVien3
             }
         }
 
+        private void rdbLuong_CheckedChanged_1(object sender, EventArgs e)
+        {
 
+        }
     }
 }

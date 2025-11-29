@@ -99,6 +99,36 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="F_BaoCaoChamCong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="F_BaoCaoChamCong.Designer.cs">
+      <DependentUpon>F_BaoCaoChamCong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="F_BaoCaoDuAn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="F_BaoCaoDuAn.Designer.cs">
+      <DependentUpon>F_BaoCaoDuAn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="F_BaoCaoLuong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="F_BaoCaoLuong.Designer.cs">
+      <DependentUpon>F_BaoCaoLuong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="F_BaoCaoNhanVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="F_BaoCaoNhanVien.Designer.cs">
+      <DependentUpon>F_BaoCaoNhanVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="F_BaoCaoTongHop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="F_BaoCaoTongHop.Designer.cs">
+      <DependentUpon>F_BaoCaoTongHop.cs</DependentUpon>
+    </Compile>
     <Compile Include="F_ChamCong.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -174,6 +204,21 @@
     <Compile Include="F_TaiKhoan.Designer.cs">
       <DependentUpon>F_TaiKhoan.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="F_BaoCaoChamCong.resx">
+      <DependentUpon>F_BaoCaoChamCong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="F_BaoCaoDuAn.resx">
+      <DependentUpon>F_BaoCaoDuAn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="F_BaoCaoLuong.resx">
+      <DependentUpon>F_BaoCaoLuong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="F_BaoCaoNhanVien.resx">
+      <DependentUpon>F_BaoCaoNhanVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="F_BaoCaoTongHop.resx">
+      <DependentUpon>F_BaoCaoTongHop.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="F_ChamCong.resx">
       <DependentUpon>F_ChamCong.cs</DependentUpon>
     </EmbeddedResource>

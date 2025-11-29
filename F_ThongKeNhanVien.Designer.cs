@@ -340,6 +340,7 @@
             this.rdbLuong.TabStop = true;
             this.rdbLuong.Text = "Thống kê lương";
             this.rdbLuong.UseVisualStyleBackColor = true;
+            this.rdbLuong.CheckedChanged += new System.EventHandler(this.rdbLuong_CheckedChanged_1);
             // 
             // groupBox1
             // 
