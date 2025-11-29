@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnThoat = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -69,7 +70,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.dtGridViewNhanVien = new System.Windows.Forms.DataGridView();
-            this.btnThoat = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -91,6 +91,18 @@
             this.panel1.Size = new System.Drawing.Size(1598, 160);
             this.panel1.TabIndex = 120;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // btnThoat
+            // 
+            this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThoat.Location = new System.Drawing.Point(1398, 36);
+            this.btnThoat.Name = "btnThoat";
+            this.btnThoat.Size = new System.Drawing.Size(163, 50);
+            this.btnThoat.TabIndex = 169;
+            this.btnThoat.Text = "Thoát";
+            this.btnThoat.UseVisualStyleBackColor = true;
+            this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
             // label7
             // 
@@ -149,17 +161,19 @@
             this.pictureBoxQRNV.Size = new System.Drawing.Size(258, 246);
             this.pictureBoxQRNV.TabIndex = 192;
             this.pictureBoxQRNV.TabStop = false;
+            this.pictureBoxQRNV.Visible = false;
             // 
             // btnTaoQR
             // 
             this.btnTaoQR.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnTaoQR.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTaoQR.Location = new System.Drawing.Point(345, 311);
+            this.btnTaoQR.Location = new System.Drawing.Point(425, 311);
             this.btnTaoQR.Name = "btnTaoQR";
             this.btnTaoQR.Size = new System.Drawing.Size(124, 47);
             this.btnTaoQR.TabIndex = 190;
             this.btnTaoQR.Text = "Tạo QR";
             this.btnTaoQR.UseVisualStyleBackColor = true;
+            this.btnTaoQR.Visible = false;
             this.btnTaoQR.Click += new System.EventHandler(this.btnTaoQR_Click);
             // 
             // cbBoxChucVu
@@ -167,7 +181,7 @@
             this.cbBoxChucVu.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cbBoxChucVu.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbBoxChucVu.FormattingEnabled = true;
-            this.cbBoxChucVu.Location = new System.Drawing.Point(138, 222);
+            this.cbBoxChucVu.Location = new System.Drawing.Point(159, 222);
             this.cbBoxChucVu.Name = "cbBoxChucVu";
             this.cbBoxChucVu.Size = new System.Drawing.Size(283, 27);
             this.cbBoxChucVu.TabIndex = 189;
@@ -177,7 +191,7 @@
             this.cbBoxMaPB.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cbBoxMaPB.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbBoxMaPB.FormattingEnabled = true;
-            this.cbBoxMaPB.Location = new System.Drawing.Point(138, 184);
+            this.cbBoxMaPB.Location = new System.Drawing.Point(159, 184);
             this.cbBoxMaPB.Name = "cbBoxMaPB";
             this.cbBoxMaPB.Size = new System.Drawing.Size(283, 27);
             this.cbBoxMaPB.TabIndex = 188;
@@ -186,7 +200,7 @@
             // 
             this.btnTimKiem.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnTimKiem.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTimKiem.Location = new System.Drawing.Point(179, 311);
+            this.btnTimKiem.Location = new System.Drawing.Point(253, 308);
             this.btnTimKiem.Name = "btnTimKiem";
             this.btnTimKiem.Size = new System.Drawing.Size(124, 47);
             this.btnTimKiem.TabIndex = 187;
@@ -198,7 +212,7 @@
             // 
             this.btnSua.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnSua.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSua.Location = new System.Drawing.Point(20, 311);
+            this.btnSua.Location = new System.Drawing.Point(94, 308);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(124, 47);
             this.btnSua.TabIndex = 186;
@@ -210,7 +224,7 @@
             // 
             this.tbGhiChu.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbGhiChu.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbGhiChu.Location = new System.Drawing.Point(138, 261);
+            this.tbGhiChu.Location = new System.Drawing.Point(159, 261);
             this.tbGhiChu.Name = "tbGhiChu";
             this.tbGhiChu.Size = new System.Drawing.Size(283, 27);
             this.tbGhiChu.TabIndex = 185;
@@ -219,7 +233,7 @@
             // 
             this.tbEmail.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbEmail.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbEmail.Location = new System.Drawing.Point(138, 147);
+            this.tbEmail.Location = new System.Drawing.Point(159, 147);
             this.tbEmail.Name = "tbEmail";
             this.tbEmail.Size = new System.Drawing.Size(283, 27);
             this.tbEmail.TabIndex = 184;
@@ -228,7 +242,7 @@
             // 
             this.tbSoDienThoai.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbSoDienThoai.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSoDienThoai.Location = new System.Drawing.Point(138, 105);
+            this.tbSoDienThoai.Location = new System.Drawing.Point(159, 105);
             this.tbSoDienThoai.Name = "tbSoDienThoai";
             this.tbSoDienThoai.Size = new System.Drawing.Size(283, 27);
             this.tbSoDienThoai.TabIndex = 183;
@@ -306,10 +320,9 @@
             // 
             // checkshowpassword
             // 
-            this.checkshowpassword.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.checkshowpassword.AutoSize = true;
             this.checkshowpassword.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkshowpassword.Location = new System.Drawing.Point(267, 143);
+            this.checkshowpassword.Location = new System.Drawing.Point(226, 140);
             this.checkshowpassword.Name = "checkshowpassword";
             this.checkshowpassword.Size = new System.Drawing.Size(150, 23);
             this.checkshowpassword.TabIndex = 164;
@@ -319,10 +332,9 @@
             // 
             // label8
             // 
-            this.label8.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(105, 113);
+            this.label8.Location = new System.Drawing.Point(64, 110);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(112, 19);
             this.label8.TabIndex = 163;
@@ -330,18 +342,16 @@
             // 
             // tbMKkhoiphuc
             // 
-            this.tbMKkhoiphuc.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbMKkhoiphuc.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbMKkhoiphuc.Location = new System.Drawing.Point(233, 110);
+            this.tbMKkhoiphuc.Location = new System.Drawing.Point(192, 107);
             this.tbMKkhoiphuc.Name = "tbMKkhoiphuc";
             this.tbMKkhoiphuc.Size = new System.Drawing.Size(184, 27);
             this.tbMKkhoiphuc.TabIndex = 162;
             // 
             // btnxuatExcel
             // 
-            this.btnxuatExcel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnxuatExcel.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnxuatExcel.Location = new System.Drawing.Point(319, 316);
+            this.btnxuatExcel.Location = new System.Drawing.Point(278, 313);
             this.btnxuatExcel.Name = "btnxuatExcel";
             this.btnxuatExcel.Size = new System.Drawing.Size(108, 41);
             this.btnxuatExcel.TabIndex = 161;
@@ -351,9 +361,8 @@
             // 
             // btnrestar
             // 
-            this.btnrestar.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnrestar.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnrestar.Location = new System.Drawing.Point(119, 317);
+            this.btnrestar.Location = new System.Drawing.Point(78, 314);
             this.btnrestar.Name = "btnrestar";
             this.btnrestar.Size = new System.Drawing.Size(108, 41);
             this.btnrestar.TabIndex = 160;
@@ -363,9 +372,8 @@
             // 
             // btnKhoiPhucNhanVien
             // 
-            this.btnKhoiPhucNhanVien.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnKhoiPhucNhanVien.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnKhoiPhucNhanVien.Location = new System.Drawing.Point(119, 247);
+            this.btnKhoiPhucNhanVien.Location = new System.Drawing.Point(78, 244);
             this.btnKhoiPhucNhanVien.Name = "btnKhoiPhucNhanVien";
             this.btnKhoiPhucNhanVien.Size = new System.Drawing.Size(298, 33);
             this.btnKhoiPhucNhanVien.TabIndex = 159;
@@ -375,9 +383,8 @@
             // 
             // btnNVDaNghiViec
             // 
-            this.btnNVDaNghiViec.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnNVDaNghiViec.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNVDaNghiViec.Location = new System.Drawing.Point(119, 188);
+            this.btnNVDaNghiViec.Location = new System.Drawing.Point(78, 185);
             this.btnNVDaNghiViec.Name = "btnNVDaNghiViec";
             this.btnNVDaNghiViec.Size = new System.Drawing.Size(298, 33);
             this.btnNVDaNghiViec.TabIndex = 158;
@@ -561,18 +568,6 @@
             this.dtGridViewNhanVien.Size = new System.Drawing.Size(1598, 230);
             this.dtGridViewNhanVien.TabIndex = 120;
             this.dtGridViewNhanVien.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewNhanVien_CellClick_2);
-            // 
-            // btnThoat
-            // 
-            this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThoat.Location = new System.Drawing.Point(1398, 36);
-            this.btnThoat.Name = "btnThoat";
-            this.btnThoat.Size = new System.Drawing.Size(163, 50);
-            this.btnThoat.TabIndex = 169;
-            this.btnThoat.Text = "Thoát";
-            this.btnThoat.UseVisualStyleBackColor = true;
-            this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
             // F_NhanVien
             // 
