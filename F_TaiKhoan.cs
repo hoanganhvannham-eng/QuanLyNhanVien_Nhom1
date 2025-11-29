@@ -43,13 +43,13 @@ namespace QuanLyNhanVien3
                 string sqlLoadDataNhanVien = @"SELECT 
                                                 tk.MaTK AS [Mã Tài Khoản], 
                                                 tk.MaNV AS [Mã Nhân Viên], 
-                                                tk.TenDangNhap AS [Tên Đăng Nhập], 
+                                                tk.SoDienThoai AS [Số Điện Thoại], 
                                                 tk.MatKhau AS [Mật Khẩu], 
                                                 tk.Quyen AS [Quyền], 
                                                 tk.GhiChu AS [Ghi Chú]
                                             FROM tblTaiKhoan AS tk
                                             INNER JOIN tblNhanVien AS nv ON tk.MaNV = nv.MaNV
-                                            WHERE nv.DeletedAt = 0  
+                                            WHERE nv.DeletedAt = 0  and tk.DeletedAt =0
                                             ORDER BY tk.MaTK;
                                             ";
 
@@ -116,6 +116,21 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
+                double a;
+
+                // check sdt
+                if (!double.TryParse(tbTenDangNhap.Text.Trim(), out a))
+                {
+                    MessageBox.Show("Số điện thoại phải là số!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                else if (tbTenDangNhap.Text.Trim().Length != 10)
+                {
+                    MessageBox.Show("Số điện thoại phải có đúng 10 chữ số!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 // check mk
                 if (tbMatKhau.Text.Trim().Length < 8)
                 {
@@ -143,10 +158,10 @@ namespace QuanLyNhanVien3
                 }
 
                 //check ten dang nhap
-                string checkTenDNNVSql = "SELECT COUNT(*) FROM tblTaiKhoan WHERE TenDangNhap = @TenDangNhap AND DeletedAt != 1";
+                string checkTenDNNVSql = "SELECT COUNT(*) FROM tblTaiKhoan WHERE SoDienThoai = @SoDienThoai AND DeletedAt != 1";
                 using (SqlCommand cmdCheckTenDN = new SqlCommand(checkTenDNNVSql, cn.conn))
                 {
-                    cmdCheckTenDN.Parameters.AddWithValue("@TenDangNhap", tbTenDangNhap.Text.Trim());
+                    cmdCheckTenDN.Parameters.AddWithValue("@SoDienThoai", tbTenDangNhap.Text.Trim());
                     int maTKCount = (int)cmdCheckTenDN.ExecuteScalar();
 
                     if (maTKCount > 0)
@@ -176,15 +191,15 @@ namespace QuanLyNhanVien3
 
                 string sqltblTaiKhoan = @"
                     INSERT INTO tblTaiKhoan 
-                        (MaTK, MaNV, TenDangNhap, MatKhau, Quyen, Ghichu, DeletedAt)
+                        (MaTK, MaNV, SoDienThoai, MatKhau, Quyen, Ghichu, DeletedAt)
                     VALUES 
-                        (@MaTK, @MaNV, @TenDangNhap, @MatKhau, @Quyen, @GhiChu, 0)";
+                        (@MaTK, @MaNV, @SoDienThoai, @MatKhau, @Quyen, @GhiChu, 0)";
 
                 using (SqlCommand cmd = new SqlCommand(sqltblTaiKhoan, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@MaTK", tbmaTK.Text.Trim());
                     cmd.Parameters.AddWithValue("@MaNV", cbBoxMaNV.SelectedValue);
-                    cmd.Parameters.AddWithValue("@TenDangNhap", tbTenDangNhap.Text.Trim());
+                    cmd.Parameters.AddWithValue("@SoDienThoai", tbTenDangNhap.Text.Trim());
                     cmd.Parameters.AddWithValue("@MatKhau", tbMatKhau.Text.Trim());
                     cmd.Parameters.AddWithValue("@Quyen", cbBoxQuyen.SelectedItem.ToString());
                     cmd.Parameters.AddWithValue("@GhiChu", tbGhiChu.Text.Trim());
@@ -288,16 +303,16 @@ namespace QuanLyNhanVien3
                 }
 
                 string newMaNV = cbBoxMaNV.SelectedValue.ToString();
-                string newTenDangNhap = tbTenDangNhap.Text.Trim();
+                string newSoDienThoai = tbTenDangNhap.Text.Trim();
                 string maTK = tbmaTK.Text.Trim();
 
                 // 2. Kiểm tra xem tên đăng nhập hiện tại có khớp với tên trong DB theo MaNV không
                 string sqlCheckOld = @"SELECT COUNT(*) FROM tblTaiKhoan 
-                               WHERE MaNV = @MaNV AND TenDangNhap = @TenDangNhap AND DeletedAt = 0";
+                               WHERE MaNV = @MaNV AND SoDienThoai = @SoDienThoai AND DeletedAt = 0";
                 using (SqlCommand cmd = new SqlCommand(sqlCheckOld, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@MaNV", newMaNV);
-                    cmd.Parameters.AddWithValue("@TenDangNhap", newTenDangNhap);
+                    cmd.Parameters.AddWithValue("@SoDienThoai", newSoDienThoai);
 
                     int countOld = (int)cmd.ExecuteScalar();
 
@@ -305,10 +320,10 @@ namespace QuanLyNhanVien3
                     {
                         // Nếu tên đăng nhập đã thay đổi -> Kiểm tra tên mới đã tồn tại chưa
                         string sqlCheckNew = @"SELECT COUNT(*) FROM tblTaiKhoan 
-                                       WHERE TenDangNhap = @TenDangNhap AND DeletedAt = 0";
+                                       WHERE SoDienThoai = @SoDienThoai AND DeletedAt = 0";
                         using (SqlCommand cmdCheck = new SqlCommand(sqlCheckNew, cn.conn))
                         {
-                            cmdCheck.Parameters.AddWithValue("@TenDangNhap", newTenDangNhap);
+                            cmdCheck.Parameters.AddWithValue("@SoDienThoai", newSoDienThoai);
                             int countNew = (int)cmdCheck.ExecuteScalar();
 
                             if (countNew > 0)
@@ -332,7 +347,7 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     string sqlUpdate = @"UPDATE tblTaiKhoan 
-                                 SET TenDangNhap = @TenDangNhap, 
+                                 SET SoDienThoai = @SoDienThoai, 
                                      MatKhau = @MatKhau, 
                                      Quyen = @Quyen, 
                                      GhiChu = @GhiChu, 
@@ -342,7 +357,7 @@ namespace QuanLyNhanVien3
                     using (SqlCommand cmdUpdate = new SqlCommand(sqlUpdate, cn.conn))
                     {
                         cmdUpdate.Parameters.AddWithValue("@MaTK", maTK);
-                        cmdUpdate.Parameters.AddWithValue("@TenDangNhap", newTenDangNhap);
+                        cmdUpdate.Parameters.AddWithValue("@SoDienThoai", newSoDienThoai);
                         cmdUpdate.Parameters.AddWithValue("@MatKhau", tbMatKhau.Text.Trim());
                         cmdUpdate.Parameters.AddWithValue("@Quyen", cbBoxQuyen.SelectedItem.ToString());
                         cmdUpdate.Parameters.AddWithValue("@GhiChu", tbGhiChu.Text.Trim());
@@ -392,7 +407,7 @@ namespace QuanLyNhanVien3
                 string selectedMaNV = cbBoxMaNV.SelectedValue.ToString();
 
                 cn.connect();
-                string sql = @" SELECT MaTK, MaNV, TenDangNhap, MatKhau, Quyen, GhiChu
+                string sql = @" SELECT MaTK, MaNV, SoDienThoai, MatKhau, Quyen, GhiChu
                                 FROM tblTaiKhoan
                                 WHERE DeletedAt = 0 
                                   AND MaNV = @MaNV
@@ -484,7 +499,7 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-                string query = @" SELECT MaTK, MaNV, TenDangNhap, MatKhau, Quyen, Ghichu
+                string query = @" SELECT MaTK, MaNV, SoDienThoai, MatKhau, Quyen, Ghichu
                                 FROM tblTaiKhoan
                                 WHERE DeletedAt = 1
                                 ORDER BY MaTK";

@@ -30,6 +30,7 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnThoat = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.panel7 = new System.Windows.Forms.Panel();
@@ -60,7 +61,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.dataGridViewTaiKhoan = new System.Windows.Forms.DataGridView();
-            this.btnThoat = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -92,6 +92,18 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1316, 170);
             this.panel1.TabIndex = 129;
+            // 
+            // btnThoat
+            // 
+            this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThoat.Location = new System.Drawing.Point(1112, 31);
+            this.btnThoat.Name = "btnThoat";
+            this.btnThoat.Size = new System.Drawing.Size(163, 50);
+            this.btnThoat.TabIndex = 169;
+            this.btnThoat.Text = "Thoát";
+            this.btnThoat.UseVisualStyleBackColor = true;
+            this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
             // panel2
             // 
@@ -306,7 +318,7 @@
             this.btnKhoiPhucPhongBan.Name = "btnKhoiPhucPhongBan";
             this.btnKhoiPhucPhongBan.Size = new System.Drawing.Size(281, 33);
             this.btnKhoiPhucPhongBan.TabIndex = 149;
-            this.btnKhoiPhucPhongBan.Text = "Khôi Phục Phòng Ban Cũ";
+            this.btnKhoiPhucPhongBan.Text = "Khôi Phục Tài Khoản Cũ";
             this.btnKhoiPhucPhongBan.UseVisualStyleBackColor = true;
             this.btnKhoiPhucPhongBan.Click += new System.EventHandler(this.btnKhoiPhucPhongBan_Click_1);
             // 
@@ -319,7 +331,7 @@
             this.btnHienThiPhongBanCu.Name = "btnHienThiPhongBanCu";
             this.btnHienThiPhongBanCu.Size = new System.Drawing.Size(281, 33);
             this.btnHienThiPhongBanCu.TabIndex = 148;
-            this.btnHienThiPhongBanCu.Text = "Hiển Thị Phong Ban Cũ";
+            this.btnHienThiPhongBanCu.Text = "Hiển Thị Tài Khoản Cũ";
             this.btnHienThiPhongBanCu.UseVisualStyleBackColor = true;
             this.btnHienThiPhongBanCu.Click += new System.EventHandler(this.btnHienThiPhongBanCu_Click_1);
             // 
@@ -402,9 +414,9 @@
             this.label6.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(28, 162);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(112, 19);
+            this.label6.Size = new System.Drawing.Size(106, 19);
             this.label6.TabIndex = 153;
-            this.label6.Text = "Tên Đăng Nhập";
+            this.label6.Text = "Số Điện Thoại";
             // 
             // label2
             // 
@@ -451,18 +463,6 @@
             this.dataGridViewTaiKhoan.Size = new System.Drawing.Size(1316, 248);
             this.dataGridViewTaiKhoan.TabIndex = 118;
             this.dataGridViewTaiKhoan.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTaiKhoan_CellClick_1);
-            // 
-            // btnThoat
-            // 
-            this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThoat.Location = new System.Drawing.Point(1112, 31);
-            this.btnThoat.Name = "btnThoat";
-            this.btnThoat.Size = new System.Drawing.Size(163, 50);
-            this.btnThoat.TabIndex = 169;
-            this.btnThoat.Text = "Thoát";
-            this.btnThoat.UseVisualStyleBackColor = true;
-            this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
             // F_TaiKhoan
             // 
