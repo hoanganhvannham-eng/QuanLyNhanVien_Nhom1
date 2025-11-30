@@ -24,14 +24,10 @@ namespace QuanLyNhanVien3
         {
             foreach (Control ctl in parent.Controls)
             {
-                if (ctl is TextBox)
-                    ((TextBox)ctl).Clear();
-                else if (ctl is ComboBox)
-                    ((ComboBox)ctl).SelectedIndex = -1;
-                else if (ctl is DateTimePicker)
-                    ((DateTimePicker)ctl).Value = DateTime.Now;
-                else if (ctl.HasChildren)
-                    ClearAllInputs(ctl);
+                if (ctl is TextBox) ((TextBox)ctl).Clear();
+                else if (ctl is ComboBox) ((ComboBox)ctl).SelectedIndex = -1;
+                // Không reset DateTimePicker về Now để người dùng tiện thao tác tiếp
+                else if (ctl.HasChildren) ClearAllInputs(ctl);
             }
         }
 
@@ -41,27 +37,46 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataLuong = @"SELECT l.MaLuong as N'Mã Lương', nv.HoTen as N'Họ Tên', l.Thang as N'Tháng',
-                                            l.Nam as N'Năm', l.LuongCoBan as N'Lương Cơ Bản',
-                                            l.PhuCap as N'Phụ Cấp', l.KhauTru as N'Khấu Trừ',
-                                            l.TongLuong as N'Tổng Lương'
-                                            FROM tblLuong l
-                                            JOIN tblNhanVien nv ON l.MaNV = nv.MaNV
-                                            WHERE l.DeletedAt = 0
-                                            ORDER BY l.Nam, l.Thang;";
+                // Lấy tháng và năm từ DateTimePicker trên giao diện
+                // Giả sử tên control là dtpThoiGian
+                int thang = dateTimePicker1.Value.Month;
+                int nam = dateTimePicker1.Value.Year;
 
-                using (SqlDataAdapter adapter = new SqlDataAdapter(sqlLoadDataLuong, cn.conn))
+                string sql = @"SELECT l.MaLuong AS N'Mã Lương', 
+                                      nv.MaNV AS N'Mã NV', 
+                                      nv.HoTen AS N'Họ Tên', 
+                                      l.Thang AS N'Tháng', 
+                                      l.Nam AS N'Năm', 
+                                      l.LuongCoBan AS N'Lương CB', 
+                                      l.SoNgayCong AS N'Ngày Công',
+                                      l.PhuCap AS N'Phụ Cấp',
+                                      l.KhauTru AS N'Khấu Trừ',
+                                      l.TongLuong AS N'Tổng Lương'
+                               FROM tblLuong l
+                               JOIN tblNhanVien nv ON l.MaNV = nv.MaNV
+                               WHERE l.DeletedAt = 0 
+                               AND l.Thang = @Thang 
+                               AND l.Nam = @Nam
+                               ORDER BY l.TongLuong DESC";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+                    cmd.Parameters.AddWithValue("@Nam", nam);
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
+
+                    // Giả sử tên GridView là dtGridViewBCLuong
                     dtGridViewBCLuong.DataSource = dt;
                 }
+
                 cn.disconnect();
-                ClearAllInputs(this);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu bảng lương: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi tải bảng lương: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -70,26 +85,39 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
+                int thang = dateTimePicker1.Value.Month;
+                int nam = dateTimePicker1.Value.Year;
 
-                string sqlLoadDataLuong = @"SELECT TOP 1 nv.HoTen as N'Họ Tên', l.Thang as N'Tháng',
-                                            l.Nam as N'Năm', l.TongLuong as N'Tổng Lương'
-                                            FROM tblLuong l
-                                            JOIN tblNhanVien nv ON l.MaNV = nv.MaNV
-                                            WHERE l.DeletedAt = 0
-                                            ORDER BY l.TongLuong DESC;";
+                // Lấy TOP 1 nhân viên lương cao nhất (WITH TIES để lấy nhiều người nếu bằng lương nhau)
+                string sql = @"SELECT TOP 1 WITH TIES 
+                                      nv.HoTen AS N'Họ Tên', 
+                                      pb.TenPB AS N'Phòng Ban',
+                                      cv.TenCV AS N'Chức Vụ',
+                                      l.TongLuong AS N'Tổng Lương Cao Nhất'
+                               FROM tblLuong l
+                               JOIN tblNhanVien nv ON l.MaNV = nv.MaNV
+                               JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
+                               JOIN tblChucVu cv ON nv.MaCV = cv.MaCV
+                               WHERE l.DeletedAt = 0 
+                               AND l.Thang = @Thang 
+                               AND l.Nam = @Nam
+                               ORDER BY l.TongLuong DESC";
 
-                using (SqlDataAdapter adapter = new SqlDataAdapter(sqlLoadDataLuong, cn.conn))
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+                    cmd.Parameters.AddWithValue("@Nam", nam);
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
                     dtGridViewBCLuong.DataSource = dt;
                 }
                 cn.disconnect();
-                ClearAllInputs(this);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu bảng lương: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
 
@@ -98,26 +126,36 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
+                int thang = dateTimePicker1.Value.Month;
+                int nam = dateTimePicker1.Value.Year;
 
-                string sqlLoadDataLuong = @"SELECT pb.TenPB as N'Tên Phòng Ban', SUM(l.TongLuong) AS N'Tổng Chi Phí'
-                                            FROM tblLuong l
-                                            JOIN tblNhanVien nv ON l.MaNV = nv.MaNV
-                                            JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
-                                            WHERE l.DeletedAt = 0 AND nv.DeletedAt = 0
-                                            GROUP BY pb.TenPB;";
+                // Group by theo tên phòng ban và tính tổng lương
+                string sql = @"SELECT pb.TenPB AS N'Tên Phòng Ban', 
+                                      COUNT(l.MaNV) AS N'Số NV Đã Nhận Lương',
+                                      SUM(l.TongLuong) AS N'Tổng Quỹ Lương'
+                               FROM tblLuong l
+                               JOIN tblNhanVien nv ON l.MaNV = nv.MaNV
+                               JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
+                               WHERE l.DeletedAt = 0 
+                               AND l.Thang = @Thang 
+                               AND l.Nam = @Nam
+                               GROUP BY pb.TenPB";
 
-                using (SqlDataAdapter adapter = new SqlDataAdapter(sqlLoadDataLuong, cn.conn))
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+                    cmd.Parameters.AddWithValue("@Nam", nam);
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
                     dtGridViewBCLuong.DataSource = dt;
                 }
                 cn.disconnect();
-                ClearAllInputs(this);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu bảng lương: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
 
@@ -133,12 +171,15 @@ namespace QuanLyNhanVien3
                         {
                             using (XLWorkbook wb = new XLWorkbook())
                             {
-                                var ws = wb.Worksheets.Add("Luong");
+                                var ws = wb.Worksheets.Add("BaoCaoLuong");
 
                                 // Ghi header
                                 for (int i = 0; i < dtGridViewBCLuong.Columns.Count; i++)
                                 {
                                     ws.Cell(1, i + 1).Value = dtGridViewBCLuong.Columns[i].HeaderText;
+                                    // Tô đậm header cho đẹp
+                                    ws.Cell(1, i + 1).Style.Font.Bold = true;
+                                    ws.Cell(1, i + 1).Style.Fill.BackgroundColor = XLColor.LightGray;
                                 }
 
                                 // Ghi dữ liệu
@@ -146,11 +187,13 @@ namespace QuanLyNhanVien3
                                 {
                                     for (int j = 0; j < dtGridViewBCLuong.Columns.Count; j++)
                                     {
-                                        ws.Cell(i + 2, j + 1).Value = dtGridViewBCLuong.Rows[i].Cells[j].Value?.ToString();
+                                        // Kiểm tra null để tránh lỗi
+                                        var cellValue = dtGridViewBCLuong.Rows[i].Cells[j].Value;
+                                        ws.Cell(i + 2, j + 1).Value = cellValue != null ? cellValue.ToString() : "";
                                     }
                                 }
 
-                                // Thêm border cho toàn bảng
+                                // Kẻ khung viền
                                 var range = ws.Range(1, 1, dtGridViewBCLuong.Rows.Count + 1, dtGridViewBCLuong.Columns.Count);
                                 range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                                 range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
@@ -158,7 +201,6 @@ namespace QuanLyNhanVien3
                                 // Tự động co giãn cột
                                 ws.Columns().AdjustToContents();
 
-                                // Lưu file
                                 wb.SaveAs(sfd.FileName);
                             }
 
@@ -166,14 +208,14 @@ namespace QuanLyNhanVien3
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Lỗi xuất file: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Không có dữ liệu trên bảng để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
         }
