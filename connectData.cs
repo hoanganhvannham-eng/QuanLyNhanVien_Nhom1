@@ -6,7 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+//.\SQLEXPRESS
+//
 namespace QuanLyNhanVien3
 {
     class connectData
