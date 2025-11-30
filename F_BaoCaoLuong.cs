@@ -41,7 +41,10 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataLuong = @"SELECT l.MaLuong, nv.HoTen, l.Thang, l.Nam, l.LuongCoBan, l.PhuCap, l.KhauTru, l.TongLuong
+                string sqlLoadDataLuong = @"SELECT l.MaLuong as N'Mã Lương', nv.HoTen as N'Họ Tên', l.Thang as N'Tháng',
+                                            l.Nam as N'Năm', l.LuongCoBan as N'Lương Cơ Bản',
+                                            l.PhuCap as N'Phụ Cấp', l.KhauTru as N'Khấu Trừ',
+                                            l.TongLuong as N'Tổng Lương'
                                             FROM tblLuong l
                                             JOIN tblNhanVien nv ON l.MaNV = nv.MaNV
                                             WHERE l.DeletedAt = 0
@@ -68,7 +71,8 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataLuong = @"SELECT TOP 1 nv.HoTen, l.Thang, l.Nam, l.TongLuong
+                string sqlLoadDataLuong = @"SELECT TOP 1 nv.HoTen as N'Họ Tên', l.Thang as N'Tháng',
+                                            l.Nam as N'Năm', l.TongLuong as N'Tổng Lương'
                                             FROM tblLuong l
                                             JOIN tblNhanVien nv ON l.MaNV = nv.MaNV
                                             WHERE l.DeletedAt = 0
@@ -95,7 +99,7 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataLuong = @"SELECT pb.TenPB, SUM(l.TongLuong) AS TongChiPhi
+                string sqlLoadDataLuong = @"SELECT pb.TenPB as N'Tên Phòng Ban', SUM(l.TongLuong) AS N'Tổng Chi Phí'
                                             FROM tblLuong l
                                             JOIN tblNhanVien nv ON l.MaNV = nv.MaNV
                                             JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
@@ -171,6 +175,11 @@ namespace QuanLyNhanVien3
             {
                 MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+
         }
+    
+
+        
     }
+
 }
