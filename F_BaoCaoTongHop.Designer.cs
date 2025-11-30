@@ -122,7 +122,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "F_BaoCaoTongHop";
-            this.Text = "F_BaoCaoTongHop";
+            this.Text = "git g";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.F_BaoCaoTongHop_Load);
             this.panel1.ResumeLayout(false);
