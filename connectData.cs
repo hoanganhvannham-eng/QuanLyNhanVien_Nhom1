@@ -14,7 +14,7 @@ namespace QuanLyNhanVien3
         public SqlConnection conn;
         public void connect()
         {
-            string strCon = @"Data Source=.\SQLEXPRESS; Initial Catalog = QuanLyNhanVien3; Integrated Security = True;";
+            string strCon = @"Data Source=DESKTOP-813PT66; Initial Catalog = QuanLyNhanVien3; Integrated Security = True;";
             try
             {
                 conn = new SqlConnection(strCon);
