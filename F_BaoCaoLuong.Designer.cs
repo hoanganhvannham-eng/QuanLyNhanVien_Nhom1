@@ -31,12 +31,13 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.btnTongLuongPhongBan = new System.Windows.Forms.Button();
+            this.btnNVTongLuongCaoNhat = new System.Windows.Forms.Button();
+            this.btnLuongHangThang = new System.Windows.Forms.Button();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.dtGridViewBCLuong = new System.Windows.Forms.DataGridView();
+            this.btnXuatExcel = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -59,21 +60,62 @@
             this.label1.Font = new System.Drawing.Font("Times New Roman", 25.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(500, 56);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(299, 51);
+            this.label1.Size = new System.Drawing.Size(296, 49);
             this.label1.TabIndex = 0;
             this.label1.Text = "Báo Cáo Lương";
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnXuatExcel);
             this.panel2.Controls.Add(this.dateTimePicker1);
-            this.panel2.Controls.Add(this.button3);
-            this.panel2.Controls.Add(this.button2);
-            this.panel2.Controls.Add(this.button1);
+            this.panel2.Controls.Add(this.btnTongLuongPhongBan);
+            this.panel2.Controls.Add(this.btnNVTongLuongCaoNhat);
+            this.panel2.Controls.Add(this.btnLuongHangThang);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 122);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1396, 261);
             this.panel2.TabIndex = 4;
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Location = new System.Drawing.Point(518, 29);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(255, 22);
+            this.dateTimePicker1.TabIndex = 3;
+            // 
+            // btnTongLuongPhongBan
+            // 
+            this.btnTongLuongPhongBan.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTongLuongPhongBan.Location = new System.Drawing.Point(924, 88);
+            this.btnTongLuongPhongBan.Name = "btnTongLuongPhongBan";
+            this.btnTongLuongPhongBan.Size = new System.Drawing.Size(309, 45);
+            this.btnTongLuongPhongBan.TabIndex = 2;
+            this.btnTongLuongPhongBan.Text = "Tổng lương theo phòng ban";
+            this.btnTongLuongPhongBan.UseVisualStyleBackColor = true;
+            this.btnTongLuongPhongBan.Click += new System.EventHandler(this.btnTongLuongPhongBan_Click);
+            // 
+            // btnNVTongLuongCaoNhat
+            // 
+            this.btnNVTongLuongCaoNhat.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNVTongLuongCaoNhat.Location = new System.Drawing.Point(417, 88);
+            this.btnNVTongLuongCaoNhat.Name = "btnNVTongLuongCaoNhat";
+            this.btnNVTongLuongCaoNhat.Size = new System.Drawing.Size(487, 45);
+            this.btnNVTongLuongCaoNhat.TabIndex = 1;
+            this.btnNVTongLuongCaoNhat.Text = "Nhân viên có tổng lương cao nhất trong tháng";
+            this.btnNVTongLuongCaoNhat.UseVisualStyleBackColor = true;
+            this.btnNVTongLuongCaoNhat.Click += new System.EventHandler(this.btnNVTongLuongCaoNhat_Click);
+            // 
+            // btnLuongHangThang
+            // 
+            this.btnLuongHangThang.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLuongHangThang.Location = new System.Drawing.Point(107, 88);
+            this.btnLuongHangThang.Name = "btnLuongHangThang";
+            this.btnLuongHangThang.Size = new System.Drawing.Size(283, 45);
+            this.btnLuongHangThang.TabIndex = 0;
+            this.btnLuongHangThang.Text = "Bảng lương hàng tháng";
+            this.btnLuongHangThang.UseVisualStyleBackColor = true;
+            this.btnLuongHangThang.Click += new System.EventHandler(this.btnLuongHangThang_Click);
             // 
             // panel3
             // 
@@ -83,40 +125,6 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1396, 361);
             this.panel3.TabIndex = 5;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(151, 88);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(239, 45);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Bảng lương hàng tháng";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(482, 88);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(239, 45);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Nhân viên có tổng lương cao nhất trong tháng";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(787, 88);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(239, 45);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Tổng lương theo phòng ban";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // dateTimePicker1
-            // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(518, 29);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(255, 22);
-            this.dateTimePicker1.TabIndex = 3;
             // 
             // dtGridViewBCLuong
             // 
@@ -132,6 +140,17 @@
             this.dtGridViewBCLuong.RowTemplate.Height = 24;
             this.dtGridViewBCLuong.Size = new System.Drawing.Size(1396, 361);
             this.dtGridViewBCLuong.TabIndex = 122;
+            // 
+            // btnXuatExcel
+            // 
+            this.btnXuatExcel.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnXuatExcel.Location = new System.Drawing.Point(553, 156);
+            this.btnXuatExcel.Name = "btnXuatExcel";
+            this.btnXuatExcel.Size = new System.Drawing.Size(161, 42);
+            this.btnXuatExcel.TabIndex = 4;
+            this.btnXuatExcel.Text = "Xuất Excel";
+            this.btnXuatExcel.UseVisualStyleBackColor = true;
+            this.btnXuatExcel.Click += new System.EventHandler(this.btnXuatExcel_Click);
             // 
             // F_BaoCaoLuong
             // 
@@ -158,10 +177,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnTongLuongPhongBan;
+        private System.Windows.Forms.Button btnNVTongLuongCaoNhat;
+        private System.Windows.Forms.Button btnLuongHangThang;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.DataGridView dtGridViewBCLuong;
+        private System.Windows.Forms.Button btnXuatExcel;
     }
 }

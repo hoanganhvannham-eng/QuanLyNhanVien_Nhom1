@@ -31,13 +31,13 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.btnXuatEXL = new System.Windows.Forms.Button();
             this.btnTimKiemTheoTen = new System.Windows.Forms.Button();
             this.txttimkiemtheoten = new System.Windows.Forms.TextBox();
             this.btnsoluongtheogioitinh = new System.Windows.Forms.Button();
             this.btnThongKeNhanVien = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.dtGridViewBCNhanVien = new System.Windows.Forms.DataGridView();
-            this.btnXuatEXL = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -77,12 +77,25 @@
             this.panel3.Size = new System.Drawing.Size(1385, 248);
             this.panel3.TabIndex = 3;
             // 
+            // btnXuatEXL
+            // 
+            this.btnXuatEXL.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnXuatEXL.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnXuatEXL.Location = new System.Drawing.Point(1122, 112);
+            this.btnXuatEXL.Name = "btnXuatEXL";
+            this.btnXuatEXL.Size = new System.Drawing.Size(223, 50);
+            this.btnXuatEXL.TabIndex = 4;
+            this.btnXuatEXL.Text = "Xuất Excel";
+            this.btnXuatEXL.UseVisualStyleBackColor = true;
+            this.btnXuatEXL.Click += new System.EventHandler(this.btnXuatEXL_Click);
+            // 
             // btnTimKiemTheoTen
             // 
             this.btnTimKiemTheoTen.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnTimKiemTheoTen.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTimKiemTheoTen.Location = new System.Drawing.Point(790, 150);
             this.btnTimKiemTheoTen.Name = "btnTimKiemTheoTen";
-            this.btnTimKiemTheoTen.Size = new System.Drawing.Size(246, 25);
+            this.btnTimKiemTheoTen.Size = new System.Drawing.Size(246, 33);
             this.btnTimKiemTheoTen.TabIndex = 3;
             this.btnTimKiemTheoTen.Text = "Tìm Kiếm Theo Tên";
             this.btnTimKiemTheoTen.UseVisualStyleBackColor = true;
@@ -99,9 +112,10 @@
             // btnsoluongtheogioitinh
             // 
             this.btnsoluongtheogioitinh.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnsoluongtheogioitinh.Location = new System.Drawing.Point(444, 112);
+            this.btnsoluongtheogioitinh.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnsoluongtheogioitinh.Location = new System.Drawing.Point(427, 112);
             this.btnsoluongtheogioitinh.Name = "btnsoluongtheogioitinh";
-            this.btnsoluongtheogioitinh.Size = new System.Drawing.Size(224, 50);
+            this.btnsoluongtheogioitinh.Size = new System.Drawing.Size(269, 71);
             this.btnsoluongtheogioitinh.TabIndex = 1;
             this.btnsoluongtheogioitinh.Text = "Thống Kê Số Lượng Nhân Viên Theo Giới Tính";
             this.btnsoluongtheogioitinh.UseVisualStyleBackColor = true;
@@ -110,9 +124,10 @@
             // btnThongKeNhanVien
             // 
             this.btnThongKeNhanVien.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnThongKeNhanVien.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnThongKeNhanVien.Location = new System.Drawing.Point(117, 112);
             this.btnThongKeNhanVien.Name = "btnThongKeNhanVien";
-            this.btnThongKeNhanVien.Size = new System.Drawing.Size(223, 50);
+            this.btnThongKeNhanVien.Size = new System.Drawing.Size(223, 71);
             this.btnThongKeNhanVien.TabIndex = 0;
             this.btnThongKeNhanVien.Text = "Thống Kê Nhân Viên ";
             this.btnThongKeNhanVien.UseVisualStyleBackColor = true;
@@ -141,17 +156,6 @@
             this.dtGridViewBCNhanVien.RowTemplate.Height = 24;
             this.dtGridViewBCNhanVien.Size = new System.Drawing.Size(1385, 380);
             this.dtGridViewBCNhanVien.TabIndex = 121;
-            // 
-            // btnXuatEXL
-            // 
-            this.btnXuatEXL.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnXuatEXL.Location = new System.Drawing.Point(1122, 112);
-            this.btnXuatEXL.Name = "btnXuatEXL";
-            this.btnXuatEXL.Size = new System.Drawing.Size(223, 50);
-            this.btnXuatEXL.TabIndex = 4;
-            this.btnXuatEXL.Text = "Xuất Excel";
-            this.btnXuatEXL.UseVisualStyleBackColor = true;
-            this.btnXuatEXL.Click += new System.EventHandler(this.btnXuatEXL_Click);
             // 
             // F_BaoCaoNhanVien
             // 
