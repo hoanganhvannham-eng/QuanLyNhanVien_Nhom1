@@ -86,28 +86,6 @@ namespace QuanLyNhanVien3
             }
         }
 
-        private void LoadcbLuong()
-        {
-            // load chuc vu combobox
-            try
-            {
-                cn.connect();
-                string sqlLoadcomboBoxttblLuong = "SELECT * FROM tblLuong WHERE DeletedAt = 0";
-                using (SqlDataAdapter da = new SqlDataAdapter(sqlLoadcomboBoxttblLuong, cn.conn))
-                {
-                    DataSet ds = new DataSet();
-                    da.Fill(ds);
-
-                    cbMaLuong.DataSource = ds.Tables[0];
-                    cbMaLuong.DisplayMember = "MaLuong"; // cot hien thi
-                    cbMaLuong.ValueMember = "MaLuong"; // cot gia tri
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi tải dữ liệu mã Lương: " + ex.Message);
-            }
-        }
 
         private void LoadDataLuong()
         {
@@ -132,7 +110,6 @@ namespace QuanLyNhanVien3
                 }
                 cn.disconnect();
                 ClearAllInputs(this);
-                LoadcbLuong();
                 LoadcbNV();
             }
             catch (Exception ex)
