@@ -57,7 +57,8 @@ namespace QuanLyNhanVien3
                 int thang = dtpThoiGian.Value.Month;
                 int nam = dtpThoiGian.Value.Year;
 
-                string sql = @"SELECT nv.MaNV, nv.HoTen, pb.TenPB, COUNT(cc.Id) AS SoNgayLamViec
+                string sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', pb.TenPB as N'Tên Phòng Ban',
+                               COUNT(cc.Id) AS N'Số ngày làm việc'
                                FROM tblNhanVien nv
                                JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
                                JOIN tblChamCong cc ON nv.MaNV = cc.MaNV 
@@ -66,7 +67,7 @@ namespace QuanLyNhanVien3
                                  AND MONTH(cc.Ngay) = @Thang 
                                  AND YEAR(cc.Ngay) = @Nam
                                GROUP BY nv.MaNV, nv.HoTen, pb.TenPB
-                               ORDER BY SoNgayLamViec DESC, nv.HoTen;";
+                               ORDER BY N'Số ngày làm việc' DESC, nv.HoTen;";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
@@ -102,7 +103,7 @@ namespace QuanLyNhanVien3
                 int nam = dtpThoiGian.Value.Year;
 
                 // SQL: Tính toán chi tiết số phút đi muộn, về sớm
-                string sql = @"SELECT nv.MaNV, nv.HoTen, cc.Ngay, cc.GioVao, cc.GioVe,
+                string sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', cc.Ngay as N'Ngày', cc.GioVao as N'Giờ Vào', cc.GioVe as N'Giờ Về',
                                CASE 
                                    -- Trường hợp 1: Đi sớm/đúng giờ VÀ Về muộn/đúng giờ -> Tốt
                                    WHEN cc.GioVao <= '08:00:00' AND cc.GioVe >= '17:00:00' 
@@ -118,7 +119,7 @@ namespace QuanLyNhanVien3
                                    
                                    -- Trường hợp 4: Đi muộn VÀ Về sớm -> Bị cả hai
                                    ELSE N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe, '17:00:00') AS NVARCHAR(20)) + N' phút'
-                               END AS TrangThai
+                               END AS N'Trạng Thái'
                                FROM tblChamCong cc
                                JOIN tblNhanVien nv ON cc.MaNV = nv.MaNV
                                WHERE cc.DeletedAt = 0
@@ -168,7 +169,8 @@ namespace QuanLyNhanVien3
                 if (currentMode == 1)
                 {
                     // --- TÌM KIẾM TRONG BẢNG SỐ NGÀY LÀM VIỆC ---
-                    sql = @"SELECT nv.MaNV, nv.HoTen, pb.TenPB, COUNT(cc.Id) AS SoNgayLamViec
+                    sql = @"SELECT nv.MaNV as 'Mã Nhân Viên', nv.HoTen as 'Họ Tên', 
+                            pb.TenPB as N'Tên Phòng Ban', COUNT(cc.Id) AS N'Số Ngày Làm Việc'
                             FROM tblNhanVien nv
                             JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
                             JOIN tblChamCong cc ON nv.MaNV = cc.MaNV 
@@ -178,18 +180,18 @@ namespace QuanLyNhanVien3
                               AND YEAR(cc.Ngay) = @Nam
                               AND (nv.HoTen LIKE @TuKhoa OR nv.MaNV LIKE @TuKhoa) -- Điều kiện tìm kiếm thêm vào đây
                             GROUP BY nv.MaNV, nv.HoTen, pb.TenPB
-                            ORDER BY SoNgayLamViec DESC, nv.HoTen;";
+                            ORDER BY N'Số Ngày Làm Việc' DESC, nv.HoTen;";
                 }
                 else if (currentMode == 2)
                 {
                     // --- TÌM KIẾM TRONG BẢNG ĐI TRỄ VỀ SỚM ---
-                    sql = @"SELECT nv.MaNV, nv.HoTen, cc.Ngay, cc.GioVao, cc.GioVe,
+                    sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', cc.Ngay as N'Ngày', cc.GioVao as N'Giờ Vào', cc.GioVe as N'Giờ Về',
                             CASE 
                                 WHEN cc.GioVao <= '08:00:00' AND cc.GioVe >= '17:00:00' THEN N'Đi làm đúng giờ'
                                 WHEN cc.GioVao <= '08:00:00' AND cc.GioVe < '17:00:00' THEN N'Đi đúng giờ - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe, '17:00:00') AS NVARCHAR(20)) + N' phút'
                                 WHEN cc.GioVao > '08:00:00' AND cc.GioVe >= '17:00:00' THEN N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về đúng giờ'
                                 ELSE N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe, '17:00:00') AS NVARCHAR(20)) + N' phút'
-                            END AS TrangThai
+                            END AS N'Trạng Thái'
                             FROM tblChamCong cc
                             JOIN tblNhanVien nv ON cc.MaNV = nv.MaNV
                             WHERE cc.DeletedAt = 0
@@ -201,7 +203,7 @@ namespace QuanLyNhanVien3
                 else
                 {
                     // --- MẶC ĐỊNH (Nếu chưa chọn bảng nào): Tìm lịch sử chấm công gốc ---
-                    sql = @"SELECT nv.MaNV, nv.HoTen, cc.Ngay, cc.GioVao, cc.GioVe
+                    sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as 'Họ Tên', cc.Ngay as N'Ngày', cc.GioVao as N'Giờ Vào', cc.GioVe as N'Giờ Về'
                             FROM tblChamCong cc
                             JOIN tblNhanVien nv ON cc.MaNV = nv.MaNV
                             WHERE cc.DeletedAt = 0

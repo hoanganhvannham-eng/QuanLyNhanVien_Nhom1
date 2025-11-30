@@ -43,10 +43,10 @@ namespace QuanLyNhanVien3
                 cn.connect();
                 // Join 3 bảng để lấy thông tin: Tên Dự Án - Tên Nhân Viên - Vai Trò
                 string sql = @"SELECT da.TenDA as N'Tên Dự Án', 
-                                      nv.MaNV as N'Mã NV', 
+                                      nv.MaNV as N'Mã Nhân Viên', 
                                       nv.HoTen as N'Tên Nhân Viên', 
                                       ct.VaiTro as N'Vai Trò',
-                                      da.NgayBatDau as N'Ngày Bắt Đầu DA'
+                                      da.NgayBatDau as N'Ngày Bắt Đầu Dự Án'
                                FROM tblDuAn da
                                JOIN tblChiTietDuAn ct ON da.MaDA = ct.MaDA
                                JOIN tblNhanVien nv ON ct.MaNV = nv.MaNV

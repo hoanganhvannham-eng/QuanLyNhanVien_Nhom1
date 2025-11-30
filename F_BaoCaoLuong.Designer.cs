@@ -31,13 +31,13 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnXuatExcel = new System.Windows.Forms.Button();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.btnTongLuongPhongBan = new System.Windows.Forms.Button();
             this.btnNVTongLuongCaoNhat = new System.Windows.Forms.Button();
             this.btnLuongHangThang = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.dtGridViewBCLuong = new System.Windows.Forms.DataGridView();
-            this.btnXuatExcel = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -77,11 +77,23 @@
             this.panel2.Size = new System.Drawing.Size(1396, 261);
             this.panel2.TabIndex = 4;
             // 
+            // btnXuatExcel
+            // 
+            this.btnXuatExcel.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnXuatExcel.Location = new System.Drawing.Point(553, 156);
+            this.btnXuatExcel.Name = "btnXuatExcel";
+            this.btnXuatExcel.Size = new System.Drawing.Size(161, 42);
+            this.btnXuatExcel.TabIndex = 4;
+            this.btnXuatExcel.Text = "Xuất Excel";
+            this.btnXuatExcel.UseVisualStyleBackColor = true;
+            this.btnXuatExcel.Click += new System.EventHandler(this.btnXuatExcel_Click);
+            // 
             // dateTimePicker1
             // 
+            this.dateTimePicker1.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTimePicker1.Location = new System.Drawing.Point(518, 29);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(255, 22);
+            this.dateTimePicker1.Size = new System.Drawing.Size(295, 28);
             this.dateTimePicker1.TabIndex = 3;
             // 
             // btnTongLuongPhongBan
@@ -140,17 +152,6 @@
             this.dtGridViewBCLuong.RowTemplate.Height = 24;
             this.dtGridViewBCLuong.Size = new System.Drawing.Size(1396, 361);
             this.dtGridViewBCLuong.TabIndex = 122;
-            // 
-            // btnXuatExcel
-            // 
-            this.btnXuatExcel.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnXuatExcel.Location = new System.Drawing.Point(553, 156);
-            this.btnXuatExcel.Name = "btnXuatExcel";
-            this.btnXuatExcel.Size = new System.Drawing.Size(161, 42);
-            this.btnXuatExcel.TabIndex = 4;
-            this.btnXuatExcel.Text = "Xuất Excel";
-            this.btnXuatExcel.UseVisualStyleBackColor = true;
-            this.btnXuatExcel.Click += new System.EventHandler(this.btnXuatExcel_Click);
             // 
             // F_BaoCaoLuong
             // 

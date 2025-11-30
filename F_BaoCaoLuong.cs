@@ -43,11 +43,11 @@ namespace QuanLyNhanVien3
                 int nam = dateTimePicker1.Value.Year;
 
                 string sql = @"SELECT l.MaLuong AS N'Mã Lương', 
-                                      nv.MaNV AS N'Mã NV', 
+                                      nv.MaNV AS N'Mã Nhân Viên', 
                                       nv.HoTen AS N'Họ Tên', 
                                       l.Thang AS N'Tháng', 
                                       l.Nam AS N'Năm', 
-                                      l.LuongCoBan AS N'Lương CB', 
+                                      l.LuongCoBan AS N'Lương Cơ Bản', 
                                       l.SoNgayCong AS N'Ngày Công',
                                       l.PhuCap AS N'Phụ Cấp',
                                       l.KhauTru AS N'Khấu Trừ',
@@ -131,7 +131,7 @@ namespace QuanLyNhanVien3
 
                 // Group by theo tên phòng ban và tính tổng lương
                 string sql = @"SELECT pb.TenPB AS N'Tên Phòng Ban', 
-                                      COUNT(l.MaNV) AS N'Số NV Đã Nhận Lương',
+                                      COUNT(l.MaNV) AS N'Số Nhân Viên Đã Nhận Lương',
                                       SUM(l.TongLuong) AS N'Tổng Quỹ Lương'
                                FROM tblLuong l
                                JOIN tblNhanVien nv ON l.MaNV = nv.MaNV
