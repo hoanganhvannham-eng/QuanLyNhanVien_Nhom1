@@ -40,7 +40,8 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataNhanVien = @"SELECT nv.MaNV, nv.HoTen, pb.TenPB, cv.TenCV, nv.Email
+                string sqlLoadDataNhanVien = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', 
+                                                    pb.TenPB as N'Tên Phòng Ban', cv.TenCV as N'Tên Chức Vụ', nv.Email
                                                     FROM tblNhanVien nv
                                                     JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
                                                     JOIN tblChucVu cv ON nv.MaCV = cv.MaCV
@@ -68,7 +69,7 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataNhanVien = @"SELECT GioiTinh, COUNT(*) AS SoLuong
+                string sqlLoadDataNhanVien = @"SELECT GioiTinh as N'Giới Tính', COUNT(*) as N'Số Lượng'
                                                 FROM tblNhanVien
                                                 WHERE DeletedAt = 0
                                                 GROUP BY GioiTinh;
@@ -157,7 +158,8 @@ namespace QuanLyNhanVien3
 
                 cn.connect();   // MỞ KẾT NỐI
 
-                string sql = @"SELECT nv.MaNV, nv.HoTen, pb.TenPB, cv.TenCV, nv.Email
+                string sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', 
+                       pb.TenPB as N'Phòng Ban', cv.TenCV as N'Tên Chức Vụ', nv.Email
                        FROM tblNhanVien nv
                        JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
                        JOIN tblChucVu cv ON nv.MaCV = cv.MaCV
