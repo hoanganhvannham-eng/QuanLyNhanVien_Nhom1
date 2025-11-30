@@ -31,12 +31,13 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.btnThongKeNhanVien = new System.Windows.Forms.Button();
-            this.btnsoluongtheogioitinh = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.btnTimKiemTheoTen = new System.Windows.Forms.Button();
+            this.txttimkiemtheoten = new System.Windows.Forms.TextBox();
+            this.btnsoluongtheogioitinh = new System.Windows.Forms.Button();
+            this.btnThongKeNhanVien = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.dtGridViewBCNhanVien = new System.Windows.Forms.DataGridView();
+            this.btnXuatEXL = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -59,14 +60,15 @@
             this.label1.Font = new System.Drawing.Font("Times New Roman", 25.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(494, 56);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(369, 51);
+            this.label1.Size = new System.Drawing.Size(364, 49);
             this.label1.TabIndex = 0;
             this.label1.Text = "Báo Cáo Nhân Viên";
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.btnXuatEXL);
             this.panel3.Controls.Add(this.btnTimKiemTheoTen);
-            this.panel3.Controls.Add(this.textBox1);
+            this.panel3.Controls.Add(this.txttimkiemtheoten);
             this.panel3.Controls.Add(this.btnsoluongtheogioitinh);
             this.panel3.Controls.Add(this.btnThongKeNhanVien);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
@@ -74,6 +76,47 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1385, 248);
             this.panel3.TabIndex = 3;
+            // 
+            // btnTimKiemTheoTen
+            // 
+            this.btnTimKiemTheoTen.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnTimKiemTheoTen.Location = new System.Drawing.Point(790, 150);
+            this.btnTimKiemTheoTen.Name = "btnTimKiemTheoTen";
+            this.btnTimKiemTheoTen.Size = new System.Drawing.Size(246, 25);
+            this.btnTimKiemTheoTen.TabIndex = 3;
+            this.btnTimKiemTheoTen.Text = "Tìm Kiếm Theo Tên";
+            this.btnTimKiemTheoTen.UseVisualStyleBackColor = true;
+            this.btnTimKiemTheoTen.Click += new System.EventHandler(this.btnTimKiemTheoTen_Click);
+            // 
+            // txttimkiemtheoten
+            // 
+            this.txttimkiemtheoten.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.txttimkiemtheoten.Location = new System.Drawing.Point(790, 112);
+            this.txttimkiemtheoten.Name = "txttimkiemtheoten";
+            this.txttimkiemtheoten.Size = new System.Drawing.Size(246, 22);
+            this.txttimkiemtheoten.TabIndex = 2;
+            // 
+            // btnsoluongtheogioitinh
+            // 
+            this.btnsoluongtheogioitinh.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnsoluongtheogioitinh.Location = new System.Drawing.Point(444, 112);
+            this.btnsoluongtheogioitinh.Name = "btnsoluongtheogioitinh";
+            this.btnsoluongtheogioitinh.Size = new System.Drawing.Size(224, 50);
+            this.btnsoluongtheogioitinh.TabIndex = 1;
+            this.btnsoluongtheogioitinh.Text = "Thống Kê Số Lượng Nhân Viên Theo Giới Tính";
+            this.btnsoluongtheogioitinh.UseVisualStyleBackColor = true;
+            this.btnsoluongtheogioitinh.Click += new System.EventHandler(this.btnsoluongtheogioitinh_Click);
+            // 
+            // btnThongKeNhanVien
+            // 
+            this.btnThongKeNhanVien.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnThongKeNhanVien.Location = new System.Drawing.Point(117, 112);
+            this.btnThongKeNhanVien.Name = "btnThongKeNhanVien";
+            this.btnThongKeNhanVien.Size = new System.Drawing.Size(223, 50);
+            this.btnThongKeNhanVien.TabIndex = 0;
+            this.btnThongKeNhanVien.Text = "Thống Kê Nhân Viên ";
+            this.btnThongKeNhanVien.UseVisualStyleBackColor = true;
+            this.btnThongKeNhanVien.Click += new System.EventHandler(this.btnThongKeNhanVien_Click);
             // 
             // panel2
             // 
@@ -83,44 +126,6 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1385, 380);
             this.panel2.TabIndex = 4;
-            // 
-            // btnThongKeNhanVien
-            // 
-            this.btnThongKeNhanVien.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnThongKeNhanVien.Location = new System.Drawing.Point(176, 116);
-            this.btnThongKeNhanVien.Name = "btnThongKeNhanVien";
-            this.btnThongKeNhanVien.Size = new System.Drawing.Size(223, 50);
-            this.btnThongKeNhanVien.TabIndex = 0;
-            this.btnThongKeNhanVien.Text = "Thống Kê Nhân Viên ";
-            this.btnThongKeNhanVien.UseVisualStyleBackColor = true;
-            // 
-            // btnsoluongtheogioitinh
-            // 
-            this.btnsoluongtheogioitinh.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnsoluongtheogioitinh.Location = new System.Drawing.Point(503, 116);
-            this.btnsoluongtheogioitinh.Name = "btnsoluongtheogioitinh";
-            this.btnsoluongtheogioitinh.Size = new System.Drawing.Size(224, 50);
-            this.btnsoluongtheogioitinh.TabIndex = 1;
-            this.btnsoluongtheogioitinh.Text = "Thống Kê Số Lượng Nhân Viên Theo Giới Tính";
-            this.btnsoluongtheogioitinh.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.textBox1.Location = new System.Drawing.Point(849, 116);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(329, 22);
-            this.textBox1.TabIndex = 2;
-            // 
-            // btnTimKiemTheoTen
-            // 
-            this.btnTimKiemTheoTen.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnTimKiemTheoTen.Location = new System.Drawing.Point(849, 154);
-            this.btnTimKiemTheoTen.Name = "btnTimKiemTheoTen";
-            this.btnTimKiemTheoTen.Size = new System.Drawing.Size(329, 25);
-            this.btnTimKiemTheoTen.TabIndex = 3;
-            this.btnTimKiemTheoTen.Text = "Tìm Kiếm Theo Tên";
-            this.btnTimKiemTheoTen.UseVisualStyleBackColor = true;
             // 
             // dtGridViewBCNhanVien
             // 
@@ -136,6 +141,17 @@
             this.dtGridViewBCNhanVien.RowTemplate.Height = 24;
             this.dtGridViewBCNhanVien.Size = new System.Drawing.Size(1385, 380);
             this.dtGridViewBCNhanVien.TabIndex = 121;
+            // 
+            // btnXuatEXL
+            // 
+            this.btnXuatEXL.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnXuatEXL.Location = new System.Drawing.Point(1122, 112);
+            this.btnXuatEXL.Name = "btnXuatEXL";
+            this.btnXuatEXL.Size = new System.Drawing.Size(223, 50);
+            this.btnXuatEXL.TabIndex = 4;
+            this.btnXuatEXL.Text = "Xuất Excel";
+            this.btnXuatEXL.UseVisualStyleBackColor = true;
+            this.btnXuatEXL.Click += new System.EventHandler(this.btnXuatEXL_Click);
             // 
             // F_BaoCaoNhanVien
             // 
@@ -167,7 +183,8 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnsoluongtheogioitinh;
         private System.Windows.Forms.Button btnTimKiemTheoTen;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txttimkiemtheoten;
         private System.Windows.Forms.DataGridView dtGridViewBCNhanVien;
+        private System.Windows.Forms.Button btnXuatEXL;
     }
 }
