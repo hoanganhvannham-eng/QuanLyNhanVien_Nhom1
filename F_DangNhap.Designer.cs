@@ -41,8 +41,8 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.btnRefresh = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pictureBoxQR = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.pictureBoxQR = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQR)).BeginInit();
             this.SuspendLayout();
@@ -95,9 +95,9 @@
             this.label2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(358, 366);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(135, 22);
+            this.label2.Size = new System.Drawing.Size(131, 22);
             this.label2.TabIndex = 22;
-            this.label2.Text = "Tên đăng nhập :";
+            this.label2.Text = "Số Điện Thoại:";
             // 
             // label1
             // 
@@ -191,6 +191,17 @@
             this.panel1.Size = new System.Drawing.Size(1300, 150);
             this.panel1.TabIndex = 28;
             // 
+            // label4
+            // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Times New Roman", 25.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(386, 99);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(561, 49);
+            this.label4.TabIndex = 28;
+            this.label4.Text = "Phần Mềm Quản Lý Nhân Viên";
+            // 
             // pictureBoxQR
             // 
             this.pictureBoxQR.Anchor = System.Windows.Forms.AnchorStyles.Top;
@@ -200,17 +211,6 @@
             this.pictureBoxQR.TabIndex = 27;
             this.pictureBoxQR.TabStop = false;
             this.pictureBoxQR.Visible = false;
-            // 
-            // label4
-            // 
-            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Times New Roman", 25.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(386, 99);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(569, 51);
-            this.label4.TabIndex = 28;
-            this.label4.Text = "Phần Mềm Quản Lý Nhân Viên";
             // 
             // F_DangNhap
             // 

@@ -1,52 +1,83 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-//.\SQLEXPRESS
-//
+
 namespace QuanLyNhanVien3
 {
     class connectData
     {
         public SqlConnection conn;
+
+        private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom1;Integrated Security=True;";
+
+        // Mở kết nối
         public void connect()
         {
-            string strCon = @"Data Source=.\SQLEXPRESS; Initial Catalog = QuanLyNhanVien3; Integrated Security = True;";
             try
             {
-                conn = new SqlConnection(strCon);
-                conn.Open();
+                if (conn == null)
+                    conn = new SqlConnection(strCon);
+
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
             }
             catch (Exception ex)
             {
-                throw new Exception("Lỗi: " + ex.Message);
-            }
-        }
-        public void disconnect()
-        {
-            if (conn != null && conn.State == ConnectionState.Open)
-            {
-                conn.Close();
-                conn.Dispose();
-                conn = null;
+                throw new Exception("Lỗi kết nối SQL: " + ex.Message);
             }
         }
 
-        public Boolean exeSQL(string cmd)
+        // Đóng kết nối
+        public void disconnect()
         {
             try
             {
-                SqlCommand sc = new SqlCommand(cmd, conn);
-                sc.ExecuteNonQuery();
+                if (conn != null && conn.State == ConnectionState.Open)
+                    conn.Close();
+            }
+            catch { }
+        }
+
+        // Thực thi câu lệnh SQL không trả về dữ liệu
+        public bool exeSQL(string cmd)
+        {
+            try
+            {
+                if (conn == null || conn.State != ConnectionState.Open)
+                    connect(); // đảm bảo kết nối mở
+
+                using (SqlCommand sc = new SqlCommand(cmd, conn))
+                {
+                    sc.ExecuteNonQuery();
+                }
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                // Có thể log ex.Message nếu muốn debug
                 return false;
+            }
+        }
+
+        // Thực thi câu lệnh SQL trả về DataTable
+        public DataTable getDataTable(string query)
+        {
+            try
+            {
+                if (conn == null || conn.State != ConnectionState.Open)
+                    connect();
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+                }
+            }
+            catch
+            {
+                return null;
             }
         }
     }

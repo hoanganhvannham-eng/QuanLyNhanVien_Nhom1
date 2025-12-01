@@ -33,6 +33,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.pictureBoxQRNV = new System.Windows.Forms.PictureBox();
             this.btnTaoQR = new System.Windows.Forms.Button();
             this.cbBoxChucVu = new System.Windows.Forms.ComboBox();
             this.cbBoxMaPB = new System.Windows.Forms.ComboBox();
@@ -69,16 +70,15 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.dtGridViewNhanVien = new System.Windows.Forms.DataGridView();
-            this.pictureBoxQRNV = new System.Windows.Forms.PictureBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQRNV)).BeginInit();
             this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGridViewNhanVien)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQRNV)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -152,6 +152,17 @@
             this.panel4.Size = new System.Drawing.Size(596, 450);
             this.panel4.TabIndex = 161;
             this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
+            // 
+            // pictureBoxQRNV
+            // 
+            this.pictureBoxQRNV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxQRNV.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.pictureBoxQRNV.Location = new System.Drawing.Point(291, 42);
+            this.pictureBoxQRNV.Name = "pictureBoxQRNV";
+            this.pictureBoxQRNV.Size = new System.Drawing.Size(258, 246);
+            this.pictureBoxQRNV.TabIndex = 192;
+            this.pictureBoxQRNV.TabStop = false;
+            this.pictureBoxQRNV.Visible = false;
             // 
             // btnTaoQR
             // 
@@ -559,17 +570,6 @@
             this.dtGridViewNhanVien.TabIndex = 120;
             this.dtGridViewNhanVien.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewNhanVien_CellClick_2);
             // 
-            // pictureBoxQRNV
-            // 
-            this.pictureBoxQRNV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBoxQRNV.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.pictureBoxQRNV.Location = new System.Drawing.Point(291, 42);
-            this.pictureBoxQRNV.Name = "pictureBoxQRNV";
-            this.pictureBoxQRNV.Size = new System.Drawing.Size(258, 246);
-            this.pictureBoxQRNV.TabIndex = 192;
-            this.pictureBoxQRNV.TabStop = false;
-            this.pictureBoxQRNV.Visible = false;
-            // 
             // F_NhanVien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -589,13 +589,13 @@
             this.panel2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQRNV)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtGridViewNhanVien)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQRNV)).EndInit();
             this.ResumeLayout(false);
 
         }

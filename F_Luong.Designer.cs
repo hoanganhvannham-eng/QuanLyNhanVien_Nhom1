@@ -37,7 +37,6 @@
             this.txtGhiChu = new System.Windows.Forms.TextBox();
             this.btnXuatExcel = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
-            this.numNam = new System.Windows.Forms.NumericUpDown();
             this.btnTimKiem = new System.Windows.Forms.Button();
             this.txtTimKiem = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -47,6 +46,7 @@
             this.txtKhauTru = new System.Windows.Forms.TextBox();
             this.txtSoNgayCong = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.cbMaLuong = new System.Windows.Forms.TextBox();
             this.cbThang = new System.Windows.Forms.ComboBox();
             this.btnXoa = new System.Windows.Forms.Button();
             this.cbMaNV = new System.Windows.Forms.ComboBox();
@@ -61,14 +61,14 @@
             this.txtLuongCoBan = new System.Windows.Forms.TextBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.dgvLuong = new System.Windows.Forms.DataGridView();
-            this.cbMaLuong = new System.Windows.Forms.TextBox();
+            this.numNam = new System.Windows.Forms.NumericUpDown();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numNam)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLuong)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numNam)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -81,6 +81,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1246, 126);
             this.panel1.TabIndex = 127;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // btnThoat
             // 
@@ -119,11 +120,11 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.numNam);
             this.panel4.Controls.Add(this.label6);
             this.panel4.Controls.Add(this.txtGhiChu);
             this.panel4.Controls.Add(this.btnXuatExcel);
             this.panel4.Controls.Add(this.btnRefresh);
-            this.panel4.Controls.Add(this.numNam);
             this.panel4.Controls.Add(this.btnTimKiem);
             this.panel4.Controls.Add(this.txtTimKiem);
             this.panel4.Controls.Add(this.label11);
@@ -137,6 +138,7 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(623, 356);
             this.panel4.TabIndex = 154;
+            this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
             // 
             // label6
             // 
@@ -182,15 +184,6 @@
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click_1);
-            // 
-            // numNam
-            // 
-            this.numNam.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.numNam.Location = new System.Drawing.Point(143, 52);
-            this.numNam.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.numNam.Name = "numNam";
-            this.numNam.Size = new System.Drawing.Size(241, 22);
-            this.numNam.TabIndex = 163;
             // 
             // btnTimKiem
             // 
@@ -258,6 +251,7 @@
             this.label8.Size = new System.Drawing.Size(41, 19);
             this.label8.TabIndex = 156;
             this.label8.Text = "Năm";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // txtKhauTru
             // 
@@ -299,6 +293,16 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(623, 356);
             this.panel3.TabIndex = 153;
+            // 
+            // cbMaLuong
+            // 
+            this.cbMaLuong.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.cbMaLuong.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbMaLuong.Location = new System.Drawing.Point(343, 53);
+            this.cbMaLuong.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.cbMaLuong.Name = "cbMaLuong";
+            this.cbMaLuong.Size = new System.Drawing.Size(222, 27);
+            this.cbMaLuong.TabIndex = 163;
             // 
             // cbThang
             // 
@@ -462,15 +466,19 @@
             this.dgvLuong.TabIndex = 121;
             this.dgvLuong.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvLuong_CellClick_1);
             // 
-            // cbMaLuong
+            // numNam
             // 
-            this.cbMaLuong.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbMaLuong.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbMaLuong.Location = new System.Drawing.Point(343, 53);
-            this.cbMaLuong.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.cbMaLuong.Name = "cbMaLuong";
-            this.cbMaLuong.Size = new System.Drawing.Size(222, 27);
-            this.cbMaLuong.TabIndex = 163;
+            this.numNam.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.numNam.Location = new System.Drawing.Point(143, 50);
+            this.numNam.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.numNam.Name = "numNam";
+            this.numNam.Size = new System.Drawing.Size(241, 22);
+            this.numNam.TabIndex = 168;
+            this.numNam.ValueChanged += new System.EventHandler(this.numNam_ValueChanged);
             // 
             // F_Luong
             // 
@@ -493,11 +501,11 @@
             this.panel2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numNam)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvLuong)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numNam)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -510,7 +518,6 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Button btnXuatExcel;
         private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.NumericUpDown numNam;
         private System.Windows.Forms.ComboBox cbMaNV;
         private System.Windows.Forms.Button btnTimKiem;
         private System.Windows.Forms.TextBox txtTimKiem;
@@ -537,5 +544,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtGhiChu;
         private System.Windows.Forms.TextBox cbMaLuong;
+        private System.Windows.Forms.NumericUpDown numNam;
     }
 }

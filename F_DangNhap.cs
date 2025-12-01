@@ -27,7 +27,7 @@ namespace QuanLyNhanVien3
         private void DangNhap_Load(object sender, EventArgs e)
         {
             tbpassword.UseSystemPasswordChar = true;
-            StartCamera();
+            //StartCamera();
         }
 
         private void btndangnhap_Click(object sender, EventArgs e)
