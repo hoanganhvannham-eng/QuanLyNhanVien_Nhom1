@@ -264,10 +264,32 @@ END;
 
 
 
+CREATE TABLE tblRole (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    TenRole NVARCHAR(50) UNIQUE NOT NULL,
+    MoTa NVARCHAR(200)
+);
+
+INSERT INTO tblRole (TenRole, MoTa) VALUES
+('Admin', 'Toàn quy?n h? th?ng'),
+('User', 'Ch? xem & ch?m công');
+
+ALTER TABLE tblTaiKhoan
+ADD RoleId INT NULL;
+
+UPDATE tblTaiKhoan SET RoleId = 2;
+
+UPDATE tblTaiKhoan SET RoleId = 1 WHERE MaTK = 'TK001';
+UPDATE tblTaiKhoan SET RoleId = 2 WHERE MaTK <> 'TK001';
+
+ALTER TABLE tblTaiKhoan
+ALTER COLUMN RoleId INT NOT NULL;
 
 
-
-
+ALTER TABLE tblTaiKhoan
+ADD CONSTRAINT FK_TaiKhoan_Role
+FOREIGN KEY (RoleId)
+REFERENCES tblRole(Id);
 
 
 
