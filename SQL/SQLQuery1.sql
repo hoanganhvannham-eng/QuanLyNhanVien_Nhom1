@@ -67,19 +67,33 @@ CREATE TABLE tblHopDong (
 -- ===== B?ng L??ng =====
 CREATE TABLE tblLuong (
     Id INT PRIMARY KEY IDENTITY(1,1),
+
     MaLuong VARCHAR(10) UNIQUE NOT NULL,
     MaNV VARCHAR(10) NOT NULL,
+
     Thang INT CHECK (Thang BETWEEN 1 AND 12),
-    Nam INT,
+    Nam INT NOT NULL,
+
     LuongCoBan DECIMAL(18,2) NOT NULL,
-    SoNgayCong INT,
+    SoNgayCongChuan INT NOT NULL DEFAULT 26,   -- ngày công chu?n
+    SoNgayCong INT DEFAULT 0,                 -- ngày công th?c t? (T? ??NG TÍNH)
+
     PhuCap DECIMAL(18,2) DEFAULT 0,
     KhauTru DECIMAL(18,2) DEFAULT 0,
+
     Ghichu NVARCHAR(255),
-    TongLuong AS (LuongCoBan + PhuCap - KhauTru) PERSISTED,
+
+    TongLuong AS (
+        (LuongCoBan / SoNgayCongChuan) * SoNgayCong
+        + PhuCap
+        - KhauTru
+    ) PERSISTED,
+
     DeletedAt INT NOT NULL DEFAULT 0,
+
     FOREIGN KEY (MaNV) REFERENCES tblNhanVien(MaNV)
 );
+GO
 
 -- ===== B?ng D? Án =====
 CREATE TABLE tblDuAn (
@@ -131,6 +145,135 @@ CREATE TABLE tblTaiKhoan (
     DeletedAt INT NOT NULL DEFAULT 0,
     FOREIGN KEY (MaNV) REFERENCES tblNhanVien(MaNV)
 );
+
+-- =====================================================
+
+IF OBJECT_ID('tblLuong', 'U') IS NOT NULL
+    DROP TABLE tblLuong;
+GO
+
+
+
+
+
+CREATE OR ALTER TRIGGER trg_UpdateSoNgayCong
+ON tblChamCong
+AFTER INSERT, DELETE
+AS
+BEGIN
+    -- C?p nh?t t?t c? các nhân viên b? ?nh h??ng
+    DECLARE @MaNV VARCHAR(10);
+
+    -- L?y các nhân viên v?a ???c ch?m công
+    SELECT @MaNV = MaNV FROM inserted;
+
+    -- Tính l?i s? ngày công th?c t? trong tháng
+    UPDATE tblLuong
+    SET SoNgayCong = (
+        SELECT COUNT(*)
+        FROM tblChamCong
+        WHERE tblChamCong.MaNV = tblLuong.MaNV
+          AND MONTH(tblChamCong.Ngay) = tblLuong.Thang
+          AND YEAR(tblChamCong.Ngay) = tblLuong.Nam
+    )
+    WHERE MaNV = @MaNV;
+END;
+GO
+
+
+-- Xóa d? li?u c? (n?u c?n)
+-- DELETE FROM tblLuong;
+-- GO
+
+-------------------------------------------------------
+--  D? LI?U L??NG CHO 3 NHÂN VIÊN TRONG 12 THÁNG
+-------------------------------------------------------
+
+
+DECLARE @i INT = 1;
+DECLARE @nv VARCHAR(10);
+DECLARE @Luong INT;
+DECLARE @Thang INT;
+
+WHILE @i <= 10
+BEGIN
+    SET @nv = 'NV0' + CAST(@i AS VARCHAR(2));
+    SET @Luong = 6000000 + (@i * 1000000);   -- LCB khác nhau m?i NV (7tr ? 16tr)
+
+    SET @Thang = 1;
+    WHILE @Thang <= 12
+    BEGIN
+        INSERT INTO tblLuong (MaLuong, MaNV, Thang, Nam, LuongCoBan, SoNgayCongChuan, SoNgayCong, PhuCap, KhauTru, GhiChu)
+        VALUES (
+            CONCAT('ML', @nv, '_', @Thang),
+            @nv,
+            @Thang,
+            2024,
+            @Luong,
+            26,
+            22 + (ABS(CHECKSUM(NEWID())) % 5),  -- sinh s? ngày làm 22–26
+            500000,
+            0,
+            N'D? li?u m?u'
+        );
+
+        SET @Thang = @Thang + 1;
+    END
+
+    SET @i = @i + 1;
+END
+
+
+
+DECLARE @Thang INT = 1;
+DECLARE @Nam INT = 2024;
+DECLARE @Ngay DATE;
+DECLARE @MaChamCong VARCHAR(20);
+DECLARE @i INT;
+
+WHILE @Thang <= 12
+BEGIN
+    -- Xác ??nh s? ngày ?i làm th?c t? trong tháng (22 ? 26)
+    DECLARE @SoNgay INT = 22 + (ABS(CHECKSUM(NEWID())) % 5);
+
+    SET @i = 1;
+    WHILE @i <= @SoNgay
+    BEGIN
+        -- Gi? s? nhân viên ?i làm liên t?c t? ngày 1 c?a tháng (b? th? 7, CN)
+        SET @Ngay = DATEADD(DAY, @i - 1, DATEFROMPARTS(@Nam, @Thang, 1));
+
+        -- N?u r?i vào th? 7 ho?c ch? nh?t ? t?ng thêm 1 ngày
+        WHILE DATENAME(WEEKDAY, @Ngay) IN ('Saturday', 'Sunday')
+        BEGIN
+            SET @Ngay = DATEADD(DAY, 1, @Ngay);
+        END
+
+        SET @MaChamCong = CONCAT('CCNV02_', @Nam, RIGHT('0' + CAST(@Thang AS VARCHAR), 2), '_', RIGHT('0' + CAST(@i AS VARCHAR),2));
+
+        INSERT INTO tblChamCong (MaChamCong, MaNV, Ngay, GioVao, GioVe, Ghichu, DeletedAt)
+        VALUES (@MaChamCong, 'NV02', @Ngay, '08:00:00', '17:00:00', N'?i làm bình th??ng', 0);
+
+        SET @i = @i + 1;
+    END
+
+    SET @Thang = @Thang + 1;
+END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- ========================================
 -- ============ Thêm d? li?u Phòng Ban =====

@@ -26,7 +26,7 @@ namespace QuanLyNhanVien3
         {
             // ComboBox Tháng
             cbThang.Items.Clear();
-            for (int i = 1; i <= 12; i++)
+            for (int i = 0; i <= 12; i++)
             {
                 cbThang.Items.Add(i);
             }
@@ -93,14 +93,20 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataLuong =
-                    @"SELECT l.MaLuong as N'Mã Lương', l.MaNV as N'Mã Nhân Viên',
-                                Thang as N'Tháng', Nam as N'Năm',
-                                LuongCoBan as N'Lương Cơ Bản', SoNgayCong as N'Số Ngày Công',
-                                PhuCap as N'Phụ cấp', KhauTru as N'Khấu Trừ', l.Ghichu as N'Ghi Chú',
-                                TongLuong as N'Tổng Lương'
-                         FROM tblLuong as l ,tblNhanVien as nv
-                         WHERE nv.DeletedAt = 0 and l.MaNV = nv.MaNV";
+                string sqlLoadDataLuong = @"SELECT 
+                                            l.MaLuong AS N'Mã Lương',
+                                            l.MaNV AS N'Mã Nhân Viên',
+                                            l.Thang AS N'Tháng',
+                                            l.Nam AS N'Năm',
+                                            l.LuongCoBan AS N'Lương Cơ Bản',
+                                            l.SoNgayCong AS N'Số Ngày Công',
+                                            l.PhuCap AS N'Phụ Cấp',
+                                            l.KhauTru AS N'Khấu Trừ',
+                                            l.Ghichu AS N'Ghi Chú',
+                                            l.TongLuong AS N'Tổng Lương'
+                                        FROM tblLuong l
+                                        JOIN tblNhanVien nv ON l.MaNV = nv.MaNV
+                                        WHERE nv.DeletedAt = 0;";
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(sqlLoadDataLuong, cn.conn))
                 {
@@ -601,6 +607,127 @@ namespace QuanLyNhanVien3
         private void numNam_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btntimkiemtheothnag_Click(object sender, EventArgs e)
+        {
+
+            //try
+            //{// Kiểm tra đã chọn tháng
+            //    if (cbbThangtimkiem.SelectedIndex <= 0) // ví dụ 0 = "Tất cả"
+            //    {
+            //        MessageBox.Show("Vui lòng chọn tháng để tìm kiếm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //        return;
+            //    }
+
+            //    // Lấy giá trị tháng (SelectedItem) và convert sang int
+            //    int thang = Convert.ToInt32(cbbThangtimkiem.SelectedItem);
+
+            //    string sql = @"SELECT MaLuong as N'Mã Lương', MaNV as N'Mã Nhân Viên',
+            //          Thang as N'Tháng', Nam as N'Năm',
+            //          LuongCoBan as N'Lương Cơ Bản', SoNgayCong as N'Số Ngày Công',
+            //          PhuCap as N'Phụ cấp', KhauTru as N'Khấu Trừ', Ghichu as N'Ghi Chú',
+            //          TongLuong as N'Tổng Lương'
+            //   FROM tblLuong
+            //   WHERE DeletedAt = 0 AND Thang = @Thang
+            //   ORDER BY MaNV";
+
+            //    using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+            //    {
+            //        cmd.Parameters.AddWithValue("@Thang", thang);
+
+            //        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            //        DataTable dt = new DataTable();
+            //        adapter.Fill(dt);
+            //        dgvLuong.DataSource = dt;
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Lỗi: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+
+        }
+
+        private void cbbThangtimkiem_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void LoadLuongTheoThang(int thang)
+        {
+            try
+            {
+                cn.connect();
+
+                string sql = @"SELECT MaLuong as N'Mã Lương', MaNV as N'Mã Nhân Viên',
+                              Thang as N'Tháng', Nam as N'Năm',
+                              LuongCoBan as N'Lương Cơ Bản', SoNgayCong as N'Số Ngày Công',
+                              PhuCap as N'Phụ cấp', KhauTru as N'Khấu Trừ', Ghichu as N'Ghi Chú',
+                              TongLuong as N'Tổng Lương'
+                       FROM tblLuong
+                       WHERE DeletedAt = 0 AND Thang = @Thang
+                       ORDER BY MaNV";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    dgvLuong.DataSource = dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi load lương: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.disconnect();
+            }
+        }
+
+        private void cbThang_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Nếu index = 0 => "Tất cả" (hiển thị tất cả)
+            if (cbThang.SelectedIndex <= 0)
+            {
+                try
+                {
+                    cn.connect();
+                    string sql = @"SELECT MaLuong as N'Mã Lương', MaNV as N'Mã Nhân Viên',
+                                  Thang as N'Tháng', Nam as N'Năm',
+                                  LuongCoBan as N'Lương Cơ Bản', SoNgayCong as N'Số Ngày Công',
+                                  PhuCap as N'Phụ cấp', KhauTru as N'Khấu Trừ', Ghichu as N'Ghi Chú',
+                                  TongLuong as N'Tổng Lương'
+                           FROM tblLuong
+                           WHERE DeletedAt = 0
+                           ORDER BY MaNV";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                    {
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        dgvLuong.DataSource = dt;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi load lương: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    cn.disconnect();
+                }
+            }
+            else
+            {
+                // Chọn một tháng cụ thể
+                int thang = Convert.ToInt32(cbThang.SelectedItem);
+                LoadLuongTheoThang(thang);
+            }
         }
     }
 
