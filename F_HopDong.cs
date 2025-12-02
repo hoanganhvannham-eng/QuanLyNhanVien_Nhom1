@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static QuanLyNhanVien3.F_FormMain;
 
 namespace QuanLyNhanVien3
 {
@@ -100,7 +101,14 @@ namespace QuanLyNhanVien3
         private void F_HopDong_Load(object sender, EventArgs e)
         {
             LoadDataHopDong();
-
+            if (LoginInfo.CurrentUserRole.ToLower() == "user")
+            {
+                btnThem.Enabled = false;
+                btnSua.Enabled = false;
+                btnXoa.Enabled = false;
+                btnKhoiPhucHDCu.Enabled = false;
+                btnXemHDCu.Enabled = false;
+            }
         }
 
         private void dtGridViewHD_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -378,31 +386,41 @@ namespace QuanLyNhanVien3
         {
             try
             {
-                if (string.IsNullOrEmpty(tbMaHD.Text))
+                // Lấy giá trị từ ComboBox (có thể nhập tay hoặc chọn)
+                string MaNVtimkiem = cbMaNV.Text.Trim();
+
+                if (string.IsNullOrEmpty(MaNVtimkiem))
                 {
-                    MessageBox.Show("Vui lòng nhập mã Hợp Đồng để tìm kiếm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning); // hoặc mã
+                    MessageBox.Show("Vui lòng nhập hoặc chọn Mã Nhân Viên để tìm kiếm!", "Thông báo",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+
                 cn.connect();
-                string MaHDtimkiem = tbMaHD.Text.Trim();
-                string sql = @" SELECT MaHopDong, MaNV, NgayBatDau, NgayKetThuc, LoaiHopDong, LuongCoBan, Ghichu
-                                FROM tblHopDong
-                                WHERE DeletedAt = 0 AND MaHopDong LIKE @MaHopDong
-                                ORDER BY MaHopDong";
+
+                string sql = @"SELECT MaHopDong, MaNV, NgayBatDau, NgayKetThuc, LoaiHopDong, LuongCoBan, Ghichu
+                   FROM tblHopDong
+                   WHERE DeletedAt = 0 AND MaNV LIKE @MaNV
+                   ORDER BY MaHopDong";
+
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
-                    cmd.Parameters.AddWithValue("@MaHopDong", "%" + MaHDtimkiem + "%");
+                    cmd.Parameters.AddWithValue("@MaNV", "%" + MaNVtimkiem + "%");
+
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
+
                     dtGridViewHD.DataSource = dt;
                 }
+
                 cn.disconnect();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi " + ex.Message);
+                MessageBox.Show("Lỗi: " + ex.Message);
             }
+
         }
 
         private void btnXemHDCu_Click_1(object sender, EventArgs e)

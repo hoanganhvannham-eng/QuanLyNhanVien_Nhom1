@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static QuanLyNhanVien3.F_FormMain;
 
 namespace QuanLyNhanVien3
 {
@@ -38,6 +39,15 @@ namespace QuanLyNhanVien3
         private void F_ChucVu_Load(object sender, EventArgs e)
         {
             LoadDataChucVu();
+            if (LoginInfo.CurrentUserRole.ToLower() == "user")
+            {
+                btnThem.Enabled = false;
+                btnSua.Enabled = false;
+                btnXoa.Enabled = false;
+                btnHienThiNVNghiViec.Enabled = false;
+                btnKhoiPhucNV.Enabled = false;
+
+            }
         }
 
         private void btnThem_Click(object sender, EventArgs e)

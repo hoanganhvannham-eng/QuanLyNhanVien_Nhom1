@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using static QuanLyNhanVien3.F_FormMain;
 
 namespace QuanLyNhanVien3
 {
@@ -21,6 +22,12 @@ namespace QuanLyNhanVien3
             LoadDataLuong();
             cbMaNV.SelectedIndexChanged += cbMaNV_SelectedIndexChanged;
             InitThangNam();
+            if (LoginInfo.CurrentUserRole.ToLower() == "user")
+            {
+                btnThem.Enabled = false;
+                btnSua.Enabled = false;
+                btnXoa.Enabled = false;
+            }
         }
         private void InitThangNam()
         {

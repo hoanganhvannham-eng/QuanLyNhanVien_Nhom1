@@ -33,6 +33,47 @@ namespace QuanLyNhanVien3
             childForm.Show();
         }
 
+        public static class LoginInfo
+        {
+            public static string CurrentUserRole = "";
+            public static string CurrentUserName = "";
+        }
+
+        private void ApplyRole()
+        {
+            string role = LoginInfo.CurrentUserRole.ToLower();
+
+            if (role == "admin")
+            {
+                // Admin full quyền – không cần làm gì
+                return;
+            }
+
+            if (role == "user")
+            {
+                // 1. Ẩn tất cả menu quản lý
+                phongBanToolStripMenuItem.Enabled = true;
+                chucVuToolStripMenuItem.Enabled = true;
+                nhanVienToolStripMenuItem.Enabled = true;
+                luongToolStripMenuItem.Enabled = true;
+                HopDongToolStripMenuItem.Enabled = true;
+                TaiKoanToolStripMenuItem.Enabled = false;
+                ThongTinDuAnToolStripMenuItem1.Enabled = true;
+                chiTietDuAnToolStripMenuItem1.Enabled = true;
+
+                // 2. Cho phép sử dụng CHẤM CÔNG
+                chamConngToolStripMenuItem.Enabled = true;
+
+                // 3. Các form báo cáo: chỉ đọc → bật nếu muốn
+                BaoCaoNhanVienToolStripMenuItem.Enabled = false;         // ✔ đúng — menu item mới có Enabled
+                báoCáoLươngToolStripMenuItem.Enabled = false;
+                báoCáoDựÁnToolStripMenuItem.Enabled = false;
+                báoCáoChấmCôngToolStripMenuItem.Enabled = false;
+                tổngHợpToolStripMenuItem.Enabled = false;
+            }
+        }
+
+
         private void ThongTinDuAnToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             OpenChildForm(new F_DuAn());
@@ -107,7 +148,7 @@ namespace QuanLyNhanVien3
 
         private void F_FormMain_Load(object sender, EventArgs e)
         {
-
+            ApplyRole();
         }
 
         private void thoátToolStripMenuItem1_Click(object sender, EventArgs e)

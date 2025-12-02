@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZXing;
 using DocumentFormat.OpenXml.Spreadsheet;
+using static QuanLyNhanVien3.F_FormMain;
 
 namespace QuanLyNhanVien3
 {
@@ -35,7 +36,7 @@ namespace QuanLyNhanVien3
             cn.connect();
             string username = tbusename.Text.Trim();
             string password = tbpassword.Text.Trim();
-            string query = "select * from tblTaiKhoan where DeletedAt = 3 AND SoDienThoai = '" + username + "' " + "and MatKhau = '" + password + "'";
+            string query = "select * from tblTaiKhoan where DeletedAt = 0 AND SoDienThoai = '" + username + "' " + "and MatKhau = '" + password + "'";
             SqlCommand cmd = new SqlCommand(query, cn.conn);
             SqlDataReader reader = cmd.ExecuteReader();
 
@@ -50,6 +51,9 @@ namespace QuanLyNhanVien3
                 F_FormMain f_Main = new F_FormMain();
                 //MessageBox.Show("Đăng nhập thành công!",
                 //                            "Thông báo");
+
+                //F_FormMain.LoginInfo.CurrentUserName = reader["TenDangNhap"].ToString();
+                F_FormMain.LoginInfo.CurrentUserRole = reader["Quyen"].ToString();
                 StopCamera();
                 f_Main.ShowDialog();
                 f_Main = null;

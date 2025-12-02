@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static QuanLyNhanVien3.F_FormMain;
 
 namespace QuanLyNhanVien3
 {
@@ -64,6 +65,14 @@ namespace QuanLyNhanVien3
         private void F_DuAn_Load_1(object sender, EventArgs e)
         {
             LoadDataDuAn();
+            if (LoginInfo.CurrentUserRole.ToLower() == "user")
+            {
+                btnThem.Enabled = false;
+                btnSua.Enabled = false;
+                btnXoa.Enabled = false;
+                btnKhoiPhucDA.Enabled = false;
+                btnXemDAdaKetThuc.Enabled = false;
+            }
         }
 
         private void dtGridViewDA_CellClick(object sender, DataGridViewCellEventArgs e)

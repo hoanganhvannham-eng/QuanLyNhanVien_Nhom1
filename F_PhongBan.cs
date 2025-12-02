@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static QuanLyNhanVien3.F_FormMain;
 
 namespace QuanLyNhanVien3
 {
@@ -516,6 +517,14 @@ namespace QuanLyNhanVien3
         private void F_PhongBan_Load(object sender, EventArgs e)
         {
             LoadDataPhongBan();
+            if (LoginInfo.CurrentUserRole.ToLower() == "user")
+            {
+                btnThem.Enabled = false;
+                btnSua.Enabled = false;
+                btnXoa.Enabled = false;
+                btnHienThiPhongBanCu.Enabled = false;
+                btnKhoiPhucPhongBan.Enabled = false;
+            }
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)

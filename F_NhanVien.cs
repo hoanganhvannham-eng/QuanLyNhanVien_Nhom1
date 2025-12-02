@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using ClosedXML.Excel;
 using ZXing;
+using static QuanLyNhanVien3.F_FormMain;
 
 namespace QuanLyNhanVien3
 {
@@ -213,6 +214,14 @@ namespace QuanLyNhanVien3
         private void NhanVien_Load(object sender, EventArgs e)
         {
             LoadDataNhanVien();
+            if (LoginInfo.CurrentUserRole.ToLower() == "user")
+            {
+                btnThem.Enabled = false;
+                btnSua.Enabled = false;
+                btnXoa.Enabled = false;
+                btnKhoiPhucNhanVien.Enabled = false;
+                btnNVDaNghiViec.Enabled = false;
+            }
         }
 
         private void dtGridViewNhanVien_CellClick_2(object sender, DataGridViewCellEventArgs e)
