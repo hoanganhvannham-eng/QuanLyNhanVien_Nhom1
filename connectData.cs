@@ -54,7 +54,7 @@ namespace QuanLyNhanVien3
             }
             catch (Exception ex)
             {
-                // Có thể log ex.Message nếu muốn debug
+                //Có thể log ex.Message nếu muốn debug
                 return false;
             }
         }
