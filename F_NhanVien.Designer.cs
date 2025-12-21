@@ -33,8 +33,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.pictureBoxQRNV = new System.Windows.Forms.PictureBox();
-            this.btnTaoQR = new System.Windows.Forms.Button();
             this.cbBoxChucVu = new System.Windows.Forms.ComboBox();
             this.cbBoxMaPB = new System.Windows.Forms.ComboBox();
             this.btnTimKiem = new System.Windows.Forms.Button();
@@ -48,13 +46,6 @@
             this.label12 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.checkshowpassword = new System.Windows.Forms.CheckBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.tbMKkhoiphuc = new System.Windows.Forms.TextBox();
-            this.btnxuatExcel = new System.Windows.Forms.Button();
-            this.btnrestar = new System.Windows.Forms.Button();
-            this.btnKhoiPhucNhanVien = new System.Windows.Forms.Button();
-            this.btnNVDaNghiViec = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.cbBoxGioiTinh = new System.Windows.Forms.ComboBox();
             this.btnXoa = new System.Windows.Forms.Button();
@@ -74,8 +65,6 @@
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQRNV)).BeginInit();
-            this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGridViewNhanVien)).BeginInit();
@@ -132,8 +121,6 @@
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.Transparent;
-            this.panel4.Controls.Add(this.pictureBoxQRNV);
-            this.panel4.Controls.Add(this.btnTaoQR);
             this.panel4.Controls.Add(this.cbBoxChucVu);
             this.panel4.Controls.Add(this.cbBoxMaPB);
             this.panel4.Controls.Add(this.btnTimKiem);
@@ -152,30 +139,6 @@
             this.panel4.Size = new System.Drawing.Size(596, 450);
             this.panel4.TabIndex = 161;
             this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
-            // 
-            // pictureBoxQRNV
-            // 
-            this.pictureBoxQRNV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBoxQRNV.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.pictureBoxQRNV.Location = new System.Drawing.Point(291, 42);
-            this.pictureBoxQRNV.Name = "pictureBoxQRNV";
-            this.pictureBoxQRNV.Size = new System.Drawing.Size(258, 246);
-            this.pictureBoxQRNV.TabIndex = 192;
-            this.pictureBoxQRNV.TabStop = false;
-            this.pictureBoxQRNV.Visible = false;
-            // 
-            // btnTaoQR
-            // 
-            this.btnTaoQR.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnTaoQR.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTaoQR.Location = new System.Drawing.Point(425, 311);
-            this.btnTaoQR.Name = "btnTaoQR";
-            this.btnTaoQR.Size = new System.Drawing.Size(124, 47);
-            this.btnTaoQR.TabIndex = 190;
-            this.btnTaoQR.Text = "Tạo QR";
-            this.btnTaoQR.UseVisualStyleBackColor = true;
-            this.btnTaoQR.Visible = false;
-            this.btnTaoQR.Click += new System.EventHandler(this.btnTaoQR_Click);
             // 
             // cbBoxChucVu
             // 
@@ -306,92 +269,11 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.Transparent;
-            this.panel5.Controls.Add(this.checkshowpassword);
-            this.panel5.Controls.Add(this.label8);
-            this.panel5.Controls.Add(this.tbMKkhoiphuc);
-            this.panel5.Controls.Add(this.btnxuatExcel);
-            this.panel5.Controls.Add(this.btnrestar);
-            this.panel5.Controls.Add(this.btnKhoiPhucNhanVien);
-            this.panel5.Controls.Add(this.btnNVDaNghiViec);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel5.Location = new System.Drawing.Point(1131, 0);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(467, 450);
             this.panel5.TabIndex = 160;
-            // 
-            // checkshowpassword
-            // 
-            this.checkshowpassword.AutoSize = true;
-            this.checkshowpassword.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkshowpassword.Location = new System.Drawing.Point(226, 140);
-            this.checkshowpassword.Name = "checkshowpassword";
-            this.checkshowpassword.Size = new System.Drawing.Size(150, 23);
-            this.checkshowpassword.TabIndex = 164;
-            this.checkshowpassword.Text = "Hiển thị mật khẩu";
-            this.checkshowpassword.UseVisualStyleBackColor = true;
-            this.checkshowpassword.CheckedChanged += new System.EventHandler(this.checkshowpassword_CheckedChanged_1);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(64, 110);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(112, 19);
-            this.label8.TabIndex = 163;
-            this.label8.Text = "MK Khôi Phục";
-            // 
-            // tbMKkhoiphuc
-            // 
-            this.tbMKkhoiphuc.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbMKkhoiphuc.Location = new System.Drawing.Point(192, 107);
-            this.tbMKkhoiphuc.Name = "tbMKkhoiphuc";
-            this.tbMKkhoiphuc.Size = new System.Drawing.Size(184, 27);
-            this.tbMKkhoiphuc.TabIndex = 162;
-            // 
-            // btnxuatExcel
-            // 
-            this.btnxuatExcel.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnxuatExcel.Location = new System.Drawing.Point(278, 313);
-            this.btnxuatExcel.Name = "btnxuatExcel";
-            this.btnxuatExcel.Size = new System.Drawing.Size(108, 41);
-            this.btnxuatExcel.TabIndex = 161;
-            this.btnxuatExcel.Text = "Xuất Excel";
-            this.btnxuatExcel.UseVisualStyleBackColor = true;
-            this.btnxuatExcel.Click += new System.EventHandler(this.btnxuatExcel_Click_1);
-            // 
-            // btnrestar
-            // 
-            this.btnrestar.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnrestar.Location = new System.Drawing.Point(78, 314);
-            this.btnrestar.Name = "btnrestar";
-            this.btnrestar.Size = new System.Drawing.Size(108, 41);
-            this.btnrestar.TabIndex = 160;
-            this.btnrestar.Text = "Refresh";
-            this.btnrestar.UseVisualStyleBackColor = true;
-            this.btnrestar.Click += new System.EventHandler(this.btnrestar_Click_1);
-            // 
-            // btnKhoiPhucNhanVien
-            // 
-            this.btnKhoiPhucNhanVien.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnKhoiPhucNhanVien.Location = new System.Drawing.Point(78, 244);
-            this.btnKhoiPhucNhanVien.Name = "btnKhoiPhucNhanVien";
-            this.btnKhoiPhucNhanVien.Size = new System.Drawing.Size(298, 33);
-            this.btnKhoiPhucNhanVien.TabIndex = 159;
-            this.btnKhoiPhucNhanVien.Text = "Khôi Phục Nhân Viên Đã Nghỉ Việc\r\n\r\n";
-            this.btnKhoiPhucNhanVien.UseVisualStyleBackColor = true;
-            this.btnKhoiPhucNhanVien.Click += new System.EventHandler(this.btnKhoiPhucNhanVien_Click_1);
-            // 
-            // btnNVDaNghiViec
-            // 
-            this.btnNVDaNghiViec.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNVDaNghiViec.Location = new System.Drawing.Point(78, 185);
-            this.btnNVDaNghiViec.Name = "btnNVDaNghiViec";
-            this.btnNVDaNghiViec.Size = new System.Drawing.Size(298, 33);
-            this.btnNVDaNghiViec.TabIndex = 158;
-            this.btnNVDaNghiViec.Text = "Hiển Thị Nhân Viên Đã Nghỉ Việc";
-            this.btnNVDaNghiViec.UseVisualStyleBackColor = true;
-            this.btnNVDaNghiViec.Click += new System.EventHandler(this.btnNVDaNghiViec_Click_1);
             // 
             // panel3
             // 
@@ -589,9 +471,6 @@
             this.panel2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQRNV)).EndInit();
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel6.ResumeLayout(false);
@@ -633,15 +512,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.CheckBox checkshowpassword;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox tbMKkhoiphuc;
-        private System.Windows.Forms.Button btnxuatExcel;
-        private System.Windows.Forms.Button btnrestar;
-        private System.Windows.Forms.Button btnKhoiPhucNhanVien;
-        private System.Windows.Forms.Button btnNVDaNghiViec;
-        private System.Windows.Forms.Button btnTaoQR;
-        private System.Windows.Forms.PictureBox pictureBoxQRNV;
         private System.Windows.Forms.Button btnThoat;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }

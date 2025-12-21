@@ -160,7 +160,6 @@ namespace QuanLyNhanVien3
                 cn.disconnect();
                 ClearAllInputs(this);
                 LoadcomboBox();
-                tbMKkhoiphuc.UseSystemPasswordChar = true;
             }
             catch (Exception ex)
             {
@@ -219,8 +218,6 @@ namespace QuanLyNhanVien3
                 btnThem.Enabled = false;
                 btnSua.Enabled = false;
                 btnXoa.Enabled = false;
-                btnKhoiPhucNhanVien.Enabled = false;
-                btnNVDaNghiViec.Enabled = false;
             }
         }
 
@@ -533,102 +530,10 @@ namespace QuanLyNhanVien3
 
         private void btnKhoiPhucNhanVien_Click_1(object sender, EventArgs e)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(tbmaNV.Text))
-                {
-                    MessageBox.Show("Vui lòng chọn hoặc nhập mã nhân viên cần khôi phục!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                cn.connect();
-                string checkMaNVSql = "SELECT COUNT(*) FROM tblNhanVien WHERE MaNV = @MaNV AND DeletedAt = 1";
-                using (SqlCommand cmdcheckcheckMaNVSql = new SqlCommand(checkMaNVSql, cn.conn))
-                {
-                    cmdcheckcheckMaNVSql.Parameters.AddWithValue("@MaNV", tbmaNV.Text.Trim());
-                    int emailCount = (int)cmdcheckcheckMaNVSql.ExecuteScalar();
-
-                    if (emailCount == 0)
-                    {
-                        MessageBox.Show("Ma NV này đã tồn tại trong hệ thống!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        cn.disconnect();
-                        return;
-                    }
-                }
-
-                //
-                if (tbMKkhoiphuc.Text == "")
-                {
-                    MessageBox.Show("Vui lòng mật khẩu để khoi phuc", "Thông báo", MessageBoxButtons.OK,
-                    MessageBoxIcon.Question);
-                    return;
-                }
-
-                string sqMKkhoiphuc = "SELECT * FROM tblTaiKhoan WHERE Quyen = @Quyen AND MatKhau = @MatKhau";
-                SqlCommand cmdkhoiphuc = new SqlCommand(sqMKkhoiphuc, cn.conn);
-                cmdkhoiphuc.Parameters.AddWithValue("@Quyen", "Admin");
-                cmdkhoiphuc.Parameters.AddWithValue("@MatKhau", tbMKkhoiphuc.Text);
-                SqlDataReader reader = cmdkhoiphuc.ExecuteReader();
-
-                if (reader.Read() == false)
-                {
-                    MessageBox.Show("mật khẩu không đúng? Vui lòng nhập lại mật khẩu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Question);
-                    tbMKkhoiphuc.Text = "";
-                    reader.Close();
-                    cn.disconnect();
-                    return;
-                }
-                reader.Close();
-
-
-                DialogResult confirm = MessageBox.Show(
-                    "Bạn có chắc chắn muốn khôi phục nhân viên này không?",
-                    "Xác nhận khôi phục",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
-                );
-
-
-                if (confirm == DialogResult.Yes)
-                {
-                    tbMKkhoiphuc.Text = "";
-                    string query = "UPDATE tblNhanVien SET DeletedAt = 0 WHERE MaNV = @MaNV";
-                    using (SqlCommand cmd = new SqlCommand(query, cn.conn))
-                    {
-                        // DELETE FROM tblNhanVien WHERE MaNV = @MaNV / UPDATE tblNhanVien SET DeletedAt = 1 WHERE MaNV = @MaNV
-                        cmd.Parameters.AddWithValue("@MaNV", tbmaNV.Text);
-                        int rowsAffected = cmd.ExecuteNonQuery();
-                        if (rowsAffected > 0)
-                        {
-                            MessageBox.Show("khôi phục nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            ClearAllInputs(this);
-                            LoadDataNhanVien();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Không tìm thấy nhân viên để khôi phục!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
-                    }
-                    cn.disconnect();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("loi " + ex.Message);
-            }
         }
 
         private void checkshowpassword_CheckedChanged_1(object sender, EventArgs e)
         {
-            if (checkshowpassword.Checked)
-            {
-                tbMKkhoiphuc.UseSystemPasswordChar = false;
-            }
-            else
-            {
-                tbMKkhoiphuc.UseSystemPasswordChar = true;
-            }
         }
 
         private void btnSua_Click(object sender, EventArgs e)
@@ -820,7 +725,7 @@ namespace QuanLyNhanVien3
                 Bitmap qrBitmap = writer.Write(data);
 
                 // Hiển thị lên PictureBox
-                pictureBoxQRNV.Image = qrBitmap;
+                //pictureBoxQRNV.Image = qrBitmap;
 
                 // Hỏi có muốn lưu QR không
                 DialogResult result = MessageBox.Show("Bạn có muốn lưu QR Code này không?",

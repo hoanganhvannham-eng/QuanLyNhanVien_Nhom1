@@ -195,5 +195,10 @@ namespace QuanLyNhanVien3
             OpenChildForm(new F_BaoCaoTongHop());
 
         }
+
+        private void thongTinDuAnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
