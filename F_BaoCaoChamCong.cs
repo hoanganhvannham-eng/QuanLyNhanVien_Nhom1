@@ -47,36 +47,38 @@ namespace QuanLyNhanVien3
         // =======================================================
         private void btnSoNgayLamViec_Click(object sender, EventArgs e)
         {
+
             try
             {
-                // Đánh dấu trạng thái đang xem là "Số ngày làm việc"
-                currentMode = 1;
-                cn.connect();
-
-                // Lấy tháng và năm từ DateTimePicker trên giao diện
                 int thang = dtpThoiGian.Value.Month;
                 int nam = dtpThoiGian.Value.Year;
 
-                string sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', pb.TenPB as N'Tên Phòng Ban',
-                               COUNT(cc.Id) AS N'Số ngày làm việc'
-                               FROM tblNhanVien nv
-                               JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
-                               JOIN tblChamCong cc ON nv.MaNV = cc.MaNV 
-                               WHERE nv.DeletedAt = 0 
-                                 AND cc.DeletedAt = 0
-                                 AND MONTH(cc.Ngay) = @Thang 
-                                 AND YEAR(cc.Ngay) = @Nam
-                               GROUP BY nv.MaNV, nv.HoTen, pb.TenPB
-                               ORDER BY N'Số ngày làm việc' DESC, nv.HoTen;";
+                cn.connect();
+
+                string sql = @"
+            SELECT 
+                nv.MaNV,
+                nv.HoTen,
+                @Thang AS Thang,
+                @Nam AS Nam,
+                COUNT(DISTINCT cc.Ngay) AS SoNgayLamViec,
+                DAY(EOMONTH(DATEFROMPARTS(@Nam, @Thang, 1))) AS SoNgayTrongThang
+            FROM tblChamCong cc
+            JOIN tblNhanVien nv ON nv.MaNV = cc.MaNV
+            WHERE cc.DeletedAt = 0
+              AND MONTH(cc.Ngay) = @Thang
+              AND YEAR(cc.Ngay) = @Nam
+            GROUP BY nv.MaNV, nv.HoTen";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@Thang", thang);
                     cmd.Parameters.AddWithValue("@Nam", nam);
 
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
-                    adapter.Fill(dt);
+                    da.Fill(dt);
+
                     dtGridViewBCChamCong.DataSource = dt;
                 }
 
@@ -84,7 +86,9 @@ namespace QuanLyNhanVien3
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải dữ liệu thống kê: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cn.disconnect();
+                MessageBox.Show("Lỗi: " + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

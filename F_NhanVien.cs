@@ -404,7 +404,8 @@ namespace QuanLyNhanVien3
             {
                 if (string.IsNullOrEmpty(tbmaNV.Text))
                 {
-                    MessageBox.Show("Vui lòng chọn hoặc nhập mã nhân viên cần xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vui lòng chọn hoặc nhập mã nhân viên cần xóa!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -415,33 +416,66 @@ namespace QuanLyNhanVien3
                     MessageBoxIcon.Question
                 );
 
-                if (confirm == DialogResult.Yes)
+                if (confirm != DialogResult.Yes) return;
+
+                cn.connect();
+
+                // 1️⃣ KIỂM TRA BẢNG LƯƠNG CHƯA HOÀN THÀNH
+                string checkLuong = @"
+            SELECT COUNT(*) 
+            FROM tblLuong 
+            WHERE MaNV = @MaNV AND DeletedAt = 0";
+
+                using (SqlCommand cmdCheck = new SqlCommand(checkLuong, cn.conn))
                 {
-                    cn.connect();
-                    string query = "UPDATE tblNhanVien SET DeletedAt = 1 WHERE MaNV = @MaNV";
+                    cmdCheck.Parameters.AddWithValue("@MaNV", tbmaNV.Text);
+                    int countLuong = (int)cmdCheck.ExecuteScalar();
+
+                    if (countLuong > 0)
+                    {
+                        MessageBox.Show(
+                            "Chưa hoàn thành bảng lương cho nhân viên, không thể xóa!",
+                            "Thông báo",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                        );
+                        cn.disconnect();
+                        return;
+                    }
+                }
+
+                // 2️⃣ BẮT ĐẦU XÓA THEO THỨ TỰ
+                string[] deleteQueries =
+                {
+            "DELETE FROM tblChiTietDuAn WHERE MaNV = @MaNV",
+            "DELETE FROM tblChamCong WHERE MaNV = @MaNV",
+            "DELETE FROM tblLuong WHERE MaNV = @MaNV",
+            "DELETE FROM tblHopDong WHERE MaNV = @MaNV",
+            "DELETE FROM tblTaiKhoan WHERE MaNV = @MaNV",
+            "DELETE FROM tblNhanVien WHERE MaNV = @MaNV"
+        };
+
+                foreach (string query in deleteQueries)
+                {
                     using (SqlCommand cmd = new SqlCommand(query, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaNV", tbmaNV.Text);
-
-                        int rowsAffected = cmd.ExecuteNonQuery();
-                        if (rowsAffected > 0)
-                        {
-                            MessageBox.Show("Xóa nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            cn.disconnect();
-                            ClearAllInputs(this);
-                            LoadDataNhanVien();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Không tìm thấy nhân viên để xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            cn.disconnect();
-                        }
+                        cmd.ExecuteNonQuery();
                     }
                 }
+
+                MessageBox.Show("Xóa nhân viên thành công!",
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                cn.disconnect();
+                ClearAllInputs(this);
+                LoadDataNhanVien();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cn.disconnect();
+                MessageBox.Show("Lỗi: " + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
