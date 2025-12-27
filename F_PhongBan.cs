@@ -325,7 +325,13 @@ namespace QuanLyNhanVien3
         {
             if (dataGridViewPhongBan.Rows.Count > 0)
             {
-                using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel Workbook|*.xlsx" })
+                string fileName = $"BaoCaoPhongBan_{DateTime.Now:ddMMyyyy_HHmmss}.xlsx";
+
+                using (SaveFileDialog sfd = new SaveFileDialog()
+                {
+                    Filter = "Excel Workbook|*.xlsx",
+                    FileName = fileName
+                })
                 {
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
@@ -333,47 +339,86 @@ namespace QuanLyNhanVien3
                         {
                             using (XLWorkbook wb = new XLWorkbook())
                             {
-                                var ws = wb.Worksheets.Add("NhanVien");
+                                var ws = wb.Worksheets.Add("PhongBan");
 
-                                // Ghi header
-                                for (int i = 0; i < dataGridViewPhongBan.Columns.Count; i++)
+                                int colCount = dataGridViewPhongBan.Columns.Count;
+
+                                /* ========== TIÊU ĐỀ ========= */
+                                ws.Cell(1, 1).Value = "BÁO CÁO DANH SÁCH PHÒNG BAN";
+                                ws.Range(1, 1, 1, colCount).Merge();
+                                ws.Range(1, 1, 1, colCount).Style.Font.Bold = true;
+                                ws.Range(1, 1, 1, colCount).Style.Font.FontSize = 18;
+                                ws.Range(1, 1, 1, colCount).Style.Alignment.Horizontal =
+                                    XLAlignmentHorizontalValues.Center;
+
+                                /* ========== NGÀY XUẤT ========= */
+                                ws.Cell(2, 1).Value = $"Ngày xuất: {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
+                                ws.Range(2, 1, 2, colCount).Merge();
+                                ws.Range(2, 1, 2, colCount).Style.Alignment.Horizontal =
+                                    XLAlignmentHorizontalValues.Center;
+                                ws.Range(2, 1, 2, colCount).Style.Font.Italic = true;
+
+                                /* ========== HEADER ========= */
+                                for (int i = 0; i < colCount; i++)
                                 {
-                                    ws.Cell(1, i + 1).Value = dataGridViewPhongBan.Columns[i].HeaderText;
+                                    ws.Cell(4, i + 1).Value =
+                                        dataGridViewPhongBan.Columns[i].HeaderText;
+
+                                    ws.Cell(4, i + 1).Style.Font.Bold = true;
+                                    ws.Cell(4, i + 1).Style.Alignment.Horizontal =
+                                        XLAlignmentHorizontalValues.Center;
+                                    ws.Cell(4, i + 1).Style.Fill.BackgroundColor =
+                                        XLColor.LightGray;
                                 }
 
-                                // Ghi dữ liệu
+                                /* ========== DỮ LIỆU ========= */
                                 for (int i = 0; i < dataGridViewPhongBan.Rows.Count; i++)
                                 {
-                                    for (int j = 0; j < dataGridViewPhongBan.Columns.Count; j++)
+                                    for (int j = 0; j < colCount; j++)
                                     {
-                                        ws.Cell(i + 2, j + 1).Value = dataGridViewPhongBan.Rows[i].Cells[j].Value?.ToString();
+                                        var value = dataGridViewPhongBan.Rows[i].Cells[j].Value;
+                                        ws.Cell(i + 5, j + 1).Value =
+                                            value != null ? value.ToString() : "";
                                     }
                                 }
 
-                                // Thêm border cho toàn bảng
-                                var range = ws.Range(1, 1, dataGridViewPhongBan.Rows.Count + 1, dataGridViewPhongBan.Columns.Count);
+                                /* ========== BORDER ========= */
+                                var range = ws.Range(
+                                    4, 1,
+                                    dataGridViewPhongBan.Rows.Count + 4,
+                                    colCount
+                                );
+
                                 range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                                 range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 
-                                // Tự động co giãn cột
+                                /* ========== AUTO SIZE ========= */
                                 ws.Columns().AdjustToContents();
 
-                                // Lưu file
                                 wb.SaveAs(sfd.FileName);
                             }
 
-                            MessageBox.Show("Xuất Excel thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Xuất Excel phòng ban thành công!",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Lỗi xuất file: " + ex.Message,
+                                "Lỗi",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
                         }
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Không có dữ liệu để xuất!",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
             }
         }
 

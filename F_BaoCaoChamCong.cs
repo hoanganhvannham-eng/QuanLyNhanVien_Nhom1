@@ -242,63 +242,82 @@ namespace QuanLyNhanVien3
         // =======================================================
         private void btnXuat_Click(object sender, EventArgs e)
         {
-            if (dtGridViewBCChamCong.Rows.Count > 0)
+            if (dtGridViewBCChamCong.Rows.Count == 0)
             {
-                using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel Workbook|*.xlsx", FileName = "BaoCaoChamCong.xlsx" })
+                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Excel Workbook|*.xlsx";
+                sfd.FileName = "BaoCaoChamCong_" + DateTime.Now.ToString("ddMMyyyy") + ".xlsx";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    if (sfd.ShowDialog() == DialogResult.OK)
+                    try
                     {
-                        try
+                        using (XLWorkbook wb = new XLWorkbook())
                         {
-                            using (XLWorkbook wb = new XLWorkbook())
+                            var ws = wb.Worksheets.Add("Báo cáo chấm công");
+
+                            int colCount = dtGridViewBCChamCong.Columns.Count;
+
+                            /* ================= TIÊU ĐỀ ================= */
+                            ws.Range(1, 1, 1, colCount).Merge();
+                            ws.Cell(1, 1).Value = "BÁO CÁO CHẤM CÔNG NHÂN VIÊN";
+                            ws.Cell(1, 1).Style.Font.Bold = true;
+                            ws.Cell(1, 1).Style.Font.FontSize = 18;
+                            ws.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                            /* ================= NGÀY XUẤT ================= */
+                            ws.Range(2, 1, 2, colCount).Merge();
+                            ws.Cell(2, 1).Value = "Ngày xuất: " + DateTime.Now.ToString("dd/MM/yyyy");
+                            ws.Cell(2, 1).Style.Font.Italic = true;
+                            ws.Cell(2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                            /* ================= HEADER ================= */
+                            for (int i = 0; i < colCount; i++)
                             {
-                                var ws = wb.Worksheets.Add("BaoCaoChamCong");
-
-                                // 1. Ghi Header (Tiêu đề cột)
-                                for (int i = 0; i < dtGridViewBCChamCong.Columns.Count; i++)
-                                {
-                                    ws.Cell(1, i + 1).Value = dtGridViewBCChamCong.Columns[i].HeaderText;
-
-                                    // Format Header cho đẹp
-                                    ws.Cell(1, i + 1).Style.Font.Bold = true;
-                                    ws.Cell(1, i + 1).Style.Fill.BackgroundColor = XLColor.LightGray;
-                                    ws.Cell(1, i + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                                }
-
-                                // 2. Ghi Dữ liệu
-                                for (int i = 0; i < dtGridViewBCChamCong.Rows.Count; i++)
-                                {
-                                    for (int j = 0; j < dtGridViewBCChamCong.Columns.Count; j++)
-                                    {
-                                        // Kiểm tra null an toàn
-                                        var cellValue = dtGridViewBCChamCong    .Rows[i].Cells[j].Value;
-                                        ws.Cell(i + 2, j + 1).Value = cellValue != null ? cellValue.ToString() : "";
-                                    }
-                                }
-
-                                // 3. Kẻ khung (Border) cho toàn bộ bảng dữ liệu
-                                var range = ws.Range(1, 1, dtGridViewBCChamCong.Rows.Count + 1, dtGridViewBCChamCong.Columns.Count);
-                                range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                                range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-
-                                // 4. Tự động co giãn cột (AutoFit)
-                                ws.Columns().AdjustToContents();
-
-                                wb.SaveAs(sfd.FileName);
+                                ws.Cell(4, i + 1).Value = dtGridViewBCChamCong.Columns[i].HeaderText;
+                                ws.Cell(4, i + 1).Style.Font.Bold = true;
+                                ws.Cell(4, i + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                                ws.Cell(4, i + 1).Style.Fill.BackgroundColor = XLColor.LightGray;
                             }
 
-                            MessageBox.Show("Xuất Excel thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            /* ================= DỮ LIỆU ================= */
+                            for (int i = 0; i < dtGridViewBCChamCong.Rows.Count; i++)
+                            {
+                                for (int j = 0; j < colCount; j++)
+                                {
+                                    var value = dtGridViewBCChamCong.Rows[i].Cells[j].Value;
+                                    ws.Cell(i + 5, j + 1).Value = value != null ? value.ToString() : "";
+                                }
+                            }
+
+                            /* ================= BORDER ================= */
+                            var range = ws.Range(4, 1,
+                                dtGridViewBCChamCong.Rows.Count + 4, colCount);
+
+                            range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                            range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                            /* ================= AUTO WIDTH ================= */
+                            ws.Columns().AdjustToContents();
+
+                            wb.SaveAs(sfd.FileName);
                         }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Lỗi xuất file: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+
+                        MessageBox.Show("Xuất báo cáo chấm công thành công!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi xuất file: " + ex.Message,
+                            "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-            }
-            else
-            {
-                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

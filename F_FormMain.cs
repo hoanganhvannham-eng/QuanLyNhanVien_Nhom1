@@ -16,7 +16,7 @@ namespace QuanLyNhanVien3
         {
             InitializeComponent();
         }
-        private void OpenChildForm(Form childForm)
+        public void OpenChildForm(Form childForm)
         {
             // Kiểm tra xem form này đã mở chưa
             foreach (Form frm in this.MdiChildren)

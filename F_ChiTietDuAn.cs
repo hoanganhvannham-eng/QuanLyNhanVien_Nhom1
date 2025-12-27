@@ -358,57 +358,81 @@ namespace QuanLyNhanVien3
 
         private void btnXuatExcel_Click(object sender, EventArgs e)
         {
-            if (dtGridViewChiTietDuAn.Rows.Count > 0)
+            if (dtGridViewChiTietDuAn.Rows.Count == 0)
             {
-                using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel Workbook|*.xlsx" })
+                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Excel Workbook|*.xlsx";
+                sfd.FileName = "ChiTietDuAn_" + DateTime.Now.ToString("ddMMyyyy") + ".xlsx";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    if (sfd.ShowDialog() == DialogResult.OK)
+                    try
                     {
-                        try
+                        using (XLWorkbook wb = new XLWorkbook())
                         {
-                            using (XLWorkbook wb = new XLWorkbook())
+                            var ws = wb.Worksheets.Add("Chi tiết dự án");
+                            int colCount = dtGridViewChiTietDuAn.Columns.Count;
+
+                            /* ================= TIÊU ĐỀ ================= */
+                            ws.Range(1, 1, 1, colCount).Merge();
+                            ws.Cell(1, 1).Value = "BÁO CÁO CHI TIẾT DỰ ÁN";
+                            ws.Cell(1, 1).Style.Font.Bold = true;
+                            ws.Cell(1, 1).Style.Font.FontSize = 18;
+                            ws.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                            /* ================= NGÀY XUẤT ================= */
+                            ws.Range(2, 1, 2, colCount).Merge();
+                            ws.Cell(2, 1).Value = "Ngày xuất: " + DateTime.Now.ToString("dd/MM/yyyy");
+                            ws.Cell(2, 1).Style.Font.Italic = true;
+                            ws.Cell(2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                            /* ================= HEADER ================= */
+                            for (int i = 0; i < colCount; i++)
                             {
-                                var ws = wb.Worksheets.Add("ChiTietDuAn");
-
-                                // Ghi header
-                                for (int i = 0; i < dtGridViewChiTietDuAn.Columns.Count; i++)
-                                {
-                                    ws.Cell(1, i + 1).Value = dtGridViewChiTietDuAn.Columns[i].HeaderText;
-                                }
-
-                                // Ghi dữ liệu
-                                for (int i = 0; i < dtGridViewChiTietDuAn.Rows.Count; i++)
-                                {
-                                    for (int j = 0; j < dtGridViewChiTietDuAn.Columns.Count; j++)
-                                    {
-                                        ws.Cell(i + 2, j + 1).Value = dtGridViewChiTietDuAn.Rows[i].Cells[j].Value?.ToString();
-                                    }
-                                }
-
-                                // Thêm border cho toàn bảng
-                                var range = ws.Range(1, 1, dtGridViewChiTietDuAn.Rows.Count + 1, dtGridViewChiTietDuAn.Columns.Count);
-                                range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                                range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-
-                                // Tự động co giãn cột
-                                ws.Columns().AdjustToContents();
-
-                                // Lưu file
-                                wb.SaveAs(sfd.FileName);
+                                ws.Cell(4, i + 1).Value = dtGridViewChiTietDuAn.Columns[i].HeaderText;
+                                ws.Cell(4, i + 1).Style.Font.Bold = true;
+                                ws.Cell(4, i + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                                ws.Cell(4, i + 1).Style.Fill.BackgroundColor = XLColor.LightGray;
                             }
 
-                            MessageBox.Show("Xuất Excel thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            /* ================= DỮ LIỆU ================= */
+                            for (int i = 0; i < dtGridViewChiTietDuAn.Rows.Count; i++)
+                            {
+                                for (int j = 0; j < colCount; j++)
+                                {
+                                    var value = dtGridViewChiTietDuAn.Rows[i].Cells[j].Value;
+                                    ws.Cell(i + 5, j + 1).Value = value != null ? value.ToString() : "";
+                                }
+                            }
+
+                            /* ================= BORDER ================= */
+                            var range = ws.Range(4, 1,
+                                dtGridViewChiTietDuAn.Rows.Count + 4, colCount);
+
+                            range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                            range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                            /* ================= AUTO WIDTH ================= */
+                            ws.Columns().AdjustToContents();
+
+                            wb.SaveAs(sfd.FileName);
                         }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+
+                        MessageBox.Show("Xuất báo cáo chi tiết dự án thành công!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi: " + ex.Message,
+                            "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-            }
-            else
-            {
-                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -549,6 +573,13 @@ namespace QuanLyNhanVien3
         private void btnThoat_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void buttonduan_Click(object sender, EventArgs e)
+        {
+            F_DuAn f = new F_DuAn();
+            f.MdiParent = this.MdiParent;
+            f.Show();
         }
     }
 }

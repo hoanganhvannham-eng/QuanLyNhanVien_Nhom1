@@ -32,6 +32,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnThoat = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.buttonchiteiteduan = new System.Windows.Forms.Button();
             this.checkHienMK = new System.Windows.Forms.CheckBox();
             this.tbMKKhoiPhuc = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -100,6 +101,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Transparent;
+            this.panel2.Controls.Add(this.buttonchiteiteduan);
             this.panel2.Controls.Add(this.checkHienMK);
             this.panel2.Controls.Add(this.tbMKKhoiPhuc);
             this.panel2.Controls.Add(this.label8);
@@ -128,6 +130,18 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1467, 410);
             this.panel2.TabIndex = 87;
+            // 
+            // buttonchiteiteduan
+            // 
+            this.buttonchiteiteduan.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.buttonchiteiteduan.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonchiteiteduan.Location = new System.Drawing.Point(1291, 267);
+            this.buttonchiteiteduan.Name = "buttonchiteiteduan";
+            this.buttonchiteiteduan.Size = new System.Drawing.Size(125, 33);
+            this.buttonchiteiteduan.TabIndex = 51;
+            this.buttonchiteiteduan.Text = "Chi tiết dự án";
+            this.buttonchiteiteduan.UseVisualStyleBackColor = true;
+            this.buttonchiteiteduan.Click += new System.EventHandler(this.buttonchiteiteduan_Click);
             // 
             // checkHienMK
             // 
@@ -460,5 +474,6 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.DataGridView dtGridViewDA;
         private System.Windows.Forms.Button btnThoat;
+        private System.Windows.Forms.Button buttonchiteiteduan;
     }
 }
