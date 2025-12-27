@@ -190,44 +190,73 @@ namespace QuanLyNhanVien3
                     MessageBoxIcon.Warning);
             }
         }
+//        SELECT tblNhanVien.Id, tblNhanVien.MaNV, tblNhanVien.HoTen, tblNhanVien.NgaySinh, tblNhanVien.GioiTinh, tblNhanVien.DiaChi, tblNhanVien.SoDienThoai, tblNhanVien.Email, tblNhanVien.MaPB, tblNhanVien.MaCV, tblNhanVien.Ghichu,
+//                  tblNhanVien.DeletedAt, tblChucVu.TenCV, tblDuAn.TenDA, tblHopDong.LoaiHopDong, tblLuong.LuongCoBan, tblPhongBan.TenPB, tblTaiKhoan.MaTK, tblChiTietDuAn.VaiTro
+//FROM     tblNhanVien INNER JOIN
+//                  tblChamCong ON tblNhanVien.MaNV = tblChamCong.MaNV INNER JOIN
+//                  tblChiTietDuAn ON tblNhanVien.MaNV = tblChiTietDuAn.MaNV INNER JOIN
+//                  tblChucVu ON tblNhanVien.MaCV = tblChucVu.MaCV INNER JOIN
+//                  tblDuAn ON tblChiTietDuAn.MaDA = tblDuAn.MaDA INNER JOIN
+//                  tblHopDong ON tblNhanVien.MaNV = tblHopDong.MaNV INNER JOIN
+//                  tblLuong ON tblNhanVien.MaNV = tblLuong.MaNV INNER JOIN
+//                  tblPhongBan ON tblNhanVien.MaPB = tblPhongBan.MaPB INNER JOIN
+//                  tblTaiKhoan ON tblNhanVien.MaNV = tblTaiKhoan.MaNV
+//WHERE  (tblNhanVien.MaNV = @ID_Nhanvien)
 
         private void btnTimKiemTheoTen_Click(object sender, EventArgs e)
         {
             try
             {
-                if (string.IsNullOrEmpty(txttimkiemtheoten.Text))
+                if (string.IsNullOrWhiteSpace(txttimkiemtheoten.Text))
                 {
-                    MessageBox.Show("Vui lòng nhập tên nhân viên để tìm kiếm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vui lòng nhập tên nhân viên để tìm kiếm!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                cn.connect();   // MỞ KẾT NỐI
+                cn.connect();
 
-                string sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', 
-                       pb.TenPB as N'Phòng Ban', cv.TenCV as N'Tên Chức Vụ', nv.Email
-                       FROM tblNhanVien nv
-                       JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
-                       JOIN tblChucVu cv ON nv.MaCV = cv.MaCV
-                       WHERE nv.DeletedAt = 0 
-                             AND nv.HoTen LIKE @TenTimKiem
-                       ORDER BY pb.TenPB, cv.TenCV;";
+                string sql = @"
+        SELECT DISTINCT
+            nv.Id,
+            nv.MaNV,
+            nv.HoTen,
+            nv.NgaySinh,
+            nv.GioiTinh,
+            nv.DiaChi,
+            nv.SoDienThoai,
+            nv.Email,
+            pb.TenPB,
+            cv.TenCV,
+            lu.LuongCoBan,
+            hd.LoaiHopDong
+        FROM tblNhanVien nv
+        LEFT JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB AND pb.DeletedAt = 0
+        LEFT JOIN tblChucVu cv ON nv.MaCV = cv.MaCV AND cv.DeletedAt = 0
+        LEFT JOIN tblLuong lu ON nv.MaNV = lu.MaNV
+        LEFT JOIN tblHopDong hd ON nv.MaNV = hd.MaNV
+        WHERE nv.DeletedAt = 0
+          AND nv.HoTen LIKE @TenTimKiem
+        ORDER BY pb.TenPB, cv.TenCV";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
-                    // chỉ thêm 1 lần % thôi
-                    cmd.Parameters.AddWithValue("@TenTimKiem", "%" + txttimkiemtheoten.Text + "%");
+                    cmd.Parameters.AddWithValue("@TenTimKiem",
+                        "%" + txttimkiemtheoten.Text.Trim() + "%");
 
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
-                    adapter.Fill(dt);
+                    da.Fill(dt);
+
                     dtGridViewBCNhanVien.DataSource = dt;
                 }
 
-                cn.disconnect(); // ĐÓNG KẾT NỐI
+                cn.disconnect();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tìm kiếm: " + ex.Message);
+                MessageBox.Show("Lỗi tìm kiếm: " + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

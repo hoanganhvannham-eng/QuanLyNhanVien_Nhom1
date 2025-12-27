@@ -180,7 +180,7 @@ namespace QuanLyNhanVien3
                     da.Fill(ds);
 
                     cbBoxMaPB.DataSource = ds.Tables[0];
-                    cbBoxMaPB.DisplayMember = "MaPB";// hien thi
+                    cbBoxMaPB.DisplayMember = "TenPB";// hien thi
                     cbBoxMaPB.ValueMember = "MaPB"; // cot gia tri
                 }
                 cn.disconnect();
@@ -802,6 +802,126 @@ namespace QuanLyNhanVien3
         private void btnThoat_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        // su ly load nhanh vien SELECT Id, MaPB, TenPB, DiaChi, SoDienThoai, Ghichu, DeletedAt  FROM tblPhongBan
+        private void LoadNhanVienTheoDieuKien()
+        {
+            if (cbBoxMaPB.SelectedValue == null ||
+                cbBoxMaPB.SelectedValue is DataRowView)
+                return;
+
+            cn.connect();
+
+            string sql = @"
+        SELECT 
+            nv.MaNV AS [Mã NV],
+            nv.HoTen AS [Họ Tên],
+            nv.NgaySinh AS [Ngày Sinh],
+            nv.GioiTinh AS [Giới Tính],
+            nv.DiaChi AS [Địa Chỉ],
+            nv.SoDienThoai AS [SĐT],
+            nv.Email AS [Email],
+            nv.MaPB AS [Phòng Ban],
+            nv.MaCV AS [Chức Vụ],
+            nv.GhiChu AS [Ghi Chú]
+        FROM tblNhanVien nv
+        WHERE nv.DeletedAt = 0
+          AND nv.MaPB = @MaPB";
+
+            // 🔹 LỌC CHỨC VỤ
+            if (cbBoxChucVu.SelectedValue != null &&
+                !(cbBoxChucVu.SelectedValue is DataRowView))
+            {
+                sql += " AND nv.MaCV = @MaCV";
+            }
+
+            // 🔹 LỌC GIỚI TÍNH
+            if (cbBoxGioiTinh.SelectedIndex != -1)
+            {
+                sql += " AND nv.GioiTinh = @GioiTinh";
+            }
+
+            SqlCommand cmd = new SqlCommand(sql, cn.conn);
+            cmd.Parameters.AddWithValue("@MaPB", cbBoxMaPB.SelectedValue);
+
+            if (cbBoxChucVu.SelectedValue != null &&
+                !(cbBoxChucVu.SelectedValue is DataRowView))
+            {
+                cmd.Parameters.AddWithValue("@MaCV", cbBoxChucVu.SelectedValue);
+            }
+
+            if (cbBoxGioiTinh.SelectedIndex != -1)
+            {
+                cmd.Parameters.AddWithValue("@GioiTinh", cbBoxGioiTinh.Text);
+            }
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            dtGridViewNhanVien.DataSource = dt;
+
+            cn.disconnect();
+        }
+
+        private void cbBoxMaPB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbBoxMaPB.SelectedValue == null) return;
+            if (cbBoxMaPB.SelectedValue is DataRowView) return;
+
+            string maPB = cbBoxMaPB.SelectedValue.ToString();
+            cn.connect();
+
+            string sql = @"
+        SELECT DISTINCT CV.MaCV, CV.TenCV
+        FROM tblNhanVien NV
+        INNER JOIN tblChucVu CV ON NV.MaCV = CV.MaCV
+        WHERE NV.MaPB = @MaPB
+          AND NV.DeletedAt = 0
+          AND CV.DeletedAt = 0";
+
+            SqlCommand cmd = new SqlCommand(sql, cn.conn);
+            cmd.Parameters.AddWithValue("@MaPB", maPB);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            cbBoxChucVu.DataSource = dt;
+            cbBoxChucVu.DisplayMember = "TenCV";
+            cbBoxChucVu.ValueMember = "MaCV";
+            cbBoxChucVu.SelectedIndex = -1;
+
+            cn.disconnect();
+
+            // 🔥 LOAD NHÂN VIÊN THEO PHÒNG BAN
+            LoadNhanVienTheoDieuKien();
+        }
+
+        private void cbBoxChucVu_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbBoxChucVu.SelectedValue == null) return;
+            if (cbBoxChucVu.SelectedValue is DataRowView) return;
+
+            LoadNhanVienTheoDieuKien();
+        }
+
+        private void cbBoxGioiTinh_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbBoxGioiTinh.SelectedIndex == -1) return;
+
+            LoadNhanVienTheoDieuKien();
+        }
+
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnrestar_Click(object sender, EventArgs e)
+        {
+            LoadDataNhanVien();
         }
     }
 }
