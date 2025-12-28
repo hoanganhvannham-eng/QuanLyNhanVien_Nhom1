@@ -97,58 +97,218 @@ namespace QuanLyNhanVien3
         // =======================================================
         private void btnDiTreVeSom_Click(object sender, EventArgs e)
         {
-            try
+            //try
+            //{
+            //    // Đánh dấu trạng thái đang xem là "Đi trễ về sớm"
+            //    currentMode = 2;
+            //    cn.connect();
+
+            //    int thang = dtpThoiGian.Value.Month;
+            //    int nam = dtpThoiGian.Value.Year;
+
+            //    // SQL: Tính toán chi tiết số phút đi muộn, về sớm
+            //    string sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', cc.Ngay as N'Ngày', cc.GioVao as N'Giờ Vào', cc.GioVe as N'Giờ Về',
+            //                   CASE 
+            //                       -- Trường hợp 1: Đi sớm/đúng giờ VÀ Về muộn/đúng giờ -> Tốt
+            //                       WHEN cc.GioVao <= '08:00:00' AND cc.GioVe >= '17:00:00' 
+            //                            THEN N'Đi làm đúng giờ'
+
+            //                       -- Trường hợp 2: Đi sớm/đúng giờ VÀ Về sớm -> Chỉ bị lỗi về sớm
+            //                       WHEN cc.GioVao <= '08:00:00' AND cc.GioVe < '17:00:00' 
+            //                            THEN N'Đi đúng giờ - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe, '17:00:00') AS NVARCHAR(20)) + N' phút'
+
+            //                       -- Trường hợp 3: Đi muộn VÀ Về muộn/đúng giờ -> Chỉ bị lỗi đi muộn
+            //                       WHEN cc.GioVao > '08:00:00' AND cc.GioVe >= '17:00:00' 
+            //                            THEN N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về đúng giờ'
+
+            //                       -- Trường hợp 4: Đi muộn VÀ Về sớm -> Bị cả hai
+            //                       ELSE N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe, '17:00:00') AS NVARCHAR(20)) + N' phút'
+            //                   END AS N'Trạng Thái'
+            //                   FROM tblChamCong cc
+            //                   JOIN tblNhanVien nv ON cc.MaNV = nv.MaNV
+            //                   WHERE cc.DeletedAt = 0
+            //                     AND MONTH(cc.Ngay) = @Thang 
+            //                     AND YEAR(cc.Ngay) = @Nam
+            //                   ORDER BY cc.Ngay DESC, nv.HoTen;";
+
+            //    using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+            //    {
+            //        cmd.Parameters.AddWithValue("@Thang", thang);
+            //        cmd.Parameters.AddWithValue("@Nam", nam);
+
+            //        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            //        DataTable dt = new DataTable();
+            //        adapter.Fill(dt);
+            //        dtGridViewBCChamCong.DataSource = dt;
+            //    }
+
+            //    cn.disconnect();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Lỗi tải dữ liệu đi trễ/về sớm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+
+            int thang = dtpThoiGian.Value.Month;
+            int nam = dtpThoiGian.Value.Year;
+
+            HienThiChamCong(thang, nam);
+            dtGridViewBCChamCong.CellFormatting += dtGridViewBCChamCong_CellFormatting;
+
+        }
+        private void HienThiChamCong(int thang, int nam)
+        {
+            cn.connect();
+
+            // reset datagridview tránh lỗi Cannot clear this list
+            dtGridViewBCChamCong.DataSource = null;
+            dtGridViewBCChamCong.Columns.Clear();
+
+            DataTable dtNguon = new DataTable();
+
+            string sql = @"
+        SELECT 
+            NV.MaNV,
+            NV.HoTen,
+            CC.Ngay,
+            CC.GioVao,
+            CC.GioVe
+        FROM tblNhanVien NV
+        LEFT JOIN tblChamCong CC 
+            ON NV.MaNV = CC.MaNV
+            AND MONTH(CC.Ngay) = @Thang
+            AND YEAR(CC.Ngay) = @Nam
+            AND CC.DeletedAt = 0
+        WHERE NV.DeletedAt = 0
+        ORDER BY NV.MaNV, CC.Ngay";
+
+            using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
             {
-                // Đánh dấu trạng thái đang xem là "Đi trễ về sớm"
-                currentMode = 2;
-                cn.connect();
+                cmd.Parameters.AddWithValue("@Thang", thang);
+                cmd.Parameters.AddWithValue("@Nam", nam);
 
-                int thang = dtpThoiGian.Value.Month;
-                int nam = dtpThoiGian.Value.Year;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dtNguon);
+            }
 
-                // SQL: Tính toán chi tiết số phút đi muộn, về sớm
-                string sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', cc.Ngay as N'Ngày', cc.GioVao as N'Giờ Vào', cc.GioVe as N'Giờ Về',
-                               CASE 
-                                   -- Trường hợp 1: Đi sớm/đúng giờ VÀ Về muộn/đúng giờ -> Tốt
-                                   WHEN cc.GioVao <= '08:00:00' AND cc.GioVe >= '17:00:00' 
-                                        THEN N'Đi làm đúng giờ'
-                                   
-                                   -- Trường hợp 2: Đi sớm/đúng giờ VÀ Về sớm -> Chỉ bị lỗi về sớm
-                                   WHEN cc.GioVao <= '08:00:00' AND cc.GioVe < '17:00:00' 
-                                        THEN N'Đi đúng giờ - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe, '17:00:00') AS NVARCHAR(20)) + N' phút'
-                                   
-                                   -- Trường hợp 3: Đi muộn VÀ Về muộn/đúng giờ -> Chỉ bị lỗi đi muộn
-                                   WHEN cc.GioVao > '08:00:00' AND cc.GioVe >= '17:00:00' 
-                                        THEN N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về đúng giờ'
-                                   
-                                   -- Trường hợp 4: Đi muộn VÀ Về sớm -> Bị cả hai
-                                   ELSE N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe, '17:00:00') AS NVARCHAR(20)) + N' phút'
-                               END AS N'Trạng Thái'
-                               FROM tblChamCong cc
-                               JOIN tblNhanVien nv ON cc.MaNV = nv.MaNV
-                               WHERE cc.DeletedAt = 0
-                                 AND MONTH(cc.Ngay) = @Thang 
-                                 AND YEAR(cc.Ngay) = @Nam
-                               ORDER BY cc.Ngay DESC, nv.HoTen;";
+            DataTable table = new DataTable();
+            table.Columns.Add("MaNV");
+            table.Columns.Add("HoTen");
 
-                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+            int soNgay = DateTime.DaysInMonth(nam, thang);
+            for (int i = 1; i <= soNgay; i++)
+                table.Columns.Add(i.ToString());
+
+            DataTable dsNV = dtNguon.DefaultView.ToTable(true, "MaNV", "HoTen");
+
+            foreach (DataRow nv in dsNV.Rows)
+            {
+                DataRow row = table.NewRow();
+                row["MaNV"] = nv["MaNV"];
+                row["HoTen"] = nv["HoTen"];
+
+                // mặc định vắng
+                for (int i = 1; i <= soNgay; i++)
+                    row[i.ToString()] = "V";
+
+                DataRow[] chamCong = dtNguon.Select(
+                    $"MaNV = '{nv["MaNV"]}' AND Ngay IS NOT NULL");
+
+                foreach (DataRow cc in chamCong)
                 {
-                    cmd.Parameters.AddWithValue("@Thang", thang);
-                    cmd.Parameters.AddWithValue("@Nam", nam);
+                    DateTime ngay = Convert.ToDateTime(cc["Ngay"]);
+                    TimeSpan gioVao = (TimeSpan)cc["GioVao"];
+                    TimeSpan gioVe = (TimeSpan)cc["GioVe"];
 
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    dtGridViewBCChamCong.DataSource = dt;
+                    double soGio = (gioVe - gioVao).TotalHours;
+
+                    row[ngay.Day.ToString()] =
+                        soGio >= 8 ? "8" :
+                        soGio >= 4 ? "4" : "V";
                 }
 
-                cn.disconnect();
+                table.Rows.Add(row);
             }
-            catch (Exception ex)
+
+            dtGridViewBCChamCong.DataSource = table;
+
+            // ================== HEADER NGÀY + THỨ ==================
+            dtGridViewBCChamCong.EnableHeadersVisualStyles = false;
+            dtGridViewBCChamCong.ColumnHeadersHeight = 45;
+
+            for (int i = 1; i <= soNgay; i++)
             {
-                MessageBox.Show("Lỗi tải dữ liệu đi trễ/về sớm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DateTime date = new DateTime(nam, thang, i);
+                string thu = "";
+                Color bg = Color.White;
+                Color fg = Color.Black;
+
+                switch (date.DayOfWeek)
+                {
+                    case DayOfWeek.Monday: thu = "T2"; break;
+                    case DayOfWeek.Tuesday: thu = "T3"; break;
+                    case DayOfWeek.Wednesday: thu = "T4"; break;
+                    case DayOfWeek.Thursday: thu = "T5"; break;
+                    case DayOfWeek.Friday: thu = "T6"; break;
+                    case DayOfWeek.Saturday:
+                        thu = "T7";
+                        bg = Color.White;
+                        break;
+                    case DayOfWeek.Sunday:
+                        thu = "CN";
+                        bg = Color.LightPink;
+                        fg = Color.Red;
+                        break;
+                }
+
+                DataGridViewColumn col = dtGridViewBCChamCong.Columns[i + 1];
+                col.HeaderText = i.ToString("00") + "\n" + thu;
+                col.HeaderCell.Style.BackColor = bg;
+                col.HeaderCell.Style.ForeColor = fg;
+                col.HeaderCell.Style.Alignment =
+                    DataGridViewContentAlignment.MiddleCenter;
+                col.Width = 38;
+            }
+
+            dtGridViewBCChamCong.ReadOnly = true;
+            dtGridViewBCChamCong.AllowUserToAddRows = false;
+
+            cn.disconnect();
+        }
+
+
+        private void dtGridViewBCChamCong_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.Value == null) return;
+
+            string val = e.Value.ToString().Trim();
+
+            e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            switch (val)
+            {
+                case "8":   // Đi làm đủ
+                    e.CellStyle.BackColor = Color.LightGreen;
+                    e.CellStyle.ForeColor = Color.Black;
+                    break;
+
+                case "4":   // Nửa ngày
+                    e.CellStyle.BackColor = Color.Khaki;
+                    e.CellStyle.ForeColor = Color.Black;
+                    break;
+
+                case "V":   // Vắng
+                    e.CellStyle.BackColor = Color.LightPink;
+                    e.CellStyle.ForeColor = Color.Black;
+                    break;
+
+                case "P":   // Nghỉ phép
+                    e.CellStyle.BackColor = Color.LightSkyBlue;
+                    e.CellStyle.ForeColor = Color.Black;
+                    break;
             }
         }
+
 
         // =======================================================
         // 3. Nút: Tìm kiếm (Thông minh theo ngữ cảnh)
@@ -319,6 +479,28 @@ namespace QuanLyNhanVien3
                     }
                 }
             }
+        }
+
+        private void F_BaoCaoChamCong_Load(object sender, EventArgs e)
+        {
+            dtpThoiGian.Format = DateTimePickerFormat.Custom;
+            dtpThoiGian.CustomFormat = "MM/yyyy";
+            dtpThoiGian.ShowUpDown = true;
+
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void dtpThoiGian_ValueChanged(object sender, EventArgs e)
+        {
+
+            //int thang = dtpThoiGian.Value.Month;
+            //int nam = dtpThoiGian.Value.Year;
+
+            //HienThiChamCong(thang, nam);
         }
     }
 }

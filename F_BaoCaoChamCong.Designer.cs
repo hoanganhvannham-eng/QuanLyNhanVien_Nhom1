@@ -78,6 +78,7 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1437, 219);
             this.panel2.TabIndex = 4;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // txtTimkiem
             // 
@@ -119,6 +120,7 @@
             this.dtpThoiGian.Name = "dtpThoiGian";
             this.dtpThoiGian.Size = new System.Drawing.Size(284, 28);
             this.dtpThoiGian.TabIndex = 2;
+            this.dtpThoiGian.ValueChanged += new System.EventHandler(this.dtpThoiGian_ValueChanged);
             // 
             // btnDiTreVeSom
             // 
@@ -177,6 +179,7 @@
             this.Name = "F_BaoCaoChamCong";
             this.Text = "git";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.F_BaoCaoChamCong_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
