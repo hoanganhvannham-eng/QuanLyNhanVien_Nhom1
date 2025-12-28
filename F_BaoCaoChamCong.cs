@@ -160,27 +160,26 @@ namespace QuanLyNhanVien3
         {
             cn.connect();
 
-            // reset datagridview tránh lỗi Cannot clear this list
             dtGridViewBCChamCong.DataSource = null;
             dtGridViewBCChamCong.Columns.Clear();
 
             DataTable dtNguon = new DataTable();
 
             string sql = @"
-        SELECT 
-            NV.MaNV,
-            NV.HoTen,
-            CC.Ngay,
-            CC.GioVao,
-            CC.GioVe
-        FROM tblNhanVien NV
-        LEFT JOIN tblChamCong CC 
-            ON NV.MaNV = CC.MaNV
-            AND MONTH(CC.Ngay) = @Thang
-            AND YEAR(CC.Ngay) = @Nam
-            AND CC.DeletedAt = 0
-        WHERE NV.DeletedAt = 0
-        ORDER BY NV.MaNV, CC.Ngay";
+    SELECT 
+        NV.MaNV  AS N'Mã NV',
+        NV.HoTen AS N'Họ tên',
+        CC.Ngay,
+        CC.GioVao,
+        CC.GioVe
+    FROM tblNhanVien NV
+    LEFT JOIN tblChamCong CC 
+        ON NV.MaNV = CC.MaNV
+        AND MONTH(CC.Ngay) = @Thang
+        AND YEAR(CC.Ngay) = @Nam
+        AND CC.DeletedAt = 0
+    WHERE NV.DeletedAt = 0
+    ORDER BY NV.MaNV, CC.Ngay";
 
             using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
             {
@@ -192,27 +191,26 @@ namespace QuanLyNhanVien3
             }
 
             DataTable table = new DataTable();
-            table.Columns.Add("MaNV");
-            table.Columns.Add("HoTen");
+            table.Columns.Add("Mã NV");
+            table.Columns.Add("Họ tên");
 
             int soNgay = DateTime.DaysInMonth(nam, thang);
             for (int i = 1; i <= soNgay; i++)
                 table.Columns.Add(i.ToString());
 
-            DataTable dsNV = dtNguon.DefaultView.ToTable(true, "MaNV", "HoTen");
+            DataTable dsNV = dtNguon.DefaultView.ToTable(true, "Mã NV", "Họ tên");
 
             foreach (DataRow nv in dsNV.Rows)
             {
                 DataRow row = table.NewRow();
-                row["MaNV"] = nv["MaNV"];
-                row["HoTen"] = nv["HoTen"];
+                row["Mã NV"] = nv["Mã NV"];
+                row["Họ tên"] = nv["Họ tên"];
 
-                // mặc định vắng
                 for (int i = 1; i <= soNgay; i++)
                     row[i.ToString()] = "V";
 
                 DataRow[] chamCong = dtNguon.Select(
-                    $"MaNV = '{nv["MaNV"]}' AND Ngay IS NOT NULL");
+                    $"[Mã NV] = '{nv["Mã NV"]}' AND Ngay IS NOT NULL");
 
                 foreach (DataRow cc in chamCong)
                 {
@@ -232,7 +230,12 @@ namespace QuanLyNhanVien3
 
             dtGridViewBCChamCong.DataSource = table;
 
-            // ================== HEADER NGÀY + THỨ ==================
+            // 🔤 FONT UNICODE HIỂN THỊ TIẾNG VIỆT
+            dtGridViewBCChamCong.Font = new Font("Segoe UI", 10);
+            dtGridViewBCChamCong.ColumnHeadersDefaultCellStyle.Font =
+                new Font("Segoe UI", 10, FontStyle.Bold);
+
+            // ===== HEADER NGÀY + THỨ =====
             dtGridViewBCChamCong.EnableHeadersVisualStyles = false;
             dtGridViewBCChamCong.ColumnHeadersHeight = 45;
 
@@ -250,10 +253,7 @@ namespace QuanLyNhanVien3
                     case DayOfWeek.Wednesday: thu = "T4"; break;
                     case DayOfWeek.Thursday: thu = "T5"; break;
                     case DayOfWeek.Friday: thu = "T6"; break;
-                    case DayOfWeek.Saturday:
-                        thu = "T7";
-                        bg = Color.White;
-                        break;
+                    case DayOfWeek.Saturday: thu = "T7"; break;
                     case DayOfWeek.Sunday:
                         thu = "CN";
                         bg = Color.LightPink;
@@ -265,8 +265,7 @@ namespace QuanLyNhanVien3
                 col.HeaderText = i.ToString("00") + "\n" + thu;
                 col.HeaderCell.Style.BackColor = bg;
                 col.HeaderCell.Style.ForeColor = fg;
-                col.HeaderCell.Style.Alignment =
-                    DataGridViewContentAlignment.MiddleCenter;
+                col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 col.Width = 38;
             }
 
@@ -275,6 +274,7 @@ namespace QuanLyNhanVien3
 
             cn.disconnect();
         }
+
 
 
         private void dtGridViewBCChamCong_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
