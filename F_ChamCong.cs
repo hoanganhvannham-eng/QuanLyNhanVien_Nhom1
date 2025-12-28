@@ -245,97 +245,102 @@ namespace QuanLyNhanVien3
         // ===== CHẤM CÔNG =====
         private void ChamCong(string maNV)
         {
+            if (string.IsNullOrWhiteSpace(maNV)) return;
 
             try
             {
-                if (string.IsNullOrEmpty(maNV)) return;
-
                 cn.connect();
 
-                // 1️⃣ Kiểm tra nhân viên còn làm việc
-                string checkNV = @"
-            SELECT 1
-            FROM tblNhanVien nv
-            INNER JOIN tblHopDong hd ON nv.MaNV = hd.MaNV
-            WHERE nv.MaNV = @MaNV
-              AND nv.DeletedAt = 0
-              AND hd.DeletedAt = 0";
+                // ===================== 1️⃣ KIỂM TRA NHÂN VIÊN =====================
+                string sqlCheckNV = @"
+        SELECT nv.DeletedAt
+        FROM tblNhanVien nv
+        INNER JOIN tblHopDong hd ON nv.MaNV = hd.MaNV
+        WHERE nv.MaNV = @MaNV
+          AND hd.DeletedAt = 0";
 
-                using (SqlCommand cmd = new SqlCommand(checkNV, cn.conn))
+                using (SqlCommand cmd = new SqlCommand(sqlCheckNV, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@MaNV", maNV);
-                    if (cmd.ExecuteScalar() == null)
+                    object result = cmd.ExecuteScalar();
+
+                    if (result == null || Convert.ToInt32(result) != 0)
                     {
-                        MessageBox.Show("Nhân viên không tồn tại hoặc đã nghỉ việc!");
+                        MessageBox.Show("Nhân viên không tồn tại hoặc đã nghỉ việc!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
                 }
 
-                // 2️⃣ Kiểm tra hôm nay đã chấm công chưa
-                string checkCC = @"
-            SELECT TOP 1 Id, GioVao, GioVe
-            FROM tblChamCong
-            WHERE MaNV = @MaNV
-              AND Ngay = CAST(GETDATE() AS DATE)
-              AND DeletedAt = 0
-            ORDER BY Id DESC";
+                // ===================== 2️⃣ LẤY CHẤM CÔNG CUỐI TRONG NGÀY =====================
+                string sqlCheckCC = @"
+        SELECT TOP 1 Id
+        FROM tblChamCong
+        WHERE MaNV = @MaNV
+          AND Ngay = CAST(GETDATE() AS DATE)
+          AND DeletedAt = 0
+        ORDER BY Id DESC";
 
-                DataTable dt = new DataTable();
-                using (SqlCommand cmd = new SqlCommand(checkCC, cn.conn))
+                object lastId;
+
+                using (SqlCommand cmd = new SqlCommand(sqlCheckCC, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@MaNV", maNV);
-                    new SqlDataAdapter(cmd).Fill(dt);
+                    lastId = cmd.ExecuteScalar();
                 }
 
-                if (dt.Rows.Count == 0)
+                // ===================== 3️⃣ CHƯA CÓ → CHECK-IN =====================
+                if (lastId == null)
                 {
-                    // 🔹 CHẤM CÔNG VÀO
                     string insert = @"
-                        INSERT INTO tblChamCong
-                        (MaChamCong, MaNV, Ngay, GioVao, GioVe, Ghichu)
-                        VALUES
-                        (@MaChamCong, @MaNV, CAST(GETDATE() AS DATE), @GioVao, @GioVao, N'Chấm công vào')";
+            INSERT INTO tblChamCong
+            (MaChamCong, MaNV, Ngay, GioVao, GioVe, GhiChu)
+            VALUES
+            (@MaChamCong, @MaNV,
+             CAST(GETDATE() AS DATE),
+             CONVERT(TIME, GETDATE()),
+             CONVERT(TIME, GETDATE()),
+             N'Chấm công vào')";
 
                     using (SqlCommand cmd = new SqlCommand(insert, cn.conn))
                     {
-                        DateTime now = DateTime.Now;
-
-                        cmd.Parameters.AddWithValue("@MaChamCong", GenerateMaChamCong(cn.conn));
+                        cmd.Parameters.AddWithValue("@MaChamCong",
+                            GenerateMaChamCong(cn.conn));
                         cmd.Parameters.AddWithValue("@MaNV", maNV);
-                        cmd.Parameters.AddWithValue("@GioVao", now);
-
                         cmd.ExecuteNonQuery();
                     }
 
-
-                    MessageBox.Show("✅ Đã chấm công vào");
+                    //MessageBox.Show(
+                    //    $"✅ {maNV} đã CHECK-IN\nGiờ vào: {DateTime.Now:HH:mm:ss}",
+                    //    "Chấm công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else if (dt.Rows[0]["GioVe"] == DBNull.Value)
+                // ===================== 4️⃣ ĐÃ CÓ → UPDATE GIỜ RA =====================
+                else
                 {
-                    // 🔹 CHẤM CÔNG RA
                     string update = @"
-                UPDATE tblChamCong
-                SET GioVe = @GioVe,
-                    Ghichu = N'Đã chấm công ra'
-                WHERE Id = @Id";
+            UPDATE tblChamCong
+            SET GioVe = CONVERT(TIME, GETDATE()),
+                GhiChu = N'Cập nhật giờ ra'
+            WHERE Id = @Id";
 
                     using (SqlCommand cmd = new SqlCommand(update, cn.conn))
                     {
-                        cmd.Parameters.AddWithValue("@GioVe", DateTime.Now);
-                        cmd.Parameters.AddWithValue("@Id", dt.Rows[0]["Id"]);
+                        cmd.Parameters.AddWithValue("@Id", lastId);
                         cmd.ExecuteNonQuery();
                     }
 
-                    MessageBox.Show("✅ Đã chấm công ra");
+                    //MessageBox.Show(
+                    //    $"✅ {maNV} đã CẬP NHẬT GIỜ RA\nGiờ mới: {DateTime.Now:HH:mm:ss}",
+                    //    "Chấm công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else
-                {
-                    MessageBox.Show("⚠️ Hôm nay đã chấm công đầy đủ!");
-                }
+
+                // ===================== 5️⃣ HIỂN THỊ NGAY LÊN GRID =====================
+                HienThiChamCongHienTai(maNV);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi chấm công: " + ex.Message);
+                MessageBox.Show("Lỗi chấm công: " + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
