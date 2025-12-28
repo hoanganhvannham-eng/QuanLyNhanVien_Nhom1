@@ -107,7 +107,6 @@
             this.btnChonAnh.Text = "Chon tu thu vien";
             this.btnChonAnh.UseVisualStyleBackColor = true;
             this.btnChonAnh.Visible = false;
-            this.btnChonAnh.Click += new System.EventHandler(this.btnChonAnh_Click);
             // 
             // btnChamCong
             // 
