@@ -188,6 +188,7 @@ namespace QuanLyNhanVien3
 
             timer1.Stop();
             StopCamera();
+            StartCamera();
 
             scannedMaNV = result.Text.Trim();
             if (string.IsNullOrEmpty(scannedMaNV)) return;

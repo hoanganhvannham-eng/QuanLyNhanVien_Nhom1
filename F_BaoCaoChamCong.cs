@@ -97,215 +97,183 @@ namespace QuanLyNhanVien3
         // =======================================================
         private void btnDiTreVeSom_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    // Đánh dấu trạng thái đang xem là "Đi trễ về sớm"
-            //    currentMode = 2;
-            //    cn.connect();
-
-            //    int thang = dtpThoiGian.Value.Month;
-            //    int nam = dtpThoiGian.Value.Year;
-
-            //    // SQL: Tính toán chi tiết số phút đi muộn, về sớm
-            //    string sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', cc.Ngay as N'Ngày', cc.GioVao as N'Giờ Vào', cc.GioVe as N'Giờ Về',
-            //                   CASE 
-            //                       -- Trường hợp 1: Đi sớm/đúng giờ VÀ Về muộn/đúng giờ -> Tốt
-            //                       WHEN cc.GioVao <= '08:00:00' AND cc.GioVe >= '17:00:00' 
-            //                            THEN N'Đi làm đúng giờ'
-
-            //                       -- Trường hợp 2: Đi sớm/đúng giờ VÀ Về sớm -> Chỉ bị lỗi về sớm
-            //                       WHEN cc.GioVao <= '08:00:00' AND cc.GioVe < '17:00:00' 
-            //                            THEN N'Đi đúng giờ - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe, '17:00:00') AS NVARCHAR(20)) + N' phút'
-
-            //                       -- Trường hợp 3: Đi muộn VÀ Về muộn/đúng giờ -> Chỉ bị lỗi đi muộn
-            //                       WHEN cc.GioVao > '08:00:00' AND cc.GioVe >= '17:00:00' 
-            //                            THEN N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về đúng giờ'
-
-            //                       -- Trường hợp 4: Đi muộn VÀ Về sớm -> Bị cả hai
-            //                       ELSE N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe, '17:00:00') AS NVARCHAR(20)) + N' phút'
-            //                   END AS N'Trạng Thái'
-            //                   FROM tblChamCong cc
-            //                   JOIN tblNhanVien nv ON cc.MaNV = nv.MaNV
-            //                   WHERE cc.DeletedAt = 0
-            //                     AND MONTH(cc.Ngay) = @Thang 
-            //                     AND YEAR(cc.Ngay) = @Nam
-            //                   ORDER BY cc.Ngay DESC, nv.HoTen;";
-
-            //    using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
-            //    {
-            //        cmd.Parameters.AddWithValue("@Thang", thang);
-            //        cmd.Parameters.AddWithValue("@Nam", nam);
-
-            //        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-            //        DataTable dt = new DataTable();
-            //        adapter.Fill(dt);
-            //        dtGridViewBCChamCong.DataSource = dt;
-            //    }
-
-            //    cn.disconnect();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Lỗi tải dữ liệu đi trễ/về sớm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-
             int thang = dtpThoiGian.Value.Month;
             int nam = dtpThoiGian.Value.Year;
 
             HienThiChamCong(thang, nam);
-            dtGridViewBCChamCong.CellFormatting += dtGridViewBCChamCong_CellFormatting;
 
         }
         private void HienThiChamCong(int thang, int nam)
         {
-            cn.connect();
-
-            dtGridViewBCChamCong.DataSource = null;
-            dtGridViewBCChamCong.Columns.Clear();
-
-            DataTable dtNguon = new DataTable();
-
-            string sql = @"
-    SELECT 
-        NV.MaNV  AS N'Mã NV',
-        NV.HoTen AS N'Họ tên',
-        CC.Ngay,
-        CC.GioVao,
-        CC.GioVe
-    FROM tblNhanVien NV
-    LEFT JOIN tblChamCong CC 
-        ON NV.MaNV = CC.MaNV
-        AND MONTH(CC.Ngay) = @Thang
-        AND YEAR(CC.Ngay) = @Nam
-        AND CC.DeletedAt = 0
-    WHERE NV.DeletedAt = 0
-    ORDER BY NV.MaNV, CC.Ngay";
-
-            using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+            try
             {
-                cmd.Parameters.AddWithValue("@Thang", thang);
-                cmd.Parameters.AddWithValue("@Nam", nam);
+                cn.connect();
 
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(dtNguon);
-            }
+                dtGridViewBCChamCong.DataSource = null;
+                dtGridViewBCChamCong.Columns.Clear();
 
-            DataTable table = new DataTable();
-            table.Columns.Add("Mã NV");
-            table.Columns.Add("Họ tên");
+                DataTable dtNguon = new DataTable();
 
-            int soNgay = DateTime.DaysInMonth(nam, thang);
-            for (int i = 1; i <= soNgay; i++)
-                table.Columns.Add(i.ToString());
+                string sql = @"
+                            SELECT 
+                                NV.MaNV  AS MaNV,
+                                NV.HoTen AS HoTen,
+                                CC.Ngay,
+                                CC.GioVao,
+                                CC.GioVe
+                            FROM tblNhanVien NV
+                            LEFT JOIN tblChamCong CC 
+                                ON NV.MaNV = CC.MaNV
+                                AND MONTH(CC.Ngay) = @Thang
+                                AND YEAR(CC.Ngay) = @Nam
+                                AND CC.DeletedAt = 0
+                            WHERE NV.DeletedAt = 0
+                            ORDER BY NV.MaNV, CC.Ngay";
 
-            DataTable dsNV = dtNguon.DefaultView.ToTable(true, "Mã NV", "Họ tên");
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+                    cmd.Parameters.AddWithValue("@Nam", nam);
+                    new SqlDataAdapter(cmd).Fill(dtNguon);
+                }
 
-            foreach (DataRow nv in dsNV.Rows)
-            {
-                DataRow row = table.NewRow();
-                row["Mã NV"] = nv["Mã NV"];
-                row["Họ tên"] = nv["Họ tên"];
+                // ================== TẠO BẢNG HIỂN THỊ ==================
+                DataTable table = new DataTable();
+                table.Columns.Add("Mã NV");
+                table.Columns.Add("Họ tên");
+
+                int soNgay = DateTime.DaysInMonth(nam, thang);
+                for (int i = 1; i <= soNgay; i++)
+                    table.Columns.Add(i.ToString());
+
+                DataTable dsNV = dtNguon.DefaultView.ToTable(true, "MaNV", "HoTen");
+
+                foreach (DataRow nv in dsNV.Rows)
+                {
+                    DataRow row = table.NewRow();
+                    row["Mã NV"] = nv["MaNV"];
+                    row["Họ tên"] = nv["HoTen"];
+
+                    // Mặc định Vắng
+                    for (int i = 1; i <= soNgay; i++)
+                        row[i.ToString()] = "V";
+
+                    DataRow[] chamCong = dtNguon.Select(
+                        $"MaNV = '{nv["MaNV"]}' AND Ngay IS NOT NULL");
+
+                    foreach (DataRow cc in chamCong)
+                    {
+                        DateTime ngay = Convert.ToDateTime(cc["Ngay"]);
+                        TimeSpan gioVao = (TimeSpan)cc["GioVao"];
+                        TimeSpan gioVe = (TimeSpan)cc["GioVe"];
+
+                        // ✅ TÍNH SỐ GIỜ LÀM THỰC
+                        double soGio = Math.Round((gioVe - gioVao).TotalHours, 2);
+
+                        // GÁN VÀO Ô NGÀY TƯƠNG ỨNG
+                        row[ngay.Day.ToString()] = soGio.ToString();
+                    }
+
+
+                    table.Rows.Add(row);
+                }
+
+                dtGridViewBCChamCong.DataSource = table;
+
+                // ================== FONT TIẾNG VIỆT ==================
+                dtGridViewBCChamCong.Font = new Font("Segoe UI", 10);
+                dtGridViewBCChamCong.ColumnHeadersDefaultCellStyle.Font =
+                    new Font("Segoe UI", 10, FontStyle.Bold);
+
+                // ================== HEADER NGÀY + THỨ ==================
+                dtGridViewBCChamCong.EnableHeadersVisualStyles = false;
+                dtGridViewBCChamCong.ColumnHeadersHeight = 45;
 
                 for (int i = 1; i <= soNgay; i++)
-                    row[i.ToString()] = "V";
-
-                DataRow[] chamCong = dtNguon.Select(
-                    $"[Mã NV] = '{nv["Mã NV"]}' AND Ngay IS NOT NULL");
-
-                foreach (DataRow cc in chamCong)
                 {
-                    DateTime ngay = Convert.ToDateTime(cc["Ngay"]);
-                    TimeSpan gioVao = (TimeSpan)cc["GioVao"];
-                    TimeSpan gioVe = (TimeSpan)cc["GioVe"];
+                    DateTime date = new DateTime(nam, thang, i);
+                    string thu;
+                    Color bg = Color.White;
+                    Color fg = Color.Black;
 
-                    double soGio = (gioVe - gioVao).TotalHours;
+                    switch (date.DayOfWeek)
+                    {
+                        case DayOfWeek.Monday: thu = "T2"; break;
+                        case DayOfWeek.Tuesday: thu = "T3"; break;
+                        case DayOfWeek.Wednesday: thu = "T4"; break;
+                        case DayOfWeek.Thursday: thu = "T5"; break;
+                        case DayOfWeek.Friday: thu = "T6"; break;
+                        case DayOfWeek.Saturday: thu = "T7"; break;
+                        default:
+                            thu = "CN";
+                            bg = Color.LightPink;
+                            fg = Color.Red;
+                            break;
+                    }
 
-                    row[ngay.Day.ToString()] =
-                        soGio >= 8 ? "8" :
-                        soGio >= 4 ? "4" : "V";
+                    DataGridViewColumn col = dtGridViewBCChamCong.Columns[i + 1];
+                    col.HeaderText = i.ToString("00") + "\n" + thu;
+                    col.HeaderCell.Style.BackColor = bg;
+                    col.HeaderCell.Style.ForeColor = fg;
+                    col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    col.Width = 40;
                 }
 
-                table.Rows.Add(row);
+                dtGridViewBCChamCong.ReadOnly = true;
+                dtGridViewBCChamCong.AllowUserToAddRows = false;
             }
-
-            dtGridViewBCChamCong.DataSource = table;
-
-            // 🔤 FONT UNICODE HIỂN THỊ TIẾNG VIỆT
-            dtGridViewBCChamCong.Font = new Font("Segoe UI", 10);
-            dtGridViewBCChamCong.ColumnHeadersDefaultCellStyle.Font =
-                new Font("Segoe UI", 10, FontStyle.Bold);
-
-            // ===== HEADER NGÀY + THỨ =====
-            dtGridViewBCChamCong.EnableHeadersVisualStyles = false;
-            dtGridViewBCChamCong.ColumnHeadersHeight = 45;
-
-            for (int i = 1; i <= soNgay; i++)
+            catch (Exception ex)
             {
-                DateTime date = new DateTime(nam, thang, i);
-                string thu = "";
-                Color bg = Color.White;
-                Color fg = Color.Black;
-
-                switch (date.DayOfWeek)
-                {
-                    case DayOfWeek.Monday: thu = "T2"; break;
-                    case DayOfWeek.Tuesday: thu = "T3"; break;
-                    case DayOfWeek.Wednesday: thu = "T4"; break;
-                    case DayOfWeek.Thursday: thu = "T5"; break;
-                    case DayOfWeek.Friday: thu = "T6"; break;
-                    case DayOfWeek.Saturday: thu = "T7"; break;
-                    case DayOfWeek.Sunday:
-                        thu = "CN";
-                        bg = Color.LightPink;
-                        fg = Color.Red;
-                        break;
-                }
-
-                DataGridViewColumn col = dtGridViewBCChamCong.Columns[i + 1];
-                col.HeaderText = i.ToString("00") + "\n" + thu;
-                col.HeaderCell.Style.BackColor = bg;
-                col.HeaderCell.Style.ForeColor = fg;
-                col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                col.Width = 38;
+                MessageBox.Show("Lỗi hiển thị chấm công: " + ex.Message);
             }
-
-            dtGridViewBCChamCong.ReadOnly = true;
-            dtGridViewBCChamCong.AllowUserToAddRows = false;
-
-            cn.disconnect();
+            finally
+            {
+                cn.disconnect();
+            }
         }
 
 
-
-        private void dtGridViewBCChamCong_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void dtGridViewBCChamCong_CellFormatting(
+    object sender, DataGridViewCellFormattingEventArgs e)
         {
+            // Bỏ qua 2 cột đầu (Mã NV, Họ tên)
+            if (e.RowIndex < 0 || e.ColumnIndex < 2) return;
+
             if (e.Value == null) return;
 
-            string val = e.Value.ToString().Trim();
+            string value = e.Value.ToString().Trim();
 
-            e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            switch (val)
+            // 🟡 Nghỉ phép
+            if (value == "P")
             {
-                case "8":   // Đi làm đủ
+                e.CellStyle.BackColor = Color.Khaki;
+                e.CellStyle.ForeColor = Color.Black;
+                return;
+            }
+
+            // ⚪ Vắng
+            if (value == "V")
+            {
+                e.CellStyle.BackColor = Color.Gainsboro;
+                e.CellStyle.ForeColor = Color.Black;
+                return;
+            }
+
+            // 🔢 Số giờ làm
+            if (double.TryParse(value, out double soGio))
+            {
+                if (soGio >= 8)
+                {
+                    // 🟢 Làm đủ / quá giờ
                     e.CellStyle.BackColor = Color.LightGreen;
                     e.CellStyle.ForeColor = Color.Black;
-                    break;
-
-                case "4":   // Nửa ngày
-                    e.CellStyle.BackColor = Color.Khaki;
-                    e.CellStyle.ForeColor = Color.Black;
-                    break;
-
-                case "V":   // Vắng
-                    e.CellStyle.BackColor = Color.LightPink;
-                    e.CellStyle.ForeColor = Color.Black;
-                    break;
-
-                case "P":   // Nghỉ phép
-                    e.CellStyle.BackColor = Color.LightSkyBlue;
-                    e.CellStyle.ForeColor = Color.Black;
-                    break;
+                }
+                else
+                {
+                    // 🔴 Làm thiếu giờ
+                    e.CellStyle.BackColor = Color.LightCoral;
+                    e.CellStyle.ForeColor = Color.White;
+                }
             }
         }
 
@@ -486,6 +454,7 @@ namespace QuanLyNhanVien3
             dtpThoiGian.Format = DateTimePickerFormat.Custom;
             dtpThoiGian.CustomFormat = "MM/yyyy";
             dtpThoiGian.ShowUpDown = true;
+            dtGridViewBCChamCong.CellFormatting += dtGridViewBCChamCong_CellFormatting;
 
         }
 
