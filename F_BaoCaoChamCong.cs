@@ -47,7 +47,6 @@ namespace QuanLyNhanVien3
         // =======================================================
         private void btnSoNgayLamViec_Click(object sender, EventArgs e)
         {
-
             try
             {
                 int thang = dtpThoiGian.Value.Month;
@@ -55,20 +54,41 @@ namespace QuanLyNhanVien3
 
                 cn.connect();
 
-                string sql = @"
-            SELECT 
-                nv.MaNV,
-                nv.HoTen,
-                @Thang AS Thang,
-                @Nam AS Nam,
-                COUNT(DISTINCT cc.Ngay) AS SoNgayLamViec,
-                DAY(EOMONTH(DATEFROMPARTS(@Nam, @Thang, 1))) AS SoNgayTrongThang
-            FROM tblChamCong cc
-            JOIN tblNhanVien nv ON nv.MaNV = cc.MaNV
-            WHERE cc.DeletedAt = 0
-              AND MONTH(cc.Ngay) = @Thang
-              AND YEAR(cc.Ngay) = @Nam
-            GROUP BY nv.MaNV, nv.HoTen";
+                string sql = @"SET DATEFIRST 7;
+
+WITH AllDays AS (
+    SELECT 
+        DATEADD(DAY, v.number, DATEFROMPARTS(@Nam, @Thang, 1)) AS Ngay
+    FROM master.dbo.spt_values v
+    WHERE v.type = 'P'
+      AND v.number < DAY(EOMONTH(DATEFROMPARTS(@Nam, @Thang, 1)))
+),
+SoNgayCongChuan AS (
+    SELECT 
+        COUNT(*) AS SoNgayTrongThangTruChuNhat
+    FROM AllDays
+    WHERE DATEPART(WEEKDAY, Ngay) <> 1   -- ❌ loại Chủ nhật
+)
+SELECT 
+    nv.MaNV,
+    nv.HoTen,
+    @Thang AS Thang,
+    @Nam AS Nam,
+
+    -- 🔹 Số ngày làm việc thực tế (từ CSDL)
+    COUNT(DISTINCT cc.Ngay) AS SoNgayLamViec,
+
+    -- 🔹 Số ngày công chuẩn (tháng - chủ nhật)
+    s.SoNgayTrongThangTruChuNhat AS SoNgayCongChuan
+FROM tblNhanVien nv
+LEFT JOIN tblChamCong cc 
+       ON nv.MaNV = cc.MaNV
+      AND cc.DeletedAt = 0
+      AND MONTH(cc.Ngay) = @Thang
+      AND YEAR(cc.Ngay) = @Nam
+CROSS JOIN SoNgayCongChuan s
+WHERE nv.DeletedAt = 0
+GROUP BY nv.MaNV, nv.HoTen, s.SoNgayTrongThangTruChuNhat";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
@@ -99,7 +119,7 @@ namespace QuanLyNhanVien3
         {
             int thang = dtpThoiGian.Value.Month;
             int nam = dtpThoiGian.Value.Year;
-
+            dtGridViewBCChamCong.CellFormatting += dtGridViewBCChamCong_CellFormatting;
             HienThiChamCong(thang, nam);
 
         }
@@ -454,7 +474,6 @@ namespace QuanLyNhanVien3
             dtpThoiGian.Format = DateTimePickerFormat.Custom;
             dtpThoiGian.CustomFormat = "MM/yyyy";
             dtpThoiGian.ShowUpDown = true;
-            dtGridViewBCChamCong.CellFormatting += dtGridViewBCChamCong_CellFormatting;
 
         }
 
