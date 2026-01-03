@@ -250,3 +250,73 @@ VALUES
 ('TK01', 'NV01', '0901000001', '123456', 'Admin', '', 1),
 ('TK02', 'NV02', '0901000002', '123456', 'User', '', 2);
 GO
+SELECT name, is_identity
+FROM sys.columns
+WHERE object_id = OBJECT_ID('tblNhanVien');
+SELECT name
+FROM sys.columns
+WHERE object_id = OBJECT_ID('tblLuong');
+SELECT name
+FROM sys.columns
+WHERE object_id = OBJECT_ID('tblChamCong');
+SELECT 
+    fk.name AS TenFK,
+    OBJECT_NAME(fk.parent_object_id) AS BangCon,
+    OBJECT_NAME(fk.referenced_object_id) AS BangCha
+FROM sys.foreign_keys fk;
+SELECT name
+FROM sys.columns
+WHERE object_id = OBJECT_ID('tblLuong')
+AND name IN ('SoNgayCong', 'TongLuong');
+SELECT 
+    l.Id,
+    nv.HoTen,
+    l.Thang,
+    l.Nam
+FROM tblLuong l
+JOIN tblNhanVien nv ON l.NhanVienId = nv.Id;
+SELECT 
+    nv.HoTen,
+    COUNT(cc.Id) AS SoNgayCong
+FROM tblChamCong cc
+JOIN tblNhanVien nv ON cc.NhanVienId = nv.Id
+GROUP BY nv.HoTen;
+SELECT * FROM vw_LuongNhanVien;
+ALTER TABLE tblLuong
+ADD ChamCongId INT NULL;
+
+UPDATE l
+SET ChamCongId = cc.Id
+FROM tblLuong l
+JOIN tblChamCong cc
+    ON MONTH(cc.Ngay) = l.Thang
+   AND YEAR(cc.Ngay) = l.Nam;
+SELECT * FROM tblLuong WHERE ChamCongId IS NULL;
+ALTER TABLE tblLuong
+DROP CONSTRAINT FK_tblLuong_NhanVien;
+ALTER TABLE tblLuong
+DROP COLUMN NhanVienId;
+ALTER TABLE tblLuong
+ADD CONSTRAINT FK_tblLuong_ChamCong
+FOREIGN KEY (ChamCongId)
+REFERENCES tblChamCong(Id);
+CREATE OR ALTER VIEW vw_LuongNhanVien
+AS
+SELECT
+    l.Id AS LuongId,
+    nv.HoTen,
+    l.Thang,
+    l.Nam,
+    l.LuongCoBan,
+    COUNT(cc.Id) AS SoNgayCong,
+    l.PhuCap,
+    l.KhauTru,
+    (l.LuongCoBan / 26) * COUNT(cc.Id)
+        + l.PhuCap - l.KhauTru AS TongLuong
+FROM tblLuong l
+JOIN tblChamCong cc ON l.ChamCongId = cc.Id
+JOIN tblNhanVien nv ON cc.NhanVienId = nv.Id
+GROUP BY
+    l.Id, nv.HoTen,
+    l.Thang, l.Nam,
+    l.LuongCoBan, l.PhuCap, l.KhauTru;
