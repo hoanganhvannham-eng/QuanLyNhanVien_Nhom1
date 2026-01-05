@@ -33,6 +33,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.btnrestar = new System.Windows.Forms.Button();
             this.btnTimKiem = new System.Windows.Forms.Button();
             this.tbDiaChi = new System.Windows.Forms.TextBox();
             this.dateTimePickerNgaySinh = new System.Windows.Forms.DateTimePicker();
@@ -62,7 +63,6 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.dtGridViewNhanVien = new System.Windows.Forms.DataGridView();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.btnrestar = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -141,6 +141,20 @@
             this.panel4.Size = new System.Drawing.Size(596, 450);
             this.panel4.TabIndex = 161;
             this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
+            // 
+            // btnrestar
+            // 
+            this.btnrestar.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnrestar.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnrestar.Location = new System.Drawing.Point(416, 315);
+            this.btnrestar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnrestar.Name = "btnrestar";
+            this.btnrestar.Size = new System.Drawing.Size(134, 44);
+            this.btnrestar.TabIndex = 188;
+            this.btnrestar.Text = "Refresh";
+            this.btnrestar.UseVisualStyleBackColor = true;
+            this.btnrestar.Visible = false;
+            this.btnrestar.Click += new System.EventHandler(this.btnrestar_Click);
             // 
             // btnTimKiem
             // 
@@ -304,7 +318,7 @@
             this.cbBoxChucVu.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cbBoxChucVu.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbBoxChucVu.FormattingEnabled = true;
-            this.cbBoxChucVu.Location = new System.Drawing.Point(192, 223);
+            this.cbBoxChucVu.Location = new System.Drawing.Point(192, 141);
             this.cbBoxChucVu.Name = "cbBoxChucVu";
             this.cbBoxChucVu.Size = new System.Drawing.Size(283, 27);
             this.cbBoxChucVu.TabIndex = 189;
@@ -319,7 +333,7 @@
             "Nam",
             "Nữ",
             "Khác"});
-            this.cbBoxGioiTinh.Location = new System.Drawing.Point(192, 264);
+            this.cbBoxGioiTinh.Location = new System.Drawing.Point(192, 186);
             this.cbBoxGioiTinh.Name = "cbBoxGioiTinh";
             this.cbBoxGioiTinh.Size = new System.Drawing.Size(283, 27);
             this.cbBoxGioiTinh.TabIndex = 160;
@@ -330,7 +344,7 @@
             this.cbBoxMaPB.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cbBoxMaPB.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbBoxMaPB.FormattingEnabled = true;
-            this.cbBoxMaPB.Location = new System.Drawing.Point(192, 185);
+            this.cbBoxMaPB.Location = new System.Drawing.Point(192, 103);
             this.cbBoxMaPB.Name = "cbBoxMaPB";
             this.cbBoxMaPB.Size = new System.Drawing.Size(283, 27);
             this.cbBoxMaPB.TabIndex = 188;
@@ -364,7 +378,7 @@
             // 
             this.tbHoTen.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbHoTen.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbHoTen.Location = new System.Drawing.Point(192, 143);
+            this.tbHoTen.Location = new System.Drawing.Point(192, 269);
             this.tbHoTen.Name = "tbHoTen";
             this.tbHoTen.Size = new System.Drawing.Size(283, 27);
             this.tbHoTen.TabIndex = 155;
@@ -373,7 +387,7 @@
             // 
             this.tbmaNV.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbmaNV.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbmaNV.Location = new System.Drawing.Point(192, 105);
+            this.tbmaNV.Location = new System.Drawing.Point(192, 231);
             this.tbmaNV.Name = "tbmaNV";
             this.tbmaNV.Size = new System.Drawing.Size(283, 27);
             this.tbmaNV.TabIndex = 154;
@@ -383,7 +397,7 @@
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(57, 267);
+            this.label3.Location = new System.Drawing.Point(57, 189);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(74, 19);
             this.label3.TabIndex = 152;
@@ -394,7 +408,7 @@
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(57, 146);
+            this.label2.Location = new System.Drawing.Point(57, 272);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 19);
             this.label2.TabIndex = 150;
@@ -405,7 +419,7 @@
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(57, 108);
+            this.label1.Location = new System.Drawing.Point(57, 234);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(109, 19);
             this.label1.TabIndex = 149;
@@ -416,7 +430,7 @@
             this.label11.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(49, 186);
+            this.label11.Location = new System.Drawing.Point(49, 104);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(108, 19);
             this.label11.TabIndex = 180;
@@ -427,7 +441,7 @@
             this.label10.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(49, 225);
+            this.label10.Location = new System.Drawing.Point(49, 143);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(68, 19);
             this.label10.TabIndex = 181;
@@ -457,20 +471,6 @@
             this.dtGridViewNhanVien.Size = new System.Drawing.Size(1598, 230);
             this.dtGridViewNhanVien.TabIndex = 120;
             this.dtGridViewNhanVien.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewNhanVien_CellClick_2);
-            // 
-            // btnrestar
-            // 
-            this.btnrestar.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnrestar.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnrestar.Location = new System.Drawing.Point(416, 315);
-            this.btnrestar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnrestar.Name = "btnrestar";
-            this.btnrestar.Size = new System.Drawing.Size(134, 44);
-            this.btnrestar.TabIndex = 188;
-            this.btnrestar.Text = "Refresh";
-            this.btnrestar.UseVisualStyleBackColor = true;
-            this.btnrestar.Visible = false;
-            this.btnrestar.Click += new System.EventHandler(this.btnrestar_Click);
             // 
             // F_NhanVien
             // 

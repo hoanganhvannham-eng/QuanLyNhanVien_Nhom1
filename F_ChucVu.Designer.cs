@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnThoat = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -41,6 +42,7 @@
             this.checkshowpassword = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.tbMaChuVu = new System.Windows.Forms.TextBox();
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.btnThem = new System.Windows.Forms.Button();
@@ -51,8 +53,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
             this.dgvHienThiChucVu = new System.Windows.Forms.DataGridView();
-            this.tbMaChuVu = new System.Windows.Forms.TextBox();
-            this.btnThoat = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cbbMaPB = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -71,6 +73,18 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1111, 128);
             this.panel1.TabIndex = 20;
+            // 
+            // btnThoat
+            // 
+            this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThoat.Location = new System.Drawing.Point(911, 25);
+            this.btnThoat.Name = "btnThoat";
+            this.btnThoat.Size = new System.Drawing.Size(163, 50);
+            this.btnThoat.TabIndex = 169;
+            this.btnThoat.Text = "Thoát";
+            this.btnThoat.UseVisualStyleBackColor = true;
+            this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
             // label1
             // 
@@ -212,6 +226,8 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.cbbMaPB);
+            this.panel3.Controls.Add(this.label6);
             this.panel3.Controls.Add(this.tbMaChuVu);
             this.panel3.Controls.Add(this.btnXoa);
             this.panel3.Controls.Add(this.btnSua);
@@ -227,6 +243,16 @@
             this.panel3.Size = new System.Drawing.Size(578, 359);
             this.panel3.TabIndex = 0;
             this.panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
+            // 
+            // tbMaChuVu
+            // 
+            this.tbMaChuVu.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tbMaChuVu.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbMaChuVu.Location = new System.Drawing.Point(297, 74);
+            this.tbMaChuVu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tbMaChuVu.Name = "tbMaChuVu";
+            this.tbMaChuVu.Size = new System.Drawing.Size(229, 30);
+            this.tbMaChuVu.TabIndex = 31;
             // 
             // btnXoa
             // 
@@ -292,7 +318,7 @@
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(171, 180);
+            this.label4.Location = new System.Drawing.Point(139, 182);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(76, 22);
             this.label4.TabIndex = 22;
@@ -303,7 +329,7 @@
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(171, 132);
+            this.label3.Location = new System.Drawing.Point(139, 134);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(114, 22);
             this.label3.TabIndex = 21;
@@ -314,7 +340,7 @@
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(171, 80);
+            this.label2.Location = new System.Drawing.Point(139, 82);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(110, 22);
             this.label2.TabIndex = 20;
@@ -345,27 +371,24 @@
             this.dgvHienThiChucVu.TabIndex = 121;
             this.dgvHienThiChucVu.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvHienThiChucVu_CellClick_1);
             // 
-            // tbMaChuVu
+            // label6
             // 
-            this.tbMaChuVu.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tbMaChuVu.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbMaChuVu.Location = new System.Drawing.Point(297, 74);
-            this.tbMaChuVu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tbMaChuVu.Name = "tbMaChuVu";
-            this.tbMaChuVu.Size = new System.Drawing.Size(229, 30);
-            this.tbMaChuVu.TabIndex = 31;
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(139, 34);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(125, 22);
+            this.label6.TabIndex = 32;
+            this.label6.Text = "Mã Phòng Ban";
             // 
-            // btnThoat
+            // cbbMaPB
             // 
-            this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThoat.Location = new System.Drawing.Point(911, 25);
-            this.btnThoat.Name = "btnThoat";
-            this.btnThoat.Size = new System.Drawing.Size(163, 50);
-            this.btnThoat.TabIndex = 169;
-            this.btnThoat.Text = "Thoát";
-            this.btnThoat.UseVisualStyleBackColor = true;
-            this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
+            this.cbbMaPB.FormattingEnabled = true;
+            this.cbbMaPB.Location = new System.Drawing.Point(297, 30);
+            this.cbbMaPB.Name = "cbbMaPB";
+            this.cbbMaPB.Size = new System.Drawing.Size(229, 24);
+            this.cbbMaPB.TabIndex = 33;
             // 
             // F_ChucVu
             // 
@@ -421,5 +444,7 @@
         private System.Windows.Forms.DataGridView dgvHienThiChucVu;
         private System.Windows.Forms.TextBox tbMaChuVu;
         private System.Windows.Forms.Button btnThoat;
+        private System.Windows.Forms.ComboBox cbbMaPB;
+        private System.Windows.Forms.Label label6;
     }
 }
