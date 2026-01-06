@@ -49,46 +49,64 @@ namespace QuanLyNhanVien3
         {
             try
             {
+                dtGridViewBCChamCong.CellFormatting -= dtGridViewBCChamCong_CellFormatting;
                 int thang = dtpThoiGian.Value.Month;
                 int nam = dtpThoiGian.Value.Year;
 
                 cn.connect();
 
-                string sql = @"SET DATEFIRST 7;
+                string sql = @"
+        SET DATEFIRST 7;
 
-WITH AllDays AS (
-    SELECT 
-        DATEADD(DAY, v.number, DATEFROMPARTS(@Nam, @Thang, 1)) AS Ngay
-    FROM master.dbo.spt_values v
-    WHERE v.type = 'P'
-      AND v.number < DAY(EOMONTH(DATEFROMPARTS(@Nam, @Thang, 1)))
-),
-SoNgayCongChuan AS (
-    SELECT 
-        COUNT(*) AS SoNgayTrongThangTruChuNhat
-    FROM AllDays
-    WHERE DATEPART(WEEKDAY, Ngay) <> 1   -- ❌ loại Chủ nhật
-)
-SELECT 
-    nv.MaNV,
-    nv.HoTen,
-    @Thang AS Thang,
-    @Nam AS Nam,
+        -- 🔹 Danh sách ngày trong tháng
+        WITH AllDays AS (
+            SELECT 
+                DATEADD(DAY, v.number, DATEFROMPARTS(@Nam, @Thang, 1)) AS Ngay
+            FROM master.dbo.spt_values v
+            WHERE v.type = 'P'
+              AND v.number < DAY(EOMONTH(DATEFROMPARTS(@Nam, @Thang, 1)))
+        ),
 
-    -- 🔹 Số ngày làm việc thực tế (từ CSDL)
-    COUNT(DISTINCT cc.Ngay) AS SoNgayLamViec,
+        -- 🔹 Ngày công chuẩn (trừ Chủ nhật)
+        SoNgayCongChuan AS (
+            SELECT COUNT(*) AS SoNgayCongChuan
+            FROM AllDays
+            WHERE DATEPART(WEEKDAY, Ngay) <> 1
+        ),
 
-    -- 🔹 Số ngày công chuẩn (tháng - chủ nhật)
-    s.SoNgayTrongThangTruChuNhat AS SoNgayCongChuan
-FROM tblNhanVien nv
-LEFT JOIN tblChamCong cc 
-       ON nv.MaNV = cc.MaNV
-      AND cc.DeletedAt = 0
-      AND MONTH(cc.Ngay) = @Thang
-      AND YEAR(cc.Ngay) = @Nam
-CROSS JOIN SoNgayCongChuan s
-WHERE nv.DeletedAt = 0
-GROUP BY nv.MaNV, nv.HoTen, s.SoNgayTrongThangTruChuNhat";
+        -- 🔹 Nhân viên còn hợp đồng hiệu lực
+        NVConHopDong AS (
+            SELECT DISTINCT nv.Id, nv.MaNV, nv.HoTen
+            FROM tblNhanVien nv
+            INNER JOIN tblHopDong hd ON nv.MaNV = hd.MaNV
+            WHERE nv.DeletedAt = 0
+              AND hd.DeletedAt = 0
+              AND (hd.NgayKetThuc IS NULL OR hd.NgayKetThuc >= GETDATE())
+        )
+
+        SELECT 
+            nv.MaNV      AS N'Mã NV',
+            nv.HoTen     AS N'Họ tên',
+            @Thang       AS N'Tháng',
+            @Nam         AS N'Năm',
+
+            -- 🔹 Số ngày làm việc thực tế
+            COUNT(DISTINCT cc.Ngay) AS N'Số ngày làm việc',
+
+            -- 🔹 Số ngày công chuẩn
+            s.SoNgayCongChuan AS N'Số ngày công chuẩn'
+
+        FROM NVConHopDong nv
+        LEFT JOIN tblChamCong cc 
+               ON cc.NhanVienId = nv.Id
+              AND cc.DeletedAt = 0
+              AND MONTH(cc.Ngay) = @Thang
+              AND YEAR(cc.Ngay) = @Nam
+
+        CROSS JOIN SoNgayCongChuan s
+
+        GROUP BY nv.MaNV, nv.HoTen, s.SoNgayCongChuan
+        ORDER BY nv.MaNV";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
@@ -101,14 +119,15 @@ GROUP BY nv.MaNV, nv.HoTen, s.SoNgayTrongThangTruChuNhat";
 
                     dtGridViewBCChamCong.DataSource = dt;
                 }
-
-                cn.disconnect();
             }
             catch (Exception ex)
             {
-                cn.disconnect();
-                MessageBox.Show("Lỗi: " + ex.Message,
+                MessageBox.Show("Lỗi báo cáo chấm công: " + ex.Message,
                     "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.disconnect();
             }
         }
 
@@ -119,8 +138,13 @@ GROUP BY nv.MaNV, nv.HoTen, s.SoNgayTrongThangTruChuNhat";
         {
             int thang = dtpThoiGian.Value.Month;
             int nam = dtpThoiGian.Value.Year;
+
+            // GỠ EVENT CŨ TRƯỚC KHI GẮN LẠI
+            dtGridViewBCChamCong.CellFormatting -= dtGridViewBCChamCong_CellFormatting;
             dtGridViewBCChamCong.CellFormatting += dtGridViewBCChamCong_CellFormatting;
+
             HienThiChamCong(thang, nam);
+
 
         }
         private void HienThiChamCong(int thang, int nam)
@@ -135,20 +159,21 @@ GROUP BY nv.MaNV, nv.HoTen, s.SoNgayTrongThangTruChuNhat";
                 DataTable dtNguon = new DataTable();
 
                 string sql = @"
-                            SELECT 
-                                NV.MaNV  AS MaNV,
-                                NV.HoTen AS HoTen,
-                                CC.Ngay,
-                                CC.GioVao,
-                                CC.GioVe
-                            FROM tblNhanVien NV
-                            LEFT JOIN tblChamCong CC 
-                                ON NV.MaNV = CC.MaNV
-                                AND MONTH(CC.Ngay) = @Thang
-                                AND YEAR(CC.Ngay) = @Nam
-                                AND CC.DeletedAt = 0
-                            WHERE NV.DeletedAt = 0
-                            ORDER BY NV.MaNV, CC.Ngay";
+            SELECT 
+                NV.Id,
+                NV.MaNV,
+                NV.HoTen,
+                CC.Ngay,
+                CC.GioVao,
+                CC.GioVe
+            FROM tblNhanVien NV
+            LEFT JOIN tblChamCong CC 
+                ON NV.Id = CC.NhanVienId
+                AND MONTH(CC.Ngay) = @Thang
+                AND YEAR(CC.Ngay) = @Nam
+                AND CC.DeletedAt = 0
+            WHERE NV.DeletedAt = 0
+            ORDER BY NV.MaNV, CC.Ngay";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
@@ -166,7 +191,7 @@ GROUP BY nv.MaNV, nv.HoTen, s.SoNgayTrongThangTruChuNhat";
                 for (int i = 1; i <= soNgay; i++)
                     table.Columns.Add(i.ToString());
 
-                DataTable dsNV = dtNguon.DefaultView.ToTable(true, "MaNV", "HoTen");
+                DataTable dsNV = dtNguon.DefaultView.ToTable(true, "Id", "MaNV", "HoTen");
 
                 foreach (DataRow nv in dsNV.Rows)
                 {
@@ -179,7 +204,7 @@ GROUP BY nv.MaNV, nv.HoTen, s.SoNgayTrongThangTruChuNhat";
                         row[i.ToString()] = "V";
 
                     DataRow[] chamCong = dtNguon.Select(
-                        $"MaNV = '{nv["MaNV"]}' AND Ngay IS NOT NULL");
+                        $"Id = {nv["Id"]} AND Ngay IS NOT NULL");
 
                     foreach (DataRow cc in chamCong)
                     {
@@ -187,20 +212,17 @@ GROUP BY nv.MaNV, nv.HoTen, s.SoNgayTrongThangTruChuNhat";
                         TimeSpan gioVao = (TimeSpan)cc["GioVao"];
                         TimeSpan gioVe = (TimeSpan)cc["GioVe"];
 
-                        // ✅ TÍNH SỐ GIỜ LÀM THỰC
                         double soGio = Math.Round((gioVe - gioVao).TotalHours, 2);
 
-                        // GÁN VÀO Ô NGÀY TƯƠNG ỨNG
                         row[ngay.Day.ToString()] = soGio.ToString();
                     }
-
 
                     table.Rows.Add(row);
                 }
 
                 dtGridViewBCChamCong.DataSource = table;
 
-                // ================== FONT TIẾNG VIỆT ==================
+                // ================== FONT ==================
                 dtGridViewBCChamCong.Font = new Font("Segoe UI", 10);
                 dtGridViewBCChamCong.ColumnHeadersDefaultCellStyle.Font =
                     new Font("Segoe UI", 10, FontStyle.Bold);
@@ -251,6 +273,7 @@ GROUP BY nv.MaNV, nv.HoTen, s.SoNgayTrongThangTruChuNhat";
                 cn.disconnect();
             }
         }
+
 
 
         private void dtGridViewBCChamCong_CellFormatting(
@@ -485,10 +508,10 @@ GROUP BY nv.MaNV, nv.HoTen, s.SoNgayTrongThangTruChuNhat";
         private void dtpThoiGian_ValueChanged(object sender, EventArgs e)
         {
 
-            //int thang = dtpThoiGian.Value.Month;
-            //int nam = dtpThoiGian.Value.Year;
+            int thang = dtpThoiGian.Value.Month;
+            int nam = dtpThoiGian.Value.Year;
 
-            //HienThiChamCong(thang, nam);
+            HienThiChamCong(thang, nam);
         }
     }
 }

@@ -42,6 +42,8 @@
             this.checkshowpassword = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.cbbMaPB = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.tbMaChuVu = new System.Windows.Forms.TextBox();
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
@@ -53,8 +55,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
             this.dgvHienThiChucVu = new System.Windows.Forms.DataGridView();
-            this.label6 = new System.Windows.Forms.Label();
-            this.cbbMaPB = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -244,6 +244,26 @@
             this.panel3.TabIndex = 0;
             this.panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
             // 
+            // cbbMaPB
+            // 
+            this.cbbMaPB.FormattingEnabled = true;
+            this.cbbMaPB.Location = new System.Drawing.Point(297, 30);
+            this.cbbMaPB.Name = "cbbMaPB";
+            this.cbbMaPB.Size = new System.Drawing.Size(229, 24);
+            this.cbbMaPB.TabIndex = 33;
+            this.cbbMaPB.SelectedIndexChanged += new System.EventHandler(this.cbbMaPB_SelectedIndexChanged);
+            // 
+            // label6
+            // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(139, 34);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(125, 22);
+            this.label6.TabIndex = 32;
+            this.label6.Text = "Mã Phòng Ban";
+            // 
             // tbMaChuVu
             // 
             this.tbMaChuVu.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -370,25 +390,6 @@
             this.dgvHienThiChucVu.Size = new System.Drawing.Size(1111, 215);
             this.dgvHienThiChucVu.TabIndex = 121;
             this.dgvHienThiChucVu.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvHienThiChucVu_CellClick_1);
-            // 
-            // label6
-            // 
-            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(139, 34);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(125, 22);
-            this.label6.TabIndex = 32;
-            this.label6.Text = "Mã Phòng Ban";
-            // 
-            // cbbMaPB
-            // 
-            this.cbbMaPB.FormattingEnabled = true;
-            this.cbbMaPB.Location = new System.Drawing.Point(297, 30);
-            this.cbbMaPB.Name = "cbbMaPB";
-            this.cbbMaPB.Size = new System.Drawing.Size(229, 24);
-            this.cbbMaPB.TabIndex = 33;
             // 
             // F_ChucVu
             // 

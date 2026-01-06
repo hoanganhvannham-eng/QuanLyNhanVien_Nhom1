@@ -19,31 +19,93 @@ namespace QuanLyNhanVien3
 
         private void F_Luong_Load(object sender, EventArgs e)
         {
-            LoadDataLuong();
-            cbMaNV.SelectedIndexChanged += cbMaNV_SelectedIndexChanged;
+
             InitThangNam();
+            LoadcbNV();
+
+            //cbThang.SelectedIndexChanged += FilterChanged;
+            //numNam.ValueChanged += FilterChanged;
+            //cbMaNV.SelectedIndexChanged += FilterChanged;
+
+            LoadLuongTheoThangNamVaNV();
             if (LoginInfo.CurrentUserRole.ToLower() == "user")
             {
                 btnThem.Enabled = false;
                 btnSua.Enabled = false;
                 btnXoa.Enabled = false;
             }
+            txtLuongCoBan.ReadOnly = true;
+        }
+
+        private void LoadLuongTheoThangNamVaNV()
+        {
+            try
+            {
+                cn.connect();
+
+                int thang = Convert.ToInt32(cbThang.SelectedItem);
+                int nam = (int)numNam.Value;
+                string maNV = cbMaNV.SelectedValue?.ToString();
+
+                string sql = @"
+        SELECT 
+            MaLuong         AS N'Mã Lương',
+            Thang           AS N'Tháng',
+            Nam             AS N'Năm',
+            LuongCoBan      AS N'Lương Cơ Bản',
+            SoNgayCongChuan AS N'Số Ngày Công Chuẩn',
+            PhuCap          AS N'Phụ Cấp',
+            KhauTru         AS N'Khấu Trừ',
+            Ghichu          AS N'Ghi Chú'
+        FROM tblLuong
+        WHERE DeletedAt = 0
+          AND Thang = @Thang
+          AND Nam = @Nam";
+
+                // 👉 Nếu có chọn nhân viên → lọc theo nhân viên
+                if (!string.IsNullOrEmpty(maNV))
+                {
+                    sql += " AND MaLuong LIKE '%' + @MaNV + '%'";
+                }
+
+                sql += " ORDER BY MaLuong";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+                    cmd.Parameters.AddWithValue("@Nam", nam);
+
+                    if (!string.IsNullOrEmpty(maNV))
+                        cmd.Parameters.AddWithValue("@MaNV", maNV);
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    dgvLuong.DataSource = dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi load lương: " + ex.Message);
+            }
+            finally
+            {
+                cn.disconnect();
+            }
         }
         private void InitThangNam()
         {
-            // ComboBox Tháng
             cbThang.Items.Clear();
-            for (int i = 0; i <= 12; i++)
-            {
+            for (int i = 1; i <= 12; i++)
                 cbThang.Items.Add(i);
-            }
-            cbThang.SelectedIndex = DateTime.Now.Month - 1;
 
-            // NumericUpDown Năm
+            cbThang.SelectedItem = DateTime.Now.Month;
+
             numNam.Minimum = 2000;
             numNam.Maximum = 2100;
             numNam.Value = DateTime.Now.Year;
         }
+
 
         connectData cn = new connectData();
         private void ClearAllInputs(Control parent)
@@ -69,29 +131,44 @@ namespace QuanLyNhanVien3
                     ClearAllInputs(ctl);
             }
         }
-
         private void LoadcbNV()
         {
-            // load chuc vu combobox
             try
             {
                 cn.connect();
-                string sqlLoadcomboBoxttblChiTietDuAn = "SELECT * FROM tblNhanVien WHERE DeletedAt = 0";
-                using (SqlDataAdapter da = new SqlDataAdapter(sqlLoadcomboBoxttblChiTietDuAn, cn.conn))
-                {
-                    DataSet ds = new DataSet();
-                    da.Fill(ds);
 
-                    cbMaNV.DataSource = ds.Tables[0];
-                    cbMaNV.DisplayMember = "MaNV"; // cot hien thi
-                    cbMaNV.ValueMember = "MaNV"; // cot gia tri
+                string sql = @"
+        SELECT DISTINCT nv.MaNV
+        FROM tblNhanVien nv
+        INNER JOIN tblHopDong hd ON nv.MaNV = hd.MaNV
+        WHERE nv.DeletedAt = 0
+          AND hd.DeletedAt = 0
+          AND (hd.NgayKetThuc IS NULL OR hd.NgayKetThuc >= GETDATE())
+        ORDER BY nv.MaNV";
+
+                using (SqlDataAdapter da = new SqlDataAdapter(sql, cn.conn))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    cbMaNV.DataSource = dt;
+                    cbMaNV.DisplayMember = "MaNV";
+                    cbMaNV.ValueMember = "MaNV";
+                    cbMaNV.SelectedIndex = -1; // không chọn sẵn
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải dữ liệu mã NV: " + ex.Message);
+                MessageBox.Show("Lỗi load nhân viên còn hợp đồng: " + ex.Message,
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.disconnect();
             }
         }
+
+
 
 
         private void LoadDataLuong()
@@ -100,36 +177,24 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataLuong = @"SELECT 
-                                            l.MaLuong AS N'Mã Lương',
-                                            l.MaNV AS N'Mã Nhân Viên',
-                                            l.Thang AS N'Tháng',
-                                            l.Nam AS N'Năm',
-                                            l.LuongCoBan AS N'Lương Cơ Bản',
-                                            l.SoNgayCong AS N'Số Ngày Công',
-                                            l.PhuCap AS N'Phụ Cấp',
-                                            l.KhauTru AS N'Khấu Trừ',
-                                            l.Ghichu AS N'Ghi Chú',
-                                            l.TongLuong AS N'Tổng Lương'
-                                        FROM tblLuong l
-                                        JOIN tblNhanVien nv ON l.MaNV = nv.MaNV
-                                        WHERE nv.DeletedAt = 0;";
+                string sql = @"SELECT MaLuong AS [Mã lương], Thang AS Tháng, Nam AS năm, LuongCoBan AS [Lương cơ bản],
+                        SoNgayCongChuan AS [Ngày công], PhuCap AS [Phụ cấp], KhauTru AS [Khấu trừ], Ghichu AS [Ghi chú], ChamCongId
+                        FROM     tblLuong
+                        WHERE  (DeletedAt = 0)";
 
-                using (SqlDataAdapter adapter = new SqlDataAdapter(sqlLoadDataLuong, cn.conn))
-                {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    dgvLuong.DataSource = dt;
-                }
-                cn.disconnect();
-                ClearAllInputs(this);
-                LoadcbNV();
+                SqlDataAdapter da = new SqlDataAdapter(sql, cn.conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                dgvLuong.DataSource = dt;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu Bảng Lương: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi load lương: " + ex.Message);
             }
-
+            finally
+            {
+                cn.disconnect();
+            }
         }
 
         private string GenerateMaLuong()
@@ -238,104 +303,45 @@ namespace QuanLyNhanVien3
 
         private void btnThem_Click_1(object sender, EventArgs e)
         {
-            string maLuong = GenerateMaLuong();
-
-            // 1. Validate cơ bản
-            if (string.IsNullOrWhiteSpace(cbMaLuong.Text) ||
-                string.IsNullOrWhiteSpace(cbMaNV.Text) ||
-                cbThang.SelectedItem == null ||
-                string.IsNullOrWhiteSpace(txtSoNgayCong.Text) ||
+            if (cbThang.SelectedItem == null ||
                 string.IsNullOrWhiteSpace(txtLuongCoBan.Text) ||
-                string.IsNullOrWhiteSpace(txtPhuCap.Text) ||
-                string.IsNullOrWhiteSpace(txtKhauTru.Text))
+                string.IsNullOrWhiteSpace(txtSoNgayCong.Text))
             {
-                MessageBox.Show("Chưa nhập đủ thông tin", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Chưa nhập đủ dữ liệu!");
                 return;
             }
 
-            // 2. Parse các giá trị số an toàn
-            if (!int.TryParse(cbThang.SelectedItem.ToString(), out int thang))
-            {
-                MessageBox.Show("Tháng không hợp lệ", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            int nam = (int)numNam.Value;
-
-            if (!int.TryParse(txtSoNgayCong.Text.Trim(), out int soNgayCong))
-            {
-                MessageBox.Show("Số ngày công không hợp lệ", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (!decimal.TryParse(txtLuongCoBan.Text.Trim(), out decimal luongCoBan))
-            {
-                MessageBox.Show("Lương cơ bản không hợp lệ", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (!decimal.TryParse(txtPhuCap.Text.Trim(), out decimal phuCap))
-            {
-                MessageBox.Show("Phụ cấp không hợp lệ", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (!decimal.TryParse(txtKhauTru.Text.Trim(), out decimal khauTru))
-            {
-                MessageBox.Show("Khấu trừ không hợp lệ", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // 3. Kiểm tra trùng MaLuong (nếu MaLuong là PK do user nhập)
             try
             {
                 cn.connect();
 
-                string checkSql = "SELECT COUNT(*) FROM tblLuong WHERE MaLuong = @MaLuong AND DeletedAt = 0";
-                using (SqlCommand checkCmd = new SqlCommand(checkSql, cn.conn))
-                {
-                    checkCmd.Parameters.AddWithValue("@MaLuong", cbMaLuong.Text.Trim());
-                    int count = (int)checkCmd.ExecuteScalar();
-                    if (count > 0)
-                    {
-                        MessageBox.Show("Mã lương này đã tồn tại. Vui lòng chọn mã khác.", "Trùng khóa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        cn.disconnect();
-                        return;
-                    }
-                }
+                string sql = @"
+        INSERT INTO tblLuong
+        (MaLuong, Thang, Nam, LuongCoBan, SoNgayCongChuan, PhuCap, KhauTru, Ghichu, DeletedAt)
+        VALUES
+        (@MaLuong, @Thang, @Nam, @LuongCoBan, @SoNgayCong, @PhuCap, @KhauTru, @Ghichu, 0)";
 
-                // 4. Insert bằng parameterized query
-                string insertSql = @"
-            INSERT INTO tblLuong
-                (MaLuong, MaNV, Thang, Nam, LuongCoBan, SoNgayCong, PhuCap, KhauTru, GhiChu, DeletedAt)
-            VALUES
-                (@MaLuong, @MaNV, @Thang, @Nam, @LuongCoBan, @SoNgayCong, @PhuCap, @KhauTru, @GhiChu, 0)";
-
-                using (SqlCommand cmd = new SqlCommand(insertSql, cn.conn))
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
-                    cmd.Parameters.AddWithValue("@MaLuong", cbMaLuong.Text.Trim());
-                    cmd.Parameters.AddWithValue("@MaNV", cbMaNV.Text.Trim());
-                    cmd.Parameters.AddWithValue("@Thang", thang);
-                    cmd.Parameters.AddWithValue("@Nam", nam);
-                    cmd.Parameters.AddWithValue("@LuongCoBan", luongCoBan);
-                    cmd.Parameters.AddWithValue("@SoNgayCong", soNgayCong);
-                    cmd.Parameters.AddWithValue("@PhuCap", phuCap);
-                    cmd.Parameters.AddWithValue("@KhauTru", khauTru);
-                    cmd.Parameters.AddWithValue("@GhiChu", txtGhiChu.Text.Trim());
+                    cmd.Parameters.AddWithValue("@MaLuong", GenerateMaLuong());
+                    cmd.Parameters.AddWithValue("@Thang", Convert.ToInt32(cbThang.SelectedItem));
+                    cmd.Parameters.AddWithValue("@Nam", (int)numNam.Value);
+                    cmd.Parameters.AddWithValue("@LuongCoBan", decimal.Parse(txtLuongCoBan.Text));
+                    cmd.Parameters.AddWithValue("@SoNgayCong", int.Parse(txtSoNgayCong.Text));
+                    cmd.Parameters.AddWithValue("@PhuCap", decimal.Parse(txtPhuCap.Text));
+                    cmd.Parameters.AddWithValue("@KhauTru", decimal.Parse(txtKhauTru.Text));
+                    cmd.Parameters.AddWithValue("@Ghichu", txtGhiChu.Text.Trim());
 
                     cmd.ExecuteNonQuery();
                 }
 
-                MessageBox.Show("Thêm thành công!!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Thêm lương thành công!");
                 LoadDataLuong();
-                // Nếu bạn muốn reset input, gọi ClearAllInputs nhưng chú ý không clear cbThang/numNam nếu không muốn
-                // hoặc gọi InitThangNam() sau khi clear
                 ClearAllInputs(this);
-                InitThangNam(); // (nếu bạn có hàm này để đặt Month/Year mặc định)
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi thêm dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi thêm lương: " + ex.Message);
             }
             finally
             {
@@ -347,41 +353,45 @@ namespace QuanLyNhanVien3
         {
             if (string.IsNullOrWhiteSpace(cbMaLuong.Text))
             {
-                MessageBox.Show("Vui lòng chọn Mã Lương để sửa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Chọn mã lương cần sửa!");
                 return;
             }
 
             try
             {
                 cn.connect();
-                string sqlUpdate = @"
-            UPDATE tblLuong 
-            SET MaNV = @MaNV, Thang = @Thang, Nam = @Nam,
-                LuongCoBan = @LuongCoBan, SoNgayCong = @SoNgayCong, 
-                PhuCap = @PhuCap, KhauTru = @KhauTru, GhiChu = @GhiChu
-            WHERE MaLuong = @MaLuong AND DeletedAt = 0";
 
-                using (SqlCommand cmd = new SqlCommand(sqlUpdate, cn.conn))
+                string sql = @"
+        UPDATE tblLuong
+        SET Thang = @Thang,
+            Nam = @Nam,
+            LuongCoBan = @LuongCoBan,
+            SoNgayCongChuan = @SoNgayCong,
+            PhuCap = @PhuCap,
+            KhauTru = @KhauTru,
+            Ghichu = @Ghichu
+        WHERE MaLuong = @MaLuong AND DeletedAt = 0";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
-                    cmd.Parameters.AddWithValue("@MaLuong", cbMaLuong.Text.Trim());
-                    cmd.Parameters.AddWithValue("@MaNV", cbMaNV.Text.Trim());
-                    cmd.Parameters.AddWithValue("@Thang", int.Parse(cbThang.SelectedItem.ToString()));
+                    cmd.Parameters.AddWithValue("@MaLuong", cbMaLuong.Text);
+                    cmd.Parameters.AddWithValue("@Thang", Convert.ToInt32(cbThang.SelectedItem));
                     cmd.Parameters.AddWithValue("@Nam", (int)numNam.Value);
-                    cmd.Parameters.AddWithValue("@LuongCoBan", decimal.Parse(txtLuongCoBan.Text.Trim()));
-                    cmd.Parameters.AddWithValue("@SoNgayCong", int.Parse(txtSoNgayCong.Text.Trim()));
-                    cmd.Parameters.AddWithValue("@PhuCap", decimal.Parse(txtPhuCap.Text.Trim()));
-                    cmd.Parameters.AddWithValue("@KhauTru", decimal.Parse(txtKhauTru.Text.Trim()));
-                    cmd.Parameters.AddWithValue("@GhiChu", txtGhiChu.Text.Trim());
+                    cmd.Parameters.AddWithValue("@LuongCoBan", decimal.Parse(txtLuongCoBan.Text));
+                    cmd.Parameters.AddWithValue("@SoNgayCong", int.Parse(txtSoNgayCong.Text));
+                    cmd.Parameters.AddWithValue("@PhuCap", decimal.Parse(txtPhuCap.Text));
+                    cmd.Parameters.AddWithValue("@KhauTru", decimal.Parse(txtKhauTru.Text));
+                    cmd.Parameters.AddWithValue("@Ghichu", txtGhiChu.Text);
 
                     cmd.ExecuteNonQuery();
                 }
 
-                MessageBox.Show("Cập nhật thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Cập nhật lương thành công!");
                 LoadDataLuong();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi sửa dữ liệu: " + ex.Message);
+                MessageBox.Show("Lỗi sửa lương: " + ex.Message);
             }
             finally
             {
@@ -393,30 +403,31 @@ namespace QuanLyNhanVien3
         {
             if (string.IsNullOrWhiteSpace(cbMaLuong.Text))
             {
-                MessageBox.Show("Vui lòng chọn Mã Lương để xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Chọn mã lương để xóa!");
                 return;
             }
 
-            DialogResult dr = MessageBox.Show("Bạn có chắc muốn xóa Mã Lương này?",
-                                              "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dr == DialogResult.No) return;
+            if (MessageBox.Show("Bạn chắc chắn muốn xóa?", "Xác nhận",
+                MessageBoxButtons.YesNo) == DialogResult.No) return;
 
             try
             {
                 cn.connect();
-                string sqlDelete = "UPDATE tblLuong SET DeletedAt = 1 WHERE MaLuong = @MaLuong";
-                using (SqlCommand cmd = new SqlCommand(sqlDelete, cn.conn))
+                string sql = "UPDATE tblLuong SET DeletedAt = 1 WHERE MaLuong = @MaLuong";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
-                    cmd.Parameters.AddWithValue("@MaLuong", cbMaLuong.Text.Trim());
+                    cmd.Parameters.AddWithValue("@MaLuong", cbMaLuong.Text);
                     cmd.ExecuteNonQuery();
                 }
 
-                MessageBox.Show("Xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Xóa thành công!");
                 LoadDataLuong();
+                ClearAllInputs(this);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi xóa dữ liệu: " + ex.Message);
+                MessageBox.Show("Lỗi xóa lương: " + ex.Message);
             }
             finally
             {
@@ -576,25 +587,18 @@ namespace QuanLyNhanVien3
 
         private void dgvLuong_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
-            int i = e.RowIndex;
-            if (i >= 0)
-            {
-                DataGridViewRow row = dgvLuong.Rows[i];
+            if (e.RowIndex < 0) return;
 
-                cbMaLuong.Text = row.Cells["Mã Lương"].Value?.ToString();
-                cbMaNV.Text = row.Cells["Mã Nhân Viên"].Value?.ToString();
+            var row = dgvLuong.Rows[e.RowIndex];
 
-                cbThang.Text = row.Cells["Tháng"].Value?.ToString();
-
-                if (int.TryParse(row.Cells["Năm"].Value?.ToString(), out int nam))
-                    numNam.Value = nam;
-
-                txtLuongCoBan.Text = row.Cells["Lương Cơ Bản"].Value?.ToString();
-                txtSoNgayCong.Text = row.Cells["Số Ngày Công"].Value?.ToString();
-                txtPhuCap.Text = row.Cells["Phụ cấp"].Value?.ToString();
-                txtKhauTru.Text = row.Cells["Khấu Trừ"].Value?.ToString();
-                txtGhiChu.Text = row.Cells["Ghi Chú"].Value?.ToString();
-            }
+            cbMaLuong.Text = row.Cells["Mã Lương"].Value.ToString();
+            cbThang.Text = row.Cells["Tháng"].Value.ToString();
+            numNam.Value = Convert.ToInt32(row.Cells["Năm"].Value);
+            txtLuongCoBan.Text = row.Cells["Lương Cơ Bản"].Value.ToString();
+            txtSoNgayCong.Text = row.Cells["Số Ngày Công Chuẩn"].Value.ToString();
+            txtPhuCap.Text = row.Cells["Phụ Cấp"].Value.ToString();
+            txtKhauTru.Text = row.Cells["Khấu Trừ"].Value.ToString();
+            txtGhiChu.Text = row.Cells["Ghi Chú"].Value.ToString();
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
@@ -604,35 +608,69 @@ namespace QuanLyNhanVien3
 
         private void cbMaNV_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            if (cbMaNV.SelectedValue == null) return;
+            if (cbMaNV.SelectedValue == null)
+            {
+                txtLuongCoBan.Text = "";
+                return;
+            }
+
+            string maNV = cbMaNV.SelectedValue.ToString();
+
+            if (string.IsNullOrWhiteSpace(maNV))
+            {
+                txtLuongCoBan.Text = "";
+                return;
+            }
+
+            decimal luongCB = GetLuongCoBanByMaNV(maNV);
+
+            if (luongCB > 0)
+            {
+                txtLuongCoBan.Text = luongCB.ToString("N0");
+            }
+            else
+            {
+                txtLuongCoBan.Text = "0";
+                //MessageBox.Show("Nhân viên chưa có hợp đồng còn hiệu lực!",
+                //    "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        private decimal GetLuongCoBanByMaNV(string maNV)
+        {
+            decimal luongCB = 0;
 
             try
             {
                 cn.connect();
 
-                string sql = @"SELECT TOP 1 LuongCoBan 
-                       FROM tblHopDong 
-                       WHERE MaNV = @MaNV AND DeletedAt = 0
-                       ORDER BY NgayBatDau DESC";
+                string sql = @"
+        SELECT TOP 1 LuongCoBan
+        FROM tblHopDong
+        WHERE MaNV = @MaNV
+          AND DeletedAt = 0
+          AND (NgayKetThuc IS NULL OR NgayKetThuc >= GETDATE())
+        ORDER BY NgayBatDau DESC";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
-                    cmd.Parameters.AddWithValue("@MaNV", cbMaNV.SelectedValue.ToString());
-                    object result = cmd.ExecuteScalar();
+                    cmd.Parameters.AddWithValue("@MaNV", maNV);
 
-                    txtLuongCoBan.Text = (result != null && result != DBNull.Value)
-                                         ? result.ToString()
-                                         : "";
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                        luongCB = Convert.ToDecimal(result);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi lấy lương cơ bản: " + ex.Message);
+                MessageBox.Show("Lỗi lấy lương cơ bản: " + ex.Message,
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 cn.disconnect();
             }
+
+            return luongCB;
         }
 
         private void txtLuongCoBan_TextChanged(object sender, EventArgs e)
@@ -656,7 +694,8 @@ namespace QuanLyNhanVien3
 
         private void numNam_ValueChanged(object sender, EventArgs e)
         {
-
+            if (cbThang.SelectedItem == null) return;
+            LoadLuongTheoThangNamVaNV();
         }
 
         private void btntimkiemtheothnag_Click(object sender, EventArgs e)
@@ -709,28 +748,36 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sql = @"SELECT MaLuong as N'Mã Lương', MaNV as N'Mã Nhân Viên',
-                              Thang as N'Tháng', Nam as N'Năm',
-                              LuongCoBan as N'Lương Cơ Bản', SoNgayCong as N'Số Ngày Công',
-                              PhuCap as N'Phụ cấp', KhauTru as N'Khấu Trừ', Ghichu as N'Ghi Chú',
-                              TongLuong as N'Tổng Lương'
-                       FROM tblLuong
-                       WHERE DeletedAt = 0 AND Thang = @Thang
-                       ORDER BY MaNV";
+                string sql = @"
+        SELECT 
+            MaLuong            AS N'Mã Lương',
+            Thang              AS N'Tháng',
+            Nam                AS N'Năm',
+            LuongCoBan         AS N'Lương Cơ Bản',
+            SoNgayCongChuan    AS N'Số Ngày Công Chuẩn',
+            PhuCap             AS N'Phụ Cấp',
+            KhauTru            AS N'Khấu Trừ',
+            Ghichu             AS N'Ghi Chú'
+        FROM tblLuong
+        WHERE DeletedAt = 0 AND Thang = @Thang
+        ORDER BY Nam DESC, MaLuong";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@Thang", thang);
 
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    dgvLuong.DataSource = dt;
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        dgvLuong.DataSource = dt;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi load lương: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi khi load lương theo tháng: " + ex.Message,
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -740,44 +787,8 @@ namespace QuanLyNhanVien3
 
         private void cbThang_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Nếu index = 0 => "Tất cả" (hiển thị tất cả)
-            if (cbThang.SelectedIndex <= 0)
-            {
-                try
-                {
-                    cn.connect();
-                    string sql = @"SELECT MaLuong as N'Mã Lương', MaNV as N'Mã Nhân Viên',
-                                  Thang as N'Tháng', Nam as N'Năm',
-                                  LuongCoBan as N'Lương Cơ Bản', SoNgayCong as N'Số Ngày Công',
-                                  PhuCap as N'Phụ cấp', KhauTru as N'Khấu Trừ', Ghichu as N'Ghi Chú',
-                                  TongLuong as N'Tổng Lương'
-                           FROM tblLuong
-                           WHERE DeletedAt = 0
-                           ORDER BY MaNV";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
-                    {
-                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        dgvLuong.DataSource = dt;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi khi load lương: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    cn.disconnect();
-                }
-            }
-            else
-            {
-                // Chọn một tháng cụ thể
-                int thang = Convert.ToInt32(cbThang.SelectedItem);
-                LoadLuongTheoThang(thang);
-            }
+            if (cbThang.SelectedItem == null) return;
+            LoadLuongTheoThangNamVaNV();
         }
     }
 
