@@ -931,8 +931,8 @@ namespace QuanLyNhanVien3
             cbBoxChucVu.DataSource = null;
             cbBoxChucVu.DataSource = dt;
             cbBoxChucVu.SelectedIndex = -1;
-            cbBoxChucVu.DisplayMember = "TenCV";
             cbBoxChucVu.ValueMember = "MaCV";
+            cbBoxChucVu.DisplayMember = "TenCV";
 
             cn.disconnect();
         }
