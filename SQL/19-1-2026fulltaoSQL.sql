@@ -1,0 +1,120 @@
+CREATE DATABASE QuanLyNhanSu;
+GO
+USE QuanLyNhanSu;
+GO
+CREATE TABLE tblRole (
+    Id INT IDENTITY PRIMARY KEY,
+    TenRole NVARCHAR(50) NOT NULL,
+    MoTa NVARCHAR(255)
+);
+CREATE TABLE tblPhongBan (
+    Id INT IDENTITY PRIMARY KEY,
+    MaPB NVARCHAR(20) NOT NULL UNIQUE,
+    TenPB NVARCHAR(100) NOT NULL,
+    DiaChi NVARCHAR(255),
+    SoDienThoai NVARCHAR(15),
+    GhiChu NVARCHAR(255),
+    DeletedAt DATETIME NULL
+);
+CREATE TABLE tblChucVu (
+    Id INT IDENTITY PRIMARY KEY,
+    MaCV NVARCHAR(20) NOT NULL UNIQUE,
+    TenCV NVARCHAR(100) NOT NULL,
+    GhiChu NVARCHAR(255),
+    DeletedAt DATETIME NULL,
+    MaPB INT NOT NULL,
+    CONSTRAINT FK_ChucVu_PhongBan 
+        FOREIGN KEY (MaPB) REFERENCES tblPhongBan(Id)
+);
+CREATE TABLE tblNhanVien (
+    Id INT IDENTITY PRIMARY KEY,
+    MaNV NVARCHAR(20) NOT NULL UNIQUE,
+    HoTen NVARCHAR(100) NOT NULL,
+    NgaySinh DATE,
+    GioiTinh NVARCHAR(10),
+    DiaChi NVARCHAR(255),
+    SoDienThoai NVARCHAR(15),
+    Email NVARCHAR(100),
+    MaCV INT NOT NULL,
+    GhiChu NVARCHAR(255),
+    DeletedAt DATETIME NULL,
+    CONSTRAINT FK_NhanVien_ChucVu
+        FOREIGN KEY (MaCV) REFERENCES tblChucVu(Id)
+);
+CREATE TABLE tblTaiKhoan (
+    Id INT IDENTITY PRIMARY KEY,
+    MaTK NVARCHAR(50) NOT NULL UNIQUE,
+    MaNV INT NOT NULL,
+    SoDienThoai NVARCHAR(15),
+    MatKhau NVARCHAR(255) NOT NULL,
+    Quyen NVARCHAR(50),
+    GhiChu NVARCHAR(255),
+    DeletedAt DATETIME NULL,
+    RoleId INT NOT NULL,
+    CONSTRAINT FK_TaiKhoan_NhanVien
+        FOREIGN KEY (MaNV) REFERENCES tblNhanVien(Id),
+    CONSTRAINT FK_TaiKhoan_Role
+        FOREIGN KEY (RoleId) REFERENCES tblRole(Id)
+);
+CREATE TABLE tblDuAn (
+    Id INT IDENTITY PRIMARY KEY,
+    MaDA NVARCHAR(20) NOT NULL UNIQUE,
+    TenDA NVARCHAR(200) NOT NULL,
+    MoTa NVARCHAR(255),
+    NgayBatDau DATE,
+    NgayKetThuc DATE,
+    GhiChu NVARCHAR(255),
+    DeletedAt DATETIME NULL
+);
+CREATE TABLE tblChiTietDuAn (
+    Id INT IDENTITY PRIMARY KEY,
+    MaNV INT NOT NULL,
+    MaDA INT NOT NULL,
+    VaiTro NVARCHAR(100),
+    GhiChu NVARCHAR(255),
+    DeletedAt DATETIME NULL,
+    CONSTRAINT FK_CTDA_NhanVien
+        FOREIGN KEY (MaNV) REFERENCES tblNhanVien(Id),
+    CONSTRAINT FK_CTDA_DuAn
+        FOREIGN KEY (MaDA) REFERENCES tblDuAn(Id)
+);
+CREATE TABLE tblHopDong (
+    Id INT IDENTITY PRIMARY KEY,
+    MaHopDong NVARCHAR(50) NOT NULL UNIQUE,
+    MaNV INT NOT NULL,
+    NgayBatDau DATE,
+    NgayKetThuc DATE,
+    LoaiHopDong NVARCHAR(100),
+    LuongCoBan DECIMAL(18,2),
+    GhiChu NVARCHAR(255),
+    DeletedAt DATETIME NULL,
+    CONSTRAINT FK_HopDong_NhanVien
+        FOREIGN KEY (MaNV) REFERENCES tblNhanVien(Id)
+);
+CREATE TABLE tblChamCong (
+    Id INT IDENTITY PRIMARY KEY,
+    MaChamCong NVARCHAR(50) NOT NULL UNIQUE,
+    Ngay DATE NOT NULL,
+    GioVao TIME,
+    GioVe TIME,
+    GhiChu NVARCHAR(255),
+    DeletedAt DATETIME NULL,
+    NhanVienId INT NOT NULL,
+    CONSTRAINT FK_ChamCong_NhanVien
+        FOREIGN KEY (NhanVienId) REFERENCES tblNhanVien(Id)
+);
+CREATE TABLE tblLuong (
+    Id INT IDENTITY PRIMARY KEY,
+    MaLuong NVARCHAR(50) NOT NULL UNIQUE,
+    Thang INT,
+    Nam INT,
+    LuongCoBan DECIMAL(18,2),
+    SoNgayCongChuan INT,
+    PhuCap DECIMAL(18,2),
+    KhauTru DECIMAL(18,2),
+    GhiChu NVARCHAR(255),
+    DeletedAt DATETIME NULL,
+    ChamCongId INT NOT NULL,
+    CONSTRAINT FK_Luong_ChamCong
+        FOREIGN KEY (ChamCongId) REFERENCES tblChamCong(Id)
+);
