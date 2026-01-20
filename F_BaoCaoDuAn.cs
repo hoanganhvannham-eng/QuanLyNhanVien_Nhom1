@@ -76,7 +76,7 @@ namespace QuanLyNhanVien3
                                       da.TenDA as N'Tên Dự Án', 
                                       COUNT(ct.MaNV) as N'Số Lượng Nhân Viên'
                                FROM tblDuAn_KienCD233824 da
-                               LEFT JOIN tblChiTietDuAn ct ON da.MaDA = ct.MaDA AND ct.DeletedAt = 0
+                               LEFT JOIN tblChiTietDuAn_KienCD233824 ct ON da.MaDA = ct.MaDA AND ct.DeletedAt = 0
                                WHERE da.DeletedAt = 0
                                GROUP BY da.MaDA, da.TenDA
                                ORDER BY COUNT(ct.MaNV) DESC;";
