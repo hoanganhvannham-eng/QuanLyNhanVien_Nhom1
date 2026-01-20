@@ -8,7 +8,7 @@ namespace QuanLyNhanVien3
     {
         public SqlConnection conn;
 
-        private string strCon = @"Data Source=DESKTOP-10V42VO\SQLEXPRESS;Initial Catalog=QuanLyNhanSu;Integrated Security=True;";
+        private string strCon = @"Data Source=MSI\SQLEXPRESS;Initial Catalog=QuanLyNhanSu;Integrated Security=True;";
 
         // Mở kết nối
         public void connect()
