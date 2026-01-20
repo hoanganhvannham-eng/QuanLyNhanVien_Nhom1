@@ -47,6 +47,12 @@ namespace QuanLyNhanVien3
         // =======================================================
         private void btnSoNgayLamViec_Click(object sender, EventArgs e)
         {
+            currentMode = 1; // Đặt chế độ là Số ngày làm việc
+            LoadSoNgayLamViec();
+        }
+
+        private void LoadSoNgayLamViec()
+        {
             try
             {
                 dtGridViewBCChamCong.CellFormatting -= dtGridViewBCChamCong_CellFormatting;
@@ -136,6 +142,8 @@ namespace QuanLyNhanVien3
         // =======================================================
         private void btnDiTreVeSom_Click(object sender, EventArgs e)
         {
+            currentMode = 2; // Đặt chế độ là Đi trễ về sớm
+
             int thang = dtpThoiGian.Value.Month;
             int nam = dtpThoiGian.Value.Year;
 
@@ -144,9 +152,8 @@ namespace QuanLyNhanVien3
             dtGridViewBCChamCong.CellFormatting += dtGridViewBCChamCong_CellFormatting;
 
             HienThiChamCong(thang, nam);
-
-
         }
+
         private void HienThiChamCong(int thang, int nam)
         {
             try
@@ -507,11 +514,20 @@ namespace QuanLyNhanVien3
 
         private void dtpThoiGian_ValueChanged(object sender, EventArgs e)
         {
-
             int thang = dtpThoiGian.Value.Month;
             int nam = dtpThoiGian.Value.Year;
 
-            HienThiChamCong(thang, nam);
+            // Kiểm tra chế độ hiện tại và load lại tương ứng
+            if (currentMode == 1)
+            {
+                // Đang ở chế độ Số ngày làm việc
+                LoadSoNgayLamViec();
+            }
+            else if (currentMode == 2)
+            {
+                // Đang ở chế độ Đi trễ về sớm
+                HienThiChamCong(thang, nam);
+            }
         }
     }
 }
