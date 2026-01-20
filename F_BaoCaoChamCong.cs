@@ -77,8 +77,8 @@ namespace QuanLyNhanVien3
         -- 🔹 Nhân viên còn hợp đồng hiệu lực
         NVConHopDong AS (
             SELECT DISTINCT nv.Id, nv.MaNV, nv.HoTen
-            FROM tblNhanVien nv
-            INNER JOIN tblHopDong hd ON nv.MaNV = hd.MaNV
+            FROM tblNhanVien_TuanhCD233018 nv
+            INNER JOIN tblHopDong_ChienCD232928 hd ON nv.MaNV = hd.MaNV
             WHERE nv.DeletedAt = 0
               AND hd.DeletedAt = 0
               AND (hd.NgayKetThuc IS NULL OR hd.NgayKetThuc >= GETDATE())
@@ -97,7 +97,7 @@ namespace QuanLyNhanVien3
             s.SoNgayCongChuan AS N'Số ngày công chuẩn'
 
         FROM NVConHopDong nv
-        LEFT JOIN tblChamCong cc 
+        LEFT JOIN tblChamCong_TuanhCD233018 cc 
                ON cc.NhanVienId = nv.Id
               AND cc.DeletedAt = 0
               AND MONTH(cc.Ngay) = @Thang
@@ -166,8 +166,8 @@ namespace QuanLyNhanVien3
                 CC.Ngay,
                 CC.GioVao,
                 CC.GioVe
-            FROM tblNhanVien NV
-            LEFT JOIN tblChamCong CC 
+            FROM tblNhanVien_TuanhCD233018 NV
+            LEFT JOIN tblChamCong_TuanhCD233018 CC 
                 ON NV.Id = CC.NhanVienId
                 AND MONTH(CC.Ngay) = @Thang
                 AND YEAR(CC.Ngay) = @Nam
@@ -346,9 +346,9 @@ namespace QuanLyNhanVien3
                     // --- TÌM KIẾM TRONG BẢNG SỐ NGÀY LÀM VIỆC ---
                     sql = @"SELECT nv.MaNV as 'Mã Nhân Viên', nv.HoTen as 'Họ Tên', 
                             pb.TenPB as N'Tên Phòng Ban', COUNT(cc.Id) AS N'Số Ngày Làm Việc'
-                            FROM tblNhanVien nv
-                            JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
-                            JOIN tblChamCong cc ON nv.MaNV = cc.MaNV 
+                            FROM tblNhanVien_TuanhCD233018 nv
+                            JOIN tblPhongBan_ThuanCD233318 pb ON nv.MaPB = pb.MaPB
+                            JOIN tblChamCong_TuanhCD233018 cc ON nv.MaNV = cc.MaNV 
                             WHERE nv.DeletedAt = 0 
                               AND cc.DeletedAt = 0
                               AND MONTH(cc.Ngay) = @Thang 
@@ -367,8 +367,8 @@ namespace QuanLyNhanVien3
                                 WHEN cc.GioVao > '08:00:00' AND cc.GioVe >= '17:00:00' THEN N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về đúng giờ'
                                 ELSE N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe, '17:00:00') AS NVARCHAR(20)) + N' phút'
                             END AS N'Trạng Thái'
-                            FROM tblChamCong cc
-                            JOIN tblNhanVien nv ON cc.MaNV = nv.MaNV
+                            FROM tblChamCong_TuanhCD233018 cc
+                            JOIN tblNhanVien_TuanhCD233018 nv ON cc.MaNV = nv.MaNV
                             WHERE cc.DeletedAt = 0
                               AND MONTH(cc.Ngay) = @Thang 
                               AND YEAR(cc.Ngay) = @Nam
@@ -379,8 +379,8 @@ namespace QuanLyNhanVien3
                 {
                     // --- MẶC ĐỊNH (Nếu chưa chọn bảng nào): Tìm lịch sử chấm công gốc ---
                     sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as 'Họ Tên', cc.Ngay as N'Ngày', cc.GioVao as N'Giờ Vào', cc.GioVe as N'Giờ Về'
-                            FROM tblChamCong cc
-                            JOIN tblNhanVien nv ON cc.MaNV = nv.MaNV
+                            FROM tblChamCong_TuanhCD233018 cc
+                            JOIN tblNhanVien_TuanhCD233018 nv ON cc.MaNV = nv.MaNV
                             WHERE cc.DeletedAt = 0
                               AND MONTH(cc.Ngay) = @Thang 
                               AND YEAR(cc.Ngay) = @Nam
