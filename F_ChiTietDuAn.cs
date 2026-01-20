@@ -41,7 +41,7 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-                string sqlLoadcomboBoxttblChiTietDuAn = "SELECT * FROM tblNhanVien WHERE DeletedAt = 0";
+                string sqlLoadcomboBoxttblChiTietDuAn = "SELECT * FROM tblNhanVien_TuanhCd233018 WHERE DeletedAt = 0";
                 using (SqlDataAdapter da = new SqlDataAdapter(sqlLoadcomboBoxttblChiTietDuAn, cn.conn))
                 {
                     DataSet ds = new DataSet();
@@ -63,7 +63,7 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-                string sqlLoadcomboBoxttblChiTietDuAn = "SELECT * FROM tblDuAn WHERE DeletedAt = 0";
+                string sqlLoadcomboBoxttblChiTietDuAn = "SELECT * FROM tblDuAn_KienCD233824 WHERE DeletedAt = 0";
                 using (SqlDataAdapter da = new SqlDataAdapter(sqlLoadcomboBoxttblChiTietDuAn, cn.conn))
                 {
                     DataSet ds = new DataSet();
@@ -86,7 +86,7 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataChiTietDuAn = @"SELECT MaNV as 'Mã nhân viên', MaDA as 'Mã dự án', VaiTro as 'Vai trò', Ghichu as 'Ghi chú' FROM tblChiTietDuAn WHERE DeletedAt = 0 ORDER BY MaNV;";
+                string sqlLoadDataChiTietDuAn = @"SELECT MaNV as 'Mã nhân viên', MaDA as 'Mã dự án', VaiTro as 'Vai trò', Ghichu as 'Ghi chú' FROM tblChiTietDuAn_KienCD233824 WHERE DeletedAt = 0 ORDER BY MaNV;";
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(sqlLoadDataChiTietDuAn, cn.conn))
                 {
@@ -157,7 +157,7 @@ namespace QuanLyNhanVien3
 
                 
 
-                string sqltblChiTietDuAn = @"INSERT INTO tblChiTietDuAn
+                string sqltblChiTietDuAn = @"INSERT INTO tblChiTietDuAn_KienCD233824
                            (MaNV, MaDA, VaiTro, Ghichu, DeletedAt)
                            VALUES ( @MaNV, @MaDA, @VaiTro, @GhiChu, 0)";
 
@@ -212,7 +212,7 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    string query = "UPDATE tblChiTietDuAn SET DeletedAt = 1 WHERE MaNV = @MaNV";
+                    string query = "UPDATE tblChiTietDuAn_KienCD233824 SET DeletedAt = 1 WHERE MaNV = @MaNV";
                     using (SqlCommand cmd = new SqlCommand(query, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaNV", cbMaNV.Text);
@@ -286,7 +286,7 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    string sql = @"UPDATE tblChiTietDuAn SET MaDA = @MaDA,Vaitro =@Vaitro ,GhiChu = @GhiChu, DeletedAt = 0 WHERE MaNV = @MaNV";
+                    string sql = @"UPDATE tblChiTietDuAn_KienCD233824 SET MaDA = @MaDA,Vaitro =@Vaitro ,GhiChu = @GhiChu, DeletedAt = 0 WHERE MaNV = @MaNV";
                     using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaNV", cbMaNV.SelectedValue);
@@ -332,7 +332,7 @@ namespace QuanLyNhanVien3
                 cn.connect();
                 string MaNVtimkiem = cbMaNV.Text.Trim();
                 string sql = @" SELECT MaNV, MaDA, VaiTro, Ghichu
-                                FROM tblChiTietDuAn
+                                FROM tblChiTietDuAn_KienCD233824
                                 WHERE DeletedAt = 0 AND MaNV LIKE @MaNV
                                 ORDER BY MaNV";
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
@@ -467,7 +467,7 @@ namespace QuanLyNhanVien3
                 }
 
                 cn.connect();
-                string query = "SELECT COUNT(*) FROM tblChiTietDuAn WHERE MaNV = @MaNV AND DeletedAt = 1";
+                string query = "SELECT COUNT(*) FROM tblChiTietDuAn_KienCD233824 WHERE MaNV = @MaNV AND DeletedAt = 1";
                 using (SqlCommand cmdcheckPB = new SqlCommand(query, cn.conn))
                 {
                     cmdcheckPB.Parameters.AddWithValue("@MaNV", cbMaNV.SelectedValue);
@@ -490,7 +490,7 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
-                string sqMKKhoiPhuc = "SELECT * FROM tblTaiKhoan WHERE Quyen = @Quyen AND MatKhau = @MatKhau";
+                string sqMKKhoiPhuc = "SELECT * FROM tblTaiKhoan_KhangCD233181 WHERE Quyen = @Quyen AND MatKhau = @MatKhau";
                 SqlCommand cmdkhoiphuc = new SqlCommand(sqMKKhoiPhuc, cn.conn);
                 cmdkhoiphuc.Parameters.AddWithValue("@Quyen", "Admin");
                 cmdkhoiphuc.Parameters.AddWithValue("@MatKhau", tbMKKhoiPhuc.Text);
@@ -518,7 +518,7 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     tbMKKhoiPhuc.Text = "";
-                    string querytblPhongBan = "UPDATE tblChiTietDuAn SET DeletedAt = 0 WHERE MaNV = @MaNV";
+                    string querytblPhongBan = "UPDATE tblChiTietDuAn_KienCD233824 SET DeletedAt = 0 WHERE MaNV = @MaNV";
                     using (SqlCommand cmd = new SqlCommand(querytblPhongBan, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaNV", cbMaNV.SelectedValue);

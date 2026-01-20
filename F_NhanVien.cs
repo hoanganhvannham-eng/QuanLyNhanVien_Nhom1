@@ -178,7 +178,7 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-                string sqlLoadcomboBoxtblPhongBan = "SELECT * FROM tblPhongBan WHERE DeletedAt = 0";
+                string sqlLoadcomboBoxtblPhongBan = "SELECT * FROM tblPhongBan_ThuanCD233318 WHERE DeletedAt = 0";
                 using (SqlDataAdapter da = new SqlDataAdapter(sqlLoadcomboBoxtblPhongBan, cn.conn))
                 {
                     DataSet ds = new DataSet();
@@ -198,7 +198,7 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-                string sqsqlLoadcomboBoxttblChucVu = "SELECT * FROM tblChucVu WHERE DeletedAt = 0";
+                string sqsqlLoadcomboBoxttblChucVu = "SELECT * FROM tblChucVu_KhangCD233181 WHERE DeletedAt = 0";
                 using (SqlDataAdapter da = new SqlDataAdapter(sqsqlLoadcomboBoxttblChucVu, cn.conn))
                 {
                     DataSet ds = new DataSet();
@@ -378,7 +378,7 @@ namespace QuanLyNhanVien3
                     return;
                 }
                 // Câu lệnh SQL chèn dữ liệu vào bảng tblNhanVien
-                string sqltblNhanVien = @"INSERT INTO tblNhanVien 
+                string sqltblNhanVien = @"INSERT INTO tblNhanVien_TuanhCD233018 
                            (MaNV, HoTen, NgaySinh, GioiTinh, DiaChi, SoDienThoai, Email, MaCV, GhiChu, DeletedAt)
                            VALUES ( @MaNV, @HoTen, @NgaySinh, @GioiTinh, @DiaChi, @SoDienThoai, @Email, @MaCV, @GhiChu, 0)";
 
@@ -445,7 +445,7 @@ namespace QuanLyNhanVien3
                 // 1️⃣ KIỂM TRA BẢNG LƯƠNG CHƯA HOÀN THÀNH
                 string checkLuong = @"
             SELECT COUNT(*) 
-            FROM tblLuong 
+            FROM tblLuong_ChienCD232928 
             WHERE MaNV = @MaNV AND DeletedAt = 0";
 
                 using (SqlCommand cmdCheck = new SqlCommand(checkLuong, cn.conn))
@@ -469,12 +469,12 @@ namespace QuanLyNhanVien3
                 // 2️⃣ BẮT ĐẦU XÓA THEO THỨ TỰ
                 string[] deleteQueries =
                 {
-            "DELETE FROM tblChiTietDuAn WHERE MaNV = @MaNV",
-            "DELETE FROM tblChamCong WHERE MaNV = @MaNV",
-            "DELETE FROM tblLuong WHERE MaNV = @MaNV",
-            "DELETE FROM tblHopDong WHERE MaNV = @MaNV",
-            "DELETE FROM tblTaiKhoan WHERE MaNV = @MaNV",
-            "DELETE FROM tblNhanVien WHERE MaNV = @MaNV"
+            "DELETE FROM tblChiTietDuAn_KienCD233824 WHERE MaNV = @MaNV",
+            "DELETE FROM tblChamCong_TuanhCD233018 WHERE MaNV = @MaNV",
+            "DELETE FROM tblLuong_ChienCD232928 WHERE MaNV = @MaNV",
+            "DELETE FROM tblHopDong_ChienCD232928 WHERE MaNV = @MaNV",
+            "DELETE FROM tblPhongBan_ThuanCD233318 WHERE MaNV = @MaNV",
+            "DELETE FROM tblNhanVien_TuanhCD233018 WHERE MaNV = @MaNV"
         };
 
                 foreach (string query in deleteQueries)
@@ -569,7 +569,7 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
                 string query = @"SELECT  MaNV ,HoTen, NgaySinh, GioiTinh, DiaChi,  SoDienThoai,  Email, MaPB, MaCV,  GhiChu
-                                FROM tblNhanVien
+                                FROM tblNhanVien_TuanhCD233018
                                 WHERE DeletedAt = 1 ORDER BY MaNV";
                 using (SqlDataAdapter da = new SqlDataAdapter(query, cn.conn))
                 {
@@ -627,7 +627,7 @@ namespace QuanLyNhanVien3
                 return;
             }
 
-            string checkMaNVSql = "SELECT COUNT(*) FROM tblNhanVien WHERE MaNV = @MaNV AND DeletedAt = 0";
+            string checkMaNVSql = "SELECT COUNT(*) FROM tblNhanVien_TuanhCD233018 WHERE MaNV = @MaNV AND DeletedAt = 0";
             using (SqlCommand cmd = new SqlCommand(checkMaNVSql, cn.conn))
             {
                 cmd.Parameters.AddWithValue("@MaNV", tbmaNV.Text.Trim());
@@ -664,7 +664,7 @@ namespace QuanLyNhanVien3
 
             if (confirm == DialogResult.Yes)
             {
-                string sql = @"UPDATE tblNhanVien SET  
+                string sql = @"UPDATE tblNhanVien_TuanhCD233018 SET  
                 HoTen = @HoTen,
                 NgaySinh = @NgaySinh,
                 GioiTinh = @GioiTinh,
@@ -731,7 +731,7 @@ namespace QuanLyNhanVien3
                     return;
                 }
                 string sql = @"SELECT MaNV, HoTen, NgaySinh, GioiTinh, DiaChi, SoDienThoai, Email, MaPB, MaCV, GhiChu
-                                FROM tblNhanVien
+                                FROM tblNhanVien_TuanhCD233018
                                 WHERE DeletedAt = 0
                                   AND HoTen LIKE '%' + @TenTimKiem + '%'
                                 ORDER BY MaNV";
@@ -863,9 +863,9 @@ namespace QuanLyNhanVien3
                                 pb.MaPB AS [Mã PB],
                                 nv.MaCV AS [Mã CV],
                                 nv.Ghichu
-                            FROM tblNhanVien nv
-                            INNER JOIN tblChucVu cv ON nv.MaCV = cv.MaCV
-                            INNER JOIN tblPhongBan pb ON cv.MaPB = pb.MaPB
+                            FROM tblNhanVien_TuanhCD233018 nv
+                            INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV = cv.MaCV
+                            INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB = pb.MaPB
                             WHERE pb.MaPB = @MaPB
                             AND nv.DeletedAt = 0
                             AND cv.DeletedAt = 0
@@ -917,10 +917,10 @@ namespace QuanLyNhanVien3
             string maPB = cbBoxMaPB.SelectedValue.ToString();
             cn.connect();
 
-            string sql = @"SELECT tblChucVu.MaCV, tblChucVu.TenCV
-                            FROM     tblPhongBan INNER JOIN
-                                              tblChucVu ON tblPhongBan.MaPB = tblChucVu.MaPB
-                            WHERE  (tblPhongBan.MaPB = @MaPB) AND (tblChucVu.DeletedAt = 0) AND (tblPhongBan.DeletedAt = 0)";
+            string sql = @"SELECT tblChucVu_KhangCD233181.MaCV, tblChucVu_KhangCD233181.TenCV
+                            FROM     tblPhongBan_ThuanCD233318 INNER JOIN
+                                              tblChucVu_KhangCD233181 ON tblPhongBan_ThuanCD233318.MaPB = tblChucVu_KhangCD233181.MaPB
+                            WHERE  (tblPhongBan_ThuanCD233318.MaPB = @MaPB) AND (tblChucVu_KhangCD233181.DeletedAt = 0) AND (tblPhongBan_ThuanCD233318.DeletedAt = 0)";
 
             SqlCommand cmd = new SqlCommand(sql, cn.conn);
             cmd.Parameters.AddWithValue("@MaPB", maPB);

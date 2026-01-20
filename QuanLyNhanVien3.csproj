@@ -170,6 +170,12 @@
     <Compile Include="F_DuAn.Designer.cs">
       <DependentUpon>F_DuAn.cs</DependentUpon>
     </Compile>
+    <Compile Include="F_DuAnChung.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="F_DuAnChung.Designer.cs">
+      <DependentUpon>F_DuAnChung.cs</DependentUpon>
+    </Compile>
     <Compile Include="F_FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -243,6 +249,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="F_DuAn.resx">
       <DependentUpon>F_DuAn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="F_DuAnChung.resx">
+      <DependentUpon>F_DuAnChung.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="F_FormMain.resx">
       <DependentUpon>F_FormMain.cs</DependentUpon>
