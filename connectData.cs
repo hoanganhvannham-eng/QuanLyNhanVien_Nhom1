@@ -51,13 +51,13 @@ namespace QuanLyNhanVien3
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
                 //Có thể log ex.Message nếu muốn debug
                 return false;
             }
         }
-
+        //s
         // Thực thi câu lệnh SQL trả về DataTable
         public DataTable getDataTable(string query)
         {
