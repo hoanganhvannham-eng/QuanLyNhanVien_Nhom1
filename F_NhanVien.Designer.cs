@@ -153,7 +153,6 @@
             this.btnrestar.TabIndex = 188;
             this.btnrestar.Text = "Refresh";
             this.btnrestar.UseVisualStyleBackColor = true;
-            this.btnrestar.Visible = false;
             this.btnrestar.Click += new System.EventHandler(this.btnrestar_Click);
             // 
             // btnTimKiem

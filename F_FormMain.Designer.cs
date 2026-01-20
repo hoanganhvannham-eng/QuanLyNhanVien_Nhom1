@@ -47,7 +47,10 @@
             this.tổngHợpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.thoátToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.thoátToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -214,6 +217,24 @@
             this.thoátToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
             this.thoátToolStripMenuItem.Text = "Thoát";
             // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Location = new System.Drawing.Point(1085, 47);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(204, 150);
+            this.panel1.TabIndex = 4;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(42, 45);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(95, 16);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Vũ Minh Khang";
+            // 
             // F_FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -221,6 +242,7 @@
             this.BackgroundImage = global::QuanLyNhanVien3.Properties.Resources.Screenshot_2025_09_15_0905481;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1324, 581);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
             this.IsMdiContainer = true;
@@ -231,6 +253,8 @@
             this.Load += new System.EventHandler(this.F_FormMain_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -257,5 +281,7 @@
         private System.Windows.Forms.ToolStripMenuItem báoCáoDựÁnToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem báoCáoChấmCôngToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tổngHợpToolStripMenuItem;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label1;
     }
 }
