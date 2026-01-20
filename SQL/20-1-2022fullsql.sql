@@ -1,4 +1,4 @@
-/* =========================
+ï»¿/* =========================
    1) CREATE DATABASE
 ========================= */
 IF DB_ID(N'QuanLyNhanSu') IS NULL
@@ -8,7 +8,7 @@ USE QuanLyNhanVien_Nhom12;
 GO
 
 /* =========================
-   2) DROP TABLE (n?u ?ã có)
+   2) DROP TABLE (n?u ?Ã£ cÃ³)
 ========================= */
 IF OBJECT_ID('dbo.tblLuong', 'U') IS NOT NULL DROP TABLE dbo.tblLuong;
 IF OBJECT_ID('dbo.tblChamCong', 'U') IS NOT NULL DROP TABLE dbo.tblChamCong;
@@ -207,7 +207,7 @@ GO
 
 /* =========================
    5) SAMPLE DATA
-   - Có tên ng??i: chèn HoTen theo th? t? b?n yêu c?u
+   - CÃ³ tÃªn ng??i: chÃ¨n HoTen theo th? t? b?n yÃªu c?u
 ========================= */
 -- T?T CHECK FK T?M TH?I
 EXEC sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL';
@@ -244,7 +244,7 @@ GO
 
 
 /* =====================================================
-0) XÓA TOÀN B? D? LI?U (?úng th? t? FK)
+0) XÃ“A TOÃ€N B? D? LI?U (?Ãºng th? t? FK)
 ===================================================== */
 DELETE FROM dbo.tblLuong;
 DELETE FROM dbo.tblChamCong;
@@ -263,21 +263,21 @@ GO
 ===================================================== */
 INSERT INTO dbo.tblRole (TenRole, MoTa)
 VALUES 
-(N'Admin', N'Qu?n tr? h? th?ng'),
-(N'Nhân s?', N'Qu?n lý nhân s?'),
-(N'Nhân viên', N'Nhân viên th??ng');
+(N'Admin', N'Quáº£n trá»‹ há»‡ thá»‘ng'),
+(N'NhÃ¢n sá»±', N'Quáº£n lÃ½ nhÃ¢n sá»±'),
+(N'NhÃ¢n viÃªn', N'NhÃ¢n viÃªn thÆ°á»ng');
 GO
 
 /* =====================================================
-2) PHÒNG BAN (>=5)
+2) PHÃ’NG BAN (>=5)
 ===================================================== */
 INSERT INTO dbo.tblPhongBan (MaPB, TenPB, DiaChi, SoDienThoai, Ghichu, DeletedAt)
 VALUES
-('PB01', N'Nhân s?',     N'Hà N?i', '090000001', NULL, 0),
-('PB02', N'K? toán',     N'Hà N?i', '090000002', NULL, 0),
-('PB03', N'CNTT',        N'Hà N?i', '090000003', NULL, 0),
-('PB04', N'Kinh doanh',  N'Hà N?i', '090000004', NULL, 0),
-('PB05', N'V?n hành',    N'Hà N?i', '090000005', NULL, 0);
+('PB01', N'NhÃ¢n sá»±',     N'HÃ  Ná»™i', '090000001', NULL, 0),
+('PB02', N'Káº¿ toÃ¡n',     N'HÃ  Ná»™i', '090000002', NULL, 0),
+('PB03', N'CNTT',        N'HÃ  Ná»™i', '090000003', NULL, 0),
+('PB04', N'Kinh doanh',  N'HÃ  Ná»™i', '090000004', NULL, 0),
+('PB05', N'Váº­n hÃ nh',    N'HÃ  Ná»™i', '090000005', NULL, 0);
 GO
 
 /* =====================================================
@@ -285,161 +285,161 @@ GO
 ===================================================== */
 INSERT INTO dbo.tblChucVu (MaCV, TenCV, Ghichu, DeletedAt, MaPB)
 VALUES
-('CV01', N'Tr??ng phòng',         NULL, 0, 'PB01'),
-('CV02', N'Phó phòng',            NULL, 0, 'PB01'),
-('CV03', N'Chuyên viên nhân s?',  NULL, 0, 'PB01'),
-('CV04', N'Nhân viên nhân s?',    NULL, 0, 'PB01'),
-('CV05', N'Th?c t?p nhân s?',     NULL, 0, 'PB01'),
+('CV01', N'TrÆ°á»Ÿng phÃ²ng',         NULL, 0, 'PB01'),
+('CV02', N'PhÃ³ phÃ²ng',            NULL, 0, 'PB01'),
+('CV03', N'ChuyÃªn viÃªn nhÃ¢n sá»±',  NULL, 0, 'PB01'),
+('CV04', N'NhÃ¢n viÃªn nhÃ¢n sá»±',    NULL, 0, 'PB01'),
+('CV05', N'Thá»±c táº­p nhÃ¢n sá»±',     NULL, 0, 'PB01'),
 
-('CV06', N'Tr??ng phòng',         NULL, 0, 'PB02'),
-('CV07', N'Phó phòng',            NULL, 0, 'PB02'),
-('CV08', N'K? toán t?ng h?p',     NULL, 0, 'PB02'),
-('CV09', N'K? toán viên',         NULL, 0, 'PB02'),
-('CV10', N'Th?c t?p k? toán',     NULL, 0, 'PB02'),
+('CV06', N'TrÆ°á»Ÿng phÃ²ng',         NULL, 0, 'PB02'),
+('CV07', N'PhÃ³ phÃ²ng',            NULL, 0, 'PB02'),
+('CV08', N'Káº¿ toÃ¡n tá»•ng há»£p',     NULL, 0, 'PB02'),
+('CV09', N'Káº¿ toÃ¡n viÃªn',         NULL, 0, 'PB02'),
+('CV10', N'Thá»±c táº­p káº¿ toÃ¡n',     NULL, 0, 'PB02'),
 
-('CV11', N'Tr??ng phòng',         NULL, 0, 'PB03'),
+('CV11', N'TrÆ°á»Ÿng phÃ²ng',         NULL, 0, 'PB03'),
 ('CV12', N'Team Lead',            NULL, 0, 'PB03'),
-('CV13', N'L?p trình viên',       NULL, 0, 'PB03'),
-('CV14', N'Ki?m th? (QA)',        NULL, 0, 'PB03'),
-('CV15', N'Th?c t?p IT',          NULL, 0, 'PB03'),
+('CV13', N'Láº­p trÃ¬nh viÃªn',       NULL, 0, 'PB03'),
+('CV14', N'Kiá»ƒm thá»­ (QA)',        NULL, 0, 'PB03'),
+('CV15', N'Thá»±c táº­p IT',          NULL, 0, 'PB03'),
 
-('CV16', N'Tr??ng phòng',         NULL, 0, 'PB04'),
-('CV17', N'Phó phòng',            NULL, 0, 'PB04'),
-('CV18', N'Nhân viên Sales',      NULL, 0, 'PB04'),
+('CV16', N'TrÆ°á»Ÿng phÃ²ng',         NULL, 0, 'PB04'),
+('CV17', N'PhÃ³ phÃ²ng',            NULL, 0, 'PB04'),
+('CV18', N'NhÃ¢n viÃªn Sales',      NULL, 0, 'PB04'),
 ('CV19', N'Marketing',            NULL, 0, 'PB04'),
-('CV20', N'Th?c t?p KD/MKT',      NULL, 0, 'PB04'),
+('CV20', N'Thá»±c táº­p KD/MKT',      NULL, 0, 'PB04'),
 
-('CV21', N'Tr??ng phòng',         NULL, 0, 'PB05'),
-('CV22', N'Giám sát v?n hành',    NULL, 0, 'PB05'),
-('CV23', N'Nhân viên v?n hành',   NULL, 0, 'PB05'),
+('CV21', N'TrÆ°á»Ÿng phÃ²ng',         NULL, 0, 'PB05'),
+('CV22', N'GiÃ¡m sÃ¡t v?n hÃ nh',    NULL, 0, 'PB05'),
+('CV23', N'NhÃ¢n viÃªn v?n hÃ nh',   NULL, 0, 'PB05'),
 ('CV24', N'Kho v?n',              NULL, 0, 'PB05'),
-('CV25', N'Th?c t?p v?n hành',    NULL, 0, 'PB05');
+('CV25', N'Th?c t?p v?n hÃ nh',    NULL, 0, 'PB05');
 GO
 
 /* =====================================================
-4) D? ÁN (thêm nhi?u ?? chia ??u)
+4) D? ÃN (thÃªm nhi?u ?? chia ??u)
 ===================================================== */
 INSERT INTO dbo.tblDuAn (MaDA, TenDA, MoTa, NgayBatDau, NgayKetThuc, Ghichu, DeletedAt)
 VALUES
 ('DA01', N'ERP N?i b?',            NULL, '2025-01-01', '2025-12-31', NULL, 0),
-('DA02', N'Website bán hàng',      NULL, '2025-02-01', '2025-11-30', NULL, 0),
-('DA03', N'?ng d?ng ch?m công',    NULL, '2025-03-01', '2025-10-31', NULL, 0),
+('DA02', N'Website bÃ¡n hÃ ng',      NULL, '2025-02-01', '2025-11-30', NULL, 0),
+('DA03', N'?ng d?ng ch?m cÃ´ng',    NULL, '2025-03-01', '2025-10-31', NULL, 0),
 ('DA04', N'Data Warehouse',        NULL, '2025-04-01', '2025-12-15', NULL, 0),
 ('DA05', N'CRM Kinh doanh',        NULL, '2025-05-01', '2025-12-20', NULL, 0);
 GO
 
 /* =====================================================
-5) NHÂN VIÊN: ?? THEO DANH SÁCH B?N ??A (t? chia ??u MaCV)
-   - ?u tiên ??a các tên: V? Minh Khang, Hoàng Tu?n Anh, Tr?n ??ng Chi?n, Cao Nhân Thu?n lên ??u n?u có trong list
+5) NHÃ‚N VIÃŠN: ?? THEO DANH SÃCH B?N ??A (t? chia ??u MaCV)
+   - ?u tiÃªn ??a cÃ¡c tÃªn: V? Minh Khang, HoÃ ng Tu?n Anh, Tr?n ??ng Chi?n, Cao NhÃ¢n Thu?n lÃªn ??u n?u cÃ³ trong list
 ===================================================== */
 DECLARE @Emp TABLE (HoTen NVARCHAR(100) NOT NULL, NgaySinh DATE NOT NULL);
 
 INSERT INTO @Emp (HoTen, NgaySinh) VALUES
-(N'Lê Tu?n Anh','2005-09-29'),
+(N'LÃª Tu?n Anh','2005-09-29'),
 (N'Nguy?n Nh?t Anh','2005-07-20'),
-(N'Ph?m Hoàng B?c','2005-12-15'),
-(N'Lô V?n Công','2005-07-25'),
-(N'?oàn V?n C??ng','2004-10-22'),
+(N'Ph?m HoÃ ng B?c','2005-12-15'),
+(N'LÃ´ V?n CÃ´ng','2005-07-25'),
+(N'?oÃ n V?n C??ng','2004-10-22'),
 (N'V? Duy Doanh','2005-10-19'),
-(N'Hoàng Ng?c Hùng D?ng','2005-01-20'),
-(N'?ào H?i D??ng','2005-03-07'),
+(N'HoÃ ng Ng?c HÃ¹ng D?ng','2005-01-20'),
+(N'?Ã o H?i D??ng','2005-03-07'),
 (N'Tr?n Vi?t D??ng','2005-02-07'),
-(N'Nguy?n ?ình ??ng','2005-11-08'),
-(N'Hoàng Anh ??c','2005-10-03'),
-(N'Ki?u Trung Giáp','2005-08-18'),
-(N'Tr?n Hoàng H?i','2005-07-22'),
-(N'V??ng Nh?t Hào','2005-11-30'),
-(N'?oàn Trung Hi?u','2005-03-11'),
+(N'Nguy?n ?Ã¬nh ??ng','2005-11-08'),
+(N'HoÃ ng Anh ??c','2005-10-03'),
+(N'Ki?u Trung GiÃ¡p','2005-08-18'),
+(N'Tr?n HoÃ ng H?i','2005-07-22'),
+(N'V??ng Nh?t HÃ o','2005-11-30'),
+(N'?oÃ n Trung Hi?u','2005-03-11'),
 (N'?? Trung Hi?u','2005-12-30'),
 (N'Ph?m Huy Hi?u','2005-02-09'),
-(N'Nguy?n Xuân Hoàn','2005-09-20'),
-(N'??ng ?ình Hùng','2002-07-30'),
-(N'Nguy?n Xuân Hùng','2005-03-09'),
+(N'Nguy?n XuÃ¢n HoÃ n','2005-09-20'),
+(N'??ng ?Ã¬nh HÃ¹ng','2002-07-30'),
+(N'Nguy?n XuÃ¢n HÃ¹ng','2005-03-09'),
 (N'Nguy?n Quang Huy','2005-08-08'),
 (N'Nguy?n Quang Huy','2005-06-11'),
 (N'Nguy?n Th? H?ng','2005-05-19'),
-(N'V? Qu?c Khánh','2005-09-01'),
-(N'Nguy?n Hà Linh','2005-03-07'),
-(N'Tr?nh Xuân L?c','2005-11-05'),
+(N'V? Qu?c KhÃ¡nh','2005-09-01'),
+(N'Nguy?n HÃ  Linh','2005-03-07'),
+(N'Tr?nh XuÃ¢n L?c','2005-11-05'),
 (N'Nguy?n V?n L?u','2005-06-06'),
 (N'Nguy?n Ph??ng Nam','2005-04-29'),
 (N'Ph?m V?n Nam','2005-12-02'),
 (N'Nguy?n Tr?ng Ngh?a','2004-05-24'),
-(N'Ngô V?n Quang','2005-02-12'),
-(N'Nguy?n S? Quân','2005-06-29'),
-(N'Tr?n Phú Quân','2005-01-16'),
+(N'NgÃ´ V?n Quang','2005-02-12'),
+(N'Nguy?n S? QuÃ¢n','2005-06-29'),
+(N'Tr?n PhÃº QuÃ¢n','2005-01-16'),
 (N'V? Quang Sang','2005-03-09'),
 (N'Ph?m Minh S?n','2005-12-22'),
-(N'Nguy?n C? Thái','2005-02-10'),
-(N'Lê ??c Thanh','2005-02-25'),
-(N'Nguy?n V?n Thành','2005-10-03'),
-(N'Phùng Ti?n Thành','2005-10-07'),
+(N'Nguy?n C? ThÃ¡i','2005-02-10'),
+(N'LÃª ??c Thanh','2005-02-25'),
+(N'Nguy?n V?n ThÃ nh','2005-10-03'),
+(N'PhÃ¹ng Ti?n ThÃ nh','2005-10-07'),
 (N'?? M?nh Th?ng','2005-05-24'),
 (N'Nguy?n V?n Th??ng','2005-11-15'),
-(N'T?ng Xuân Toàn','2005-11-23'),
-(N'?? Anh Tú','2005-09-03'),
-(N'Nguy?n Nh? Tùng','2005-07-12'),
-(N'Nguy?n Quang Tùng','2005-07-28'),
-(N'C?n Xuân Vi?t','2005-11-05'),
+(N'T?ng XuÃ¢n ToÃ n','2005-11-23'),
+(N'?? Anh TÃº','2005-09-03'),
+(N'Nguy?n Nh? TÃ¹ng','2005-07-12'),
+(N'Nguy?n Quang TÃ¹ng','2005-07-28'),
+(N'C?n XuÃ¢n Vi?t','2005-11-05'),
 (N'Phi H?ng V??ng','2003-06-16'),
 
-(N'Hoàng Tu?n Anh','2003-01-21'),
+(N'HoÃ ng Tu?n Anh','2003-01-21'),
 (N'Nguy?n H?i Anh','2005-09-24'),
 (N'Nguy?n Qu?c Anh','2005-11-06'),
 (N'Nguy?n Vi?t Anh','2005-02-08'),
 (N'Tr??ng Nguy?t Anh','2004-10-17'),
-(N'Nguy?n ?ình Chi?n','2003-11-05'),
+(N'Nguy?n ?Ã¬nh Chi?n','2003-11-05'),
 (N'Tr?n ??ng Chi?n','2005-08-23'),
-(N'?? Thành Công','2005-10-16'),
-(N'Lê V?n D?ng','2002-07-02'),
+(N'?? ThÃ nh CÃ´ng','2005-10-16'),
+(N'LÃª V?n D?ng','2002-07-02'),
 (N'L?u Minh D?ng','2005-12-15'),
 (N'Tr?n Qu?c D?ng','2005-11-20'),
-(N'Hoàng ??ng D??ng','2005-10-20'),
+(N'HoÃ ng ??ng D??ng','2005-10-20'),
 (N'Nguy?n Ti?n ??t','2005-12-14'),
 (N'Tr?n Tu?n ??t','2005-06-23'),
 (N'Nguy?n Tr?ng ?i?n','2005-07-26'),
-(N'Lê Minh H?i','2005-11-06'),
+(N'LÃª Minh H?i','2005-11-06'),
 (N'L?u Ng?c H?i','2005-06-06'),
 (N'Nguy?n ??c H?u','2005-08-20'),
-(N'Nguy?n Xuân Hi?n','2003-07-22'),
-(N'?? ?ình Hi?p','2005-05-25'),
-(N'Nguy?n Công Hòa','2005-11-19'),
-(N'Nguy?n Xuân Hoàng','2005-08-27'),
-(N'Phan H?u Huy Hoàng','2005-09-25'),
-(N'Hà ??ng H?p','2005-07-12'),
-(N'Mai Chí Hùng','2005-02-24'),
-(N'Nguy?n Quang Hùng','2004-11-09'),
-(N'Nguy?n Thanh Hùng','2005-02-26'),
-(N'?? Xuân Huy','2005-05-02'),
+(N'Nguy?n XuÃ¢n Hi?n','2003-07-22'),
+(N'?? ?Ã¬nh Hi?p','2005-05-25'),
+(N'Nguy?n CÃ´ng HÃ²a','2005-11-19'),
+(N'Nguy?n XuÃ¢n HoÃ ng','2005-08-27'),
+(N'Phan H?u Huy HoÃ ng','2005-09-25'),
+(N'HÃ  ??ng H?p','2005-07-12'),
+(N'Mai ChÃ­ HÃ¹ng','2005-02-24'),
+(N'Nguy?n Quang HÃ¹ng','2004-11-09'),
+(N'Nguy?n Thanh HÃ¹ng','2005-02-26'),
+(N'?? XuÃ¢n Huy','2005-05-02'),
 (N'Tr?n Quang Huy','2004-08-19'),
 (N'V? Minh Khang','2005-05-23'),
-(N'Bùi Quang Khoa','2005-09-16'),
+(N'BÃ¹i Quang Khoa','2005-09-16'),
 (N'Chu V?n Khoa','2005-09-10'),
-(N'Ngô Trung Kiên','2005-08-02'),
-(N'Nguy?n Trung Kiên','2005-03-17'),
-(N'Nguy?n Trung Kiên','2005-03-13'),
-(N'Nguy?n Thành L?c','2005-06-16'),
+(N'NgÃ´ Trung KiÃªn','2005-08-02'),
+(N'Nguy?n Trung KiÃªn','2005-03-17'),
+(N'Nguy?n Trung KiÃªn','2005-03-13'),
+(N'Nguy?n ThÃ nh L?c','2005-06-16'),
 (N'Nguy?n Tr??ng Lu?n','2005-11-17'),
-(N'Lê Quang Minh','2005-03-10'),
+(N'LÃª Quang Minh','2005-03-10'),
 (N'Tr?n T?t Minh','2001-04-28'),
-(N'M?ch Quý Nhân','2001-01-01'),
-(N'Nguy?n H?u Pháp','2005-01-25'),
+(N'M?ch QuÃ½ NhÃ¢n','2001-01-01'),
+(N'Nguy?n H?u PhÃ¡p','2005-01-25'),
 (N'Nguy?n Thanh Phong','2005-06-02'),
-(N'Tr?n ?ình Phúc','2005-02-16'),
+(N'Tr?n ?Ã¬nh PhÃºc','2005-02-16'),
 (N'Nguy?n V?n Quy?n','2004-08-22'),
-(N'Hà M?nh Thái S?n','2004-09-18'),
-(N'Nguy?n Minh Tâm','2005-10-10'),
-(N'Nguy?n V?n Thành','2005-10-19'),
+(N'HÃ  M?nh ThÃ¡i S?n','2004-09-18'),
+(N'Nguy?n Minh TÃ¢m','2005-10-10'),
+(N'Nguy?n V?n ThÃ nh','2005-10-19'),
 (N'Nguy?n V?n Th?ng','2005-01-11'),
-(N'Nguy?n V?n Thông','2004-04-18'),
-(N'Cao Nhân Thu?n','2005-03-17'),
-(N'V? Th? Thanh Thuý','2005-04-23'),
-(N'Ph?m V?n Toàn','2005-03-06'),
+(N'Nguy?n V?n ThÃ´ng','2004-04-18'),
+(N'Cao NhÃ¢n Thu?n','2005-03-17'),
+(N'V? Th? Thanh ThuÃ½','2005-04-23'),
+(N'Ph?m V?n ToÃ n','2005-03-06'),
 (N'D??ng Anh Tu?n','2005-01-08'),
 (N'Nguy?n V?n Tu?n','2003-02-21'),
-(N'Nguy?n Duy Tùng','2005-02-25'),
+(N'Nguy?n Duy TÃ¹ng','2005-02-25'),
 (N'Nguy?n Qu?c Vi?t','2005-12-10'),
-(N'Lê Minh V??ng','2005-12-06'),
+(N'LÃª Minh V??ng','2005-12-06'),
 (N'Nguy?n Th?nh V??ng','2005-03-13');
 
 DECLARE @CV TABLE (rn INT PRIMARY KEY, MaCV VARCHAR(10) NOT NULL);
@@ -453,9 +453,9 @@ INSERT INTO @CV(rn, MaCV) SELECT rn, MaCV FROM x;
             ORDER BY 
                 CASE 
                     WHEN HoTen = N'V? Minh Khang' THEN 1
-                    WHEN HoTen = N'Hoàng Tu?n Anh' THEN 2
+                    WHEN HoTen = N'HoÃ ng Tu?n Anh' THEN 2
                     WHEN HoTen = N'Tr?n ??ng Chi?n' THEN 3
-                    WHEN HoTen = N'Cao Nhân Thu?n' THEN 4
+                    WHEN HoTen = N'Cao NhÃ¢n Thu?n' THEN 4
                     ELSE 100
                 END,
                 HoTen, NgaySinh
@@ -481,7 +481,7 @@ SELECT
         WHEN m.HoTen LIKE N'%Th?%' OR m.HoTen LIKE N'%Nguy?t%' THEN N'N?'
         ELSE N'Nam'
     END AS GioiTinh,
-    N'Hà N?i' AS DiaChi,
+    N'HÃ  N?i' AS DiaChi,
     '091' + RIGHT('000000' + CAST(m.r AS VARCHAR(10)), 6) AS SoDienThoai,
     'nv' + CAST(m.r AS VARCHAR(10)) + '@mail.com' AS Email,
     cv.MaCV,
@@ -492,7 +492,7 @@ JOIN @CV cv ON cv.rn = m.cv_rn;
 GO
 
 /* =====================================================
-6) TÀI KHO?N (m?i NV 1 TK) + phân quy?n chia ??u (Admin/Nhân s?/Nhân viên)
+6) TÃ€I KHO?N (m?i NV 1 TK) + phÃ¢n quy?n chia ??u (Admin/NhÃ¢n s?/NhÃ¢n viÃªn)
 ===================================================== */
 ;WITH N AS (
     SELECT MaNV, SoDienThoai, ROW_NUMBER() OVER (ORDER BY MaNV) r
@@ -506,8 +506,8 @@ SELECT
     SoDienThoai,
     CONVERT(VARCHAR(255), HASHBYTES('MD5','123456'),2),
     CASE WHEN (r % 20)=1 THEN N'Admin'
-         WHEN (r % 10)=1 THEN N'Nhân s?'
-         ELSE N'Nhân viên' END,
+         WHEN (r % 10)=1 THEN N'NhÃ¢n s?'
+         ELSE N'NhÃ¢n viÃªn' END,
     NULL,
     0,
     CASE WHEN (r % 20)=1 THEN 1
@@ -517,7 +517,7 @@ FROM N;
 GO
 
 /* =====================================================
-7) H?P ??NG (chia ??u lo?i H? + l??ng theo nhóm)
+7) H?P ??NG (chia ??u lo?i H? + l??ng theo nhÃ³m)
 ===================================================== */
 ;WITH N AS (
     SELECT MaNV, ROW_NUMBER() OVER (ORDER BY MaNV) r
@@ -544,7 +544,7 @@ FROM N;
 GO
 
 /* =====================================================
-8) CHI TI?T D? ÁN (chia ??u 5 d? án)
+8) CHI TI?T D? ÃN (chia ??u 5 d? Ã¡n)
 ===================================================== */
 ;WITH N AS (
     SELECT MaNV, ROW_NUMBER() OVER (ORDER BY MaNV) r
@@ -566,17 +566,17 @@ INSERT INTO dbo.tblChiTietDuAn (MaNV, MaDA, VaiTro, Ghichu, DeletedAt)
 SELECT
     MaNV,
     MaDA,
-    CASE WHEN (r % 25)=1 THEN N'Qu?n lý d? án'
+    CASE WHEN (r % 25)=1 THEN N'Qu?n lÃ½ d? Ã¡n'
          WHEN (r % 7)=0 THEN N'Leader'
-         ELSE N'Thành viên' END,
+         ELSE N'ThÃ nh viÃªn' END,
     NULL,
     0
 FROM D;
 GO
 
 /* =====================================================
-9) CH?M CÔNG: ?? 12 THÁNG N?M 2025, M?I NGÀY M?I NV ??U CÓ
-   - T?o d? li?u theo ngày: 2025-01-01 -> 2025-12-31
+9) CH?M CÃ”NG: ?? 12 THÃNG N?M 2025, M?I NGÃ€Y M?I NV ??U CÃ“
+   - T?o d? li?u theo ngÃ y: 2025-01-01 -> 2025-12-31
 ===================================================== */
 DECLARE @Ngay DATE = '2025-01-01';
 WHILE @Ngay <= '2025-12-31'
@@ -588,7 +588,7 @@ BEGIN
         @Ngay,
         CASE WHEN (nv.Id % 4)=0 THEN '07:45' WHEN (nv.Id % 4)=1 THEN '08:00' WHEN (nv.Id % 4)=2 THEN '08:10' ELSE '08:05' END,
         CASE WHEN (nv.Id % 4)=0 THEN '17:00' WHEN (nv.Id % 4)=1 THEN '17:15' WHEN (nv.Id % 4)=2 THEN '17:30' ELSE '17:05' END,
-        CASE WHEN (nv.Id % 13)=0 THEN N'?i công tác' WHEN (nv.Id % 17)=0 THEN N'T?ng ca' ELSE NULL END,
+        CASE WHEN (nv.Id % 13)=0 THEN N'?i cÃ´ng tÃ¡c' WHEN (nv.Id % 17)=0 THEN N'T?ng ca' ELSE NULL END,
         0,
         nv.Id
     FROM dbo.tblNhanVien nv;
@@ -598,8 +598,8 @@ END
 GO
 
 /* =====================================================
-10) L??NG: ?? N?M 2025 (m?i NV m?i THÁNG 1 b?n ghi)
-   - ChamCongId: l?y 1 b?n ghi ch?m công ??i di?n trong tháng (MIN)
+10) L??NG: ?? N?M 2025 (m?i NV m?i THÃNG 1 b?n ghi)
+   - ChamCongId: l?y 1 b?n ghi ch?m cÃ´ng ??i di?n trong thÃ¡ng (MIN)
    - SoNgayCongChuan: 26
 ===================================================== */
 ;WITH CC AS (
