@@ -47,9 +47,9 @@ namespace QuanLyNhanVien3
                                       nv.HoTen as N'Tên Nhân Viên', 
                                       ct.VaiTro as N'Vai Trò',
                                       da.NgayBatDau as N'Ngày Bắt Đầu Dự Án'
-                               FROM tblDuAn da
-                               JOIN tblChiTietDuAn ct ON da.MaDA = ct.MaDA
-                               JOIN tblNhanVien nv ON ct.MaNV = nv.MaNV
+                               FROM tblDuAn_KienCD233824 da
+                               JOIN tblChiTietDuAn_KienCD233824 ct ON da.MaDA = ct.MaDA
+                               JOIN tblNhanVien_TuanhCD233018 nv ON ct.MaNV = nv.MaNV
                                WHERE da.DeletedAt = 0 AND ct.DeletedAt = 0
                                ORDER BY da.TenDA, nv.HoTen;";
 
@@ -75,7 +75,7 @@ namespace QuanLyNhanVien3
                 string sql = @"SELECT da.MaDA as N'Mã Dự Án', 
                                       da.TenDA as N'Tên Dự Án', 
                                       COUNT(ct.MaNV) as N'Số Lượng Nhân Viên'
-                               FROM tblDuAn da
+                               FROM tblDuAn_KienCD233824 da
                                LEFT JOIN tblChiTietDuAn ct ON da.MaDA = ct.MaDA AND ct.DeletedAt = 0
                                WHERE da.DeletedAt = 0
                                GROUP BY da.MaDA, da.TenDA
@@ -112,7 +112,7 @@ namespace QuanLyNhanVien3
                                       MoTa as N'Mô Tả', 
                                       NgayBatDau as N'Ngày Bắt Đầu', 
                                       NgayKetThuc as N'Ngày Kết Thúc'
-                               FROM tblDuAn
+                               FROM tblDuAn_KienCD233824
                                WHERE DeletedAt = 0 
                                AND TenDA LIKE @TenTimKiem
                                ORDER BY TenDA;";
