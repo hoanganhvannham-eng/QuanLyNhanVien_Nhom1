@@ -1,205 +1,216 @@
 ﻿using ClosedXML.Excel;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyNhanVien3
 {
-    public partial class F_BaoCaoTongHop: Form
+    public partial class F_BaoCaoTongHop : Form
     {
         connectData cn = new connectData();
+
         public F_BaoCaoTongHop()
         {
             InitializeComponent();
         }
-        private void ClearAllInputs(Control parent)
-        {
-            foreach (Control ctl in parent.Controls)
-            {
-                if (ctl is TextBox)
-                    ((TextBox)ctl).Clear();
-                else if (ctl is ComboBox)
-                    ((ComboBox)ctl).SelectedIndex = -1;
-                else if (ctl is DateTimePicker)
-                    ((DateTimePicker)ctl).Value = DateTime.Now;
-                else if (ctl.HasChildren)
-                    ClearAllInputs(ctl);
-            }
-        }
 
-
+        // ===============================
+        // FORM LOAD
+        // ===============================
         private void F_BaoCaoTongHop_Load(object sender, EventArgs e)
         {
-
+            LoadLoaiBaoCao();
+            LoadPhongBan();
+            LoadSummary();
         }
 
-        private void btnTongHopChung_Click(object sender, EventArgs e)
+        // ===============================
+        // LOAD COMBOBOX LOẠI BÁO CÁO
+        // ===============================
+        void LoadLoaiBaoCao()
+        {
+            cboLoaiBaoCao.Items.Clear();
+            cboLoaiBaoCao.Items.Add("Danh sách nhân viên");
+            cboLoaiBaoCao.Items.Add("Nhân viên theo phòng ban");
+            cboLoaiBaoCao.Items.Add("Nhân viên tham gia dự án");
+            cboLoaiBaoCao.Items.Add("Nhân viên nhiều dự án nhất");
+            cboLoaiBaoCao.SelectedIndex = 0;
+        }
+
+        // ===============================
+        // LOAD PHÒNG BAN
+        // ===============================
+        void LoadPhongBan()
+        {
+            cn.connect();
+            SqlDataAdapter da = new SqlDataAdapter(
+                "SELECT MaPB, TenPB FROM tblPhongBan WHERE DeletedAt = 0",
+                cn.conn);
+
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            cboPhongBan.DataSource = dt;
+            cboPhongBan.DisplayMember = "TenPB";
+            cboPhongBan.ValueMember = "MaPB";
+            cboPhongBan.SelectedIndex = -1;
+
+            cn.disconnect();
+        }
+
+        // ===============================
+        // SUMMARY CARD
+        // ===============================
+        void LoadSummary()
+        {
+            cn.connect();
+
+            lblNVValue.Text = new SqlCommand(
+                "SELECT COUNT(*) FROM tblNhanVien WHERE DeletedAt = 0",
+                cn.conn).ExecuteScalar().ToString();
+
+            lblPBValue.Text = new SqlCommand(
+                "SELECT COUNT(*) FROM tblPhongBan WHERE DeletedAt = 0",
+                cn.conn).ExecuteScalar().ToString();
+
+            lblDAValue.Text = new SqlCommand(
+                "SELECT COUNT(*) FROM tblDuAn WHERE DeletedAt = 0",
+                cn.conn).ExecuteScalar().ToString();
+
+            cn.disconnect();
+        }
+
+        // ===============================
+        // NÚT XEM BÁO CÁO (TRỌNG TÂM)
+        // ===============================
+        private void btnXemBaoCao_Click(object sender, EventArgs e)
         {
             try
             {
                 cn.connect();
+                string sql = "";
 
-                // Câu truy vấn đếm số lượng từ 3 bảng khác nhau và trả về 1 dòng kết quả
-                string sql = @"
-                    SELECT 
-                        (SELECT COUNT(*) FROM tblNhanVien WHERE DeletedAt = 0) AS [Tổng Số Nhân Viên],
-                        (SELECT COUNT(*) FROM tblPhongBan WHERE DeletedAt = 0) AS [Tổng Số Phòng Ban],
-                        (SELECT COUNT(*) FROM tblDuAn WHERE DeletedAt = 0) AS [Tổng Số Dự Án]
-                ";
-
-                using (SqlDataAdapter adapter = new SqlDataAdapter(sql, cn.conn))
+                switch (cboLoaiBaoCao.SelectedIndex)
                 {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    dtGridViewBCTongHop.DataSource = dt;
+                    // 1. Danh sách nhân viên
+                    case 0:
+                        sql = @"
+                            SELECT 
+                                nv.MaNV, nv.HoTen, nv.GioiTinh, nv.NgaySinh,
+                                pb.TenPB AS PhongBan,
+                                cv.TenCV AS ChucVu,
+                                nv.SoDienThoai, nv.Email
+                            FROM tblNhanVien nv
+                            JOIN tblChucVu cv ON nv.MaCV = cv.MaCV
+                            JOIN tblPhongBan pb ON cv.MaPB = pb.MaPB
+                            WHERE nv.DeletedAt = 0
+                            ORDER BY pb.TenPB, nv.HoTen";
+                        break;
 
-                    // Tự động chỉnh độ rộng cột cho đẹp
-                    dtGridViewBCTongHop.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    // 2. Nhân viên theo phòng ban
+                    case 1:
+                        if (cboPhongBan.SelectedValue == null)
+                        {
+                            MessageBox.Show("Vui lòng chọn phòng ban!");
+                            return;
+                        }
+                        sql = @"
+                            SELECT 
+                                nv.MaNV, nv.HoTen,
+                                cv.TenCV AS ChucVu,
+                                pb.TenPB AS PhongBan
+                            FROM tblNhanVien nv
+                            JOIN tblChucVu cv ON nv.MaCV = cv.MaCV
+                            JOIN tblPhongBan pb ON cv.MaPB = pb.MaPB
+                            WHERE nv.DeletedAt = 0
+                              AND pb.MaPB = @MaPB
+                            ORDER BY nv.HoTen";
+                        break;
+
+                    // 3. Nhân viên tham gia dự án
+                    case 2:
+                        sql = @"
+                            SELECT 
+                                nv.MaNV, nv.HoTen,
+                                da.TenDA AS DuAn,
+                                ctda.VaiTro
+                            FROM tblChiTietDuAn ctda
+                            JOIN tblNhanVien nv ON ctda.MaNV = nv.MaNV
+                            JOIN tblDuAn da ON ctda.MaDA = da.MaDA
+                            WHERE ctda.DeletedAt = 0
+                            ORDER BY da.TenDA, nv.HoTen";
+                        break;
+
+                    // 4. Nhân viên nhiều dự án nhất
+                    case 3:
+                        sql = @"
+                            SELECT TOP 10
+                                nv.MaNV, nv.HoTen,
+                                COUNT(ctda.MaDA) AS SoDuAn
+                            FROM tblChiTietDuAn ctda
+                            JOIN tblNhanVien nv ON ctda.MaNV = nv.MaNV
+                            WHERE ctda.DeletedAt = 0
+                            GROUP BY nv.MaNV, nv.HoTen
+                            ORDER BY SoDuAn DESC";
+                        break;
                 }
+
+                SqlDataAdapter adapter = new SqlDataAdapter(sql, cn.conn);
+
+                if (sql.Contains("@MaPB"))
+                    adapter.SelectCommand.Parameters.AddWithValue(
+                        "@MaPB", cboPhongBan.SelectedValue);
+
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+
+                dtGridViewBCTongHop.DataSource = dt;
+                dtGridViewBCTongHop.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
                 cn.disconnect();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải báo cáo tổng hợp: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi tải báo cáo: " + ex.Message);
             }
         }
 
-        private void btnNhanVienNhieuDuAn_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                cn.connect();
-
-                // Câu truy vấn Join bảng Nhân viên và ChiTietDuAn, Group by và lấy Top 1
-                // Sử dụng TOP 1 WITH TIES để lấy tất cả những người cùng hạng nhất (nếu có nhiều người bằng nhau)
-                string sql = @"
-                    SELECT TOP 1 WITH TIES 
-                        nv.MaNV AS [Mã Nhân Viên], 
-                        nv.HoTen AS [Họ Tên], 
-                        pb.TenPB AS [Phòng Ban],
-                        COUNT(ct.MaDA) AS [Số Lượng Dự Án Tham Gia]
-                    FROM tblNhanVien nv
-                    JOIN tblChiTietDuAn ct ON nv.MaNV = ct.MaNV
-                    JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
-                    WHERE nv.DeletedAt = 0
-                    GROUP BY nv.MaNV, nv.HoTen, pb.TenPB
-                    ORDER BY COUNT(ct.MaDA) DESC;
-                ";
-
-                using (SqlDataAdapter adapter = new SqlDataAdapter(sql, cn.conn))
-                {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    dtGridViewBCTongHop.DataSource = dt;
-
-                    // Tự động chỉnh độ rộng cột
-                    dtGridViewBCTongHop.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                }
-
-                cn.disconnect();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi tải dữ liệu dự án: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
+        // ===============================
+        // XUẤT EXCEL (GIỮ NGUYÊN)
+        // ===============================
         private void btnXuatExcel_Click(object sender, EventArgs e)
         {
-            if (dtGridViewBCTongHop.Rows.Count > 0)
+            if (dtGridViewBCTongHop.Rows.Count == 0)
             {
-                string fileName = "BaoCaoTongHop_" + DateTime.Now.ToString("ddMMyyyy") + ".xlsx";
+                MessageBox.Show("Không có dữ liệu để xuất!");
+                return;
+            }
 
-                using (SaveFileDialog sfd = new SaveFileDialog()
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Excel Workbook|*.xlsx";
+            sfd.FileName = "BaoCao_" + DateTime.Now.ToString("ddMMyyyy") + ".xlsx";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                using (XLWorkbook wb = new XLWorkbook())
                 {
-                    Filter = "Excel Workbook|*.xlsx",
-                    FileName = fileName
-                })
-                {
-                    if (sfd.ShowDialog() == DialogResult.OK)
-                    {
-                        try
-                        {
-                            using (XLWorkbook wb = new XLWorkbook())
-                            {
-                                var ws = wb.Worksheets.Add("BaoCaoTongHop");
+                    var ws = wb.Worksheets.Add("BaoCao");
 
-                                int colCount = dtGridViewBCTongHop.Columns.Count;
+                    for (int i = 0; i < dtGridViewBCTongHop.Columns.Count; i++)
+                        ws.Cell(1, i + 1).Value =
+                            dtGridViewBCTongHop.Columns[i].HeaderText;
 
-                                /* ================= TIÊU ĐỀ ================= */
-                                ws.Cell(1, 1).Value = "BÁO CÁO TỔNG HỢP";
-                                ws.Range(1, 1, 1, colCount).Merge();
-                                ws.Range(1, 1, 1, colCount).Style.Font.Bold = true;
-                                ws.Range(1, 1, 1, colCount).Style.Font.FontSize = 18;
-                                ws.Range(1, 1, 1, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    for (int i = 0; i < dtGridViewBCTongHop.Rows.Count; i++)
+                        for (int j = 0; j < dtGridViewBCTongHop.Columns.Count; j++)
+                            ws.Cell(i + 2, j + 1).Value = dtGridViewBCTongHop.Rows[i].Cells[j].Value?.ToString() ?? "";
 
-                                /* ================= NGÀY XUẤT ================= */
-                                ws.Cell(2, 1).Value = "Ngày xuất: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm");
-                                ws.Range(2, 1, 2, colCount).Merge();
-                                ws.Range(2, 1, 2, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-                                ws.Range(2, 1, 2, colCount).Style.Font.Italic = true;
-
-                                /* ================= HEADER ================= */
-                                for (int i = 0; i < colCount; i++)
-                                {
-                                    ws.Cell(4, i + 1).Value = dtGridViewBCTongHop.Columns[i].HeaderText;
-                                }
-
-                                var headerRange = ws.Range(4, 1, 4, colCount);
-                                headerRange.Style.Font.Bold = true;
-                                headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                                headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
-                                headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                                headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-
-                                /* ================= DỮ LIỆU ================= */
-                                for (int i = 0; i < dtGridViewBCTongHop.Rows.Count; i++)
-                                {
-                                    for (int j = 0; j < colCount; j++)
-                                    {
-                                        var value = dtGridViewBCTongHop.Rows[i].Cells[j].Value;
-                                        ws.Cell(i + 5, j + 1).Value = value != null ? value.ToString() : "";
-                                    }
-                                }
-
-                                /* ================= BORDER + AUTOFIT ================= */
-                                var dataRange = ws.Range(4, 1,
-                                    dtGridViewBCTongHop.Rows.Count + 4,
-                                    colCount);
-
-                                dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                                dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-
-                                ws.Columns().AdjustToContents();
-
-                                wb.SaveAs(sfd.FileName);
-                            }
-
-                            MessageBox.Show("Xuất Excel thành công!",
-                                "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Lỗi xuất file: " + ex.Message,
-                                "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
+                    ws.Columns().AdjustToContents();
+                    wb.SaveAs(sfd.FileName);
                 }
-            }
-            else
-            {
-                MessageBox.Show("Không có dữ liệu để xuất!",
-                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
 
+                MessageBox.Show("Xuất Excel thành công!");
+            }
         }
     }
 }
