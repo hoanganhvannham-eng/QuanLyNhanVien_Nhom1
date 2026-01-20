@@ -15,9 +15,6 @@ namespace QuanLyNhanVien3
             InitializeComponent();
         }
 
-        // ===============================
-        // FORM LOAD
-        // ===============================
         private void F_BaoCaoTongHop_Load(object sender, EventArgs e)
         {
             LoadLoaiBaoCao();
@@ -26,7 +23,7 @@ namespace QuanLyNhanVien3
         }
 
         // ===============================
-        // LOAD COMBOBOX LOẠI BÁO CÁO
+        // LOAD LOẠI BÁO CÁO
         // ===============================
         void LoadLoaiBaoCao()
         {
@@ -45,7 +42,7 @@ namespace QuanLyNhanVien3
         {
             cn.connect();
             SqlDataAdapter da = new SqlDataAdapter(
-                "SELECT MaPB, TenPB FROM tblPhongBan WHERE DeletedAt = 0",
+                "SELECT MaPB, TenPB FROM tblPhongBan_ThuanCD233318 WHERE DeletedAt = 0",
                 cn.conn);
 
             DataTable dt = new DataTable();
@@ -67,22 +64,22 @@ namespace QuanLyNhanVien3
             cn.connect();
 
             lblNVValue.Text = new SqlCommand(
-                "SELECT COUNT(*) FROM tblNhanVien WHERE DeletedAt = 0",
+                "SELECT COUNT(*) FROM tblNhanVien_TuanhCD233018 WHERE DeletedAt = 0",
                 cn.conn).ExecuteScalar().ToString();
 
             lblPBValue.Text = new SqlCommand(
-                "SELECT COUNT(*) FROM tblPhongBan WHERE DeletedAt = 0",
+                "SELECT COUNT(*) FROM tblPhongBan_ThuanCD233318 WHERE DeletedAt = 0",
                 cn.conn).ExecuteScalar().ToString();
 
             lblDAValue.Text = new SqlCommand(
-                "SELECT COUNT(*) FROM tblDuAn WHERE DeletedAt = 0",
+                "SELECT COUNT(*) FROM tblDuAn_KienCD233824 WHERE DeletedAt = 0",
                 cn.conn).ExecuteScalar().ToString();
 
             cn.disconnect();
         }
 
         // ===============================
-        // NÚT XEM BÁO CÁO (TRỌNG TÂM)
+        // XEM BÁO CÁO
         // ===============================
         private void btnXemBaoCao_Click(object sender, EventArgs e)
         {
@@ -96,16 +93,16 @@ namespace QuanLyNhanVien3
                     // 1. Danh sách nhân viên
                     case 0:
                         sql = @"
-                            SELECT 
-                                nv.MaNV, nv.HoTen, nv.GioiTinh, nv.NgaySinh,
-                                pb.TenPB AS PhongBan,
-                                cv.TenCV AS ChucVu,
-                                nv.SoDienThoai, nv.Email
-                            FROM tblNhanVien nv
-                            JOIN tblChucVu cv ON nv.MaCV = cv.MaCV
-                            JOIN tblPhongBan pb ON cv.MaPB = pb.MaPB
-                            WHERE nv.DeletedAt = 0
-                            ORDER BY pb.TenPB, nv.HoTen";
+                        SELECT 
+                            nv.MaNV, nv.HoTen, nv.GioiTinh, nv.NgaySinh,
+                            pb.TenPB AS PhongBan,
+                            cv.TenCV AS ChucVu,
+                            nv.SoDienThoai, nv.Email
+                        FROM tblNhanVien_TuanhCD233018 nv
+                        JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV = cv.MaCV
+                        JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB = pb.MaPB
+                        WHERE nv.DeletedAt = 0
+                        ORDER BY pb.TenPB, nv.HoTen";
                         break;
 
                     // 2. Nhân viên theo phòng ban
@@ -115,52 +112,52 @@ namespace QuanLyNhanVien3
                             MessageBox.Show("Vui lòng chọn phòng ban!");
                             return;
                         }
+
                         sql = @"
-                            SELECT 
-                                nv.MaNV, nv.HoTen,
-                                cv.TenCV AS ChucVu,
-                                pb.TenPB AS PhongBan
-                            FROM tblNhanVien nv
-                            JOIN tblChucVu cv ON nv.MaCV = cv.MaCV
-                            JOIN tblPhongBan pb ON cv.MaPB = pb.MaPB
-                            WHERE nv.DeletedAt = 0
-                              AND pb.MaPB = @MaPB
-                            ORDER BY nv.HoTen";
+                        SELECT 
+                            nv.MaNV, nv.HoTen,
+                            cv.TenCV AS ChucVu,
+                            pb.TenPB AS PhongBan
+                        FROM tblNhanVien_TuanhCD233018 nv
+                        JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV = cv.MaCV
+                        JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB = pb.MaPB
+                        WHERE nv.DeletedAt = 0
+                          AND pb.MaPB = @MaPB
+                        ORDER BY nv.HoTen";
                         break;
 
                     // 3. Nhân viên tham gia dự án
                     case 2:
                         sql = @"
-                            SELECT 
-                                nv.MaNV, nv.HoTen,
-                                da.TenDA AS DuAn,
-                                ctda.VaiTro
-                            FROM tblChiTietDuAn ctda
-                            JOIN tblNhanVien nv ON ctda.MaNV = nv.MaNV
-                            JOIN tblDuAn da ON ctda.MaDA = da.MaDA
-                            WHERE ctda.DeletedAt = 0
-                            ORDER BY da.TenDA, nv.HoTen";
+                        SELECT 
+                            nv.MaNV, nv.HoTen,
+                            da.TenDA AS DuAn,
+                            ct.VaiTro
+                        FROM tblChiTietDuAn_KienCD233824 ct
+                        JOIN tblNhanVien_TuanhCD233018 nv ON ct.MaNV = nv.MaNV
+                        JOIN tblDuAn_KienCD233824 da ON ct.MaDA = da.MaDA
+                        WHERE ct.DeletedAt = 0
+                        ORDER BY da.TenDA, nv.HoTen";
                         break;
 
                     // 4. Nhân viên nhiều dự án nhất
                     case 3:
                         sql = @"
-                            SELECT TOP 10
-                                nv.MaNV, nv.HoTen,
-                                COUNT(ctda.MaDA) AS SoDuAn
-                            FROM tblChiTietDuAn ctda
-                            JOIN tblNhanVien nv ON ctda.MaNV = nv.MaNV
-                            WHERE ctda.DeletedAt = 0
-                            GROUP BY nv.MaNV, nv.HoTen
-                            ORDER BY SoDuAn DESC";
+                        SELECT TOP 10
+                            nv.MaNV, nv.HoTen,
+                            COUNT(ct.MaDA) AS SoDuAn
+                        FROM tblChiTietDuAn_KienCD233824 ct
+                        JOIN tblNhanVien_TuanhCD233018 nv ON ct.MaNV = nv.MaNV
+                        WHERE ct.DeletedAt = 0
+                        GROUP BY nv.MaNV, nv.HoTen
+                        ORDER BY SoDuAn DESC";
                         break;
                 }
 
                 SqlDataAdapter adapter = new SqlDataAdapter(sql, cn.conn);
 
                 if (sql.Contains("@MaPB"))
-                    adapter.SelectCommand.Parameters.AddWithValue(
-                        "@MaPB", cboPhongBan.SelectedValue);
+                    adapter.SelectCommand.Parameters.AddWithValue("@MaPB", cboPhongBan.SelectedValue);
 
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
@@ -176,9 +173,6 @@ namespace QuanLyNhanVien3
             }
         }
 
-        // ===============================
-        // XUẤT EXCEL (GIỮ NGUYÊN)
-        // ===============================
         private void btnXuatExcel_Click(object sender, EventArgs e)
         {
             if (dtGridViewBCTongHop.Rows.Count == 0)
@@ -197,13 +191,16 @@ namespace QuanLyNhanVien3
                 {
                     var ws = wb.Worksheets.Add("BaoCao");
 
+                    // Header
                     for (int i = 0; i < dtGridViewBCTongHop.Columns.Count; i++)
                         ws.Cell(1, i + 1).Value =
                             dtGridViewBCTongHop.Columns[i].HeaderText;
 
+                    // Data
                     for (int i = 0; i < dtGridViewBCTongHop.Rows.Count; i++)
                         for (int j = 0; j < dtGridViewBCTongHop.Columns.Count; j++)
-                            ws.Cell(i + 2, j + 1).Value = dtGridViewBCTongHop.Rows[i].Cells[j].Value?.ToString() ?? "";
+                            ws.Cell(i + 2, j + 1).Value =
+                                dtGridViewBCTongHop.Rows[i].Cells[j].Value?.ToString() ?? "";
 
                     ws.Columns().AdjustToContents();
                     wb.SaveAs(sfd.FileName);
