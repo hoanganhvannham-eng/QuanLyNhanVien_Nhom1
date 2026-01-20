@@ -31,15 +31,15 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBoxmanhanvientimkiem = new System.Windows.Forms.TextBox();
             this.btnXuatEXL = new System.Windows.Forms.Button();
             this.txttimkiemtheoten = new System.Windows.Forms.TextBox();
             this.btnsoluongtheogioitinh = new System.Windows.Forms.Button();
             this.btnThongKeNhanVien = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.dtGridViewBCNhanVien = new System.Windows.Forms.DataGridView();
-            this.textBoxmanhanvientimkiem = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -80,6 +80,38 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(1385, 248);
             this.panel3.TabIndex = 3;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(706, 150);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(101, 19);
+            this.label3.TabIndex = 151;
+            this.label3.Text = "Tên nhân viên";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(706, 121);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(109, 19);
+            this.label2.TabIndex = 150;
+            this.label2.Text = "Mã Nhân Viên ";
+            // 
+            // textBoxmanhanvientimkiem
+            // 
+            this.textBoxmanhanvientimkiem.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.textBoxmanhanvientimkiem.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxmanhanvientimkiem.Location = new System.Drawing.Point(834, 112);
+            this.textBoxmanhanvientimkiem.Name = "textBoxmanhanvientimkiem";
+            this.textBoxmanhanvientimkiem.Size = new System.Drawing.Size(246, 28);
+            this.textBoxmanhanvientimkiem.TabIndex = 5;
+            this.textBoxmanhanvientimkiem.TextChanged += new System.EventHandler(this.textBoxmanhanvientimkiem_TextChanged);
             // 
             // btnXuatEXL
             // 
@@ -151,38 +183,6 @@
             this.dtGridViewBCNhanVien.Size = new System.Drawing.Size(1385, 380);
             this.dtGridViewBCNhanVien.TabIndex = 121;
             // 
-            // textBoxmanhanvientimkiem
-            // 
-            this.textBoxmanhanvientimkiem.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.textBoxmanhanvientimkiem.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxmanhanvientimkiem.Location = new System.Drawing.Point(834, 112);
-            this.textBoxmanhanvientimkiem.Name = "textBoxmanhanvientimkiem";
-            this.textBoxmanhanvientimkiem.Size = new System.Drawing.Size(246, 28);
-            this.textBoxmanhanvientimkiem.TabIndex = 5;
-            this.textBoxmanhanvientimkiem.TextChanged += new System.EventHandler(this.textBoxmanhanvientimkiem_TextChanged);
-            // 
-            // label2
-            // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(706, 121);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(109, 19);
-            this.label2.TabIndex = 150;
-            this.label2.Text = "Mã Nhân Viên ";
-            // 
-            // label3
-            // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(706, 150);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(101, 19);
-            this.label3.TabIndex = 151;
-            this.label3.Text = "Tên nhân viên";
-            // 
             // F_BaoCaoNhanVien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -192,7 +192,7 @@
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel1);
             this.Name = "F_BaoCaoNhanVien";
-            this.Text = "F_BaoCaoNhanVien";
+            this.Text = "3";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

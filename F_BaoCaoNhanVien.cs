@@ -42,9 +42,9 @@ namespace QuanLyNhanVien3
 
                 string sqlLoadDataNhanVien = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', 
                                                     pb.TenPB as N'Tên Phòng Ban', cv.TenCV as N'Tên Chức Vụ', nv.Email
-                                                    FROM tblNhanVien nv
-                                                    JOIN tblPhongBan pb ON nv.MaPB = pb.MaPB
-                                                    JOIN tblChucVu cv ON nv.MaCV = cv.MaCV
+                                                    FROM tblNhanVien_TuanhCD233018 nv
+                                                    JOIN tblPhongBan_ThuanCD233318 pb ON nv.MaPB = pb.MaPB
+                                                    JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV = cv.MaCV
                                                     WHERE nv.DeletedAt = 0
                                                     ORDER BY pb.TenPB, cv.TenCV;"; 
 
@@ -70,7 +70,7 @@ namespace QuanLyNhanVien3
                 cn.connect();
 
                 string sqlLoadDataNhanVien = @"SELECT GioiTinh as N'Giới Tính', COUNT(*) as N'Số Lượng'
-                                                FROM tblNhanVien
+                                                FROM tblNhanVien_TuanhCD233018
                                                 WHERE DeletedAt = 0
                                                 GROUP BY GioiTinh;
                                                 ";
@@ -230,14 +230,14 @@ namespace QuanLyNhanVien3
                                 cv.TenCV         AS N'Chức vụ',
                                 lu.LuongCoBan    AS N'Lương cơ bản',
                                 hd.LoaiHopDong   AS N'Loại hợp đồng'
-                            FROM tblNhanVien nv
-                            LEFT JOIN tblPhongBan pb 
+                            FROM tblNhanVien_TuanhCD233018 nv
+                            LEFT JOIN tblPhongBan_ThuanCD233318 pb 
                                 ON nv.MaPB = pb.MaPB AND pb.DeletedAt = 0
-                            LEFT JOIN tblChucVu cv 
+                            LEFT JOIN tblChucVu_KhangCD233181 cv 
                                 ON nv.MaCV = cv.MaCV AND cv.DeletedAt = 0
-                            LEFT JOIN tblLuong lu 
+                            LEFT JOIN tblLuong_ChienCD232928 lu 
                                 ON nv.MaNV = lu.MaNV
-                            LEFT JOIN tblHopDong hd 
+                            LEFT JOIN tblHopDong_ChienCD232928 hd 
                                 ON nv.MaNV = hd.MaNV
                             WHERE nv.DeletedAt = 0
                               AND nv.MaNV LIKE @TenTimKiem
@@ -290,12 +290,12 @@ namespace QuanLyNhanVien3
                             cv.TenCV         AS N'Chức vụ',
                             lu.LuongCoBan    AS N'Lương cơ bản',
                             hd.LoaiHopDong   AS N'Loại hợp đồng'
-                        FROM tblNhanVien nv
-                        LEFT JOIN tblPhongBan pb 
+                        FROM tblNhanVien_TuanhCD233018 nv
+                        LEFT JOIN tblPhongBan_ThuanCD233318 pb 
                             ON nv.MaPB = pb.MaPB AND pb.DeletedAt = 0
-                        LEFT JOIN tblChucVu cv 
+                        LEFT JOIN tblChucVu_KhangCD233181 cv 
                             ON nv.MaCV = cv.MaCV AND cv.DeletedAt = 0
-                        LEFT JOIN tblLuong lu 
+                        LEFT JOIN tblLuong_ChienCD232928 lu 
                             ON nv.MaNV = lu.MaNV
                         LEFT JOIN tblHopDong hd 
                             ON nv.MaNV = hd.MaNV
