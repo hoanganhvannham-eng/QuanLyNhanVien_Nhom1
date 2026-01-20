@@ -7,8 +7,12 @@ namespace QuanLyNhanVien3
     class connectData
     {
         public SqlConnection conn;
+<<<<<<< HEAD
 
         private string strCon = @"Data Source=MSI\SQLEXPRESS;Initial Catalog=QuanLyNhanSu;Integrated Security=True;";
+=======
+        private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom12;Integrated Security=True;";
+>>>>>>> 8077acb180b0113467b713637fc16034f48cb17b
 
         // Mở kết nối
         public void connect()
@@ -52,13 +56,13 @@ namespace QuanLyNhanVien3
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
                 //Có thể log ex.Message nếu muốn debug
                 return false;
             }
         }
-
+        //s
         // Thực thi câu lệnh SQL trả về DataTable
         public DataTable getDataTable(string query)
         {
