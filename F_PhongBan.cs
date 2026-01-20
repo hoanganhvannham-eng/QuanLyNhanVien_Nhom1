@@ -48,7 +48,7 @@ namespace QuanLyNhanVien3
                                                     DiaChi AS [Địa Chỉ],
                                                     SoDienThoai AS [Số Điện Thoại],
                                                     GhiChu AS [Ghi Chú]
-                                                FROM tblPhongBan
+                                                FROM tblPhongBan_ThuanCD233318
                                                 WHERE DeletedAt = 0
                                                 ORDER BY MaPB;
                                                 ";
@@ -105,7 +105,7 @@ namespace QuanLyNhanVien3
 
 
                 // check ma phong ban
-                string checkMaPBSql = "SELECT COUNT(*) FROM tblPhongBan  WHERE MaPB  = @MaPB  AND DeletedAt = 0";
+                string checkMaPBSql = "SELECT COUNT(*) FROM tblPhongBan_ThuanCD233318  WHERE MaPB  = @MaPB  AND DeletedAt = 0";
                 using (SqlCommand cmdcheckMaPBSql = new SqlCommand(checkMaPBSql, cn.conn))
                 {
                     cmdcheckMaPBSql.Parameters.AddWithValue("@MaPB", tbmaPB.Text);
@@ -120,7 +120,7 @@ namespace QuanLyNhanVien3
                     }
                 }
 
-                string checkdiachiTenPB = "SELECT COUNT(*) FROM tblPhongBan  WHERE TenPB  = @TenPB AND DiaChi  = @DiaChi";
+                string checkdiachiTenPB = "SELECT COUNT(*) FROM tblPhongBan_ThuanCD233318  WHERE TenPB  = @TenPB AND DiaChi  = @DiaChi";
                 using (SqlCommand cmd = new SqlCommand(checkdiachiTenPB, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@TenPB", tbTenPB.Text.Trim());
@@ -136,7 +136,7 @@ namespace QuanLyNhanVien3
                     }
                 }
 
-                string sqltblNhanVien = @"INSERT INTO tblPhongBan 
+                string sqltblNhanVien = @"INSERT INTO tblPhongBan_ThuanCD233318 
                            (MaPB, TenPB,  DiaChi, SoDienThoai, Ghichu, DeletedAt)
                            VALUES ( @MaPB, @TenPB, @DiaChi, @SoDienThoai, @GhiChu, 0)";
 
@@ -195,7 +195,7 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    string query = "UPDATE tblPhongBan SET DeletedAt = 1 WHERE MaPB = @MaPB";
+                    string query = "UPDATE tblPhongBan_ThuanCD233318 SET DeletedAt = 1 WHERE MaPB = @MaPB";
                     using (SqlCommand cmd = new SqlCommand(query, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaPB", tbmaPB.Text);
@@ -252,7 +252,7 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    string sql = @"UPDATE tblPhongBan SET TenPB = @TenPB, DiaChi = @DiaChi, SoDienThoai = @SoDienThoai, GhiChu= @GhiChu, DeletedAt = 0 WHERE MaPB = @MaPB";
+                    string sql = @"UPDATE tblPhongBan_ThuanCD233318 SET TenPB = @TenPB, DiaChi = @DiaChi, SoDienThoai = @SoDienThoai, GhiChu= @GhiChu, DeletedAt = 0 WHERE MaPB = @MaPB";
                     using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaPB", tbmaPB.Text.Trim());
@@ -427,7 +427,7 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-                string query = @" SELECT MaPB, TenPB, DiaChi, SoDienThoai, Ghichu FROM tblPhongBan WHERE DeletedAt =1 ORDER BY MaPB";
+                string query = @" SELECT MaPB, TenPB, DiaChi, SoDienThoai, Ghichu FROM tblPhongBan_ThuanCD233318 WHERE DeletedAt =1 ORDER BY MaPB";
                 using (SqlDataAdapter da = new SqlDataAdapter(query, cn.conn))
                 {
                     DataTable dt = new DataTable();
@@ -453,7 +453,7 @@ namespace QuanLyNhanVien3
                 }
 
                 cn.connect();
-                string query = "SELECT COUNT(*) FROM tblPhongBan WHERE MaPB = @MaPB AND DeletedAt = 1";
+                string query = "SELECT COUNT(*) FROM tblPhongBan_ThuanCD233318 WHERE MaPB = @MaPB AND DeletedAt = 1";
                 using (SqlCommand cmdcheckPB = new SqlCommand(query, cn.conn))
                 {
                     cmdcheckPB.Parameters.AddWithValue("@MaPB", tbmaPB.Text.Trim());
@@ -476,7 +476,7 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
-                string sqMKkhoiphuc = "SELECT * FROM tblTaiKhoan WHERE Quyen = @Quyen AND MatKhau = @MatKhau";
+                string sqMKkhoiphuc = "SELECT * FROM tblTaiKhoan_KhangCD233181 WHERE Quyen = @Quyen AND MatKhau = @MatKhau";
                 SqlCommand cmdkhoiphuc = new SqlCommand(sqMKkhoiphuc, cn.conn);
                 cmdkhoiphuc.Parameters.AddWithValue("@Quyen", "Admin");
                 cmdkhoiphuc.Parameters.AddWithValue("@MatKhau", tbMKkhoiphuc.Text);
@@ -504,7 +504,7 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     tbMKkhoiphuc.Text = "";
-                    string querytblPhongBan = "UPDATE tblPhongBan SET DeletedAt = 0 WHERE MaPB = @MaPB";
+                    string querytblPhongBan = "UPDATE tblPhongBan_ThuanCD233318 SET DeletedAt = 0 WHERE MaPB = @MaPB";
                     using (SqlCommand cmd = new SqlCommand(querytblPhongBan, cn.conn))
                     {
                         // DELETE FROM tblNhanVien WHERE MaNV = @MaNV / UPDATE tblNhanVien SET DeletedAt = 1 WHERE MaNV = @MaNV
