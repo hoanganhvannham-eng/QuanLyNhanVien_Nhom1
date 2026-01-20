@@ -7,12 +7,7 @@ namespace QuanLyNhanVien3
     class connectData
     {
         public SqlConnection conn;
-<<<<<<< HEAD
-
-        private string strCon = @"Data Source=MSI\SQLEXPRESS;Initial Catalog=QuanLyNhanSu;Integrated Security=True;";
-=======
         private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom12;Integrated Security=True;";
->>>>>>> 8077acb180b0113467b713637fc16034f48cb17b
 
         // Mở kết nối
         public void connect()
