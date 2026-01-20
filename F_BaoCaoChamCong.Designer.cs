@@ -51,7 +51,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1437, 122);
+            this.panel1.Size = new System.Drawing.Size(1616, 122);
             this.panel1.TabIndex = 3;
             // 
             // label1
@@ -59,7 +59,7 @@
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 25.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(520, 56);
+            this.label1.Location = new System.Drawing.Point(610, 56);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(387, 49);
             this.label1.TabIndex = 0;
@@ -76,14 +76,14 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 122);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1437, 219);
+            this.panel2.Size = new System.Drawing.Size(1616, 219);
             this.panel2.TabIndex = 4;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // txtTimkiem
             // 
             this.txtTimkiem.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTimkiem.Location = new System.Drawing.Point(1074, 66);
+            this.txtTimkiem.Location = new System.Drawing.Point(1235, 78);
             this.txtTimkiem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtTimkiem.Name = "txtTimkiem";
             this.txtTimkiem.Size = new System.Drawing.Size(187, 28);
@@ -92,7 +92,7 @@
             // btnTimKiem
             // 
             this.btnTimKiem.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTimKiem.Location = new System.Drawing.Point(728, 58);
+            this.btnTimKiem.Location = new System.Drawing.Point(889, 70);
             this.btnTimKiem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnTimKiem.Name = "btnTimKiem";
             this.btnTimKiem.Size = new System.Drawing.Size(330, 42);
@@ -104,7 +104,7 @@
             // btnXuat
             // 
             this.btnXuat.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnXuat.Location = new System.Drawing.Point(926, 133);
+            this.btnXuat.Location = new System.Drawing.Point(1087, 145);
             this.btnXuat.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnXuat.Name = "btnXuat";
             this.btnXuat.Size = new System.Drawing.Size(132, 41);
@@ -116,7 +116,7 @@
             // dtpThoiGian
             // 
             this.dtpThoiGian.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpThoiGian.Location = new System.Drawing.Point(211, 16);
+            this.dtpThoiGian.Location = new System.Drawing.Point(372, 28);
             this.dtpThoiGian.Name = "dtpThoiGian";
             this.dtpThoiGian.Size = new System.Drawing.Size(284, 28);
             this.dtpThoiGian.TabIndex = 2;
@@ -125,7 +125,7 @@
             // btnDiTreVeSom
             // 
             this.btnDiTreVeSom.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDiTreVeSom.Location = new System.Drawing.Point(211, 115);
+            this.btnDiTreVeSom.Location = new System.Drawing.Point(372, 127);
             this.btnDiTreVeSom.Name = "btnDiTreVeSom";
             this.btnDiTreVeSom.Size = new System.Drawing.Size(463, 59);
             this.btnDiTreVeSom.TabIndex = 1;
@@ -136,7 +136,7 @@
             // btnSoNgayLamViec
             // 
             this.btnSoNgayLamViec.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSoNgayLamViec.Location = new System.Drawing.Point(211, 54);
+            this.btnSoNgayLamViec.Location = new System.Drawing.Point(372, 66);
             this.btnSoNgayLamViec.Name = "btnSoNgayLamViec";
             this.btnSoNgayLamViec.Size = new System.Drawing.Size(463, 46);
             this.btnSoNgayLamViec.TabIndex = 0;
@@ -150,7 +150,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 341);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1437, 415);
+            this.panel3.Size = new System.Drawing.Size(1616, 415);
             this.panel3.TabIndex = 5;
             // 
             // dtGridViewBCChamCong
@@ -165,14 +165,14 @@
             this.dtGridViewBCChamCong.ReadOnly = true;
             this.dtGridViewBCChamCong.RowHeadersWidth = 51;
             this.dtGridViewBCChamCong.RowTemplate.Height = 24;
-            this.dtGridViewBCChamCong.Size = new System.Drawing.Size(1437, 415);
+            this.dtGridViewBCChamCong.Size = new System.Drawing.Size(1616, 415);
             this.dtGridViewBCChamCong.TabIndex = 122;
             // 
             // F_BaoCaoChamCong
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1437, 756);
+            this.ClientSize = new System.Drawing.Size(1616, 756);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
