@@ -146,10 +146,10 @@
             // 
             this.btnrestar.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnrestar.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnrestar.Location = new System.Drawing.Point(416, 315);
+            this.btnrestar.Location = new System.Drawing.Point(409, 308);
             this.btnrestar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnrestar.Name = "btnrestar";
-            this.btnrestar.Size = new System.Drawing.Size(134, 44);
+            this.btnrestar.Size = new System.Drawing.Size(145, 47);
             this.btnrestar.TabIndex = 188;
             this.btnrestar.Text = "Refresh";
             this.btnrestar.UseVisualStyleBackColor = true;
