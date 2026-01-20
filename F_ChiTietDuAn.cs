@@ -441,7 +441,7 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-                string query = @" SELECT MaNV, MaDA, VaiTro, Ghichu FROM tblChiTietDuAn WHERE DeletedAt = 1 ORDER BY MaNV;";
+                string query = @" SELECT MaNV, MaDA, VaiTro, Ghichu FROM tblChiTietDuAn_KienCD233824 WHERE DeletedAt = 1 ORDER BY MaNV;";
                 using (SqlDataAdapter da = new SqlDataAdapter(query, cn.conn))
                 {
                     DataTable dt = new DataTable();
