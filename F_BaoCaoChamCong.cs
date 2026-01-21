@@ -50,7 +50,6 @@ namespace QuanLyNhanVien3
             currentMode = 1; // Đặt chế độ là Số ngày làm việc
             LoadSoNgayLamViec();
         }
-
         private void LoadSoNgayLamViec()
         {
             try
@@ -62,57 +61,49 @@ namespace QuanLyNhanVien3
                 cn.connect();
 
                 string sql = @"
-        SET DATEFIRST 7;
+SET DATEFIRST 7;
 
-        -- 🔹 Danh sách ngày trong tháng
-        WITH AllDays AS (
-            SELECT 
-                DATEADD(DAY, v.number, DATEFROMPARTS(@Nam, @Thang, 1)) AS Ngay
-            FROM master.dbo.spt_values v
-            WHERE v.type = 'P'
-              AND v.number < DAY(EOMONTH(DATEFROMPARTS(@Nam, @Thang, 1)))
-        ),
+-- 🔹 Danh sách ngày trong tháng
+WITH AllDays AS (
+    SELECT 
+        DATEADD(DAY, v.number, DATEFROMPARTS(@Nam, @Thang, 1)) AS Ngay
+    FROM master.dbo.spt_values v
+    WHERE v.type = 'P'
+      AND v.number < DAY(EOMONTH(DATEFROMPARTS(@Nam, @Thang, 1)))
+),
 
-        -- 🔹 Ngày công chuẩn (trừ Chủ nhật)
-        SoNgayCongChuan AS (
-            SELECT COUNT(*) AS SoNgayCongChuan
-            FROM AllDays
-            WHERE DATEPART(WEEKDAY, Ngay) <> 1
-        ),
+-- 🔹 Ngày công chuẩn (trừ Chủ nhật)
+SoNgayCongChuan AS (
+    SELECT COUNT(*) AS SoNgayCongChuan
+    FROM AllDays
+    WHERE DATEPART(WEEKDAY, Ngay) <> 1
+)
 
-        -- 🔹 Nhân viên còn hợp đồng hiệu lực
-        NVConHopDong AS (
-            SELECT DISTINCT nv.Id, nv.MaNV, nv.HoTen
-            FROM tblNhanVien_TuanhCD233018 nv
-            INNER JOIN tblHopDong_ChienCD232928 hd ON nv.MaNV = hd.MaNV
-            WHERE nv.DeletedAt = 0
-              AND hd.DeletedAt = 0
-              AND (hd.NgayKetThuc IS NULL OR hd.NgayKetThuc >= GETDATE())
-        )
+SELECT 
+    nv.MaNV_TuanhCD233018      AS N'Mã NV',
+    nv.HoTen_TuanhCD233018     AS N'Họ tên',
+    @Thang                      AS N'Tháng',
+    @Nam                        AS N'Năm',
 
-        SELECT 
-            nv.MaNV      AS N'Mã NV',
-            nv.HoTen     AS N'Họ tên',
-            @Thang       AS N'Tháng',
-            @Nam         AS N'Năm',
+    -- 🔹 Số ngày làm việc thực tế
+    COUNT(DISTINCT cc.Ngay_TuanhCD233018) AS N'Số ngày làm việc',
 
-            -- 🔹 Số ngày làm việc thực tế
-            COUNT(DISTINCT cc.Ngay) AS N'Số ngày làm việc',
+    -- 🔹 Số ngày công chuẩn
+    s.SoNgayCongChuan AS N'Số ngày công chuẩn'
 
-            -- 🔹 Số ngày công chuẩn
-            s.SoNgayCongChuan AS N'Số ngày công chuẩn'
+FROM tblNhanVien_TuanhCD233018 nv
+LEFT JOIN tblChamCong_TuanhCD233018 cc 
+       ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+      AND cc.DeletedAt_TuanhCD233018 = 0
+      AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+      AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
 
-        FROM NVConHopDong nv
-        LEFT JOIN tblChamCong_TuanhCD233018 cc 
-               ON cc.NhanVienId = nv.Id
-              AND cc.DeletedAt = 0
-              AND MONTH(cc.Ngay) = @Thang
-              AND YEAR(cc.Ngay) = @Nam
+CROSS JOIN SoNgayCongChuan s
 
-        CROSS JOIN SoNgayCongChuan s
+WHERE nv.DeletedAt_TuanhCD233018 = 0
 
-        GROUP BY nv.MaNV, nv.HoTen, s.SoNgayCongChuan
-        ORDER BY nv.MaNV";
+GROUP BY nv.MaNV_TuanhCD233018, nv.HoTen_TuanhCD233018, s.SoNgayCongChuan
+ORDER BY nv.MaNV_TuanhCD233018";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
@@ -136,7 +127,6 @@ namespace QuanLyNhanVien3
                 cn.disconnect();
             }
         }
-
         // =======================================================
         // 2. Nút: Nhân viên đi trễ hoặc về sớm
         // =======================================================
@@ -167,20 +157,20 @@ namespace QuanLyNhanVien3
 
                 string sql = @"
             SELECT 
-                NV.Id,
-                NV.MaNV,
-                NV.HoTen,
-                CC.Ngay,
-                CC.GioVao,
-                CC.GioVe
+                NV.Id_TuanhCD233018,
+                NV.MaNV_TuanhCD233018,
+                NV.HoTen_TuanhCD233018,
+                CC.Ngay_TuanhCD233018,
+                CC.GioVao_TuanhCD233018,
+                CC.GioVe_TuanhCD233018
             FROM tblNhanVien_TuanhCD233018 NV
             LEFT JOIN tblChamCong_TuanhCD233018 CC 
-                ON NV.Id = CC.NhanVienId
-                AND MONTH(CC.Ngay) = @Thang
-                AND YEAR(CC.Ngay) = @Nam
-                AND CC.DeletedAt = 0
-            WHERE NV.DeletedAt = 0
-            ORDER BY NV.MaNV, CC.Ngay";
+                ON NV.Id_TuanhCD233018 = CC.NhanVienId_TuanhCD233018
+                AND MONTH(CC.Ngay_TuanhCD233018) = @Thang
+                AND YEAR(CC.Ngay_TuanhCD233018) = @Nam
+                AND CC.DeletedAt_TuanhCD233018 = 0
+            WHERE NV.DeletedAt_TuanhCD233018 = 0
+            ORDER BY NV.MaNV_TuanhCD233018, CC.Ngay_TuanhCD233018";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
@@ -198,26 +188,26 @@ namespace QuanLyNhanVien3
                 for (int i = 1; i <= soNgay; i++)
                     table.Columns.Add(i.ToString());
 
-                DataTable dsNV = dtNguon.DefaultView.ToTable(true, "Id", "MaNV", "HoTen");
+                DataTable dsNV = dtNguon.DefaultView.ToTable(true, "Id_TuanhCD233018", "MaNV_TuanhCD233018", "HoTen_TuanhCD233018");
 
                 foreach (DataRow nv in dsNV.Rows)
                 {
                     DataRow row = table.NewRow();
-                    row["Mã NV"] = nv["MaNV"];
-                    row["Họ tên"] = nv["HoTen"];
+                    row["Mã NV"] = nv["MaNV_TuanhCD233018"];
+                    row["Họ tên"] = nv["HoTen_TuanhCD233018"];
 
                     // Mặc định Vắng
                     for (int i = 1; i <= soNgay; i++)
                         row[i.ToString()] = "V";
 
                     DataRow[] chamCong = dtNguon.Select(
-                        $"Id = {nv["Id"]} AND Ngay IS NOT NULL");
+                        $"Id_TuanhCD233018 = {nv["Id_TuanhCD233018"]} AND Ngay_TuanhCD233018 IS NOT NULL");
 
                     foreach (DataRow cc in chamCong)
                     {
-                        DateTime ngay = Convert.ToDateTime(cc["Ngay"]);
-                        TimeSpan gioVao = (TimeSpan)cc["GioVao"];
-                        TimeSpan gioVe = (TimeSpan)cc["GioVe"];
+                        DateTime ngay = Convert.ToDateTime(cc["Ngay_TuanhCD233018"]);
+                        TimeSpan gioVao = (TimeSpan)cc["GioVao_TuanhCD233018"];
+                        TimeSpan gioVe = (TimeSpan)cc["GioVe_TuanhCD233018"];
 
                         double soGio = Math.Round((gioVe - gioVao).TotalHours, 2);
 
@@ -351,48 +341,48 @@ namespace QuanLyNhanVien3
                 if (currentMode == 1)
                 {
                     // --- TÌM KIẾM TRONG BẢNG SỐ NGÀY LÀM VIỆC ---
-                    sql = @"SELECT nv.MaNV as 'Mã Nhân Viên', nv.HoTen as 'Họ Tên', 
-                            pb.TenPB as N'Tên Phòng Ban', COUNT(cc.Id) AS N'Số Ngày Làm Việc'
+                    sql = @"SELECT nv.MaNV_TuanhCD233018 as 'Mã Nhân Viên', nv.HoTen_TuanhCD233018 as 'Họ Tên', 
+                            cv.TenCV_KhangCD233181 as N'Tên Chức Vụ', COUNT(cc.Id_TuanhCD233018) AS N'Số Ngày Làm Việc'
                             FROM tblNhanVien_TuanhCD233018 nv
-                            JOIN tblPhongBan_ThuanCD233318 pb ON nv.MaPB = pb.MaPB
-                            JOIN tblChamCong_TuanhCD233018 cc ON nv.MaNV = cc.MaNV 
-                            WHERE nv.DeletedAt = 0 
-                              AND cc.DeletedAt = 0
-                              AND MONTH(cc.Ngay) = @Thang 
-                              AND YEAR(cc.Ngay) = @Nam
-                              AND (nv.HoTen LIKE @TuKhoa OR nv.MaNV LIKE @TuKhoa) -- Điều kiện tìm kiếm thêm vào đây
-                            GROUP BY nv.MaNV, nv.HoTen, pb.TenPB
-                            ORDER BY N'Số Ngày Làm Việc' DESC, nv.HoTen;";
+                            JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+                            JOIN tblChamCong_TuanhCD233018 cc ON nv.Id_TuanhCD233018 = cc.NhanVienId_TuanhCD233018
+                            WHERE nv.DeletedAt_TuanhCD233018 = 0 
+                              AND cc.DeletedAt_TuanhCD233018 = 0
+                              AND MONTH(cc.Ngay_TuanhCD233018) = @Thang 
+                              AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                              AND (nv.HoTen_TuanhCD233018 LIKE @TuKhoa OR nv.MaNV_TuanhCD233018 LIKE @TuKhoa)
+                            GROUP BY nv.MaNV_TuanhCD233018, nv.HoTen_TuanhCD233018, cv.TenCV_KhangCD233181
+                            ORDER BY N'Số Ngày Làm Việc' DESC, nv.HoTen_TuanhCD233018;";
                 }
                 else if (currentMode == 2)
                 {
                     // --- TÌM KIẾM TRONG BẢNG ĐI TRỄ VỀ SỚM ---
-                    sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', cc.Ngay as N'Ngày', cc.GioVao as N'Giờ Vào', cc.GioVe as N'Giờ Về',
+                    sql = @"SELECT nv.MaNV_TuanhCD233018 as N'Mã Nhân Viên', nv.HoTen_TuanhCD233018 as N'Họ Tên', cc.Ngay_TuanhCD233018 as N'Ngày', cc.GioVao_TuanhCD233018 as N'Giờ Vào', cc.GioVe_TuanhCD233018 as N'Giờ Về',
                             CASE 
-                                WHEN cc.GioVao <= '08:00:00' AND cc.GioVe >= '17:00:00' THEN N'Đi làm đúng giờ'
-                                WHEN cc.GioVao <= '08:00:00' AND cc.GioVe < '17:00:00' THEN N'Đi đúng giờ - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe, '17:00:00') AS NVARCHAR(20)) + N' phút'
-                                WHEN cc.GioVao > '08:00:00' AND cc.GioVe >= '17:00:00' THEN N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về đúng giờ'
-                                ELSE N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao) AS NVARCHAR(20)) + N' phút - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe, '17:00:00') AS NVARCHAR(20)) + N' phút'
+                                WHEN cc.GioVao_TuanhCD233018 <= '08:00:00' AND cc.GioVe_TuanhCD233018 >= '17:00:00' THEN N'Đi làm đúng giờ'
+                                WHEN cc.GioVao_TuanhCD233018 <= '08:00:00' AND cc.GioVe_TuanhCD233018 < '17:00:00' THEN N'Đi đúng giờ - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe_TuanhCD233018, '17:00:00') AS NVARCHAR(20)) + N' phút'
+                                WHEN cc.GioVao_TuanhCD233018 > '08:00:00' AND cc.GioVe_TuanhCD233018 >= '17:00:00' THEN N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao_TuanhCD233018) AS NVARCHAR(20)) + N' phút - Về đúng giờ'
+                                ELSE N'Đi muộn ' + CAST(DATEDIFF(MINUTE, '08:00:00', cc.GioVao_TuanhCD233018) AS NVARCHAR(20)) + N' phút - Về sớm ' + CAST(DATEDIFF(MINUTE, cc.GioVe_TuanhCD233018, '17:00:00') AS NVARCHAR(20)) + N' phút'
                             END AS N'Trạng Thái'
                             FROM tblChamCong_TuanhCD233018 cc
-                            JOIN tblNhanVien_TuanhCD233018 nv ON cc.MaNV = nv.MaNV
-                            WHERE cc.DeletedAt = 0
-                              AND MONTH(cc.Ngay) = @Thang 
-                              AND YEAR(cc.Ngay) = @Nam
-                              AND (nv.HoTen LIKE @TuKhoa OR nv.MaNV LIKE @TuKhoa) -- Điều kiện tìm kiếm thêm vào đây
-                            ORDER BY cc.Ngay DESC, nv.HoTen;";
+                            JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                            WHERE cc.DeletedAt_TuanhCD233018 = 0
+                              AND MONTH(cc.Ngay_TuanhCD233018) = @Thang 
+                              AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                              AND (nv.HoTen_TuanhCD233018 LIKE @TuKhoa OR nv.MaNV_TuanhCD233018 LIKE @TuKhoa)
+                            ORDER BY cc.Ngay_TuanhCD233018 DESC, nv.HoTen_TuanhCD233018;";
                 }
                 else
                 {
                     // --- MẶC ĐỊNH (Nếu chưa chọn bảng nào): Tìm lịch sử chấm công gốc ---
-                    sql = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as 'Họ Tên', cc.Ngay as N'Ngày', cc.GioVao as N'Giờ Vào', cc.GioVe as N'Giờ Về'
+                    sql = @"SELECT nv.MaNV_TuanhCD233018 as N'Mã Nhân Viên', nv.HoTen_TuanhCD233018 as 'Họ Tên', cc.Ngay_TuanhCD233018 as N'Ngày', cc.GioVao_TuanhCD233018 as N'Giờ Vào', cc.GioVe_TuanhCD233018 as N'Giờ Về'
                             FROM tblChamCong_TuanhCD233018 cc
-                            JOIN tblNhanVien_TuanhCD233018 nv ON cc.MaNV = nv.MaNV
-                            WHERE cc.DeletedAt = 0
-                              AND MONTH(cc.Ngay) = @Thang 
-                              AND YEAR(cc.Ngay) = @Nam
-                              AND (nv.HoTen LIKE @TuKhoa OR nv.MaNV LIKE @TuKhoa)
-                            ORDER BY cc.Ngay DESC;";
+                            JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                            WHERE cc.DeletedAt_TuanhCD233018 = 0
+                              AND MONTH(cc.Ngay_TuanhCD233018) = @Thang 
+                              AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                              AND (nv.HoTen_TuanhCD233018 LIKE @TuKhoa OR nv.MaNV_TuanhCD233018 LIKE @TuKhoa)
+                            ORDER BY cc.Ngay_TuanhCD233018 DESC;";
                 }
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
