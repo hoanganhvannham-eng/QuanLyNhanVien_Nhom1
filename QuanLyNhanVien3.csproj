@@ -42,6 +42,9 @@
     <Reference Include="AForge.Video.DirectShow, Version=2.2.5.0, Culture=neutral, PublicKeyToken=61ea4348d43881b7, processorArchitecture=MSIL">
       <HintPath>packages\AForge.Video.DirectShow.2.2.5\lib\AForge.Video.DirectShow.dll</HintPath>
     </Reference>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>packages\BouncyCastle.Cryptography.2.4.0\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
     <Reference Include="ClosedXML, Version=0.105.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
       <HintPath>packages\ClosedXML.0.105.0\lib\netstandard2.0\ClosedXML.dll</HintPath>
     </Reference>
@@ -119,6 +122,12 @@
     </Compile>
     <Compile Include="F_BaoCaoChamCong.Designer.cs">
       <DependentUpon>F_BaoCaoChamCong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="F_BaoCaoChiTiet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="F_BaoCaoChiTiet.Designer.cs">
+      <DependentUpon>F_BaoCaoChiTiet.cs</DependentUpon>
     </Compile>
     <Compile Include="F_BaoCaoDuAn.cs">
       <SubType>Form</SubType>
@@ -233,6 +242,9 @@
     </Compile>
     <EmbeddedResource Include="F_BaoCaoChamCong.resx">
       <DependentUpon>F_BaoCaoChamCong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="F_BaoCaoChiTiet.resx">
+      <DependentUpon>F_BaoCaoChiTiet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="F_BaoCaoDuAn.resx">
       <DependentUpon>F_BaoCaoDuAn.cs</DependentUpon>
