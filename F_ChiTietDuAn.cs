@@ -14,7 +14,7 @@ using static QuanLyNhanVien3.F_FormMain;
 
 namespace QuanLyNhanVien3
 {
-    public partial class F_ChiTietDuAn: Form
+    public partial class F_ChiTietDuAn : Form
     {
         public F_ChiTietDuAn()
         {
@@ -37,19 +37,21 @@ namespace QuanLyNhanVien3
         }
         private void LoadcbNV()
         {
-            // load chuc vu combobox
             try
             {
                 cn.connect();
-                string sqlLoadcomboBoxttblChiTietDuAn = "SELECT * FROM tblNhanVien_TuanhCd233018 WHERE DeletedAt = 0";
+                string sqlLoadcomboBoxttblChiTietDuAn = @"
+                    SELECT MaNV_TuanhCD233018 
+                    FROM tblNhanVien_TuanhCD233018 
+                    WHERE DeletedAt_TuanhCD233018 = 0";
                 using (SqlDataAdapter da = new SqlDataAdapter(sqlLoadcomboBoxttblChiTietDuAn, cn.conn))
                 {
                     DataSet ds = new DataSet();
                     da.Fill(ds);
 
                     cbMaNV.DataSource = ds.Tables[0];
-                    cbMaNV.DisplayMember = "MaNV"; // cot hien thi
-                    cbMaNV.ValueMember = "MaNV"; // cot gia tri
+                    cbMaNV.DisplayMember = "MaNV_TuanhCD233018";
+                    cbMaNV.ValueMember = "MaNV_TuanhCD233018";
                 }
             }
             catch (Exception ex)
@@ -59,19 +61,21 @@ namespace QuanLyNhanVien3
         }
         private void LoadcbDA()
         {
-            // load chuc vu combobox
             try
             {
                 cn.connect();
-                string sqlLoadcomboBoxttblChiTietDuAn = "SELECT * FROM tblDuAn_KienCD233824 WHERE DeletedAt = 0";
+                string sqlLoadcomboBoxttblChiTietDuAn = @"
+                    SELECT MaDA_KienCD233824 
+                    FROM tblDuAn_KienCD233824 
+                    WHERE DeletedAt_KienCD233824 = 0";
                 using (SqlDataAdapter da = new SqlDataAdapter(sqlLoadcomboBoxttblChiTietDuAn, cn.conn))
                 {
                     DataSet ds = new DataSet();
                     da.Fill(ds);
 
                     cbMaDuAn.DataSource = ds.Tables[0];
-                    cbMaDuAn.DisplayMember = "MaDA"; // cot hien thi
-                    cbMaDuAn.ValueMember = "MaDA"; // cot gia tri
+                    cbMaDuAn.DisplayMember = "MaDA_KienCD233824";
+                    cbMaDuAn.ValueMember = "MaDA_KienCD233824";
                 }
             }
             catch (Exception ex)
@@ -86,7 +90,15 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataChiTietDuAn = @"SELECT MaNV as 'Mã nhân viên', MaDA as 'Mã dự án', VaiTro as 'Vai trò', Ghichu as 'Ghi chú' FROM tblChiTietDuAn_KienCD233824 WHERE DeletedAt = 0 ORDER BY MaNV;";
+                string sqlLoadDataChiTietDuAn = @"
+                    SELECT 
+                        MaNV_TuanhCD233018 as 'Mã nhân viên', 
+                        MaDA_KienCD233824 as 'Mã dự án', 
+                        VaiTro_KienCD233824 as 'Vai trò', 
+                        Ghichu_KienCD233824 as 'Ghi chú' 
+                    FROM tblChiTietDuAn_KienCD233824 
+                    WHERE DeletedAt_KienCD233824 = 0 
+                    ORDER BY MaNV_TuanhCD233018;";
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(sqlLoadDataChiTietDuAn, cn.conn))
                 {
@@ -126,7 +138,7 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
                 if (
-                    string.IsNullOrWhiteSpace(cbMaNV.Text)||
+                    string.IsNullOrWhiteSpace(cbMaNV.Text) ||
                     cbMaDuAn.SelectedIndex == -1 ||
                     string.IsNullOrWhiteSpace(tbVaiTro.Text))
                 {
@@ -135,31 +147,11 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
-
-
-
-                // check ma Nhan vien
-                //string checkMaDASql = "SELECT COUNT(*) FROM tblChiTietDuAn  WHERE MaNV  = @MaNV  AND DeletedAt = 0";
-                //using (SqlCommand cmdcheckMaDASql = new SqlCommand(checkMaDASql, cn.conn))
-                //{
-                //    cmdcheckMaDASql.Parameters.AddWithValue("@MaNV", cbMaNV.Text);
-                //    int MaHDCount = (int)cmdcheckMaDASql.ExecuteScalar();
-
-                //    if (MaHDCount != 0)
-                //    {
-                //        MessageBox.Show("Mã Nhân Viên đã tồn tại trong hệ thống!", "Thông báo",
-                //        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //        cn.disconnect();
-                //        return;
-                //    }
-                //}
-
-
-                
-
-                string sqltblChiTietDuAn = @"INSERT INTO tblChiTietDuAn_KienCD233824
-                           (MaNV, MaDA, VaiTro, Ghichu, DeletedAt)
-                           VALUES ( @MaNV, @MaDA, @VaiTro, @GhiChu, 0)";
+                string sqltblChiTietDuAn = @"
+                    INSERT INTO tblChiTietDuAn_KienCD233824
+                        (MaNV_TuanhCD233018, MaDA_KienCD233824, VaiTro_KienCD233824, Ghichu_KienCD233824, DeletedAt_KienCD233824)
+                    VALUES 
+                        (@MaNV, @MaDA, @VaiTro, @GhiChu, 0)";
 
                 using (SqlCommand cmd = new SqlCommand(sqltblChiTietDuAn, cn.conn))
                 {
@@ -212,7 +204,10 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    string query = "UPDATE tblChiTietDuAn_KienCD233824 SET DeletedAt = 1 WHERE MaNV = @MaNV";
+                    string query = @"
+                        UPDATE tblChiTietDuAn_KienCD233824 
+                        SET DeletedAt_KienCD233824 = 1 
+                        WHERE MaNV_TuanhCD233018 = @MaNV";
                     using (SqlCommand cmd = new SqlCommand(query, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaNV", cbMaNV.Text);
@@ -254,28 +249,6 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
-
-
-
-                // check ma Nhan vien
-                //string checkMaDASql = "SELECT COUNT(*) FROM tblChiTietDuAn  WHERE MaNV  = @MaNV  AND DeletedAt = 0";
-                //using (SqlCommand cmdcheckMaDASql = new SqlCommand(checkMaDASql, cn.conn))
-                //{
-                //    cmdcheckMaDASql.Parameters.AddWithValue("@MaNV", cbMaNV.Text);
-                //    int MaHDCount = (int)cmdcheckMaDASql.ExecuteScalar();
-
-                //    if (MaHDCount != 0)
-                //    {
-                //        MessageBox.Show("Mã Nhân Viên đã tồn tại trong hệ thống!", "Thông báo",
-                //        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //        cn.disconnect();
-                //        return;
-                //    }
-                //}
-
-
-
-
                 DialogResult confirm = MessageBox.Show(
                    "Bạn có chắc chắn muốn sửa chi tiết dự án này không?",
                    "Xác nhận sửa",
@@ -286,7 +259,13 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    string sql = @"UPDATE tblChiTietDuAn_KienCD233824 SET MaDA = @MaDA,Vaitro =@Vaitro ,GhiChu = @GhiChu, DeletedAt = 0 WHERE MaNV = @MaNV";
+                    string sql = @"
+                        UPDATE tblChiTietDuAn_KienCD233824 
+                        SET MaDA_KienCD233824 = @MaDA,
+                            VaiTro_KienCD233824 = @Vaitro,
+                            GhiChu_KienCD233824 = @GhiChu, 
+                            DeletedAt_KienCD233824 = 0 
+                        WHERE MaNV_TuanhCD233018 = @MaNV";
                     using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaNV", cbMaNV.SelectedValue);
@@ -326,15 +305,21 @@ namespace QuanLyNhanVien3
             {
                 if (string.IsNullOrEmpty(cbMaNV.Text))
                 {
-                    MessageBox.Show("Vui lòng nhập mã Nhân Viên để tìm kiếm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning); // hoặc mã
+                    MessageBox.Show("Vui lòng nhập mã Nhân Viên để tìm kiếm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 cn.connect();
                 string MaNVtimkiem = cbMaNV.Text.Trim();
-                string sql = @" SELECT MaNV, MaDA, VaiTro, Ghichu
-                                FROM tblChiTietDuAn_KienCD233824
-                                WHERE DeletedAt = 0 AND MaNV LIKE @MaNV
-                                ORDER BY MaNV";
+                string sql = @"
+                    SELECT 
+                        MaNV_TuanhCD233018, 
+                        MaDA_KienCD233824, 
+                        VaiTro_KienCD233824, 
+                        Ghichu_KienCD233824
+                    FROM tblChiTietDuAn_KienCD233824
+                    WHERE DeletedAt_KienCD233824 = 0 
+                      AND MaNV_TuanhCD233018 LIKE @MaNV
+                    ORDER BY MaNV_TuanhCD233018";
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@MaNV", "%" + MaNVtimkiem + "%");
@@ -441,7 +426,15 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-                string query = @" SELECT MaNV, MaDA, VaiTro, Ghichu FROM tblChiTietDuAn_KienCD233824 WHERE DeletedAt = 1 ORDER BY MaNV;";
+                string query = @"
+                    SELECT 
+                        MaNV_TuanhCD233018, 
+                        MaDA_KienCD233824, 
+                        VaiTro_KienCD233824, 
+                        Ghichu_KienCD233824 
+                    FROM tblChiTietDuAn_KienCD233824 
+                    WHERE DeletedAt_KienCD233824 = 1 
+                    ORDER BY MaNV_TuanhCD233018;";
                 using (SqlDataAdapter da = new SqlDataAdapter(query, cn.conn))
                 {
                     DataTable dt = new DataTable();
@@ -467,7 +460,11 @@ namespace QuanLyNhanVien3
                 }
 
                 cn.connect();
-                string query = "SELECT COUNT(*) FROM tblChiTietDuAn_KienCD233824 WHERE MaNV = @MaNV AND DeletedAt = 1";
+                string query = @"
+                    SELECT COUNT(*) 
+                    FROM tblChiTietDuAn_KienCD233824 
+                    WHERE MaNV_TuanhCD233018 = @MaNV 
+                      AND DeletedAt_KienCD233824 = 1";
                 using (SqlCommand cmdcheckPB = new SqlCommand(query, cn.conn))
                 {
                     cmdcheckPB.Parameters.AddWithValue("@MaNV", cbMaNV.SelectedValue);
@@ -482,7 +479,6 @@ namespace QuanLyNhanVien3
                     }
                 }
 
-                //
                 if (tbMKKhoiPhuc.Text == "")
                 {
                     MessageBox.Show("Vui lòng nhập mật khẩu để khôi phục", "Thông báo", MessageBoxButtons.OK,
@@ -490,7 +486,11 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
-                string sqMKKhoiPhuc = "SELECT * FROM tblTaiKhoan_KhangCD233181 WHERE Quyen = @Quyen AND MatKhau = @MatKhau";
+                string sqMKKhoiPhuc = @"
+                    SELECT * 
+                    FROM tblTaiKhoan_KhangCD233181 
+                    WHERE Quyen_KhangCD233181 = @Quyen 
+                      AND MatKhau_KhangCD233181 = @MatKhau";
                 SqlCommand cmdkhoiphuc = new SqlCommand(sqMKKhoiPhuc, cn.conn);
                 cmdkhoiphuc.Parameters.AddWithValue("@Quyen", "Admin");
                 cmdkhoiphuc.Parameters.AddWithValue("@MatKhau", tbMKKhoiPhuc.Text);
@@ -506,7 +506,6 @@ namespace QuanLyNhanVien3
                 }
                 reader.Close();
 
-
                 DialogResult confirm = MessageBox.Show(
                     "Bạn có chắc chắn muốn khôi phục chi tiết dữ liệu dự án này không?",
                     "Xác nhận khôi phục",
@@ -514,11 +513,13 @@ namespace QuanLyNhanVien3
                     MessageBoxIcon.Question
                 );
 
-
                 if (confirm == DialogResult.Yes)
                 {
                     tbMKKhoiPhuc.Text = "";
-                    string querytblPhongBan = "UPDATE tblChiTietDuAn_KienCD233824 SET DeletedAt = 0 WHERE MaNV = @MaNV";
+                    string querytblPhongBan = @"
+                        UPDATE tblChiTietDuAn_KienCD233824 
+                        SET DeletedAt_KienCD233824 = 0 
+                        WHERE MaNV_TuanhCD233018 = @MaNV";
                     using (SqlCommand cmd = new SqlCommand(querytblPhongBan, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaNV", cbMaNV.SelectedValue);
@@ -541,10 +542,10 @@ namespace QuanLyNhanVien3
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi " + ex.Message);
-                
+
             }
         }
-        
+
 
         private void CheckHienMK_CheckedChanged(object sender, EventArgs e)
         {
