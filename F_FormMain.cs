@@ -76,7 +76,7 @@ namespace QuanLyNhanVien3
 
         private void ThongTinDuAnToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new F_DuAn());
+            OpenChildForm(new F_DuAnChung());
             //DuAn DA = new DuAn();
             //DA.MdiParent = this;
             //DA.Show();
