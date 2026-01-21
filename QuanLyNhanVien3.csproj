@@ -150,6 +150,12 @@
     <Compile Include="F_ChamCong.Designer.cs">
       <DependentUpon>F_ChamCong.cs</DependentUpon>
     </Compile>
+    <Compile Include="F_ChamCongChiTiet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="F_ChamCongChiTiet.Designer.cs">
+      <DependentUpon>F_ChamCongChiTiet.cs</DependentUpon>
+    </Compile>
     <Compile Include="F_ChiTietDuAn.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -242,6 +248,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="F_ChamCong.resx">
       <DependentUpon>F_ChamCong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="F_ChamCongChiTiet.resx">
+      <DependentUpon>F_ChamCongChiTiet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="F_ChiTietDuAn.resx">
       <DependentUpon>F_ChiTietDuAn.cs</DependentUpon>
