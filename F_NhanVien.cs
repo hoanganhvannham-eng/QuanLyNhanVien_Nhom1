@@ -176,6 +176,7 @@ namespace QuanLyNhanVien3
             LoadcomboBox();
             loadcbbCV();
             LoadNhanVienTheoDieuKien();
+            LoadTongSoNhanVien();
             if (LoginInfo.CurrentUserRole.ToLower() == "user")
             {
                 btnThem.Enabled = false;
@@ -183,7 +184,38 @@ namespace QuanLyNhanVien3
                 btnXoa.Enabled = false;
             }
         }
+        //tong nhan vien 
+        private void LoadTongSoNhanVien()
+        {
+            try
+            {
+                cn.connect();
 
+                string sqlTongNV = @"
+            SELECT COUNT(*) AS TongNV 
+            FROM tblNhanVien_TuanhCD233018
+            WHERE DeletedAt_TuanhCD233018 = 0";
+
+                using (SqlDataAdapter da = new SqlDataAdapter(sqlTongNV, cn.conn))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        lblTongNhanVien.Text = "Tổng số nhân viên: " + dt.Rows[0]["TongNV"].ToString();
+                    }
+                }
+
+                cn.disconnect();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi load tổng nhân viên: " + ex.Message);
+            }
+        }
+
+        //tong nhan vien and
         private void dtGridViewNhanVien_CellClick_2(object sender, DataGridViewCellEventArgs e)
         {
             int i = e.RowIndex;
