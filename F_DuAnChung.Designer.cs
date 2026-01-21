@@ -49,6 +49,8 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tbTenNhanVien = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnXuatPDF = new System.Windows.Forms.Button();
             this.btnXuatExcel = new System.Windows.Forms.Button();
@@ -64,8 +66,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDA)).BeginInit();
@@ -83,7 +83,7 @@
             this.panel1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1743, 896);
+            this.panel1.Size = new System.Drawing.Size(1743, 991);
             this.panel1.TabIndex = 0;
             // 
             // groupBox2
@@ -104,9 +104,9 @@
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(0, 100);
+            this.groupBox2.Location = new System.Drawing.Point(0, 195);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(1743, 397);
             this.groupBox2.TabIndex = 3;
@@ -127,10 +127,10 @@
             this.dgvDA.RowTemplate.Height = 24;
             this.dgvDA.Size = new System.Drawing.Size(1078, 319);
             this.dgvDA.TabIndex = 87;
+            this.dgvDA.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDA_CellClick);
             // 
             // btnSuaDA
             // 
-            this.btnSuaDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnSuaDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSuaDA.Location = new System.Drawing.Point(231, 327);
             this.btnSuaDA.Name = "btnSuaDA";
@@ -138,10 +138,10 @@
             this.btnSuaDA.TabIndex = 54;
             this.btnSuaDA.Text = "Sửa";
             this.btnSuaDA.UseVisualStyleBackColor = true;
+            this.btnSuaDA.Click += new System.EventHandler(this.btnSuaDA_Click);
             // 
             // btnXoaDA
             // 
-            this.btnXoaDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnXoaDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnXoaDA.Location = new System.Drawing.Point(446, 327);
             this.btnXoaDA.Name = "btnXoaDA";
@@ -149,10 +149,10 @@
             this.btnXoaDA.TabIndex = 53;
             this.btnXoaDA.Text = "Xóa";
             this.btnXoaDA.UseVisualStyleBackColor = true;
+            this.btnXoaDA.Click += new System.EventHandler(this.btnXoaDA_Click);
             // 
             // btnThemDA
             // 
-            this.btnThemDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnThemDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnThemDA.Location = new System.Drawing.Point(18, 327);
             this.btnThemDA.Name = "btnThemDA";
@@ -160,10 +160,10 @@
             this.btnThemDA.TabIndex = 52;
             this.btnThemDA.Text = "Thêm";
             this.btnThemDA.UseVisualStyleBackColor = true;
+            this.btnThemDA.Click += new System.EventHandler(this.btnThemDA_Click);
             // 
             // tbGhiChuDA
             // 
-            this.tbGhiChuDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbGhiChuDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbGhiChuDA.Location = new System.Drawing.Point(244, 288);
             this.tbGhiChuDA.Name = "tbGhiChuDA";
@@ -172,7 +172,6 @@
             // 
             // tbMota
             // 
-            this.tbMota.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbMota.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbMota.Location = new System.Drawing.Point(244, 238);
             this.tbMota.Name = "tbMota";
@@ -181,7 +180,6 @@
             // 
             // label7
             // 
-            this.label7.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(14, 291);
@@ -192,7 +190,6 @@
             // 
             // label6
             // 
-            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(14, 241);
@@ -203,7 +200,6 @@
             // 
             // DatePickerNgayKetThuc
             // 
-            this.DatePickerNgayKetThuc.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.DatePickerNgayKetThuc.CustomFormat = "dd/MM/yyyy";
             this.DatePickerNgayKetThuc.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DatePickerNgayKetThuc.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
@@ -214,7 +210,6 @@
             // 
             // DatePickerNgayBatDau
             // 
-            this.DatePickerNgayBatDau.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.DatePickerNgayBatDau.CustomFormat = "dd/MM/yyyy";
             this.DatePickerNgayBatDau.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DatePickerNgayBatDau.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
@@ -225,7 +220,6 @@
             // 
             // tbmaDA
             // 
-            this.tbmaDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbmaDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbmaDA.Location = new System.Drawing.Point(243, 41);
             this.tbmaDA.Name = "tbmaDA";
@@ -234,7 +228,6 @@
             // 
             // tbTenDA
             // 
-            this.tbTenDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbTenDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbTenDA.Location = new System.Drawing.Point(244, 91);
             this.tbTenDA.Name = "tbTenDA";
@@ -243,7 +236,6 @@
             // 
             // label5
             // 
-            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(14, 197);
@@ -254,7 +246,6 @@
             // 
             // label4
             // 
-            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(14, 144);
@@ -265,7 +256,6 @@
             // 
             // label3
             // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(14, 90);
@@ -276,7 +266,6 @@
             // 
             // label2
             // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(14, 40);
@@ -300,7 +289,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 28.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(685, 9);
+            this.label1.Location = new System.Drawing.Point(886, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(338, 53);
             this.label1.TabIndex = 1;
@@ -309,7 +298,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.tbTenNhanVien);
             this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.btnRefresh);
             this.groupBox1.Controls.Add(this.btnXuatPDF);
@@ -328,16 +317,34 @@
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(0, 497);
+            this.groupBox1.Location = new System.Drawing.Point(0, 592);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(1743, 399);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Chi tiết Dự án";
             // 
+            // tbTenNhanVien
+            // 
+            this.tbTenNhanVien.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbTenNhanVien.Location = new System.Drawing.Point(242, 89);
+            this.tbTenNhanVien.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tbTenNhanVien.Name = "tbTenNhanVien";
+            this.tbTenNhanVien.Size = new System.Drawing.Size(329, 27);
+            this.tbTenNhanVien.TabIndex = 96;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(15, 92);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(108, 19);
+            this.label12.TabIndex = 95;
+            this.label12.Text = "Tên Nhân Viên";
+            // 
             // btnRefresh
             // 
-            this.btnRefresh.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnRefresh.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRefresh.Location = new System.Drawing.Point(19, 336);
             this.btnRefresh.Name = "btnRefresh";
@@ -345,10 +352,10 @@
             this.btnRefresh.TabIndex = 94;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // btnXuatPDF
             // 
-            this.btnXuatPDF.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnXuatPDF.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnXuatPDF.Location = new System.Drawing.Point(447, 337);
             this.btnXuatPDF.Name = "btnXuatPDF";
@@ -356,10 +363,10 @@
             this.btnXuatPDF.TabIndex = 93;
             this.btnXuatPDF.Text = "Xuất PDF";
             this.btnXuatPDF.UseVisualStyleBackColor = true;
+            this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
             // 
             // btnXuatExcel
             // 
-            this.btnXuatExcel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnXuatExcel.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnXuatExcel.Location = new System.Drawing.Point(232, 336);
             this.btnXuatExcel.Name = "btnXuatExcel";
@@ -367,10 +374,10 @@
             this.btnXuatExcel.TabIndex = 92;
             this.btnXuatExcel.Text = "Xuất Excel";
             this.btnXuatExcel.UseVisualStyleBackColor = true;
+            this.btnXuatExcel.Click += new System.EventHandler(this.btnXuatExcel_Click);
             // 
             // btnSuaCTDA
             // 
-            this.btnSuaCTDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnSuaCTDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSuaCTDA.Location = new System.Drawing.Point(232, 284);
             this.btnSuaCTDA.Name = "btnSuaCTDA";
@@ -378,10 +385,10 @@
             this.btnSuaCTDA.TabIndex = 91;
             this.btnSuaCTDA.Text = "Sửa";
             this.btnSuaCTDA.UseVisualStyleBackColor = true;
+            this.btnSuaCTDA.Click += new System.EventHandler(this.btnSuaCTDA_Click);
             // 
             // btnXoaCTDA
             // 
-            this.btnXoaCTDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnXoaCTDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnXoaCTDA.Location = new System.Drawing.Point(447, 284);
             this.btnXoaCTDA.Name = "btnXoaCTDA";
@@ -389,10 +396,10 @@
             this.btnXoaCTDA.TabIndex = 90;
             this.btnXoaCTDA.Text = "Xóa";
             this.btnXoaCTDA.UseVisualStyleBackColor = true;
+            this.btnXoaCTDA.Click += new System.EventHandler(this.btnXoaCTDA_Click);
             // 
             // btnThemCTDA
             // 
-            this.btnThemCTDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnThemCTDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnThemCTDA.Location = new System.Drawing.Point(19, 283);
             this.btnThemCTDA.Name = "btnThemCTDA";
@@ -400,6 +407,7 @@
             this.btnThemCTDA.TabIndex = 89;
             this.btnThemCTDA.Text = "Thêm";
             this.btnThemCTDA.UseVisualStyleBackColor = true;
+            this.btnThemCTDA.Click += new System.EventHandler(this.btnThemCTDA_Click);
             // 
             // dgvChiTietDA
             // 
@@ -415,10 +423,10 @@
             this.dgvChiTietDA.RowTemplate.Height = 24;
             this.dgvChiTietDA.Size = new System.Drawing.Size(1078, 305);
             this.dgvChiTietDA.TabIndex = 88;
+            this.dgvChiTietDA.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvChiTietDA_CellClick);
             // 
             // cbMaDuAn
             // 
-            this.cbMaDuAn.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cbMaDuAn.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbMaDuAn.FormattingEnabled = true;
             this.cbMaDuAn.Location = new System.Drawing.Point(244, 135);
@@ -428,7 +436,6 @@
             // 
             // cbMaNV
             // 
-            this.cbMaNV.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cbMaNV.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbMaNV.FormattingEnabled = true;
             this.cbMaNV.Location = new System.Drawing.Point(243, 46);
@@ -438,7 +445,6 @@
             // 
             // tbGhiChuCTDA
             // 
-            this.tbGhiChuCTDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbGhiChuCTDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbGhiChuCTDA.Location = new System.Drawing.Point(244, 228);
             this.tbGhiChuCTDA.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -448,7 +454,6 @@
             // 
             // tbVaiTro
             // 
-            this.tbVaiTro.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbVaiTro.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbVaiTro.Location = new System.Drawing.Point(244, 180);
             this.tbVaiTro.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -458,7 +463,6 @@
             // 
             // label8
             // 
-            this.label8.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.Location = new System.Drawing.Point(15, 231);
@@ -469,7 +473,6 @@
             // 
             // label9
             // 
-            this.label9.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.Location = new System.Drawing.Point(15, 182);
@@ -480,7 +483,6 @@
             // 
             // label10
             // 
-            this.label10.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.Location = new System.Drawing.Point(15, 138);
@@ -491,7 +493,6 @@
             // 
             // label11
             // 
-            this.label11.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.Location = new System.Drawing.Point(15, 49);
@@ -500,35 +501,15 @@
             this.label11.TabIndex = 65;
             this.label11.Text = "Mã Nhân Viên";
             // 
-            // label12
-            // 
-            this.label12.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(15, 92);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(108, 19);
-            this.label12.TabIndex = 95;
-            this.label12.Text = "Tên Nhân Viên";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.textBox1.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(242, 89);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(329, 27);
-            this.textBox1.TabIndex = 96;
-            // 
             // F_DuAnChung
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1743, 896);
+            this.ClientSize = new System.Drawing.Size(1743, 991);
             this.Controls.Add(this.panel1);
             this.Name = "F_DuAnChung";
             this.Text = "F_DuAnChung";
+            this.Load += new System.EventHandler(this.F_DuAnChung_Load);
             this.panel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -580,7 +561,7 @@
         private System.Windows.Forms.Button btnXoaCTDA;
         private System.Windows.Forms.Button btnThemCTDA;
         private System.Windows.Forms.DataGridView dgvChiTietDA;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbTenNhanVien;
         private System.Windows.Forms.Label label12;
     }
 }
