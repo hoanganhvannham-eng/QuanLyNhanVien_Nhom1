@@ -851,6 +851,7 @@ namespace QuanLyNhanVien3
         private void btnrestar_Click(object sender, EventArgs e)
         {
             LoadNhanVienTheoDieuKien();
+            LoadTongSoNhanVien();
             isEditingNhanVien = false;
         }
     }

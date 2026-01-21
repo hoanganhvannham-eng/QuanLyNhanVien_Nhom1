@@ -30,53 +30,6 @@ namespace QuanLyNhanVien3
         {
         }
 
-        // ===== LOAD NHÂN VIÊN VÀO COMBOBOX =====
-
-        // ===== HIỂN THỊ NHÂN VIÊN VỪA QUÉT =====
-        //private void HienThiNhanVienVuaQuet(string maNV)
-        //{
-        //    if (string.IsNullOrEmpty(maNV)) return; // Kiểm tra null/rỗng
-
-        //    try
-        //    {
-        //        cn.connect();
-
-        //        string query = @"
-        //            SELECT 
-        //                cc.MaChamCong AS [Mã chấm công],
-        //                nv.MaNV AS [Mã nhân viên],
-        //                nv.HoTen AS [Họ tên],
-        //                cc.Ngay AS [Ngày],
-        //                CONVERT(VARCHAR(8), cc.GioVao, 108) AS [Giờ vào],
-        //                CONVERT(VARCHAR(8), cc.GioVe, 108) AS [Giờ về],
-        //                cc.Ghichu AS [Ghi chú]
-        //            FROM tblNhanVien nv
-        //            LEFT JOIN tblChamCong cc ON nv.MaNV = cc.MaNV AND cc.DeletedAt = 0
-        //            WHERE nv.MaNV = @MaNV
-        //            ORDER BY cc.Ngay DESC;
-        //        ";
-
-        //        using (SqlCommand cmd = new SqlCommand(query, cn.conn))
-        //        {
-        //            cmd.Parameters.AddWithValue("@MaNV", maNV);
-        //            SqlDataAdapter da = new SqlDataAdapter(cmd);
-        //            DataTable dt = new DataTable();
-        //            da.Fill(dt);
-        //            dtGridViewChamCong.DataSource = dt;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Lỗi hiển thị nhân viên vừa quét: " + ex.Message);
-        //    }
-        //    finally
-        //    {
-        //        cn.disconnect();
-        //    }
-        //}
-
-        // ===== QUÉT QR TỪ FILE ẢNH =====
-
         // ===== BẮT ĐẦU CAMERA =====
         private void btnChamCong_Click(object sender, EventArgs e)
         {
@@ -208,10 +161,10 @@ namespace QuanLyNhanVien3
             string newMa = "CC001";
 
             string query = @"
-        SELECT TOP 1 MaChamCong
-        FROM tblChamCong
-        WHERE MaChamCong LIKE 'CC%'
-        ORDER BY Id DESC";
+        SELECT TOP 1 MaChamCong_TuanhCD233018
+        FROM tblChamCong_TuanhCD233018
+        WHERE MaChamCong_TuanhCD233018 LIKE 'CC%'
+        ORDER BY Id_TuanhCD233018 DESC";
 
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
@@ -252,77 +205,95 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                // ===================== 1️⃣ KIỂM TRA NHÂN VIÊN =====================
-                string sqlCheckNV = @"
-        SELECT nv.DeletedAt
-        FROM tblNhanVien nv
-        INNER JOIN tblHopDong hd ON nv.MaNV = hd.MaNV
-        WHERE nv.MaNV = @MaNV
-          AND hd.DeletedAt = 0";
+                // ===================== 1️⃣ LẤY ID NHÂN VIÊN TỪ MÃ NV =====================
+                string sqlGetNhanVienId = @"
+                    SELECT Id_TuanhCD233018
+                    FROM tblNhanVien_TuanhCD233018
+                    WHERE MaNV_TuanhCD233018 = @MaNV
+                      AND DeletedAt_TuanhCD233018 = 0";
 
-                using (SqlCommand cmd = new SqlCommand(sqlCheckNV, cn.conn))
+                int nhanVienId = 0;
+                using (SqlCommand cmd = new SqlCommand(sqlGetNhanVienId, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@MaNV", maNV);
                     object result = cmd.ExecuteScalar();
 
-                    if (result == null || Convert.ToInt32(result) != 0)
+                    if (result == null)
                     {
                         MessageBox.Show("Nhân viên không tồn tại hoặc đã nghỉ việc!",
                             "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
+
+                    nhanVienId = Convert.ToInt32(result);
                 }
 
-                // ===================== 2️⃣ LẤY CHẤM CÔNG CUỐI TRONG NGÀY =====================
+                // ===================== 2️⃣ KIỂM TRA HỢP ĐỒNG =====================
+                string sqlCheckHD = @"
+                    SELECT COUNT(*)
+                    FROM tblHopDong_ChienCD232928
+                    WHERE MaNV_TuanhCD233018 = @MaNV
+                      AND DeletedAt_ChienCD232928 = 0
+                      AND (NgayKetThuc_ChienCD232928 IS NULL OR NgayKetThuc_ChienCD232928 >= GETDATE())";
+
+                using (SqlCommand cmd = new SqlCommand(sqlCheckHD, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaNV", maNV);
+                    int count = (int)cmd.ExecuteScalar();
+
+                    if (count == 0)
+                    {
+                        MessageBox.Show("Nhân viên không có hợp đồng hiệu lực!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+
+                // ===================== 3️⃣ LẤY CHẤM CÔNG CUỐI TRONG NGÀY =====================
                 string sqlCheckCC = @"
-        SELECT TOP 1 Id
-        FROM tblChamCong
-        WHERE MaNV = @MaNV
-          AND Ngay = CAST(GETDATE() AS DATE)
-          AND DeletedAt = 0
-        ORDER BY Id DESC";
+                    SELECT TOP 1 Id_TuanhCD233018
+                    FROM tblChamCong_TuanhCD233018
+                    WHERE NhanVienId_TuanhCD233018 = @NhanVienId
+                      AND Ngay_TuanhCD233018 = CAST(GETDATE() AS DATE)
+                      AND DeletedAt_TuanhCD233018 = 0
+                    ORDER BY Id_TuanhCD233018 DESC";
 
                 object lastId;
 
                 using (SqlCommand cmd = new SqlCommand(sqlCheckCC, cn.conn))
                 {
-                    cmd.Parameters.AddWithValue("@MaNV", maNV);
+                    cmd.Parameters.AddWithValue("@NhanVienId", nhanVienId);
                     lastId = cmd.ExecuteScalar();
                 }
 
-                // ===================== 3️⃣ CHƯA CÓ → CHECK-IN =====================
+                // ===================== 4️⃣ CHƯA CÓ → CHECK-IN =====================
                 if (lastId == null)
                 {
                     string insert = @"
-            INSERT INTO tblChamCong
-            (MaChamCong, MaNV, Ngay, GioVao, GioVe, GhiChu)
-            VALUES
-            (@MaChamCong, @MaNV,
-             CAST(GETDATE() AS DATE),
-             CONVERT(TIME, GETDATE()),
-             CONVERT(TIME, GETDATE()),
-             N'Chấm công vào')";
+                        INSERT INTO tblChamCong_TuanhCD233018
+                        (MaChamCong_TuanhCD233018, Ngay_TuanhCD233018, GioVao_TuanhCD233018, GioVe_TuanhCD233018, Ghichu_TuanhCD233018, DeletedAt_TuanhCD233018, NhanVienId_TuanhCD233018)
+                        VALUES
+                        (@MaChamCong, CAST(GETDATE() AS DATE), CONVERT(TIME, GETDATE()), CONVERT(TIME, GETDATE()), N'Chấm công vào', 0, @NhanVienId)";
 
                     using (SqlCommand cmd = new SqlCommand(insert, cn.conn))
                     {
-                        cmd.Parameters.AddWithValue("@MaChamCong",
-                            GenerateMaChamCong(cn.conn));
-                        cmd.Parameters.AddWithValue("@MaNV", maNV);
+                        cmd.Parameters.AddWithValue("@MaChamCong", GenerateMaChamCong(cn.conn));
+                        cmd.Parameters.AddWithValue("@NhanVienId", nhanVienId);
                         cmd.ExecuteNonQuery();
                     }
 
-                    //MessageBox.Show(
-                    //    $"✅ {maNV} đã CHECK-IN\nGiờ vào: {DateTime.Now:HH:mm:ss}",
-                    //    "Chấm công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        $"✅ {maNV} đã CHECK-IN\nGiờ vào: {DateTime.Now:HH:mm:ss}",
+                        "Chấm công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                // ===================== 4️⃣ ĐÃ CÓ → UPDATE GIỜ RA =====================
+                // ===================== 5️⃣ ĐÃ CÓ → UPDATE GIỜ RA =====================
                 else
                 {
                     string update = @"
-            UPDATE tblChamCong
-            SET GioVe = CONVERT(TIME, GETDATE()),
-                GhiChu = N'Cập nhật giờ ra'
-            WHERE Id = @Id";
+                        UPDATE tblChamCong_TuanhCD233018
+                        SET GioVe_TuanhCD233018 = CONVERT(TIME, GETDATE()),
+                            Ghichu_TuanhCD233018 = N'Cập nhật giờ ra'
+                        WHERE Id_TuanhCD233018 = @Id";
 
                     using (SqlCommand cmd = new SqlCommand(update, cn.conn))
                     {
@@ -330,12 +301,12 @@ namespace QuanLyNhanVien3
                         cmd.ExecuteNonQuery();
                     }
 
-                    //MessageBox.Show(
-                    //    $"✅ {maNV} đã CẬP NHẬT GIỜ RA\nGiờ mới: {DateTime.Now:HH:mm:ss}",
-                    //    "Chấm công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        $"✅ {maNV} đã CẬP NHẬT GIỜ RA\nGiờ mới: {DateTime.Now:HH:mm:ss}",
+                        "Chấm công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
-                // ===================== 5️⃣ HIỂN THỊ NGAY LÊN GRID =====================
+                // ===================== 6️⃣ HIỂN THỊ NGAY LÊN GRID =====================
                 HienThiChamCongHienTai(maNV);
             }
             catch (Exception ex)
@@ -348,49 +319,48 @@ namespace QuanLyNhanVien3
                 cn.disconnect();
             }
         }
+
         private void HienThiChamCongHienTai(string maNV)
-{
-    try
-    {
-        cn.connect();
-
-        string sql = @"
-        SELECT 
-            cc.MaChamCong   AS N'Mã chấm công',
-            nv.MaNV         AS N'Mã NV',
-            nv.HoTen        AS N'Họ tên',
-            cc.Ngay         AS N'Ngày',
-            CONVERT(varchar(8), cc.GioVao, 108) AS N'Giờ vào',
-            CONVERT(varchar(8), cc.GioVe, 108)  AS N'Giờ về',
-            cc.GhiChu       AS N'Ghi chú'
-        FROM tblChamCong cc
-        JOIN tblNhanVien nv ON cc.MaNV = nv.MaNV
-        WHERE cc.MaNV = @MaNV
-          AND cc.Ngay = CAST(GETDATE() AS DATE)
-          AND cc.DeletedAt = 0
-        ORDER BY cc.Id DESC";
-
-        using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
         {
-            cmd.Parameters.AddWithValue("@MaNV", maNV);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
+            try
+            {
+                cn.connect();
 
-            dtGridViewChamCong.DataSource = dt;
+                string sql = @"
+                    SELECT 
+                        cc.MaChamCong_TuanhCD233018   AS N'Mã chấm công',
+                        nv.MaNV_TuanhCD233018         AS N'Mã NV',
+                        nv.HoTen_TuanhCD233018        AS N'Họ tên',
+                        cc.Ngay_TuanhCD233018         AS N'Ngày',
+                        CONVERT(varchar(8), cc.GioVao_TuanhCD233018, 108) AS N'Giờ vào',
+                        CONVERT(varchar(8), cc.GioVe_TuanhCD233018, 108)  AS N'Giờ về',
+                        cc.Ghichu_TuanhCD233018       AS N'Ghi chú'
+                    FROM tblChamCong_TuanhCD233018 cc
+                    JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                    WHERE nv.MaNV_TuanhCD233018 = @MaNV
+                      AND cc.Ngay_TuanhCD233018 = CAST(GETDATE() AS DATE)
+                      AND cc.DeletedAt_TuanhCD233018 = 0
+                    ORDER BY cc.Id_TuanhCD233018 DESC";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaNV", maNV);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    dtGridViewChamCong.DataSource = dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi hiển thị chấm công: " + ex.Message);
+            }
+            finally
+            {
+                cn.disconnect();
+            }
         }
-    }
-    catch (Exception ex)
-    {
-        MessageBox.Show("Lỗi hiển thị chấm công: " + ex.Message);
-    }
-    finally
-    {
-        cn.disconnect();
-    }
-}
-
-
 
         private bool CheckNhanVien(string maNV)
         {
@@ -398,10 +368,10 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
                 string query = @"
-                    SELECT nv.MaNV
-                    FROM tblNhanVien nv
-                    LEFT JOIN tblHopDong hd ON nv.MaNV = hd.MaNV AND hd.DeletedAt = 0
-                    WHERE nv.MaNV = @MaNV AND nv.DeletedAt = 0
+                    SELECT nv.MaNV_TuanhCD233018
+                    FROM tblNhanVien_TuanhCD233018 nv
+                    LEFT JOIN tblHopDong_ChienCD232928 hd ON nv.MaNV_TuanhCD233018 = hd.MaNV_TuanhCD233018 AND hd.DeletedAt_ChienCD232928 = 0
+                    WHERE nv.MaNV_TuanhCD233018 = @MaNV AND nv.DeletedAt_TuanhCD233018 = 0
                 ";
                 using (SqlCommand cmd = new SqlCommand(query, cn.conn))
                 {
