@@ -31,11 +31,10 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dgvDA = new System.Windows.Forms.DataGridView();
-            this.btnRefreshDA = new System.Windows.Forms.Button();
             this.btnSuaDA = new System.Windows.Forms.Button();
             this.btnXoaDA = new System.Windows.Forms.Button();
             this.btnThemDA = new System.Windows.Forms.Button();
-            this.tbGhiChu = new System.Windows.Forms.TextBox();
+            this.tbGhiChuDA = new System.Windows.Forms.TextBox();
             this.tbMota = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -50,27 +49,29 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnRefresh = new System.Windows.Forms.Button();
+            this.btnXuatPDF = new System.Windows.Forms.Button();
+            this.btnXuatExcel = new System.Windows.Forms.Button();
+            this.btnSuaCTDA = new System.Windows.Forms.Button();
+            this.btnXoaCTDA = new System.Windows.Forms.Button();
+            this.btnThemCTDA = new System.Windows.Forms.Button();
+            this.dgvChiTietDA = new System.Windows.Forms.DataGridView();
             this.cbMaDuAn = new System.Windows.Forms.ComboBox();
             this.cbMaNV = new System.Windows.Forms.ComboBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tbGhiChuCTDA = new System.Windows.Forms.TextBox();
             this.tbVaiTro = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.btnXuatPDF = new System.Windows.Forms.Button();
-            this.btnXuatExcel = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDA)).BeginInit();
             this.panel2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvChiTietDA)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -82,17 +83,16 @@
             this.panel1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1743, 811);
+            this.panel1.Size = new System.Drawing.Size(1743, 896);
             this.panel1.TabIndex = 0;
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.dgvDA);
-            this.groupBox2.Controls.Add(this.btnRefreshDA);
             this.groupBox2.Controls.Add(this.btnSuaDA);
             this.groupBox2.Controls.Add(this.btnXoaDA);
             this.groupBox2.Controls.Add(this.btnThemDA);
-            this.groupBox2.Controls.Add(this.tbGhiChu);
+            this.groupBox2.Controls.Add(this.tbGhiChuDA);
             this.groupBox2.Controls.Add(this.tbMota);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.label6);
@@ -108,7 +108,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(0, 100);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1743, 418);
+            this.groupBox2.Size = new System.Drawing.Size(1743, 397);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Tìm Dự án";
@@ -128,22 +128,11 @@
             this.dgvDA.Size = new System.Drawing.Size(1078, 319);
             this.dgvDA.TabIndex = 87;
             // 
-            // btnRefreshDA
-            // 
-            this.btnRefreshDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnRefreshDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefreshDA.Location = new System.Drawing.Point(484, 327);
-            this.btnRefreshDA.Name = "btnRefreshDA";
-            this.btnRefreshDA.Size = new System.Drawing.Size(125, 33);
-            this.btnRefreshDA.TabIndex = 56;
-            this.btnRefreshDA.Text = "Refresh";
-            this.btnRefreshDA.UseVisualStyleBackColor = true;
-            // 
             // btnSuaDA
             // 
             this.btnSuaDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnSuaDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSuaDA.Location = new System.Drawing.Point(165, 327);
+            this.btnSuaDA.Location = new System.Drawing.Point(231, 327);
             this.btnSuaDA.Name = "btnSuaDA";
             this.btnSuaDA.Size = new System.Drawing.Size(125, 33);
             this.btnSuaDA.TabIndex = 54;
@@ -154,7 +143,7 @@
             // 
             this.btnXoaDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnXoaDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnXoaDA.Location = new System.Drawing.Point(319, 327);
+            this.btnXoaDA.Location = new System.Drawing.Point(446, 327);
             this.btnXoaDA.Name = "btnXoaDA";
             this.btnXoaDA.Size = new System.Drawing.Size(125, 33);
             this.btnXoaDA.TabIndex = 53;
@@ -172,14 +161,14 @@
             this.btnThemDA.Text = "Thêm";
             this.btnThemDA.UseVisualStyleBackColor = true;
             // 
-            // tbGhiChu
+            // tbGhiChuDA
             // 
-            this.tbGhiChu.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.tbGhiChu.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbGhiChu.Location = new System.Drawing.Point(244, 288);
-            this.tbGhiChu.Name = "tbGhiChu";
-            this.tbGhiChu.Size = new System.Drawing.Size(328, 27);
-            this.tbGhiChu.TabIndex = 51;
+            this.tbGhiChuDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.tbGhiChuDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbGhiChuDA.Location = new System.Drawing.Point(244, 288);
+            this.tbGhiChuDA.Name = "tbGhiChuDA";
+            this.tbGhiChuDA.Size = new System.Drawing.Size(328, 27);
+            this.tbGhiChuDA.TabIndex = 51;
             // 
             // tbMota
             // 
@@ -320,16 +309,18 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button4);
+            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.label12);
+            this.groupBox1.Controls.Add(this.btnRefresh);
             this.groupBox1.Controls.Add(this.btnXuatPDF);
             this.groupBox1.Controls.Add(this.btnXuatExcel);
-            this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.button3);
-            this.groupBox1.Controls.Add(this.dataGridView1);
+            this.groupBox1.Controls.Add(this.btnSuaCTDA);
+            this.groupBox1.Controls.Add(this.btnXoaCTDA);
+            this.groupBox1.Controls.Add(this.btnThemCTDA);
+            this.groupBox1.Controls.Add(this.dgvChiTietDA);
             this.groupBox1.Controls.Add(this.cbMaDuAn);
             this.groupBox1.Controls.Add(this.cbMaNV);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.tbGhiChuCTDA);
             this.groupBox1.Controls.Add(this.tbVaiTro);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.label9);
@@ -337,19 +328,100 @@
             this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(0, 518);
+            this.groupBox1.Location = new System.Drawing.Point(0, 497);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1743, 293);
+            this.groupBox1.Size = new System.Drawing.Size(1743, 399);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Chi tiết Dự án";
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnRefresh.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRefresh.Location = new System.Drawing.Point(19, 336);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(125, 33);
+            this.btnRefresh.TabIndex = 94;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            // 
+            // btnXuatPDF
+            // 
+            this.btnXuatPDF.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnXuatPDF.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnXuatPDF.Location = new System.Drawing.Point(447, 337);
+            this.btnXuatPDF.Name = "btnXuatPDF";
+            this.btnXuatPDF.Size = new System.Drawing.Size(125, 33);
+            this.btnXuatPDF.TabIndex = 93;
+            this.btnXuatPDF.Text = "Xuất PDF";
+            this.btnXuatPDF.UseVisualStyleBackColor = true;
+            // 
+            // btnXuatExcel
+            // 
+            this.btnXuatExcel.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnXuatExcel.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnXuatExcel.Location = new System.Drawing.Point(232, 336);
+            this.btnXuatExcel.Name = "btnXuatExcel";
+            this.btnXuatExcel.Size = new System.Drawing.Size(125, 33);
+            this.btnXuatExcel.TabIndex = 92;
+            this.btnXuatExcel.Text = "Xuất Excel";
+            this.btnXuatExcel.UseVisualStyleBackColor = true;
+            // 
+            // btnSuaCTDA
+            // 
+            this.btnSuaCTDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnSuaCTDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSuaCTDA.Location = new System.Drawing.Point(232, 284);
+            this.btnSuaCTDA.Name = "btnSuaCTDA";
+            this.btnSuaCTDA.Size = new System.Drawing.Size(125, 33);
+            this.btnSuaCTDA.TabIndex = 91;
+            this.btnSuaCTDA.Text = "Sửa";
+            this.btnSuaCTDA.UseVisualStyleBackColor = true;
+            // 
+            // btnXoaCTDA
+            // 
+            this.btnXoaCTDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnXoaCTDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnXoaCTDA.Location = new System.Drawing.Point(447, 284);
+            this.btnXoaCTDA.Name = "btnXoaCTDA";
+            this.btnXoaCTDA.Size = new System.Drawing.Size(125, 33);
+            this.btnXoaCTDA.TabIndex = 90;
+            this.btnXoaCTDA.Text = "Xóa";
+            this.btnXoaCTDA.UseVisualStyleBackColor = true;
+            // 
+            // btnThemCTDA
+            // 
+            this.btnThemCTDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnThemCTDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThemCTDA.Location = new System.Drawing.Point(19, 283);
+            this.btnThemCTDA.Name = "btnThemCTDA";
+            this.btnThemCTDA.Size = new System.Drawing.Size(125, 33);
+            this.btnThemCTDA.TabIndex = 89;
+            this.btnThemCTDA.Text = "Thêm";
+            this.btnThemCTDA.UseVisualStyleBackColor = true;
+            // 
+            // dgvChiTietDA
+            // 
+            this.dgvChiTietDA.AllowUserToAddRows = false;
+            this.dgvChiTietDA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvChiTietDA.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvChiTietDA.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvChiTietDA.Location = new System.Drawing.Point(631, 46);
+            this.dgvChiTietDA.Name = "dgvChiTietDA";
+            this.dgvChiTietDA.ReadOnly = true;
+            this.dgvChiTietDA.RowHeadersWidth = 51;
+            this.dgvChiTietDA.RowTemplate.Height = 24;
+            this.dgvChiTietDA.Size = new System.Drawing.Size(1078, 305);
+            this.dgvChiTietDA.TabIndex = 88;
             // 
             // cbMaDuAn
             // 
             this.cbMaDuAn.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cbMaDuAn.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbMaDuAn.FormattingEnabled = true;
-            this.cbMaDuAn.Location = new System.Drawing.Point(243, 91);
+            this.cbMaDuAn.Location = new System.Drawing.Point(244, 135);
             this.cbMaDuAn.Name = "cbMaDuAn";
             this.cbMaDuAn.Size = new System.Drawing.Size(329, 27);
             this.cbMaDuAn.TabIndex = 72;
@@ -364,21 +436,21 @@
             this.cbMaNV.Size = new System.Drawing.Size(329, 27);
             this.cbMaNV.TabIndex = 71;
             // 
-            // textBox1
+            // tbGhiChuCTDA
             // 
-            this.textBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.textBox1.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(243, 184);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(329, 27);
-            this.textBox1.TabIndex = 70;
+            this.tbGhiChuCTDA.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.tbGhiChuCTDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbGhiChuCTDA.Location = new System.Drawing.Point(244, 228);
+            this.tbGhiChuCTDA.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tbGhiChuCTDA.Name = "tbGhiChuCTDA";
+            this.tbGhiChuCTDA.Size = new System.Drawing.Size(329, 27);
+            this.tbGhiChuCTDA.TabIndex = 70;
             // 
             // tbVaiTro
             // 
             this.tbVaiTro.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbVaiTro.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbVaiTro.Location = new System.Drawing.Point(243, 136);
+            this.tbVaiTro.Location = new System.Drawing.Point(244, 180);
             this.tbVaiTro.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tbVaiTro.Name = "tbVaiTro";
             this.tbVaiTro.Size = new System.Drawing.Size(329, 27);
@@ -389,7 +461,7 @@
             this.label8.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(14, 186);
+            this.label8.Location = new System.Drawing.Point(15, 231);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(65, 19);
             this.label8.TabIndex = 68;
@@ -400,7 +472,7 @@
             this.label9.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(14, 138);
+            this.label9.Location = new System.Drawing.Point(15, 182);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(54, 19);
             this.label9.TabIndex = 67;
@@ -411,7 +483,7 @@
             this.label10.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(14, 94);
+            this.label10.Location = new System.Drawing.Point(15, 138);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(79, 19);
             this.label10.TabIndex = 66;
@@ -422,98 +494,38 @@
             this.label11.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(14, 49);
+            this.label11.Location = new System.Drawing.Point(15, 49);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(105, 19);
             this.label11.TabIndex = 65;
             this.label11.Text = "Mã Nhân Viên";
             // 
-            // dataGridView1
+            // label12
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(631, 46);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(1078, 165);
-            this.dataGridView1.TabIndex = 88;
+            this.label12.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(15, 92);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(108, 19);
+            this.label12.TabIndex = 95;
+            this.label12.Text = "Tên Nhân Viên";
             // 
-            // button1
+            // textBox1
             // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.button1.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(188, 240);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(125, 33);
-            this.button1.TabIndex = 91;
-            this.button1.Text = "Sửa";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.button2.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(362, 239);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(125, 33);
-            this.button2.TabIndex = 90;
-            this.button2.Text = "Xóa";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.button3.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(18, 239);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(125, 33);
-            this.button3.TabIndex = 89;
-            this.button3.Text = "Thêm";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // btnXuatPDF
-            // 
-            this.btnXuatPDF.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnXuatPDF.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnXuatPDF.Location = new System.Drawing.Point(1584, 239);
-            this.btnXuatPDF.Name = "btnXuatPDF";
-            this.btnXuatPDF.Size = new System.Drawing.Size(125, 33);
-            this.btnXuatPDF.TabIndex = 93;
-            this.btnXuatPDF.Text = "Xuất PDF";
-            this.btnXuatPDF.UseVisualStyleBackColor = true;
-            // 
-            // btnXuatExcel
-            // 
-            this.btnXuatExcel.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnXuatExcel.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnXuatExcel.Location = new System.Drawing.Point(1407, 239);
-            this.btnXuatExcel.Name = "btnXuatExcel";
-            this.btnXuatExcel.Size = new System.Drawing.Size(125, 33);
-            this.btnXuatExcel.TabIndex = 92;
-            this.btnXuatExcel.Text = "Xuất Excel";
-            this.btnXuatExcel.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.button4.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(1239, 239);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(125, 33);
-            this.button4.TabIndex = 94;
-            this.button4.Text = "Refresh";
-            this.button4.UseVisualStyleBackColor = true;
+            this.textBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.textBox1.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(242, 89);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(329, 27);
+            this.textBox1.TabIndex = 96;
             // 
             // F_DuAnChung
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1743, 811);
+            this.ClientSize = new System.Drawing.Size(1743, 896);
             this.Controls.Add(this.panel1);
             this.Name = "F_DuAnChung";
             this.Text = "F_DuAnChung";
@@ -525,7 +537,7 @@
             this.panel2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvChiTietDA)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -545,29 +557,30 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox tbGhiChu;
+        private System.Windows.Forms.TextBox tbGhiChuDA;
         private System.Windows.Forms.TextBox tbMota;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button btnRefreshDA;
         private System.Windows.Forms.Button btnSuaDA;
         private System.Windows.Forms.Button btnXoaDA;
         private System.Windows.Forms.Button btnThemDA;
         private System.Windows.Forms.DataGridView dgvDA;
         private System.Windows.Forms.ComboBox cbMaDuAn;
         private System.Windows.Forms.ComboBox cbMaNV;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbGhiChuCTDA;
         private System.Windows.Forms.TextBox tbVaiTro;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Button btnXuatPDF;
         private System.Windows.Forms.Button btnXuatExcel;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button btnSuaCTDA;
+        private System.Windows.Forms.Button btnXoaCTDA;
+        private System.Windows.Forms.Button btnThemCTDA;
+        private System.Windows.Forms.DataGridView dgvChiTietDA;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label12;
     }
 }

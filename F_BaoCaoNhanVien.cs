@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace QuanLyNhanVien3
 {
-    public partial class F_BaoCaoNhanVien: Form
+    public partial class F_BaoCaoNhanVien : Form
     {
         public F_BaoCaoNhanVien()
         {
@@ -40,13 +40,18 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataNhanVien = @"SELECT nv.MaNV as N'Mã Nhân Viên', nv.HoTen as N'Họ Tên', 
-                                                    pb.TenPB as N'Tên Phòng Ban', cv.TenCV as N'Tên Chức Vụ', nv.Email
-                                                    FROM tblNhanVien_TuanhCD233018 nv
-                                                    JOIN tblPhongBan_ThuanCD233318 pb ON nv.MaPB = pb.MaPB
-                                                    JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV = cv.MaCV
-                                                    WHERE nv.DeletedAt = 0
-                                                    ORDER BY pb.TenPB, cv.TenCV;"; 
+                string sqlLoadDataNhanVien = @"
+                    SELECT 
+                        nv.MaNV_TuanhCD233018 as N'Mã Nhân Viên', 
+                        nv.HoTen_TuanhCD233018 as N'Họ Tên', 
+                        pb.TenPB_ThuanCD233318 as N'Tên Phòng Ban', 
+                        cv.TenCV_KhangCD233181 as N'Tên Chức Vụ', 
+                        nv.Email_TuanhCD233018 as N'Email'
+                    FROM tblNhanVien_TuanhCD233018 nv
+                    JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+                    JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+                    WHERE nv.DeletedAt_TuanhCD233018 = 0
+                    ORDER BY pb.TenPB_ThuanCD233318, cv.TenCV_KhangCD233181;";
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(sqlLoadDataNhanVien, cn.conn))
                 {
@@ -69,11 +74,13 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataNhanVien = @"SELECT GioiTinh as N'Giới Tính', COUNT(*) as N'Số Lượng'
-                                                FROM tblNhanVien_TuanhCD233018
-                                                WHERE DeletedAt = 0
-                                                GROUP BY GioiTinh;
-                                                ";
+                string sqlLoadDataNhanVien = @"
+                    SELECT 
+                        GioiTinh_TuanhCD233018 as N'Giới Tính', 
+                        COUNT(*) as N'Số Lượng'
+                    FROM tblNhanVien_TuanhCD233018
+                    WHERE DeletedAt_TuanhCD233018 = 0
+                    GROUP BY GioiTinh_TuanhCD233018;";
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(sqlLoadDataNhanVien, cn.conn))
                 {
@@ -190,59 +197,39 @@ namespace QuanLyNhanVien3
                     MessageBoxIcon.Warning);
             }
         }
-        //        SELECT tblNhanVien.Id, tblNhanVien.MaNV, tblNhanVien.HoTen, tblNhanVien.NgaySinh, tblNhanVien.GioiTinh, tblNhanVien.DiaChi, tblNhanVien.SoDienThoai, tblNhanVien.Email, tblNhanVien.MaPB, tblNhanVien.MaCV, tblNhanVien.Ghichu,
-        //                  tblNhanVien.DeletedAt, tblChucVu.TenCV, tblDuAn.TenDA, tblHopDong.LoaiHopDong, tblLuong.LuongCoBan, tblPhongBan.TenPB, tblTaiKhoan.MaTK, tblChiTietDuAn.VaiTro
-        //FROM     tblNhanVien INNER JOIN
-        //                  tblChamCong ON tblNhanVien.MaNV = tblChamCong.MaNV INNER JOIN
-        //                  tblChiTietDuAn ON tblNhanVien.MaNV = tblChiTietDuAn.MaNV INNER JOIN
-        //                  tblChucVu ON tblNhanVien.MaCV = tblChucVu.MaCV INNER JOIN
-        //                  tblDuAn ON tblChiTietDuAn.MaDA = tblDuAn.MaDA INNER JOIN
-        //                  tblHopDong ON tblNhanVien.MaNV = tblHopDong.MaNV INNER JOIN
-        //                  tblLuong ON tblNhanVien.MaNV = tblLuong.MaNV INNER JOIN
-        //                  tblPhongBan ON tblNhanVien.MaPB = tblPhongBan.MaPB INNER JOIN
-        //                  tblTaiKhoan ON tblNhanVien.MaNV = tblTaiKhoan.MaNV
-        //WHERE  (tblNhanVien.MaNV = @ID_Nhanvien)
-
 
         void timkiemtheomanhanvien()
         {
             try
             {
-                //if (string.IsNullOrWhiteSpace(textBoxmanhanvientimkiem.Text))
-                //{
-                //    MessageBox.Show("Vui lòng nhập tên nhân viên để tìm kiếm!",
-                //        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //    return;
-                //}
-
                 cn.connect();
                 string sql = @"
-                            SELECT DISTINCT
-                                nv.Id            AS N'ID',
-                                nv.MaNV          AS N'Mã nhân viên',
-                                nv.HoTen         AS N'Họ tên',
-                                nv.NgaySinh      AS N'Ngày sinh',
-                                nv.GioiTinh      AS N'Giới tính',
-                                nv.DiaChi        AS N'Địa chỉ',
-                                nv.SoDienThoai   AS N'Số điện thoại',
-                                nv.Email         AS N'Email',
-                                pb.TenPB         AS N'Phòng ban',
-                                cv.TenCV         AS N'Chức vụ',
-                                lu.LuongCoBan    AS N'Lương cơ bản',
-                                hd.LoaiHopDong   AS N'Loại hợp đồng'
-                            FROM tblNhanVien_TuanhCD233018 nv
-                            LEFT JOIN tblPhongBan_ThuanCD233318 pb 
-                                ON nv.MaPB = pb.MaPB AND pb.DeletedAt = 0
-                            LEFT JOIN tblChucVu_KhangCD233181 cv 
-                                ON nv.MaCV = cv.MaCV AND cv.DeletedAt = 0
-                            LEFT JOIN tblLuong_ChienCD232928 lu 
-                                ON nv.MaNV = lu.MaNV
-                            LEFT JOIN tblHopDong_ChienCD232928 hd 
-                                ON nv.MaNV = hd.MaNV
-                            WHERE nv.DeletedAt = 0
-                              AND nv.MaNV LIKE @TenTimKiem
-                            ORDER BY pb.TenPB, cv.TenCV";
-
+                    SELECT DISTINCT
+                        nv.Id_TuanhCD233018       AS N'ID',
+                        nv.MaNV_TuanhCD233018     AS N'Mã nhân viên',
+                        nv.HoTen_TuanhCD233018    AS N'Họ tên',
+                        nv.NgaySinh_TuanhCD233018 AS N'Ngày sinh',
+                        nv.GioiTinh_TuanhCD233018 AS N'Giới tính',
+                        nv.DiaChi_TuanhCD233018   AS N'Địa chỉ',
+                        nv.SoDienThoai_TuanhCD233018 AS N'Số điện thoại',
+                        nv.Email_TuanhCD233018    AS N'Email',
+                        pb.TenPB_ThuanCD233318    AS N'Phòng ban',
+                        cv.TenCV_KhangCD233181    AS N'Chức vụ',
+                        hd.LuongCoBan_ChienCD232928 AS N'Lương cơ bản',
+                        hd.LoaiHopDong_ChienCD232928 AS N'Loại hợp đồng'
+                    FROM tblNhanVien_TuanhCD233018 nv
+                    LEFT JOIN tblChucVu_KhangCD233181 cv 
+                        ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181 
+                        AND cv.DeletedAt_KhangCD233181 = 0
+                    LEFT JOIN tblPhongBan_ThuanCD233318 pb 
+                        ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318 
+                        AND pb.DeletedAt_ThuanCD233318 = 0
+                    LEFT JOIN tblHopDong_ChienCD232928 hd 
+                        ON nv.MaNV_TuanhCD233018 = hd.MaNV_TuanhCD233018
+                        AND hd.DeletedAt_ChienCD232928 = 0
+                    WHERE nv.DeletedAt_TuanhCD233018 = 0
+                      AND nv.MaNV_TuanhCD233018 LIKE @TenTimKiem
+                    ORDER BY pb.TenPB_ThuanCD233318, cv.TenCV_KhangCD233181";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
@@ -264,45 +251,39 @@ namespace QuanLyNhanVien3
                     "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         void timkiemtheoten()
         {
             try
             {
-                //if (string.IsNullOrWhiteSpace(txttimkiemtheoten.Text))
-                //{
-                //    MessageBox.Show("Vui lòng nhập tên nhân viên để tìm kiếm!",
-                //        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //    return;
-                //}
-
                 cn.connect();
                 string sql = @"
-                        SELECT DISTINCT
-                            nv.Id            AS N'ID',
-                            nv.MaNV          AS N'Mã nhân viên',
-                            nv.HoTen         AS N'Họ tên',
-                            nv.NgaySinh      AS N'Ngày sinh',
-                            nv.GioiTinh      AS N'Giới tính',
-                            nv.DiaChi        AS N'Địa chỉ',
-                            nv.SoDienThoai   AS N'Số điện thoại',
-                            nv.Email         AS N'Email',
-                            pb.TenPB         AS N'Phòng ban',
-                            cv.TenCV         AS N'Chức vụ',
-                            lu.LuongCoBan    AS N'Lương cơ bản',
-                            hd.LoaiHopDong   AS N'Loại hợp đồng'
-                        FROM tblNhanVien_TuanhCD233018 nv
-                        LEFT JOIN tblPhongBan_ThuanCD233318 pb 
-                            ON nv.MaPB = pb.MaPB AND pb.DeletedAt = 0
-                        LEFT JOIN tblChucVu_KhangCD233181 cv 
-                            ON nv.MaCV = cv.MaCV AND cv.DeletedAt = 0
-                        LEFT JOIN tblLuong_ChienCD232928 lu 
-                            ON nv.MaNV = lu.MaNV
-                        LEFT JOIN tblHopDong hd 
-                            ON nv.MaNV = hd.MaNV
-                        WHERE nv.DeletedAt = 0
-                          AND nv.HoTen LIKE @TenTimKiem
-                        ORDER BY pb.TenPB, cv.TenCV";
-
+                    SELECT DISTINCT
+                        nv.Id_TuanhCD233018       AS N'ID',
+                        nv.MaNV_TuanhCD233018     AS N'Mã nhân viên',
+                        nv.HoTen_TuanhCD233018    AS N'Họ tên',
+                        nv.NgaySinh_TuanhCD233018 AS N'Ngày sinh',
+                        nv.GioiTinh_TuanhCD233018 AS N'Giới tính',
+                        nv.DiaChi_TuanhCD233018   AS N'Địa chỉ',
+                        nv.SoDienThoai_TuanhCD233018 AS N'Số điện thoại',
+                        nv.Email_TuanhCD233018    AS N'Email',
+                        pb.TenPB_ThuanCD233318    AS N'Phòng ban',
+                        cv.TenCV_KhangCD233181    AS N'Chức vụ',
+                        hd.LuongCoBan_ChienCD232928 AS N'Lương cơ bản',
+                        hd.LoaiHopDong_ChienCD232928 AS N'Loại hợp đồng'
+                    FROM tblNhanVien_TuanhCD233018 nv
+                    LEFT JOIN tblChucVu_KhangCD233181 cv 
+                        ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181 
+                        AND cv.DeletedAt_KhangCD233181 = 0
+                    LEFT JOIN tblPhongBan_ThuanCD233318 pb 
+                        ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318 
+                        AND pb.DeletedAt_ThuanCD233318 = 0
+                    LEFT JOIN tblHopDong_ChienCD232928 hd 
+                        ON nv.MaNV_TuanhCD233018 = hd.MaNV_TuanhCD233018
+                        AND hd.DeletedAt_ChienCD232928 = 0
+                    WHERE nv.DeletedAt_TuanhCD233018 = 0
+                      AND nv.HoTen_TuanhCD233018 LIKE @TenTimKiem
+                    ORDER BY pb.TenPB_ThuanCD233318, cv.TenCV_KhangCD233181";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
@@ -324,6 +305,7 @@ namespace QuanLyNhanVien3
                     "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void btnTimKiemTheoTen_Click(object sender, EventArgs e)
         {
         }
