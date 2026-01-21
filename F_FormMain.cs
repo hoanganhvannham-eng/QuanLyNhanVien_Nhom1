@@ -149,6 +149,8 @@ namespace QuanLyNhanVien3
         private void F_FormMain_Load(object sender, EventArgs e)
         {
             ApplyRole();
+            toolStripLabel1.Text =
+                "Xin chào: " + LoginInfo.CurrentUserName;
         }
 
         private void thoátToolStripMenuItem1_Click(object sender, EventArgs e)

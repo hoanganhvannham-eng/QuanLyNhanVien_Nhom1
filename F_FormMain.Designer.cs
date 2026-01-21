@@ -53,8 +53,11 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.toolStripLabelUser = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.toolStripLabelUser.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -289,6 +292,24 @@
             this.label1.Text = "Vũ Minh Khang";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
+            // toolStripLabelUser
+            // 
+            this.toolStripLabelUser.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStripLabelUser.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStripLabelUser.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1});
+            this.toolStripLabelUser.Location = new System.Drawing.Point(0, 556);
+            this.toolStripLabelUser.Name = "toolStripLabelUser";
+            this.toolStripLabelUser.Size = new System.Drawing.Size(1324, 25);
+            this.toolStripLabelUser.TabIndex = 6;
+            this.toolStripLabelUser.Text = "toolStrip1";
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(111, 22);
+            this.toolStripLabel1.Text = "toolStripLabel1";
+            // 
             // F_FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -296,6 +317,7 @@
             this.BackgroundImage = global::QuanLyNhanVien3.Properties.Resources.Screenshot_2025_09_15_0905481;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1324, 581);
+            this.Controls.Add(this.toolStripLabelUser);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
@@ -309,6 +331,8 @@
             this.menuStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.toolStripLabelUser.ResumeLayout(false);
+            this.toolStripLabelUser.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -341,5 +365,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ToolStrip toolStripLabelUser;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
     }
 }
