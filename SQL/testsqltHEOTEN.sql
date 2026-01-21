@@ -472,6 +472,36 @@ GO
 
 /*9*/
 
+-- 1️⃣ XÓA BẢNG LƯƠNG TRƯỚC (bảng con)
+DELETE FROM dbo.tblLuong_ChienCD232928;
+GO
+-- ====================================================================
+-- XÓA TOÀN BỘ DỮ LIỆU CHẤM CÔNG CŨ
+-- ====================================================================
+DELETE FROM dbo.tblChamCong_TuanhCD233018;
+GO
+
+-- ====================================================================
+-- THÊM DỮ LIỆU CHẤM CÔNG MẪU CHO CẢ NĂM 2025 (TRỪ CHỦ NHẬT)
+-- ====================================================================
+SET DATEFIRST 7; -- Đặt Chủ nhật là ngày đầu tuần
+GO
+
+DECLARE @Nam INT = 2025;
+DECLARE @NgayBatDau DATE = DATEFROMPARTS(@Nam, 1, 1);
+DECLARE @NgayKetThuc DATE = DATEFROMPARTS(@Nam, 12, 31);
+
+-- Tạo bảng tạm chứa tất cả các ngày trong năm (trừ Chủ nhật)
+WITH AllDays AS (
+    SELECT 
+        DATEADD(DAY, v.number, @NgayBatDau) AS Ngay
+    FROM master.dbo.spt_values v
+    WHERE v.type = 'P'
+      AND v.number <= DATEDIFF(DAY, @NgayBatDau, @NgayKetThuc)
+      AND DATEPART(WEEKDAY, DATEADD(DAY, v.number, @NgayBatDau)) <> 1 -- Loại Chủ nhật
+)
+
+-- Thêm chấm công cho TẤT CẢ nhân viên x TẤT CẢ ngày làm việc
 INSERT INTO dbo.tblChamCong_TuanhCD233018
 (
     MaChamCong_TuanhCD233018,
@@ -483,20 +513,33 @@ INSERT INTO dbo.tblChamCong_TuanhCD233018
     NhanVienId_TuanhCD233018
 )
 SELECT
-    'CC' + RIGHT('000000' + CAST(nv.Id_TuanhCD233018 AS VARCHAR), 6) + '_20250101',
-    '2025-01-01',
-    '08:00',
-    '17:00',
-    NULL,
-    0,
+    -- Mã chấm công: CC000001_20250103 (CC + ID nhân viên 6 số + ngày)
+    'CC' + RIGHT('000000' + CAST(nv.Id_TuanhCD233018 AS VARCHAR), 6) + '_' + CONVERT(VARCHAR(8), d.Ngay, 112),
+    d.Ngay,
+    
+    -- Giờ vào: Ngẫu nhiên từ 07:30 - 08:30
+    DATEADD(MINUTE, ABS(CHECKSUM(NEWID())) % 61 + 450, CAST('00:00' AS TIME)),
+    
+    -- Giờ về: Ngẫu nhiên từ 17:00 - 18:00
+    DATEADD(MINUTE, ABS(CHECKSUM(NEWID())) % 61 + 1020, CAST('00:00' AS TIME)),
+    
+    NULL, -- Ghi chú
+    0,    -- DeletedAt
     nv.Id_TuanhCD233018
 FROM dbo.tblNhanVien_TuanhCD233018 nv
-WHERE NOT EXISTS (
-    SELECT 1
-    FROM dbo.tblChamCong_TuanhCD233018 cc
-    WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-      AND cc.Ngay_TuanhCD233018 = '2025-01-01'
-);
+CROSS JOIN AllDays d
+WHERE nv.DeletedAt_TuanhCD233018 = 0
+ORDER BY nv.Id_TuanhCD233018, d.Ngay;
+GO
+
+-- Kiểm tra kết quả
+SELECT 
+    COUNT(*) AS TongSoBanGhi,
+    COUNT(DISTINCT NhanVienId_TuanhCD233018) AS SoNhanVien,
+    COUNT(DISTINCT Ngay_TuanhCD233018) AS SoNgayLamViec,
+    MIN(Ngay_TuanhCD233018) AS NgayDauTien,
+    MAX(Ngay_TuanhCD233018) AS NgayCuoiCung
+FROM dbo.tblChamCong_TuanhCD233018;
 GO
 
 
@@ -534,3 +577,8 @@ WHERE NOT EXISTS (
     WHERE l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
 );
 GO
+
+
+            SELECT COUNT(*) AS TongNV 
+            FROM tblNhanVien_TuanhCD233018
+            WHERE DeletedAt_TuanhCD233018 = 0
