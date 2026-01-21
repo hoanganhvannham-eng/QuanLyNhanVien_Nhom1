@@ -222,5 +222,10 @@ namespace QuanLyNhanVien3
                     "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        private void F_BaoCaoDuAn_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
