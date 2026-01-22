@@ -40,7 +40,7 @@
             this.luongToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chamConngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chấmCôngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.chiTiếtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chamConngchitietToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ThongKe = new System.Windows.Forms.ToolStripMenuItem();
             this.BaoCaoNhanVienToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.báoCáoLươngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -162,7 +162,7 @@
             // 
             this.chamConngToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.chấmCôngToolStripMenuItem,
-            this.chiTiếtToolStripMenuItem});
+            this.chamConngchitietToolStripMenuItem});
             this.chamConngToolStripMenuItem.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chamConngToolStripMenuItem.Name = "chamConngToolStripMenuItem";
             this.chamConngToolStripMenuItem.Size = new System.Drawing.Size(147, 29);
@@ -176,12 +176,12 @@
             this.chấmCôngToolStripMenuItem.Text = "Chấm công";
             this.chấmCôngToolStripMenuItem.Click += new System.EventHandler(this.chấmCôngToolStripMenuItem_Click);
             // 
-            // chiTiếtToolStripMenuItem
+            // chamConngchitietToolStripMenuItem
             // 
-            this.chiTiếtToolStripMenuItem.Name = "chiTiếtToolStripMenuItem";
-            this.chiTiếtToolStripMenuItem.Size = new System.Drawing.Size(286, 30);
-            this.chiTiếtToolStripMenuItem.Text = "Chi tiết/ Chỉnh sửa";
-            this.chiTiếtToolStripMenuItem.Click += new System.EventHandler(this.chiTiếtToolStripMenuItem_Click);
+            this.chamConngchitietToolStripMenuItem.Name = "chamConngchitietToolStripMenuItem";
+            this.chamConngchitietToolStripMenuItem.Size = new System.Drawing.Size(286, 30);
+            this.chamConngchitietToolStripMenuItem.Text = "Chi tiết/ Chỉnh sửa";
+            this.chamConngchitietToolStripMenuItem.Click += new System.EventHandler(this.chiTiếtToolStripMenuItem_Click);
             // 
             // ThongKe
             // 
@@ -389,7 +389,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStrip toolStripLabelUser;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
-        private System.Windows.Forms.ToolStripMenuItem chiTiếtToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem chamConngchitietToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem chấmCôngToolStripMenuItem;
     }
 }
