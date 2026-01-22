@@ -164,6 +164,7 @@
             this.Name = "F_BaoCaoLuong";
             this.Text = "F_BaoCaoLuong";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.F_BaoCaoLuong_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);

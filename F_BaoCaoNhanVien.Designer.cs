@@ -2,203 +2,238 @@
 {
     partial class F_BaoCaoNhanVien
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
+            this.panelHeader = new System.Windows.Forms.Panel();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.lblSubTitle = new System.Windows.Forms.Label();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.gbSearch = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxmanhanvientimkiem = new System.Windows.Forms.TextBox();
-            this.btnXuatEXL = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.txttimkiemtheoten = new System.Windows.Forms.TextBox();
-            this.btnsoluongtheogioitinh = new System.Windows.Forms.Button();
+            this.gbReportType = new System.Windows.Forms.GroupBox();
             this.btnThongKeNhanVien = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.btnsoluongtheogioitinh = new System.Windows.Forms.Button();
+            this.btnXuatEXL = new System.Windows.Forms.Button();
+            this.gbContent = new System.Windows.Forms.GroupBox();
             this.dtGridViewBCNhanVien = new System.Windows.Forms.DataGridView();
-            this.panel1.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.lblGridTitle = new System.Windows.Forms.Label();
+            this.panelHeader.SuspendLayout();
+            this.panelTop.SuspendLayout();
+            this.gbSearch.SuspendLayout();
+            this.gbReportType.SuspendLayout();
+            this.gbContent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGridViewBCNhanVien)).BeginInit();
             this.SuspendLayout();
             // 
-            // panel1
+            // panelHeader
             // 
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1385, 122);
-            this.panel1.TabIndex = 0;
+            this.panelHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(58)))), ((int)(((byte)(138)))));
+            this.panelHeader.Controls.Add(this.lblTitle);
+            this.panelHeader.Controls.Add(this.lblSubTitle);
+            this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelHeader.Location = new System.Drawing.Point(0, 0);
+            this.panelHeader.Name = "panelHeader";
+            this.panelHeader.Size = new System.Drawing.Size(1385, 78);
+            this.panelHeader.TabIndex = 2;
             // 
-            // label1
+            // lblTitle
             // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Times New Roman", 25.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(494, 56);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(364, 49);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Báo Cáo Nhân Viên";
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.ForeColor = System.Drawing.Color.White;
+            this.lblTitle.Location = new System.Drawing.Point(18, 10);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(294, 37);
+            this.lblTitle.TabIndex = 0;
+            this.lblTitle.Text = "BÁO CÁO NHÂN VIÊN";
             // 
-            // panel3
+            // lblSubTitle
             // 
-            this.panel3.Controls.Add(this.label3);
-            this.panel3.Controls.Add(this.label2);
-            this.panel3.Controls.Add(this.textBoxmanhanvientimkiem);
-            this.panel3.Controls.Add(this.btnXuatEXL);
-            this.panel3.Controls.Add(this.txttimkiemtheoten);
-            this.panel3.Controls.Add(this.btnsoluongtheogioitinh);
-            this.panel3.Controls.Add(this.btnThongKeNhanVien);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(0, 122);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1385, 248);
-            this.panel3.TabIndex = 3;
+            this.lblSubTitle.AutoSize = true;
+            this.lblSubTitle.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblSubTitle.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lblSubTitle.Location = new System.Drawing.Point(20, 45);
+            this.lblSubTitle.Name = "lblSubTitle";
+            this.lblSubTitle.Size = new System.Drawing.Size(237, 23);
+            this.lblSubTitle.TabIndex = 1;
+            this.lblSubTitle.Text = "Thống kê & tìm kiếm nhân viên";
             // 
-            // label3
+            // panelTop
             // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(706, 150);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(101, 19);
-            this.label3.TabIndex = 151;
-            this.label3.Text = "Tên nhân viên";
+            this.panelTop.Controls.Add(this.gbSearch);
+            this.panelTop.Controls.Add(this.gbReportType);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 78);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Padding = new System.Windows.Forms.Padding(12);
+            this.panelTop.Size = new System.Drawing.Size(1385, 210);
+            this.panelTop.TabIndex = 1;
+            // 
+            // gbSearch
+            // 
+            this.gbSearch.Controls.Add(this.label2);
+            this.gbSearch.Controls.Add(this.textBoxmanhanvientimkiem);
+            this.gbSearch.Controls.Add(this.label3);
+            this.gbSearch.Controls.Add(this.txttimkiemtheoten);
+            this.gbSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.gbSearch.Location = new System.Drawing.Point(12, 102);
+            this.gbSearch.Name = "gbSearch";
+            this.gbSearch.Size = new System.Drawing.Size(1361, 96);
+            this.gbSearch.TabIndex = 0;
+            this.gbSearch.TabStop = false;
+            this.gbSearch.Text = "Tìm kiếm";
             // 
             // label2
             // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(706, 121);
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.label2.Location = new System.Drawing.Point(20, 35);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(109, 19);
-            this.label2.TabIndex = 150;
-            this.label2.Text = "Mã Nhân Viên ";
+            this.label2.Size = new System.Drawing.Size(124, 23);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Mã nhân viên";
             // 
             // textBoxmanhanvientimkiem
             // 
-            this.textBoxmanhanvientimkiem.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.textBoxmanhanvientimkiem.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxmanhanvientimkiem.Location = new System.Drawing.Point(834, 112);
+            this.textBoxmanhanvientimkiem.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.textBoxmanhanvientimkiem.Location = new System.Drawing.Point(150, 32);
             this.textBoxmanhanvientimkiem.Name = "textBoxmanhanvientimkiem";
-            this.textBoxmanhanvientimkiem.Size = new System.Drawing.Size(246, 28);
-            this.textBoxmanhanvientimkiem.TabIndex = 5;
-            this.textBoxmanhanvientimkiem.TextChanged += new System.EventHandler(this.textBoxmanhanvientimkiem_TextChanged);
+            this.textBoxmanhanvientimkiem.Size = new System.Drawing.Size(240, 30);
+            this.textBoxmanhanvientimkiem.TabIndex = 1;
             // 
-            // btnXuatEXL
+            // label3
             // 
-            this.btnXuatEXL.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnXuatEXL.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnXuatEXL.Location = new System.Drawing.Point(1122, 112);
-            this.btnXuatEXL.Name = "btnXuatEXL";
-            this.btnXuatEXL.Size = new System.Drawing.Size(223, 50);
-            this.btnXuatEXL.TabIndex = 4;
-            this.btnXuatEXL.Text = "Xuất Excel";
-            this.btnXuatEXL.UseVisualStyleBackColor = true;
-            this.btnXuatEXL.Click += new System.EventHandler(this.btnXuatEXL_Click);
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.label3.Location = new System.Drawing.Point(420, 35);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(124, 23);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Tên nhân viên";
             // 
             // txttimkiemtheoten
             // 
-            this.txttimkiemtheoten.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.txttimkiemtheoten.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txttimkiemtheoten.Location = new System.Drawing.Point(834, 150);
+            this.txttimkiemtheoten.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txttimkiemtheoten.Location = new System.Drawing.Point(550, 32);
             this.txttimkiemtheoten.Name = "txttimkiemtheoten";
-            this.txttimkiemtheoten.Size = new System.Drawing.Size(246, 28);
-            this.txttimkiemtheoten.TabIndex = 2;
-            this.txttimkiemtheoten.TextChanged += new System.EventHandler(this.txttimkiemtheoten_TextChanged);
+            this.txttimkiemtheoten.Size = new System.Drawing.Size(260, 30);
+            this.txttimkiemtheoten.TabIndex = 3;
             // 
-            // btnsoluongtheogioitinh
+            // gbReportType
             // 
-            this.btnsoluongtheogioitinh.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnsoluongtheogioitinh.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnsoluongtheogioitinh.Location = new System.Drawing.Point(384, 112);
-            this.btnsoluongtheogioitinh.Name = "btnsoluongtheogioitinh";
-            this.btnsoluongtheogioitinh.Size = new System.Drawing.Size(269, 71);
-            this.btnsoluongtheogioitinh.TabIndex = 1;
-            this.btnsoluongtheogioitinh.Text = "Thống Kê Số Lượng Nhân Viên Theo Giới Tính";
-            this.btnsoluongtheogioitinh.UseVisualStyleBackColor = true;
-            this.btnsoluongtheogioitinh.Click += new System.EventHandler(this.btnsoluongtheogioitinh_Click);
+            this.gbReportType.Controls.Add(this.btnThongKeNhanVien);
+            this.gbReportType.Controls.Add(this.btnsoluongtheogioitinh);
+            this.gbReportType.Controls.Add(this.btnXuatEXL);
+            this.gbReportType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.gbReportType.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.gbReportType.Location = new System.Drawing.Point(12, 12);
+            this.gbReportType.Name = "gbReportType";
+            this.gbReportType.Size = new System.Drawing.Size(1361, 90);
+            this.gbReportType.TabIndex = 1;
+            this.gbReportType.TabStop = false;
+            this.gbReportType.Text = "Chọn loại báo cáo";
             // 
             // btnThongKeNhanVien
             // 
-            this.btnThongKeNhanVien.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnThongKeNhanVien.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThongKeNhanVien.Location = new System.Drawing.Point(104, 112);
+            this.btnThongKeNhanVien.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThongKeNhanVien.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnThongKeNhanVien.Location = new System.Drawing.Point(18, 32);
             this.btnThongKeNhanVien.Name = "btnThongKeNhanVien";
-            this.btnThongKeNhanVien.Size = new System.Drawing.Size(223, 71);
+            this.btnThongKeNhanVien.Size = new System.Drawing.Size(300, 44);
             this.btnThongKeNhanVien.TabIndex = 0;
-            this.btnThongKeNhanVien.Text = "Thống Kê Nhân Viên ";
-            this.btnThongKeNhanVien.UseVisualStyleBackColor = true;
+            this.btnThongKeNhanVien.Text = "Thống kê nhân viên";
             this.btnThongKeNhanVien.Click += new System.EventHandler(this.btnThongKeNhanVien_Click);
             // 
-            // panel2
+            // btnsoluongtheogioitinh
             // 
-            this.panel2.Controls.Add(this.dtGridViewBCNhanVien);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 370);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1385, 380);
-            this.panel2.TabIndex = 4;
+            this.btnsoluongtheogioitinh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnsoluongtheogioitinh.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnsoluongtheogioitinh.Location = new System.Drawing.Point(340, 32);
+            this.btnsoluongtheogioitinh.Name = "btnsoluongtheogioitinh";
+            this.btnsoluongtheogioitinh.Size = new System.Drawing.Size(340, 44);
+            this.btnsoluongtheogioitinh.TabIndex = 1;
+            this.btnsoluongtheogioitinh.Text = "Thống kê theo giới tính";
+            this.btnsoluongtheogioitinh.Click += new System.EventHandler(this.btnsoluongtheogioitinh_Click);
+            // 
+            // btnXuatEXL
+            // 
+            this.btnXuatEXL.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXuatEXL.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnXuatEXL.Location = new System.Drawing.Point(700, 32);
+            this.btnXuatEXL.Name = "btnXuatEXL";
+            this.btnXuatEXL.Size = new System.Drawing.Size(220, 44);
+            this.btnXuatEXL.TabIndex = 2;
+            this.btnXuatEXL.Text = "Xuất Excel";
+            this.btnXuatEXL.Click += new System.EventHandler(this.btnXuatEXL_Click);
+            // 
+            // gbContent
+            // 
+            this.gbContent.Controls.Add(this.dtGridViewBCNhanVien);
+            this.gbContent.Controls.Add(this.lblGridTitle);
+            this.gbContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbContent.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.gbContent.Location = new System.Drawing.Point(0, 288);
+            this.gbContent.Name = "gbContent";
+            this.gbContent.Padding = new System.Windows.Forms.Padding(10);
+            this.gbContent.Size = new System.Drawing.Size(1385, 462);
+            this.gbContent.TabIndex = 0;
+            this.gbContent.TabStop = false;
+            this.gbContent.Text = "Bảng số liệu";
             // 
             // dtGridViewBCNhanVien
             // 
-            this.dtGridViewBCNhanVien.AllowUserToAddRows = false;
             this.dtGridViewBCNhanVien.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dtGridViewBCNhanVien.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtGridViewBCNhanVien.ColumnHeadersHeight = 29;
             this.dtGridViewBCNhanVien.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dtGridViewBCNhanVien.Location = new System.Drawing.Point(0, 0);
-            this.dtGridViewBCNhanVien.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dtGridViewBCNhanVien.Location = new System.Drawing.Point(10, 63);
             this.dtGridViewBCNhanVien.Name = "dtGridViewBCNhanVien";
             this.dtGridViewBCNhanVien.ReadOnly = true;
+            this.dtGridViewBCNhanVien.RowHeadersVisible = false;
             this.dtGridViewBCNhanVien.RowHeadersWidth = 51;
-            this.dtGridViewBCNhanVien.RowTemplate.Height = 24;
-            this.dtGridViewBCNhanVien.Size = new System.Drawing.Size(1385, 380);
-            this.dtGridViewBCNhanVien.TabIndex = 121;
+            this.dtGridViewBCNhanVien.Size = new System.Drawing.Size(1365, 389);
+            this.dtGridViewBCNhanVien.TabIndex = 0;
+            this.dtGridViewBCNhanVien.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewBCNhanVien_CellClick);
+            // 
+            // lblGridTitle
+            // 
+            this.lblGridTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblGridTitle.Location = new System.Drawing.Point(10, 33);
+            this.lblGridTitle.Name = "lblGridTitle";
+            this.lblGridTitle.Size = new System.Drawing.Size(1365, 30);
+            this.lblGridTitle.TabIndex = 1;
+            this.lblGridTitle.Text = "Chi tiết danh sách nhân viên";
             // 
             // F_BaoCaoNhanVien
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(1385, 750);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel3);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.gbContent);
+            this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.panelHeader);
             this.Name = "F_BaoCaoNhanVien";
-            this.Text = "3";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Báo cáo nhân viên";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel2.ResumeLayout(false);
+            this.panelHeader.ResumeLayout(false);
+            this.panelHeader.PerformLayout();
+            this.panelTop.ResumeLayout(false);
+            this.gbSearch.ResumeLayout(false);
+            this.gbSearch.PerformLayout();
+            this.gbReportType.ResumeLayout(false);
+            this.gbContent.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtGridViewBCNhanVien)).EndInit();
             this.ResumeLayout(false);
 
@@ -206,17 +241,24 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panelHeader;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblSubTitle;
+
+        private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.GroupBox gbReportType;
         private System.Windows.Forms.Button btnThongKeNhanVien;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnsoluongtheogioitinh;
-        private System.Windows.Forms.TextBox txttimkiemtheoten;
-        private System.Windows.Forms.DataGridView dtGridViewBCNhanVien;
         private System.Windows.Forms.Button btnXuatEXL;
-        private System.Windows.Forms.TextBox textBoxmanhanvientimkiem;
+
+        private System.Windows.Forms.GroupBox gbSearch;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBoxmanhanvientimkiem;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txttimkiemtheoten;
+
+        private System.Windows.Forms.GroupBox gbContent;
+        private System.Windows.Forms.Label lblGridTitle;
+        private System.Windows.Forms.DataGridView dtGridViewBCNhanVien;
     }
 }

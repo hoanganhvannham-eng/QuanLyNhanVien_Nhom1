@@ -246,9 +246,11 @@ namespace QuanLyNhanVien3
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-    
 
-        
+        private void F_BaoCaoLuong_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }
