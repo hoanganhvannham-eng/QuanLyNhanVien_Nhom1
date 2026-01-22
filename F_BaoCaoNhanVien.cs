@@ -319,5 +319,25 @@ namespace QuanLyNhanVien3
         {
             timkiemtheomanhanvien();
         }
+
+        private void F_BaoCaoNhanVien_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dtGridViewBCNhanVien_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void txttimkiemtheoten_TextChanged_1(object sender, EventArgs e)
+        {
+            timkiemtheoten();
+        }
+
+        private void textBoxmanhanvientimkiem_TextChanged_1(object sender, EventArgs e)
+        {
+            timkiemtheomanhanvien();
+        }
     }
 }

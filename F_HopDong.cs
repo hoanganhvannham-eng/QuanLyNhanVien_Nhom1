@@ -14,7 +14,7 @@ using static QuanLyNhanVien3.F_FormMain;
 
 namespace QuanLyNhanVien3
 {
-    public partial class F_HopDong: Form
+    public partial class F_HopDong : Form
     {
         public F_HopDong()
         {
@@ -22,6 +22,7 @@ namespace QuanLyNhanVien3
         }
 
         connectData cn = new connectData();
+
         private void ClearAllInputs(Control parent)
         {
             foreach (Control ctl in parent.Controls)
@@ -37,22 +38,21 @@ namespace QuanLyNhanVien3
             }
         }
 
-
         private void LoadcomboBox()
         {
-            // load chuc vu combobox
+            // load nhan vien combobox
             try
             {
                 cn.connect();
-                string sqsqlLoadcomboBoxttblChucVu = "SELECT * FROM tblNhanVien WHERE DeletedAt = 0";
-                using (SqlDataAdapter da = new SqlDataAdapter(sqsqlLoadcomboBoxttblChucVu, cn.conn))
+                string sqlLoadcomboBox = "SELECT * FROM tblNhanVien_TuanhCD233018";
+                using (SqlDataAdapter da = new SqlDataAdapter(sqlLoadcomboBox, cn.conn))
                 {
                     DataSet ds = new DataSet();
                     da.Fill(ds);
 
                     cbMaNV.DataSource = ds.Tables[0];
-                    cbMaNV.DisplayMember = "MaNV"; // cot hien thi
-                    cbMaNV.ValueMember = "MaNV"; // cot gia tri
+                    cbMaNV.DisplayMember = "MaNV_TuanhCD233018"; // cot hien thi
+                    cbMaNV.ValueMember = "MaNV_TuanhCD233018"; // cot gia tri
                 }
             }
             catch (Exception ex)
@@ -60,24 +60,29 @@ namespace QuanLyNhanVien3
                 MessageBox.Show("Lỗi load ma NV: " + ex.Message);
             }
         }
+
         private void LoadDataHopDong()
         {
             try
             {
                 cn.connect();
 
+                // Lưu ý: Trong bảng tblHopDong_ChienCD232928 không có trường DeletedAt
+                // Tôi sẽ giả sử bảng này có trường DeletedAt_ChienCD232928 để phù hợp với logic của bạn
+                // Nếu thực tế không có, bạn cần bỏ điều kiện WHERE
                 string sqlLoadDataNhanVien = @"SELECT 
-                                                    MaHopDong AS [Mã Hợp Đồng], 
-                                                    hd.MaNV AS [Mã Nhân Viên], 
-                                                    NgayBatDau AS [Ngày Bắt Đầu], 
-                                                    NgayKetThuc AS [Ngày Kết Thúc], 
-                                                    LoaiHopDong AS [Loại Hợp Đồng], 
-                                                    LuongCoBan AS [Lương Cơ Bản], 
-                                                    hd.GhiChu AS [Ghi Chú]
-                                                FROM tblHopDong AS hd
-                                                JOIN tblNhanVien AS nv ON hd.MaNV = nv.MaNV
-                                                WHERE nv.DeletedAt = 0
-                                                ORDER BY MaHopDong;
+                                                    hd.Id_ChienCD232928 AS [ID],
+                                                    hd.MaHopDong_ChienCD232928 AS [Mã Hợp Đồng], 
+                                                    hd.MaNV_TuanhCD233018 AS [Mã Nhân Viên], 
+                                                    hd.NgayBatDau_ChienCD232928 AS [Ngày Bắt Đầu], 
+                                                    hd.NgayKetThuc_ChienCD232928 AS [Ngày Kết Thúc], 
+                                                    hd.LoaiHopDong_ChienCD232928 AS [Loại Hợp Đồng], 
+                                                    hd.LuongCoBan_ChienCD232928 AS [Lương Cơ Bản], 
+                                                    hd.Ghichu_ChienCD232928 AS [Ghi Chú]
+                                                FROM tblHopDong_ChienCD232928 AS hd
+                                                -- JOIN tblNhanVien_TuanhCD233018 AS nv ON hd.MaNV_TuanhCD233018 = nv.MaNV_TuanhCD233018
+                                                -- WHERE hd.DeletedAt_ChienCD232928 = 0  -- Nếu có trường DeletedAt
+                                                ORDER BY hd.MaHopDong_ChienCD232928;
                                                 ";
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(sqlLoadDataNhanVien, cn.conn))
@@ -93,9 +98,8 @@ namespace QuanLyNhanVien3
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu Dự Án: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lỗi khi tải dữ liệu Hợp Đồng: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void F_HopDong_Load(object sender, EventArgs e)
@@ -116,16 +120,17 @@ namespace QuanLyNhanVien3
             int i = e.RowIndex;
             if (i >= 0)
             {
-                tbMaHD.Text = dtGridViewHD.Rows[i].Cells[0].Value.ToString();
-                cbMaNV.SelectedValue = dtGridViewHD.Rows[i].Cells[1].Value.ToString();
-                DatePickerNgayBatDau.Value = Convert.ToDateTime(dtGridViewHD.Rows[i].Cells[2].Value);
-                DatePickerNgayKetThuc.Value = Convert.ToDateTime(dtGridViewHD.Rows[i].Cells[3].Value);
-                tbLoaiHD.Text = dtGridViewHD.Rows[i].Cells[4].Value.ToString();
-                tbLuongCoBan.Text = dtGridViewHD.Rows[i].Cells[5].Value.ToString();
-                tbGhiChu.Text = dtGridViewHD.Rows[i].Cells[6].Value.ToString();
+                tbMaHD.Text = dtGridViewHD.Rows[i].Cells[1].Value.ToString(); // Cell 1 là Mã Hợp Đồng
+                cbMaNV.SelectedValue = dtGridViewHD.Rows[i].Cells[2].Value.ToString(); // Cell 2 là Mã NV
+                DatePickerNgayBatDau.Value = Convert.ToDateTime(dtGridViewHD.Rows[i].Cells[3].Value);
+                DatePickerNgayKetThuc.Value = Convert.ToDateTime(dtGridViewHD.Rows[i].Cells[4].Value);
+                tbLoaiHD.Text = dtGridViewHD.Rows[i].Cells[5].Value.ToString();
+                tbLuongCoBan.Text = dtGridViewHD.Rows[i].Cells[6].Value.ToString();
+                tbGhiChu.Text = dtGridViewHD.Rows[i].Cells[7]?.Value?.ToString() ?? "";
             }
         }
-   private void btnThem_Click_2(object sender, EventArgs e)
+
+        private void btnThem_Click_2(object sender, EventArgs e)
         {
             try
             {
@@ -134,19 +139,15 @@ namespace QuanLyNhanVien3
                     string.IsNullOrWhiteSpace(tbMaHD.Text) ||
                     cbMaNV.SelectedIndex == -1 ||
                     string.IsNullOrWhiteSpace(tbLoaiHD.Text) ||
-                    string.IsNullOrWhiteSpace(tbLuongCoBan.Text) ||
-                    string.IsNullOrWhiteSpace(tbLoaiHD.Text))
+                    string.IsNullOrWhiteSpace(tbLuongCoBan.Text))
                 {
                     MessageBox.Show("Vui lòng nhập đầy đủ thông tin !", "Thông báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-
-
-
                 // check ma Hop Dong
-                string checkMaDASql = "SELECT COUNT(*) FROM tblHopDong  WHERE MaHopDong  = @MaHopDong  AND DeletedAt = 0";
+                string checkMaDASql = "SELECT COUNT(*) FROM tblHopDong_ChienCD232928 WHERE MaHopDong_ChienCD232928 = @MaHopDong";
                 using (SqlCommand cmdcheckMaDASql = new SqlCommand(checkMaDASql, cn.conn))
                 {
                     cmdcheckMaDASql.Parameters.AddWithValue("@MaHopDong", tbMaHD.Text);
@@ -161,16 +162,13 @@ namespace QuanLyNhanVien3
                     }
                 }
 
-
                 //Kiểm Tra trong lương cơ bản 
                 string input = tbLuongCoBan.Text.Trim();
-                // 2. Kiểm tra có phải số hay không (cho phép dấu . hoặc , theo hệ thống)
                 if (!double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out double luong))
                 {
                     MessageBox.Show("Lương cơ bản phải là số!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                // 3. Kiểm tra phải > 0
                 if (luong <= 0)
                 {
                     MessageBox.Show("Lương cơ bản phải lớn hơn 0!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -185,9 +183,11 @@ namespace QuanLyNhanVien3
                 }
                 // end check
 
-                string sqltblHopDong = @"INSERT INTO tblHopDong 
-                           (MaHopDong, MaNV, NgayBatDau, NgayKetThuc, LoaiHopDong, LuongCoBan, Ghichu, DeletedAt)
-                           VALUES ( @MaHopDong, @MaNV, @NgayBatDau, @NgayKetThuc, @LoaiHopDong, @LuongCoBan, @GhiChu, 0)";
+                string sqltblHopDong = @"INSERT INTO tblHopDong_ChienCD232928 
+                           (MaHopDong_ChienCD232928, MaNV_TuanhCD233018, NgayBatDau_ChienCD232928, 
+                           NgayKetThuc_ChienCD232928, LoaiHopDong_ChienCD232928, 
+                           LuongCoBan_ChienCD232928, Ghichu_ChienCD232928)
+                           VALUES (@MaHopDong, @MaNV, @NgayBatDau, @NgayKetThuc, @LoaiHopDong, @LuongCoBan, @GhiChu)";
 
                 using (SqlCommand cmd = new SqlCommand(sqltblHopDong, cn.conn))
                 {
@@ -237,13 +237,11 @@ namespace QuanLyNhanVien3
 
                 //Kiểm Tra trong lương cơ bản 
                 string input = tbLuongCoBan.Text.Trim();
-                // 2. Kiểm tra có phải số hay không (cho phép dấu . hoặc , theo hệ thống)
                 if (!double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out double luong))
                 {
                     MessageBox.Show("Lương cơ bản phải là số!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                // 3. Kiểm tra phải > 0
                 if (luong <= 0)
                 {
                     MessageBox.Show("Lương cơ bản phải lớn hơn 0!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -258,7 +256,7 @@ namespace QuanLyNhanVien3
                 }
                 // end check
 
-                string checkMaHDSql = "SELECT COUNT(*) FROM tblHopDong WHERE MaHopDong = @MaHopDong AND DeletedAt = 0";
+                string checkMaHDSql = "SELECT COUNT(*) FROM tblHopDong_ChienCD232928 WHERE MaHopDong_ChienCD232928 = @MaHopDong";
                 using (SqlCommand cmd = new SqlCommand(checkMaHDSql, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@MaHopDong", tbMaHD.Text.Trim());
@@ -275,8 +273,7 @@ namespace QuanLyNhanVien3
                     string.IsNullOrWhiteSpace(tbMaHD.Text) ||
                     cbMaNV.SelectedIndex == -1 ||
                     string.IsNullOrWhiteSpace(tbLoaiHD.Text) ||
-                    string.IsNullOrWhiteSpace(tbLuongCoBan.Text) ||
-                    string.IsNullOrWhiteSpace(tbLoaiHD.Text))
+                    string.IsNullOrWhiteSpace(tbLuongCoBan.Text))
                 {
                     MessageBox.Show("Vui lòng nhập đầy đủ thông tin !", "Thông báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -289,13 +286,17 @@ namespace QuanLyNhanVien3
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question
                 );
-                // NgayBatDau, NgayKetThuc, LoaiHopDong, LuongCoBan, Ghichu, DeletedAt)
-                // @NgayBatDau, @NgayKetThuc, @LoaiHopDong, @LuongCoBan, @GhiChu, 0)"
 
                 if (confirm == DialogResult.Yes)
                 {
-                    string sql = @"UPDATE tblHopDong SET  MaHopDong = @MaHopDong, MaNV = @MaNV, NgayBatDau = @NgayBatDau, NgayKetThuc = @NgayKetThuc,
-                              LoaiHopDong = @LoaiHopDong, LuongCoBan = @LuongCoBan, GhiChu= @GhiChu, DeletedAt = 0 WHERE MaHopDong = @MaHopDong";
+                    string sql = @"UPDATE tblHopDong_ChienCD232928 SET 
+                              MaNV_TuanhCD233018 = @MaNV, 
+                              NgayBatDau_ChienCD232928 = @NgayBatDau, 
+                              NgayKetThuc_ChienCD232928 = @NgayKetThuc,
+                              LoaiHopDong_ChienCD232928 = @LoaiHopDong, 
+                              LuongCoBan_ChienCD232928 = @LuongCoBan, 
+                              Ghichu_ChienCD232928 = @GhiChu
+                              WHERE MaHopDong_ChienCD232928 = @MaHopDong";
                     using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaHopDong", tbMaHD.Text.Trim());
@@ -317,7 +318,7 @@ namespace QuanLyNhanVien3
                         }
                         else
                         {
-                            MessageBox.Show("Sửa hợp đông thất bại!", "Lỗi",
+                            MessageBox.Show("Sửa hợp đồng thất bại!", "Lỗi",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
@@ -350,7 +351,7 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    string query = "UPDATE tblHopDong SET DeletedAt = 1 WHERE MaHopDong = @MaHopDong";
+                    string query = "DELETE FROM tblHopDong_ChienCD232928 WHERE MaHopDong_ChienCD232928 = @MaHopDong";
                     using (SqlCommand cmd = new SqlCommand(query, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaHopDong", tbMaHD.Text);
@@ -386,7 +387,6 @@ namespace QuanLyNhanVien3
         {
             try
             {
-                // Lấy giá trị từ ComboBox (có thể nhập tay hoặc chọn)
                 string MaNVtimkiem = cbMaNV.Text.Trim();
 
                 if (string.IsNullOrEmpty(MaNVtimkiem))
@@ -398,10 +398,17 @@ namespace QuanLyNhanVien3
 
                 cn.connect();
 
-                string sql = @"SELECT MaHopDong, MaNV, NgayBatDau, NgayKetThuc, LoaiHopDong, LuongCoBan, Ghichu
-                   FROM tblHopDong
-                   WHERE DeletedAt = 0 AND MaNV LIKE @MaNV
-                   ORDER BY MaHopDong";
+                string sql = @"SELECT Id_ChienCD232928 AS [ID],
+                                      MaHopDong_ChienCD232928 AS [Mã Hợp Đồng], 
+                                      MaNV_TuanhCD233018 AS [Mã Nhân Viên], 
+                                      NgayBatDau_ChienCD232928 AS [Ngày Bắt Đầu], 
+                                      NgayKetThuc_ChienCD232928 AS [Ngày Kết Thúc], 
+                                      LoaiHopDong_ChienCD232928 AS [Loại Hợp Đồng], 
+                                      LuongCoBan_ChienCD232928 AS [Lương Cơ Bản], 
+                                      Ghichu_ChienCD232928 AS [Ghi Chú]
+                               FROM tblHopDong_ChienCD232928
+                               WHERE MaNV_TuanhCD233018 LIKE @MaNV
+                               ORDER BY MaHopDong_ChienCD232928";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
@@ -420,119 +427,18 @@ namespace QuanLyNhanVien3
             {
                 MessageBox.Show("Lỗi: " + ex.Message);
             }
-
         }
 
         private void btnXemHDCu_Click_1(object sender, EventArgs e)
         {
-            try
-            {
-                cn.connect();
-                string query = @" SELECT MaHopDong, MaNV, NgayBatDau, NgayKetThuc, LoaiHopDong, LuongCoBan, Ghichu FROM tblHopDong WHERE DeletedAt =1 ORDER BY MaHopDong";
-                using (SqlDataAdapter da = new SqlDataAdapter(query, cn.conn))
-                {
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dtGridViewHD.DataSource = dt;
-                }
-                cn.disconnect();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi: " + ex.Message);
-            }
+            // Nếu bảng không có cột DeletedAt, chức năng này không khả dụng
+            MessageBox.Show("Chức năng xem hợp đồng đã xóa không khả dụng vì bảng không hỗ trợ soft delete.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnKhoiPhucHDCu_Click_1(object sender, EventArgs e)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(tbMaHD.Text))
-                {
-                    MessageBox.Show("Vui lòng chọn hoặc nhập mã Hợp Đồng cần khôi phục!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                cn.connect();
-                string query = "SELECT COUNT(*) FROM tblHopDong WHERE MaHopDong = @MaHopDong AND DeletedAt = 1";
-                using (SqlCommand cmdcheckPB = new SqlCommand(query, cn.conn))
-                {
-                    cmdcheckPB.Parameters.AddWithValue("@MaHopDong", tbMaHD.Text.Trim());
-                    int emailCount = (int)cmdcheckPB.ExecuteScalar();
-
-                    if (emailCount == 0)
-                    {
-                        MessageBox.Show("Mã Hợp Đồng này đã tồn tại trong hệ thống!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        cn.disconnect();
-                        return;
-                    }
-                }
-
-                //
-                if (tbMKKhoiPhuc.Text == "")
-                {
-                    MessageBox.Show("Vui lòng nhập mật khẩu để khôi phục", "Thông báo", MessageBoxButtons.OK,
-                    MessageBoxIcon.Question);
-                    return;
-                }
-
-                string sqMKKhoiPhuc = "SELECT * FROM tblTaiKhoan WHERE Quyen = @Quyen AND MatKhau = @MatKhau";
-                SqlCommand cmdkhoiphuc = new SqlCommand(sqMKKhoiPhuc, cn.conn);
-                cmdkhoiphuc.Parameters.AddWithValue("@Quyen", "Admin");
-                cmdkhoiphuc.Parameters.AddWithValue("@MatKhau", tbMKKhoiPhuc.Text);
-                SqlDataReader reader = cmdkhoiphuc.ExecuteReader();
-
-                if (reader.Read() == false)
-                {
-                    MessageBox.Show("mật khẩu không đúng? Vui lòng nhập lại mật khẩu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Question);
-                    tbMKKhoiPhuc.Text = "";
-                    reader.Close();
-                    cn.disconnect();
-                    return;
-                }
-                reader.Close();
-
-
-                DialogResult confirm = MessageBox.Show(
-                    "Bạn có chắc chắn muốn khôi phục Hợp Đồng này không?",
-                    "Xác nhận khôi phục",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
-                );
-
-
-                if (confirm == DialogResult.Yes)
-                {
-                    tbMKKhoiPhuc.Text = "";
-                    string querytblPhongBan = "UPDATE tblHopDong SET DeletedAt = 0 WHERE MaHopDong = @MaHopDong";
-                    using (SqlCommand cmd = new SqlCommand(querytblPhongBan, cn.conn))
-                    {
-                        // DELETE FROM tblNhanVien WHERE MaNV = @MaNV / UPDATE tblNhanVien SET DeletedAt = 1 WHERE MaNV = @MaNV
-                        cmd.Parameters.AddWithValue("@MaHopDong", tbMaHD.Text);
-                        int rowsAffected = cmd.ExecuteNonQuery();
-                        if (rowsAffected > 0)
-                        {
-                            MessageBox.Show("khôi phục Hợp Đồng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            cn.disconnect();
-                            ClearAllInputs(this);
-                            LoadDataHopDong();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Không tìm thấy Hợp Đồng để khôi phục!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            cn.disconnect();
-                        }
-                    }
-                    //cn.disconnect();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi " + ex.Message);
-                //MessageBox.Show("Chi tiết lỗi: " + ex.ToString(), "Lỗi hệ thống",
-                //    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // Nếu bảng không có cột DeletedAt, chức năng này không khả dụng
+            MessageBox.Show("Chức năng khôi phục hợp đồng không khả dụng vì bảng không hỗ trợ soft delete.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void checkHienMK_CheckedChanged_1(object sender, EventArgs e)
@@ -634,7 +540,6 @@ namespace QuanLyNhanVien3
                 MessageBox.Show("Không có dữ liệu để xuất!",
                     "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
