@@ -43,13 +43,13 @@ namespace QuanLyNhanVien3
         {
             string role = LoginInfo.CurrentUserRole.ToLower();
 
-            if (role == "admin")
+            if (role == "Admin")
             {
                 // Admin full quyền – không cần làm gì
                 return;
             }
 
-            if (role == "user")
+            if (role == "nhan vien") //Admin
             {
                 // 1. Ẩn tất cả menu quản lý
                 phongBanToolStripMenuItem.Enabled = true;
