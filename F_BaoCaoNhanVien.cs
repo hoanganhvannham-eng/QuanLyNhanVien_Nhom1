@@ -329,5 +329,15 @@ namespace QuanLyNhanVien3
         {
 
         }
+
+        private void txttimkiemtheoten_TextChanged_1(object sender, EventArgs e)
+        {
+            timkiemtheoten();
+        }
+
+        private void textBoxmanhanvientimkiem_TextChanged_1(object sender, EventArgs e)
+        {
+            timkiemtheomanhanvien();
+        }
     }
 }

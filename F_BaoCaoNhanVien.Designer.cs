@@ -114,6 +114,7 @@
             this.textBoxmanhanvientimkiem.Name = "textBoxmanhanvientimkiem";
             this.textBoxmanhanvientimkiem.Size = new System.Drawing.Size(240, 30);
             this.textBoxmanhanvientimkiem.TabIndex = 1;
+            this.textBoxmanhanvientimkiem.TextChanged += new System.EventHandler(this.textBoxmanhanvientimkiem_TextChanged_1);
             // 
             // label3
             // 
@@ -131,6 +132,7 @@
             this.txttimkiemtheoten.Name = "txttimkiemtheoten";
             this.txttimkiemtheoten.Size = new System.Drawing.Size(260, 30);
             this.txttimkiemtheoten.TabIndex = 3;
+            this.txttimkiemtheoten.TextChanged += new System.EventHandler(this.txttimkiemtheoten_TextChanged_1);
             // 
             // gbReportType
             // 
