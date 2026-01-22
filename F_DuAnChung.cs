@@ -8,6 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClosedXML.Excel;
+using iTextSharp.text.pdf;
+using System.IO;
+using iTextPdf = iTextSharp.text;
 
 namespace QuanLyNhanVien3
 {
@@ -19,6 +23,7 @@ namespace QuanLyNhanVien3
         }
 
         connectData cn = new connectData();
+        private string nguoiDangNhap = "Admin"; // Có thể lấy từ session/login
 
         private void ClearAllInputs(Control parent)
         {
@@ -167,7 +172,6 @@ namespace QuanLyNhanVien3
             }
         }
 
-        // ===== THÊM METHOD MỚI: Load tên nhân viên khi chọn mã =====
         private void cbMaNV_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbMaNV.SelectedIndex != -1)
@@ -421,6 +425,7 @@ namespace QuanLyNhanVien3
                 LoadDataChiTietDuAnTheoMaDA(maDA);
             }
         }
+
         private void LoadDataChiTietDuAnTheoMaDA(string maDA)
         {
             try
@@ -428,17 +433,17 @@ namespace QuanLyNhanVien3
                 cn.connect();
 
                 string sql = @"
-            SELECT 
-                ct.MaNV_TuanhCD233018 AS 'Mã nhân viên',
-                nv.HoTen_TuanhCD233018 AS 'Tên nhân viên',
-                ct.MaDA_KienCD233824 AS 'Mã dự án',
-                ct.VaiTro_KienCD233824 AS 'Vai trò',
-                ct.Ghichu_KienCD233824 AS 'Ghi chú'
-            FROM tblChiTietDuAn_KienCD233824 ct
-            LEFT JOIN tblNhanVien_TuanhCD233018 nv 
-                ON ct.MaNV_TuanhCD233018 = nv.MaNV_TuanhCD233018
-            WHERE ct.DeletedAt_KienCD233824 = 0
-              AND ct.MaDA_KienCD233824 = @MaDA";
+                    SELECT 
+                        ct.MaNV_TuanhCD233018 AS 'Mã nhân viên',
+                        nv.HoTen_TuanhCD233018 AS 'Tên nhân viên',
+                        ct.MaDA_KienCD233824 AS 'Mã dự án',
+                        ct.VaiTro_KienCD233824 AS 'Vai trò',
+                        ct.Ghichu_KienCD233824 AS 'Ghi chú'
+                    FROM tblChiTietDuAn_KienCD233824 ct
+                    LEFT JOIN tblNhanVien_TuanhCD233018 nv 
+                        ON ct.MaNV_TuanhCD233018 = nv.MaNV_TuanhCD233018
+                    WHERE ct.DeletedAt_KienCD233824 = 0
+                      AND ct.MaDA_KienCD233824 = @MaDA";
 
                 using (SqlDataAdapter da = new SqlDataAdapter(sql, cn.conn))
                 {
@@ -458,9 +463,6 @@ namespace QuanLyNhanVien3
                 cn.disconnect();
             }
         }
-
-
-        // ===== ĐÃ XÓA method LoadChiTietDuAnCellclick() vì không cần thiết =====
 
         private void btnThemCTDA_Click(object sender, EventArgs e)
         {
@@ -555,7 +557,6 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    // ===== ĐÃ SỬA: Thêm điều kiện MaDA vào WHERE =====
                     string sql = @"
                         UPDATE tblChiTietDuAn_KienCD233824 
                         SET VaiTro_KienCD233824 = @VaiTro,
@@ -659,6 +660,7 @@ namespace QuanLyNhanVien3
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             LoadDataDuAn();
+            LoadDataChiTietDuAn();
             LoadComboBoxMaNV();
             LoadComboBoxMaDA();
             ClearAllInputs(this);
@@ -666,12 +668,289 @@ namespace QuanLyNhanVien3
 
         private void btnXuatExcel_Click(object sender, EventArgs e)
         {
-            // TODO: Implement Excel export
+            if (dgvDA.Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog sfd = new SaveFileDialog()
+            {
+                Filter = "Excel Workbook|*.xlsx",
+                FileName = "DanhSachDuAn_" + DateTime.Now.ToString("ddMMyyyy")
+            })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        using (XLWorkbook wb = new XLWorkbook())
+                        {
+                            var ws = wb.Worksheets.Add("DuAn");
+
+                            // Tiêu đề công ty
+                            ws.Cell(1, 1).Value = "CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM";
+                            ws.Range(1, 1, 1, 6).Merge();
+                            ws.Cell(1, 1).Style.Font.Bold = true;
+                            ws.Cell(1, 1).Style.Font.FontSize = 14;
+                            ws.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                            // Tiêu đề chính
+                            ws.Cell(2, 1).Value = "DANH SÁCH DỰ ÁN";
+                            ws.Range(2, 1, 2, 6).Merge();
+                            ws.Cell(2, 1).Style.Font.Bold = true;
+                            ws.Cell(2, 1).Style.Font.FontSize = 16;
+                            ws.Cell(2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                            // Ngày lập báo cáo
+                            ws.Cell(3, 1).Value = "Ngày lập báo cáo: " + DateTime.Now.ToString("dd/MM/yyyy");
+                            ws.Cell(3, 1).Style.Font.Italic = true;
+
+                            // Header
+                            int headerRow = 5;
+                            for (int i = 0; i < dgvDA.Columns.Count; i++)
+                            {
+                                ws.Cell(headerRow, i + 1).Value = dgvDA.Columns[i].HeaderText;
+                                ws.Cell(headerRow, i + 1).Style.Font.Bold = true;
+                                ws.Cell(headerRow, i + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                                ws.Cell(headerRow, i + 1).Style.Fill.BackgroundColor = XLColor.LightGray;
+                            }
+
+                            // Dữ liệu
+                            int dataStartRow = headerRow + 1;
+                            for (int i = 0; i < dgvDA.Rows.Count; i++)
+                            {
+                                for (int j = 0; j < dgvDA.Columns.Count; j++)
+                                {
+                                    var cellValue = dgvDA.Rows[i].Cells[j].Value;
+                                    if (cellValue is DateTime)
+                                    {
+                                        ws.Cell(dataStartRow + i, j + 1).Value = ((DateTime)cellValue).ToString("dd/MM/yyyy");
+                                    }
+                                    else
+                                    {
+                                        ws.Cell(dataStartRow + i, j + 1).Value = cellValue?.ToString() ?? "";
+                                    }
+                                }
+                            }
+
+                            // Border
+                            int lastDataRow = dataStartRow + dgvDA.Rows.Count - 1;
+                            var tableRange = ws.Range(headerRow, 1, lastDataRow, dgvDA.Columns.Count);
+                            tableRange.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+                            tableRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                            // Thống kê
+                            int statsRow = lastDataRow + 2;
+                            ws.Cell(statsRow, 1).Value = "Tổng số dự án:";
+                            ws.Cell(statsRow, 2).Value = dgvDA.Rows.Count;
+                            ws.Cell(statsRow, 1).Style.Font.Bold = true;
+                            ws.Cell(statsRow, 2).Style.Font.Bold = true;
+
+                            // Chữ ký
+                            int signatureRow = lastDataRow + 4;
+                            ws.Cell(signatureRow, 5).Value = "Hà Nội, ngày " + DateTime.Now.Day + " tháng " + DateTime.Now.Month + " năm " + DateTime.Now.Year;
+                            ws.Cell(signatureRow, 5).Style.Font.Italic = true;
+                            ws.Cell(signatureRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                            ws.Cell(signatureRow + 1, 5).Value = "Người lập báo cáo";
+                            ws.Cell(signatureRow + 1, 5).Style.Font.Bold = true;
+                            ws.Cell(signatureRow + 1, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                            ws.Cell(signatureRow + 3, 5).Value = nguoiDangNhap;
+                            ws.Cell(signatureRow + 3, 5).Style.Font.Bold = true;
+                            ws.Cell(signatureRow + 3, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                            // Auto-fit columns
+                            ws.Columns().AdjustToContents();
+                            for (int i = 1; i <= dgvDA.Columns.Count; i++)
+                            {
+                                if (ws.Column(i).Width < 15)
+                                    ws.Column(i).Width = 15;
+                            }
+
+                            ws.Row(1).Height = 25;
+                            ws.Row(2).Height = 30;
+
+                            wb.SaveAs(sfd.FileName);
+                        }
+
+                        MessageBox.Show("Xuất Excel thành công!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        DialogResult openFile = MessageBox.Show("Bạn có muốn mở file vừa xuất không?",
+                            "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (openFile == DialogResult.Yes)
+                        {
+                            System.Diagnostics.Process.Start(sfd.FileName);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi: " + ex.Message, "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
 
         private void btnXuatPDF_Click(object sender, EventArgs e)
         {
-            // TODO: Implement PDF export
+            if (dgvDA.Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog sfd = new SaveFileDialog()
+            {
+                Filter = "PDF files|*.pdf",
+                FileName = "DanhSachDuAn_" + DateTime.Now.ToString("ddMMyyyy")
+            })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        // Tạo font Unicode
+                        string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "times.ttf");
+                        BaseFont bf = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                        iTextPdf.Font titleFont = new iTextPdf.Font(bf, 16, iTextPdf.Font.BOLD);
+                        iTextPdf.Font headerFont = new iTextPdf.Font(bf, 12, iTextPdf.Font.BOLD);
+                        iTextPdf.Font normalFont = new iTextPdf.Font(bf, 11);
+                        iTextPdf.Font smallFont = new iTextPdf.Font(bf, 10);
+
+                        iTextPdf.Document doc = new iTextPdf.Document(iTextPdf.PageSize.A4.Rotate(), 25, 25, 30, 30);
+                        PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
+                        doc.Open();
+
+                        // Tiêu đề công ty
+                        iTextPdf.Paragraph companyName = new iTextPdf.Paragraph("CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM", headerFont);
+                        companyName.Alignment = iTextPdf.Element.ALIGN_CENTER;
+                        doc.Add(companyName);
+
+                        // Tiêu đề chính
+                        iTextPdf.Paragraph title = new iTextPdf.Paragraph("DANH SÁCH DỰ ÁN", titleFont);
+                        title.Alignment = iTextPdf.Element.ALIGN_CENTER;
+                        title.SpacingBefore = 10f;
+                        title.SpacingAfter = 10f;
+                        doc.Add(title);
+
+                        // Ngày lập
+                        iTextPdf.Paragraph date = new iTextPdf.Paragraph("Ngày lập báo cáo: " + DateTime.Now.ToString("dd/MM/yyyy"), smallFont);
+                        date.Alignment = iTextPdf.Element.ALIGN_LEFT;
+                        date.SpacingAfter = 20f;
+                        doc.Add(date);
+
+                        // Tạo bảng
+                        PdfPTable table = new PdfPTable(dgvDA.Columns.Count);
+                        table.WidthPercentage = 100;
+
+                        // Thiết lập độ rộng cột
+                        float[] columnWidths = new float[dgvDA.Columns.Count];
+                        for (int i = 0; i < dgvDA.Columns.Count; i++)
+                        {
+                            columnWidths[i] = i == 0 ? 10f : (i == 1 ? 20f : 15f);
+                        }
+                        table.SetWidths(columnWidths);
+
+                        // Header của bảng
+                        for (int i = 0; i < dgvDA.Columns.Count; i++)
+                        {
+                            PdfPCell cell = new PdfPCell(new iTextPdf.Phrase(dgvDA.Columns[i].HeaderText, normalFont));
+                            cell.BackgroundColor = iTextPdf.BaseColor.LIGHT_GRAY;
+                            cell.HorizontalAlignment = iTextPdf.Element.ALIGN_CENTER;
+                            cell.VerticalAlignment = iTextPdf.Element.ALIGN_MIDDLE;
+                            cell.Padding = 8;
+                            table.AddCell(cell);
+                        }
+
+                        // Dữ liệu
+                        for (int i = 0; i < dgvDA.Rows.Count; i++)
+                        {
+                            for (int j = 0; j < dgvDA.Columns.Count; j++)
+                            {
+                                var cellValue = dgvDA.Rows[i].Cells[j].Value;
+                                string displayValue = "";
+
+                                if (cellValue is DateTime)
+                                {
+                                    displayValue = ((DateTime)cellValue).ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    displayValue = cellValue?.ToString() ?? "";
+                                }
+
+                                PdfPCell cell = new PdfPCell(new iTextPdf.Phrase(displayValue, smallFont));
+                                cell.HorizontalAlignment = j == 0 ? iTextPdf.Element.ALIGN_CENTER : iTextPdf.Element.ALIGN_LEFT;
+                                cell.VerticalAlignment = iTextPdf.Element.ALIGN_MIDDLE;
+                                cell.Padding = 5;
+                                table.AddCell(cell);
+                            }
+                        }
+
+                        doc.Add(table);
+
+                        // Thống kê
+                        iTextPdf.Paragraph stats = new iTextPdf.Paragraph("\nTổng số dự án: " + dgvDA.Rows.Count, normalFont);
+                        stats.SpacingBefore = 15f;
+                        stats.SpacingAfter = 20f;
+                        doc.Add(stats);
+
+                        // Chữ ký
+                        PdfPTable signatureTable = new PdfPTable(2);
+                        signatureTable.WidthPercentage = 100;
+                        signatureTable.SetWidths(new float[] { 50f, 50f });
+
+                        PdfPCell emptyCell = new PdfPCell(new iTextPdf.Phrase(""));
+                        emptyCell.Border = iTextPdf.Rectangle.NO_BORDER;
+                        signatureTable.AddCell(emptyCell);
+
+                        PdfPCell signatureCell = new PdfPCell();
+                        signatureCell.Border = iTextPdf.Rectangle.NO_BORDER;
+                        signatureCell.HorizontalAlignment = iTextPdf.Element.ALIGN_CENTER;
+
+                        iTextPdf.Paragraph signDate = new iTextPdf.Paragraph("Hà Nội, ngày " + DateTime.Now.Day + " tháng " +
+                            DateTime.Now.Month + " năm " + DateTime.Now.Year, smallFont);
+                        signDate.Alignment = iTextPdf.Element.ALIGN_CENTER;
+
+                        iTextPdf.Paragraph signTitle = new iTextPdf.Paragraph("Người lập báo cáo", normalFont);
+                        signTitle.Alignment = iTextPdf.Element.ALIGN_CENTER;
+                        signTitle.SpacingBefore = 5f;
+                        signTitle.SpacingAfter = 40f;
+
+                        iTextPdf.Paragraph signName = new iTextPdf.Paragraph(nguoiDangNhap, normalFont);
+                        signName.Alignment = iTextPdf.Element.ALIGN_CENTER;
+
+                        signatureCell.AddElement(signDate);
+                        signatureCell.AddElement(signTitle);
+                        signatureCell.AddElement(signName);
+
+                        signatureTable.AddCell(signatureCell);
+                        doc.Add(signatureTable);
+
+                        doc.Close();
+
+                        MessageBox.Show("Xuất PDF thành công!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        DialogResult openFile = MessageBox.Show("Bạn có muốn mở file vừa xuất không?",
+                            "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (openFile == DialogResult.Yes)
+                        {
+                            System.Diagnostics.Process.Start(sfd.FileName);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi: " + ex.Message, "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
 
         private void dgvChiTietDA_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -690,96 +969,11 @@ namespace QuanLyNhanVien3
         private void F_DuAnChung_Load(object sender, EventArgs e)
         {
             LoadDataDuAn();
+            LoadDataChiTietDuAn();
             LoadComboBoxMaNV();
-            LoadComboBoxMaDA(); 
-            ApplyPermissions();
+            LoadComboBoxMaDA();
         }
 
-        private void ApplyPermissions()
-        {
-            int roleId = F_FormMain.LoginInfo.CurrentRoleId;
-
-            // RoleId = 1: Admin (Full quyền)
-            if (roleId == 1)
-            {
-                btnThemCTDA.Enabled = true;
-                btnThemDA.Enabled = true;
-                btnSuaDA.Enabled = true;
-                btnSuaCTDA.Enabled = true;
-                btnXoaCTDA.Enabled = true;
-                btnXoaDA.Enabled = true;
-                btnXuatExcel.Enabled = true;
-                btnXuatPDF.Enabled = true;
-
-            }
-            // RoleId = 2: Manager (Xem và Sửa, không Xóa)
-            else if (roleId == 2)
-            {
-                btnThemCTDA.Enabled = true;
-                btnThemDA.Enabled = true;
-                btnSuaDA.Enabled = true;
-                btnSuaCTDA.Enabled = true;
-                btnXoaCTDA.Enabled = true;
-                btnXoaDA.Enabled = false;
-                btnXuatExcel.Enabled = false;
-                btnXuatPDF.Enabled = true;
-            }
-            // RoleId = 3: Employee (Chỉ xem)
-            else if (roleId == 3)
-            {
-                btnThemCTDA.Enabled = false;
-                btnThemDA.Enabled = false;
-                btnSuaDA.Enabled = false;
-                btnSuaCTDA.Enabled =false;
-                btnXoaCTDA.Enabled =   false;
-                btnXoaDA.Enabled = false;
-                btnXuatExcel.Enabled = false;
-                btnXuatPDF.Enabled = false;
-
-                // Vô hiệu hóa tất cả textbox/combobox
-                SetControlsReadOnly(this.Controls);
-            }
-            // Các role khác - Không có quyền
-            else
-            {
-
-                btnThemCTDA.Enabled = false;
-                btnThemDA.Enabled = false;
-                btnSuaDA.Enabled = false;
-                btnSuaCTDA.Enabled = false;
-                btnXoaCTDA.Enabled = false;
-                btnXoaDA.Enabled = false;
-                btnXuatExcel.Enabled = false;
-                btnXuatPDF.Enabled = false;
-                SetControlsReadOnly(this.Controls);
-            }
-        }
-
-        // Hàm đệ quy để set ReadOnly cho tất cả TextBox/ComboBox
-        private void SetControlsReadOnly(Control.ControlCollection controls)
-        {
-            foreach (Control control in controls)
-            {
-                if (control is TextBox)
-                {
-                    ((TextBox)control).ReadOnly = true;
-                }
-                else if (control is ComboBox)
-                {
-                    ((ComboBox)control).Enabled = false;
-                }
-                else if (control is DateTimePicker)
-                {
-                    ((DateTimePicker)control).Enabled = false;
-                }
-
-                // Đệ quy với các container (Panel, GroupBox...)
-                if (control.HasChildren)
-                {
-                    SetControlsReadOnly(control.Controls);
-                }
-            }
-        }
         private void cbMaNV_SelectedValueChanged(object sender, EventArgs e)
         {
             if (cbMaNV.SelectedValue == null) return;
@@ -789,10 +983,10 @@ namespace QuanLyNhanVien3
                 cn.connect();
 
                 string sql = @"
-            SELECT HoTen_TuanhCD233018
-            FROM tblNhanVien_TuanhCD233018
-            WHERE MaNV_TuanhCD233018 = @MaNV
-              AND DeletedAt_TuanhCD233018 = 0";
+                    SELECT HoTen_TuanhCD233018
+                    FROM tblNhanVien_TuanhCD233018
+                    WHERE MaNV_TuanhCD233018 = @MaNV
+                      AND DeletedAt_TuanhCD233018 = 0";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
