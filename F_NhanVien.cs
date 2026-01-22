@@ -935,8 +935,11 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
 
             if (dtGridViewNhanVien.Rows.Count > 0)
             {
+                // Tạo tên file tự động
+                string fileName = $"DánhachNhanVien_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
                 using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel Workbook|*.xlsx" })
                 {
+                    sfd.FileName = fileName;
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
                         try
@@ -961,8 +964,8 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
                                 ws.Cell(2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                                 ws.Cell(2, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
-                                // ===== NGÀY LẬP BÁO CÁO =====
-                                ws.Cell(3, 1).Value = "Ngày lập báo cáo: " + DateTime.Now.ToString("dd/MM/yyyy");
+                                // ===== NGÀY XUẤT (THỜI GIAN HIỆN TẠI) =====
+                                ws.Cell(3, 1).Value = "Ngày lập báo cáo: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
                                 ws.Cell(3, 1).Style.Font.Italic = true;
 
                                 // ===== THÔNG TIN PHÒNG BAN & CHỨC VỤ =====
@@ -1058,6 +1061,8 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
                             }
 
                             MessageBox.Show("Xuất Excel thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            System.Diagnostics.Process.Start(sfd.FileName);
                         }
                         catch (Exception ex)
                         {
@@ -1092,7 +1097,7 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
                 using (SaveFileDialog sfd = new SaveFileDialog()
                 {
                     Filter = "PDF File|*.pdf",
-                    FileName = "DanhSachNhanVien_" + DateTime.Now.ToString("yyyyMMdd") + ".pdf"
+                    FileName = "DanhSachNhanVien_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".pdf"
                 })
                 {
                     if (sfd.ShowDialog() == DialogResult.OK)
@@ -1133,7 +1138,7 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
                             doc.Add(title);
 
                             // ===== NGÀY LẬP BÁO CÁO =====
-                            Paragraph dateReport = new Paragraph("Ngày lập báo cáo: " + DateTime.Now.ToString("dd/MM/yyyy"), fontItalic);
+                            Paragraph dateReport = new Paragraph("Ngày lập báo cáo: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), fontItalic);
                             dateReport.SpacingAfter = 10;
                             doc.Add(dateReport);
 
@@ -1225,6 +1230,8 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
                             doc.Close();
 
                             MessageBox.Show("Xuất PDF thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            System.Diagnostics.Process.Start(sfd.FileName);
                         }
                         catch (Exception ex)
                         {

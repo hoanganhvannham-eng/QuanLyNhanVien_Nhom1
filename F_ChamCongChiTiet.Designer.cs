@@ -33,6 +33,8 @@
             this.label7 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.xuatpdf = new System.Windows.Forms.Button();
+            this.xuatexcel = new System.Windows.Forms.Button();
             this.btnrestar = new System.Windows.Forms.Button();
             this.tbGhiChu = new System.Windows.Forms.TextBox();
             this.tbGioVe = new System.Windows.Forms.TextBox();
@@ -55,8 +57,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.dtGridViewChamCong = new System.Windows.Forms.DataGridView();
-            this.xuatpdf = new System.Windows.Forms.Button();
-            this.xuatexcel = new System.Windows.Forms.Button();
+            this.cbBoxChucVu = new System.Windows.Forms.ComboBox();
+            this.cbBoxMaPB = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -126,6 +130,32 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(542, 454);
             this.panel5.TabIndex = 1;
+            // 
+            // xuatpdf
+            // 
+            this.xuatpdf.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.xuatpdf.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.xuatpdf.Location = new System.Drawing.Point(156, 352);
+            this.xuatpdf.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.xuatpdf.Name = "xuatpdf";
+            this.xuatpdf.Size = new System.Drawing.Size(145, 47);
+            this.xuatpdf.TabIndex = 206;
+            this.xuatpdf.Text = "PDF";
+            this.xuatpdf.UseVisualStyleBackColor = true;
+            this.xuatpdf.Click += new System.EventHandler(this.xuatpdf_Click);
+            // 
+            // xuatexcel
+            // 
+            this.xuatexcel.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.xuatexcel.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.xuatexcel.Location = new System.Drawing.Point(330, 352);
+            this.xuatexcel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.xuatexcel.Name = "xuatexcel";
+            this.xuatexcel.Size = new System.Drawing.Size(145, 47);
+            this.xuatexcel.TabIndex = 205;
+            this.xuatexcel.Text = "excel";
+            this.xuatexcel.UseVisualStyleBackColor = true;
+            this.xuatexcel.Click += new System.EventHandler(this.xuatexcel_Click);
             // 
             // btnrestar
             // 
@@ -218,6 +248,10 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.cbBoxChucVu);
+            this.panel4.Controls.Add(this.cbBoxMaPB);
+            this.panel4.Controls.Add(this.label11);
+            this.panel4.Controls.Add(this.label10);
             this.panel4.Controls.Add(this.tbmanhanvien);
             this.panel4.Controls.Add(this.tbtennhanvien);
             this.panel4.Controls.Add(this.label8);
@@ -237,7 +271,7 @@
             // 
             // tbmanhanvien
             // 
-            this.tbmanhanvien.Location = new System.Drawing.Point(260, 143);
+            this.tbmanhanvien.Location = new System.Drawing.Point(260, 198);
             this.tbmanhanvien.Name = "tbmanhanvien";
             this.tbmanhanvien.Size = new System.Drawing.Size(307, 22);
             this.tbmanhanvien.TabIndex = 172;
@@ -245,7 +279,7 @@
             // 
             // tbtennhanvien
             // 
-            this.tbtennhanvien.Location = new System.Drawing.Point(257, 187);
+            this.tbtennhanvien.Location = new System.Drawing.Point(257, 242);
             this.tbtennhanvien.Name = "tbtennhanvien";
             this.tbtennhanvien.Size = new System.Drawing.Size(307, 22);
             this.tbtennhanvien.TabIndex = 171;
@@ -254,7 +288,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(142, 189);
+            this.label8.Location = new System.Drawing.Point(122, 242);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(91, 16);
             this.label8.TabIndex = 170;
@@ -265,7 +299,7 @@
             // 
             this.btnXoa.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnXoa.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnXoa.Location = new System.Drawing.Point(433, 299);
+            this.btnXoa.Location = new System.Drawing.Point(433, 354);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(124, 42);
             this.btnXoa.TabIndex = 169;
@@ -277,7 +311,7 @@
             // 
             this.btnThem.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnThem.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThem.Location = new System.Drawing.Point(274, 299);
+            this.btnThem.Location = new System.Drawing.Point(274, 354);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(124, 42);
             this.btnThem.TabIndex = 168;
@@ -287,7 +321,7 @@
             // 
             // dateTimeNgayChamCong
             // 
-            this.dateTimeNgayChamCong.Location = new System.Drawing.Point(257, 235);
+            this.dateTimeNgayChamCong.Location = new System.Drawing.Point(257, 290);
             this.dateTimeNgayChamCong.Name = "dateTimeNgayChamCong";
             this.dateTimeNgayChamCong.Size = new System.Drawing.Size(310, 22);
             this.dateTimeNgayChamCong.TabIndex = 166;
@@ -295,7 +329,7 @@
             // 
             // tbMaChamCong
             // 
-            this.tbMaChamCong.Location = new System.Drawing.Point(260, 98);
+            this.tbMaChamCong.Location = new System.Drawing.Point(260, 153);
             this.tbMaChamCong.Name = "tbMaChamCong";
             this.tbMaChamCong.Size = new System.Drawing.Size(307, 22);
             this.tbMaChamCong.TabIndex = 165;
@@ -304,7 +338,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(142, 237);
+            this.label3.Location = new System.Drawing.Point(122, 290);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(40, 16);
             this.label3.TabIndex = 164;
@@ -313,7 +347,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(145, 143);
+            this.label2.Location = new System.Drawing.Point(125, 196);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(48, 16);
             this.label2.TabIndex = 163;
@@ -322,7 +356,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(145, 100);
+            this.label1.Location = new System.Drawing.Point(125, 153);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(99, 16);
             this.label1.TabIndex = 162;
@@ -353,31 +387,49 @@
             this.dtGridViewChamCong.TabIndex = 122;
             this.dtGridViewChamCong.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewChamCong_CellClick);
             // 
-            // xuatpdf
+            // cbBoxChucVu
             // 
-            this.xuatpdf.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.xuatpdf.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.xuatpdf.Location = new System.Drawing.Point(156, 352);
-            this.xuatpdf.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.xuatpdf.Name = "xuatpdf";
-            this.xuatpdf.Size = new System.Drawing.Size(145, 47);
-            this.xuatpdf.TabIndex = 206;
-            this.xuatpdf.Text = "PDF";
-            this.xuatpdf.UseVisualStyleBackColor = true;
-            this.xuatpdf.Click += new System.EventHandler(this.xuatpdf_Click);
+            this.cbBoxChucVu.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.cbBoxChucVu.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBoxChucVu.FormattingEnabled = true;
+            this.cbBoxChucVu.Location = new System.Drawing.Point(260, 107);
+            this.cbBoxChucVu.Name = "cbBoxChucVu";
+            this.cbBoxChucVu.Size = new System.Drawing.Size(307, 27);
+            this.cbBoxChucVu.TabIndex = 193;
+            this.cbBoxChucVu.SelectedIndexChanged += new System.EventHandler(this.cbBoxChucVu_SelectedIndexChanged);
             // 
-            // xuatexcel
+            // cbBoxMaPB
             // 
-            this.xuatexcel.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.xuatexcel.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.xuatexcel.Location = new System.Drawing.Point(330, 352);
-            this.xuatexcel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.xuatexcel.Name = "xuatexcel";
-            this.xuatexcel.Size = new System.Drawing.Size(145, 47);
-            this.xuatexcel.TabIndex = 205;
-            this.xuatexcel.Text = "excel";
-            this.xuatexcel.UseVisualStyleBackColor = true;
-            this.xuatexcel.Click += new System.EventHandler(this.xuatexcel_Click);
+            this.cbBoxMaPB.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.cbBoxMaPB.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBoxMaPB.FormattingEnabled = true;
+            this.cbBoxMaPB.Location = new System.Drawing.Point(260, 69);
+            this.cbBoxMaPB.Name = "cbBoxMaPB";
+            this.cbBoxMaPB.Size = new System.Drawing.Size(307, 27);
+            this.cbBoxMaPB.TabIndex = 192;
+            this.cbBoxMaPB.SelectedIndexChanged += new System.EventHandler(this.cbBoxMaPB_SelectedIndexChanged);
+            // 
+            // label11
+            // 
+            this.label11.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(124, 74);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(108, 19);
+            this.label11.TabIndex = 190;
+            this.label11.Text = "Mã Phòng Ban";
+            // 
+            // label10
+            // 
+            this.label10.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(124, 113);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(68, 19);
+            this.label10.TabIndex = 191;
+            this.label10.Text = "Chức Vụ";
             // 
             // F_ChamCongChiTiet
             // 
@@ -435,5 +487,9 @@
         private System.Windows.Forms.DataGridView dtGridViewChamCong;
         private System.Windows.Forms.Button xuatpdf;
         private System.Windows.Forms.Button xuatexcel;
+        private System.Windows.Forms.ComboBox cbBoxChucVu;
+        private System.Windows.Forms.ComboBox cbBoxMaPB;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label10;
     }
 }

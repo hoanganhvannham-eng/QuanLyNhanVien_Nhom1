@@ -831,95 +831,95 @@ SELECT Id_KhangCD233181, MaTK_KhangCD233181, MaNV_TuanhCD233018, SoDienThoai_Kha
   <xs:element name="DataSet3" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="DataSet3" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSet3">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="tblChamCong_TuanhCD233018" msprop:Generator_RowClassName="tblChamCong_TuanhCD233018Row" msprop:Generator_RowEvHandlerName="tblChamCong_TuanhCD233018RowChangeEventHandler" msprop:Generator_RowDeletedName="tblChamCong_TuanhCD233018RowDeleted" msprop:Generator_RowDeletingName="tblChamCong_TuanhCD233018RowDeleting" msprop:Generator_RowEvArgName="tblChamCong_TuanhCD233018RowChangeEvent" msprop:Generator_TablePropName="tblChamCong_TuanhCD233018" msprop:Generator_RowChangedName="tblChamCong_TuanhCD233018RowChanged" msprop:Generator_UserTableName="tblChamCong_TuanhCD233018" msprop:Generator_RowChangingName="tblChamCong_TuanhCD233018RowChanging" msprop:Generator_TableClassName="tblChamCong_TuanhCD233018DataTable" msprop:Generator_TableVarName="tabletblChamCong_TuanhCD233018">
+        <xs:element name="tblChamCong_TuanhCD233018" msprop:Generator_RowEvHandlerName="tblChamCong_TuanhCD233018RowChangeEventHandler" msprop:Generator_RowDeletedName="tblChamCong_TuanhCD233018RowDeleted" msprop:Generator_RowDeletingName="tblChamCong_TuanhCD233018RowDeleting" msprop:Generator_RowEvArgName="tblChamCong_TuanhCD233018RowChangeEvent" msprop:Generator_TablePropName="tblChamCong_TuanhCD233018" msprop:Generator_RowChangedName="tblChamCong_TuanhCD233018RowChanged" msprop:Generator_UserTableName="tblChamCong_TuanhCD233018" msprop:Generator_RowChangingName="tblChamCong_TuanhCD233018RowChanging" msprop:Generator_RowClassName="tblChamCong_TuanhCD233018Row" msprop:Generator_TableClassName="tblChamCong_TuanhCD233018DataTable" msprop:Generator_TableVarName="tabletblChamCong_TuanhCD233018">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Id_TuanhCD233018" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="Id_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="Id_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="Id_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnId_TuanhCD233018" type="xs:int" />
-              <xs:element name="MaChamCong_TuanhCD233018" msprop:Generator_UserColumnName="MaChamCong_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="MaChamCong_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="MaChamCong_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnMaChamCong_TuanhCD233018">
+              <xs:element name="Id_TuanhCD233018" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInTable="Id_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="Id_TuanhCD233018" msprop:Generator_UserColumnName="Id_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnId_TuanhCD233018" type="xs:int" />
+              <xs:element name="MaChamCong_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="MaChamCong_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="MaChamCong_TuanhCD233018" msprop:Generator_UserColumnName="MaChamCong_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnMaChamCong_TuanhCD233018">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="20" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Ngay_TuanhCD233018" msprop:Generator_UserColumnName="Ngay_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="Ngay_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="Ngay_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnNgay_TuanhCD233018" type="xs:dateTime" />
-              <xs:element name="GioVao_TuanhCD233018" msprop:Generator_UserColumnName="GioVao_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="GioVao_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="GioVao_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnGioVao_TuanhCD233018" type="xs:duration" />
-              <xs:element name="GioVe_TuanhCD233018" msprop:Generator_UserColumnName="GioVe_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="GioVe_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="GioVe_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnGioVe_TuanhCD233018" type="xs:duration" />
-              <xs:element name="Ghichu_TuanhCD233018" msprop:Generator_UserColumnName="Ghichu_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="Ghichu_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="Ghichu_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnGhichu_TuanhCD233018" minOccurs="0">
+              <xs:element name="Ngay_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="Ngay_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="Ngay_TuanhCD233018" msprop:Generator_UserColumnName="Ngay_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnNgay_TuanhCD233018" type="xs:dateTime" />
+              <xs:element name="GioVao_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="GioVao_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="GioVao_TuanhCD233018" msprop:Generator_UserColumnName="GioVao_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnGioVao_TuanhCD233018" type="xs:duration" />
+              <xs:element name="GioVe_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="GioVe_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="GioVe_TuanhCD233018" msprop:Generator_UserColumnName="GioVe_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnGioVe_TuanhCD233018" type="xs:duration" />
+              <xs:element name="Ghichu_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="Ghichu_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="Ghichu_TuanhCD233018" msprop:Generator_UserColumnName="Ghichu_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnGhichu_TuanhCD233018" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="255" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="DeletedAt_TuanhCD233018" msprop:Generator_UserColumnName="DeletedAt_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="DeletedAt_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_TuanhCD233018" type="xs:int" />
-              <xs:element name="NhanVienId_TuanhCD233018" msprop:Generator_UserColumnName="NhanVienId_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="NhanVienId_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="NhanVienId_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnNhanVienId_TuanhCD233018" type="xs:int" />
+              <xs:element name="DeletedAt_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="DeletedAt_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_TuanhCD233018" msprop:Generator_UserColumnName="DeletedAt_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_TuanhCD233018" type="xs:int" />
+              <xs:element name="NhanVienId_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="NhanVienId_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="NhanVienId_TuanhCD233018" msprop:Generator_UserColumnName="NhanVienId_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnNhanVienId_TuanhCD233018" type="xs:int" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblChiTietDuAn_KienCD233824" msprop:Generator_RowClassName="tblChiTietDuAn_KienCD233824Row" msprop:Generator_RowEvHandlerName="tblChiTietDuAn_KienCD233824RowChangeEventHandler" msprop:Generator_RowDeletedName="tblChiTietDuAn_KienCD233824RowDeleted" msprop:Generator_RowDeletingName="tblChiTietDuAn_KienCD233824RowDeleting" msprop:Generator_RowEvArgName="tblChiTietDuAn_KienCD233824RowChangeEvent" msprop:Generator_TablePropName="tblChiTietDuAn_KienCD233824" msprop:Generator_RowChangedName="tblChiTietDuAn_KienCD233824RowChanged" msprop:Generator_UserTableName="tblChiTietDuAn_KienCD233824" msprop:Generator_RowChangingName="tblChiTietDuAn_KienCD233824RowChanging" msprop:Generator_TableClassName="tblChiTietDuAn_KienCD233824DataTable" msprop:Generator_TableVarName="tabletblChiTietDuAn_KienCD233824">
+        <xs:element name="tblChiTietDuAn_KienCD233824" msprop:Generator_RowEvHandlerName="tblChiTietDuAn_KienCD233824RowChangeEventHandler" msprop:Generator_RowDeletedName="tblChiTietDuAn_KienCD233824RowDeleted" msprop:Generator_RowDeletingName="tblChiTietDuAn_KienCD233824RowDeleting" msprop:Generator_RowEvArgName="tblChiTietDuAn_KienCD233824RowChangeEvent" msprop:Generator_TablePropName="tblChiTietDuAn_KienCD233824" msprop:Generator_RowChangedName="tblChiTietDuAn_KienCD233824RowChanged" msprop:Generator_UserTableName="tblChiTietDuAn_KienCD233824" msprop:Generator_RowChangingName="tblChiTietDuAn_KienCD233824RowChanging" msprop:Generator_RowClassName="tblChiTietDuAn_KienCD233824Row" msprop:Generator_TableClassName="tblChiTietDuAn_KienCD233824DataTable" msprop:Generator_TableVarName="tabletblChiTietDuAn_KienCD233824">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Id_KienCD233824" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="Id_KienCD233824" msprop:Generator_ColumnPropNameInTable="Id_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="Id_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnId_KienCD233824" type="xs:int" />
-              <xs:element name="MaNV_TuanhCD233018" msprop:Generator_UserColumnName="MaNV_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="MaNV_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="MaNV_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnMaNV_TuanhCD233018">
+              <xs:element name="Id_KienCD233824" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInTable="Id_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="Id_KienCD233824" msprop:Generator_UserColumnName="Id_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnId_KienCD233824" type="xs:int" />
+              <xs:element name="MaNV_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="MaNV_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="MaNV_TuanhCD233018" msprop:Generator_UserColumnName="MaNV_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnMaNV_TuanhCD233018">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="MaDA_KienCD233824" msprop:Generator_UserColumnName="MaDA_KienCD233824" msprop:Generator_ColumnPropNameInTable="MaDA_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="MaDA_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnMaDA_KienCD233824">
+              <xs:element name="MaDA_KienCD233824" msprop:Generator_ColumnPropNameInTable="MaDA_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="MaDA_KienCD233824" msprop:Generator_UserColumnName="MaDA_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnMaDA_KienCD233824">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="VaiTro_KienCD233824" msprop:Generator_UserColumnName="VaiTro_KienCD233824" msprop:Generator_ColumnPropNameInTable="VaiTro_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="VaiTro_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnVaiTro_KienCD233824" minOccurs="0">
+              <xs:element name="VaiTro_KienCD233824" msprop:Generator_ColumnPropNameInTable="VaiTro_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="VaiTro_KienCD233824" msprop:Generator_UserColumnName="VaiTro_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnVaiTro_KienCD233824" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="100" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Ghichu_KienCD233824" msprop:Generator_UserColumnName="Ghichu_KienCD233824" msprop:Generator_ColumnPropNameInTable="Ghichu_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="Ghichu_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnGhichu_KienCD233824" minOccurs="0">
+              <xs:element name="Ghichu_KienCD233824" msprop:Generator_ColumnPropNameInTable="Ghichu_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="Ghichu_KienCD233824" msprop:Generator_UserColumnName="Ghichu_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnGhichu_KienCD233824" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="255" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="DeletedAt_KienCD233824" msprop:Generator_UserColumnName="DeletedAt_KienCD233824" msprop:Generator_ColumnPropNameInTable="DeletedAt_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_KienCD233824" type="xs:int" />
+              <xs:element name="DeletedAt_KienCD233824" msprop:Generator_ColumnPropNameInTable="DeletedAt_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_KienCD233824" msprop:Generator_UserColumnName="DeletedAt_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_KienCD233824" type="xs:int" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblChucVu_KhangCD233181" msprop:Generator_RowClassName="tblChucVu_KhangCD233181Row" msprop:Generator_RowEvHandlerName="tblChucVu_KhangCD233181RowChangeEventHandler" msprop:Generator_RowDeletedName="tblChucVu_KhangCD233181RowDeleted" msprop:Generator_RowDeletingName="tblChucVu_KhangCD233181RowDeleting" msprop:Generator_RowEvArgName="tblChucVu_KhangCD233181RowChangeEvent" msprop:Generator_TablePropName="tblChucVu_KhangCD233181" msprop:Generator_RowChangedName="tblChucVu_KhangCD233181RowChanged" msprop:Generator_UserTableName="tblChucVu_KhangCD233181" msprop:Generator_RowChangingName="tblChucVu_KhangCD233181RowChanging" msprop:Generator_TableClassName="tblChucVu_KhangCD233181DataTable" msprop:Generator_TableVarName="tabletblChucVu_KhangCD233181">
+        <xs:element name="tblChucVu_KhangCD233181" msprop:Generator_RowEvHandlerName="tblChucVu_KhangCD233181RowChangeEventHandler" msprop:Generator_RowDeletedName="tblChucVu_KhangCD233181RowDeleted" msprop:Generator_RowDeletingName="tblChucVu_KhangCD233181RowDeleting" msprop:Generator_RowEvArgName="tblChucVu_KhangCD233181RowChangeEvent" msprop:Generator_TablePropName="tblChucVu_KhangCD233181" msprop:Generator_RowChangedName="tblChucVu_KhangCD233181RowChanged" msprop:Generator_UserTableName="tblChucVu_KhangCD233181" msprop:Generator_RowChangingName="tblChucVu_KhangCD233181RowChanging" msprop:Generator_RowClassName="tblChucVu_KhangCD233181Row" msprop:Generator_TableClassName="tblChucVu_KhangCD233181DataTable" msprop:Generator_TableVarName="tabletblChucVu_KhangCD233181">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Id_KhangCD233181" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="Id_KhangCD233181" msprop:Generator_ColumnPropNameInTable="Id_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="Id_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnId_KhangCD233181" type="xs:int" />
-              <xs:element name="MaCV_KhangCD233181" msprop:Generator_UserColumnName="MaCV_KhangCD233181" msprop:Generator_ColumnPropNameInTable="MaCV_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="MaCV_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnMaCV_KhangCD233181">
+              <xs:element name="Id_KhangCD233181" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInTable="Id_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="Id_KhangCD233181" msprop:Generator_UserColumnName="Id_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnId_KhangCD233181" type="xs:int" />
+              <xs:element name="MaCV_KhangCD233181" msprop:Generator_ColumnPropNameInTable="MaCV_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="MaCV_KhangCD233181" msprop:Generator_UserColumnName="MaCV_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnMaCV_KhangCD233181">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="TenCV_KhangCD233181" msprop:Generator_UserColumnName="TenCV_KhangCD233181" msprop:Generator_ColumnPropNameInTable="TenCV_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="TenCV_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnTenCV_KhangCD233181">
+              <xs:element name="TenCV_KhangCD233181" msprop:Generator_ColumnPropNameInTable="TenCV_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="TenCV_KhangCD233181" msprop:Generator_UserColumnName="TenCV_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnTenCV_KhangCD233181">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="100" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Ghichu_KhangCD233181" msprop:Generator_UserColumnName="Ghichu_KhangCD233181" msprop:Generator_ColumnPropNameInTable="Ghichu_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="Ghichu_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnGhichu_KhangCD233181" minOccurs="0">
+              <xs:element name="Ghichu_KhangCD233181" msprop:Generator_ColumnPropNameInTable="Ghichu_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="Ghichu_KhangCD233181" msprop:Generator_UserColumnName="Ghichu_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnGhichu_KhangCD233181" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="255" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="DeletedAt_KhangCD233181" msprop:Generator_UserColumnName="DeletedAt_KhangCD233181" msprop:Generator_ColumnPropNameInTable="DeletedAt_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_KhangCD233181" type="xs:int" />
-              <xs:element name="MaPB_ThuanCD233318" msprop:Generator_UserColumnName="MaPB_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="MaPB_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="MaPB_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnMaPB_ThuanCD233318">
+              <xs:element name="DeletedAt_KhangCD233181" msprop:Generator_ColumnPropNameInTable="DeletedAt_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_KhangCD233181" msprop:Generator_UserColumnName="DeletedAt_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_KhangCD233181" type="xs:int" />
+              <xs:element name="MaPB_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="MaPB_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="MaPB_ThuanCD233318" msprop:Generator_UserColumnName="MaPB_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnMaPB_ThuanCD233318">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
@@ -929,232 +929,232 @@ SELECT Id_KhangCD233181, MaTK_KhangCD233181, MaNV_TuanhCD233018, SoDienThoai_Kha
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblDuAn_KienCD233824" msprop:Generator_RowClassName="tblDuAn_KienCD233824Row" msprop:Generator_RowEvHandlerName="tblDuAn_KienCD233824RowChangeEventHandler" msprop:Generator_RowDeletedName="tblDuAn_KienCD233824RowDeleted" msprop:Generator_RowDeletingName="tblDuAn_KienCD233824RowDeleting" msprop:Generator_RowEvArgName="tblDuAn_KienCD233824RowChangeEvent" msprop:Generator_TablePropName="tblDuAn_KienCD233824" msprop:Generator_RowChangedName="tblDuAn_KienCD233824RowChanged" msprop:Generator_UserTableName="tblDuAn_KienCD233824" msprop:Generator_RowChangingName="tblDuAn_KienCD233824RowChanging" msprop:Generator_TableClassName="tblDuAn_KienCD233824DataTable" msprop:Generator_TableVarName="tabletblDuAn_KienCD233824">
+        <xs:element name="tblDuAn_KienCD233824" msprop:Generator_RowEvHandlerName="tblDuAn_KienCD233824RowChangeEventHandler" msprop:Generator_RowDeletedName="tblDuAn_KienCD233824RowDeleted" msprop:Generator_RowDeletingName="tblDuAn_KienCD233824RowDeleting" msprop:Generator_RowEvArgName="tblDuAn_KienCD233824RowChangeEvent" msprop:Generator_TablePropName="tblDuAn_KienCD233824" msprop:Generator_RowChangedName="tblDuAn_KienCD233824RowChanged" msprop:Generator_UserTableName="tblDuAn_KienCD233824" msprop:Generator_RowChangingName="tblDuAn_KienCD233824RowChanging" msprop:Generator_RowClassName="tblDuAn_KienCD233824Row" msprop:Generator_TableClassName="tblDuAn_KienCD233824DataTable" msprop:Generator_TableVarName="tabletblDuAn_KienCD233824">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Id_KienCD233824" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="Id_KienCD233824" msprop:Generator_ColumnPropNameInTable="Id_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="Id_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnId_KienCD233824" type="xs:int" />
-              <xs:element name="MaDA_KienCD233824" msprop:Generator_UserColumnName="MaDA_KienCD233824" msprop:Generator_ColumnPropNameInTable="MaDA_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="MaDA_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnMaDA_KienCD233824">
+              <xs:element name="Id_KienCD233824" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInTable="Id_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="Id_KienCD233824" msprop:Generator_UserColumnName="Id_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnId_KienCD233824" type="xs:int" />
+              <xs:element name="MaDA_KienCD233824" msprop:Generator_ColumnPropNameInTable="MaDA_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="MaDA_KienCD233824" msprop:Generator_UserColumnName="MaDA_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnMaDA_KienCD233824">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="TenDA_KienCD233824" msprop:Generator_UserColumnName="TenDA_KienCD233824" msprop:Generator_ColumnPropNameInTable="TenDA_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="TenDA_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnTenDA_KienCD233824">
+              <xs:element name="TenDA_KienCD233824" msprop:Generator_ColumnPropNameInTable="TenDA_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="TenDA_KienCD233824" msprop:Generator_UserColumnName="TenDA_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnTenDA_KienCD233824">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="200" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="MoTa_KienCD233824" msprop:Generator_UserColumnName="MoTa_KienCD233824" msprop:Generator_ColumnPropNameInTable="MoTa_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="MoTa_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnMoTa_KienCD233824" minOccurs="0">
+              <xs:element name="MoTa_KienCD233824" msprop:Generator_ColumnPropNameInTable="MoTa_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="MoTa_KienCD233824" msprop:Generator_UserColumnName="MoTa_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnMoTa_KienCD233824" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="500" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="NgayBatDau_KienCD233824" msprop:Generator_UserColumnName="NgayBatDau_KienCD233824" msprop:Generator_ColumnPropNameInTable="NgayBatDau_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="NgayBatDau_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnNgayBatDau_KienCD233824" type="xs:dateTime" minOccurs="0" />
-              <xs:element name="NgayKetThuc_KienCD233824" msprop:Generator_UserColumnName="NgayKetThuc_KienCD233824" msprop:Generator_ColumnPropNameInTable="NgayKetThuc_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="NgayKetThuc_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnNgayKetThuc_KienCD233824" type="xs:dateTime" minOccurs="0" />
-              <xs:element name="Ghichu_KienCD233824" msprop:Generator_UserColumnName="Ghichu_KienCD233824" msprop:Generator_ColumnPropNameInTable="Ghichu_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="Ghichu_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnGhichu_KienCD233824" minOccurs="0">
+              <xs:element name="NgayBatDau_KienCD233824" msprop:Generator_ColumnPropNameInTable="NgayBatDau_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="NgayBatDau_KienCD233824" msprop:Generator_UserColumnName="NgayBatDau_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnNgayBatDau_KienCD233824" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="NgayKetThuc_KienCD233824" msprop:Generator_ColumnPropNameInTable="NgayKetThuc_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="NgayKetThuc_KienCD233824" msprop:Generator_UserColumnName="NgayKetThuc_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnNgayKetThuc_KienCD233824" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Ghichu_KienCD233824" msprop:Generator_ColumnPropNameInTable="Ghichu_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="Ghichu_KienCD233824" msprop:Generator_UserColumnName="Ghichu_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnGhichu_KienCD233824" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="255" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="DeletedAt_KienCD233824" msprop:Generator_UserColumnName="DeletedAt_KienCD233824" msprop:Generator_ColumnPropNameInTable="DeletedAt_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_KienCD233824" type="xs:int" />
+              <xs:element name="DeletedAt_KienCD233824" msprop:Generator_ColumnPropNameInTable="DeletedAt_KienCD233824Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_KienCD233824" msprop:Generator_UserColumnName="DeletedAt_KienCD233824" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_KienCD233824" type="xs:int" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblHopDong_ChienCD232928" msprop:Generator_RowClassName="tblHopDong_ChienCD232928Row" msprop:Generator_RowEvHandlerName="tblHopDong_ChienCD232928RowChangeEventHandler" msprop:Generator_RowDeletedName="tblHopDong_ChienCD232928RowDeleted" msprop:Generator_RowDeletingName="tblHopDong_ChienCD232928RowDeleting" msprop:Generator_RowEvArgName="tblHopDong_ChienCD232928RowChangeEvent" msprop:Generator_TablePropName="tblHopDong_ChienCD232928" msprop:Generator_RowChangedName="tblHopDong_ChienCD232928RowChanged" msprop:Generator_UserTableName="tblHopDong_ChienCD232928" msprop:Generator_RowChangingName="tblHopDong_ChienCD232928RowChanging" msprop:Generator_TableClassName="tblHopDong_ChienCD232928DataTable" msprop:Generator_TableVarName="tabletblHopDong_ChienCD232928">
+        <xs:element name="tblHopDong_ChienCD232928" msprop:Generator_RowEvHandlerName="tblHopDong_ChienCD232928RowChangeEventHandler" msprop:Generator_RowDeletedName="tblHopDong_ChienCD232928RowDeleted" msprop:Generator_RowDeletingName="tblHopDong_ChienCD232928RowDeleting" msprop:Generator_RowEvArgName="tblHopDong_ChienCD232928RowChangeEvent" msprop:Generator_TablePropName="tblHopDong_ChienCD232928" msprop:Generator_RowChangedName="tblHopDong_ChienCD232928RowChanged" msprop:Generator_UserTableName="tblHopDong_ChienCD232928" msprop:Generator_RowChangingName="tblHopDong_ChienCD232928RowChanging" msprop:Generator_RowClassName="tblHopDong_ChienCD232928Row" msprop:Generator_TableClassName="tblHopDong_ChienCD232928DataTable" msprop:Generator_TableVarName="tabletblHopDong_ChienCD232928">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Id_ChienCD232928" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="Id_ChienCD232928" msprop:Generator_ColumnPropNameInTable="Id_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="Id_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnId_ChienCD232928" type="xs:int" />
-              <xs:element name="MaHopDong_ChienCD232928" msprop:Generator_UserColumnName="MaHopDong_ChienCD232928" msprop:Generator_ColumnPropNameInTable="MaHopDong_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="MaHopDong_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnMaHopDong_ChienCD232928">
+              <xs:element name="Id_ChienCD232928" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInTable="Id_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="Id_ChienCD232928" msprop:Generator_UserColumnName="Id_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnId_ChienCD232928" type="xs:int" />
+              <xs:element name="MaHopDong_ChienCD232928" msprop:Generator_ColumnPropNameInTable="MaHopDong_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="MaHopDong_ChienCD232928" msprop:Generator_UserColumnName="MaHopDong_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnMaHopDong_ChienCD232928">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="MaNV_TuanhCD233018" msprop:Generator_UserColumnName="MaNV_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="MaNV_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="MaNV_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnMaNV_TuanhCD233018">
+              <xs:element name="MaNV_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="MaNV_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="MaNV_TuanhCD233018" msprop:Generator_UserColumnName="MaNV_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnMaNV_TuanhCD233018">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="NgayBatDau_ChienCD232928" msprop:Generator_UserColumnName="NgayBatDau_ChienCD232928" msprop:Generator_ColumnPropNameInTable="NgayBatDau_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="NgayBatDau_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnNgayBatDau_ChienCD232928" type="xs:dateTime" />
-              <xs:element name="NgayKetThuc_ChienCD232928" msprop:Generator_UserColumnName="NgayKetThuc_ChienCD232928" msprop:Generator_ColumnPropNameInTable="NgayKetThuc_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="NgayKetThuc_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnNgayKetThuc_ChienCD232928" type="xs:dateTime" minOccurs="0" />
-              <xs:element name="LoaiHopDong_ChienCD232928" msprop:Generator_UserColumnName="LoaiHopDong_ChienCD232928" msprop:Generator_ColumnPropNameInTable="LoaiHopDong_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="LoaiHopDong_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnLoaiHopDong_ChienCD232928" minOccurs="0">
+              <xs:element name="NgayBatDau_ChienCD232928" msprop:Generator_ColumnPropNameInTable="NgayBatDau_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="NgayBatDau_ChienCD232928" msprop:Generator_UserColumnName="NgayBatDau_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnNgayBatDau_ChienCD232928" type="xs:dateTime" />
+              <xs:element name="NgayKetThuc_ChienCD232928" msprop:Generator_ColumnPropNameInTable="NgayKetThuc_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="NgayKetThuc_ChienCD232928" msprop:Generator_UserColumnName="NgayKetThuc_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnNgayKetThuc_ChienCD232928" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="LoaiHopDong_ChienCD232928" msprop:Generator_ColumnPropNameInTable="LoaiHopDong_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="LoaiHopDong_ChienCD232928" msprop:Generator_UserColumnName="LoaiHopDong_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnLoaiHopDong_ChienCD232928" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="LuongCoBan_ChienCD232928" msprop:Generator_UserColumnName="LuongCoBan_ChienCD232928" msprop:Generator_ColumnPropNameInTable="LuongCoBan_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="LuongCoBan_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnLuongCoBan_ChienCD232928" type="xs:decimal" />
-              <xs:element name="Ghichu_ChienCD232928" msprop:Generator_UserColumnName="Ghichu_ChienCD232928" msprop:Generator_ColumnPropNameInTable="Ghichu_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="Ghichu_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnGhichu_ChienCD232928" minOccurs="0">
+              <xs:element name="LuongCoBan_ChienCD232928" msprop:Generator_ColumnPropNameInTable="LuongCoBan_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="LuongCoBan_ChienCD232928" msprop:Generator_UserColumnName="LuongCoBan_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnLuongCoBan_ChienCD232928" type="xs:decimal" />
+              <xs:element name="Ghichu_ChienCD232928" msprop:Generator_ColumnPropNameInTable="Ghichu_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="Ghichu_ChienCD232928" msprop:Generator_UserColumnName="Ghichu_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnGhichu_ChienCD232928" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="255" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="DeletedAt_ChienCD232928" msprop:Generator_UserColumnName="DeletedAt_ChienCD232928" msprop:Generator_ColumnPropNameInTable="DeletedAt_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_ChienCD232928" type="xs:int" />
+              <xs:element name="DeletedAt_ChienCD232928" msprop:Generator_ColumnPropNameInTable="DeletedAt_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_ChienCD232928" msprop:Generator_UserColumnName="DeletedAt_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_ChienCD232928" type="xs:int" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblLuong_ChienCD232928" msprop:Generator_RowClassName="tblLuong_ChienCD232928Row" msprop:Generator_RowEvHandlerName="tblLuong_ChienCD232928RowChangeEventHandler" msprop:Generator_RowDeletedName="tblLuong_ChienCD232928RowDeleted" msprop:Generator_RowDeletingName="tblLuong_ChienCD232928RowDeleting" msprop:Generator_RowEvArgName="tblLuong_ChienCD232928RowChangeEvent" msprop:Generator_TablePropName="tblLuong_ChienCD232928" msprop:Generator_RowChangedName="tblLuong_ChienCD232928RowChanged" msprop:Generator_UserTableName="tblLuong_ChienCD232928" msprop:Generator_RowChangingName="tblLuong_ChienCD232928RowChanging" msprop:Generator_TableClassName="tblLuong_ChienCD232928DataTable" msprop:Generator_TableVarName="tabletblLuong_ChienCD232928">
+        <xs:element name="tblLuong_ChienCD232928" msprop:Generator_RowEvHandlerName="tblLuong_ChienCD232928RowChangeEventHandler" msprop:Generator_RowDeletedName="tblLuong_ChienCD232928RowDeleted" msprop:Generator_RowDeletingName="tblLuong_ChienCD232928RowDeleting" msprop:Generator_RowEvArgName="tblLuong_ChienCD232928RowChangeEvent" msprop:Generator_TablePropName="tblLuong_ChienCD232928" msprop:Generator_RowChangedName="tblLuong_ChienCD232928RowChanged" msprop:Generator_UserTableName="tblLuong_ChienCD232928" msprop:Generator_RowChangingName="tblLuong_ChienCD232928RowChanging" msprop:Generator_RowClassName="tblLuong_ChienCD232928Row" msprop:Generator_TableClassName="tblLuong_ChienCD232928DataTable" msprop:Generator_TableVarName="tabletblLuong_ChienCD232928">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Id_ChienCD232928" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="Id_ChienCD232928" msprop:Generator_ColumnPropNameInTable="Id_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="Id_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnId_ChienCD232928" type="xs:int" />
-              <xs:element name="MaLuong_ChienCD232928" msprop:Generator_UserColumnName="MaLuong_ChienCD232928" msprop:Generator_ColumnPropNameInTable="MaLuong_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="MaLuong_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnMaLuong_ChienCD232928">
+              <xs:element name="Id_ChienCD232928" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInTable="Id_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="Id_ChienCD232928" msprop:Generator_UserColumnName="Id_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnId_ChienCD232928" type="xs:int" />
+              <xs:element name="MaLuong_ChienCD232928" msprop:Generator_ColumnPropNameInTable="MaLuong_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="MaLuong_ChienCD232928" msprop:Generator_UserColumnName="MaLuong_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnMaLuong_ChienCD232928">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Thang_ChienCD232928" msprop:Generator_UserColumnName="Thang_ChienCD232928" msprop:Generator_ColumnPropNameInTable="Thang_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="Thang_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnThang_ChienCD232928" type="xs:int" minOccurs="0" />
-              <xs:element name="Nam_ChienCD232928" msprop:Generator_UserColumnName="Nam_ChienCD232928" msprop:Generator_ColumnPropNameInTable="Nam_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="Nam_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnNam_ChienCD232928" type="xs:int" />
-              <xs:element name="LuongCoBan_ChienCD232928" msprop:Generator_UserColumnName="LuongCoBan_ChienCD232928" msprop:Generator_ColumnPropNameInTable="LuongCoBan_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="LuongCoBan_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnLuongCoBan_ChienCD232928" type="xs:decimal" />
-              <xs:element name="SoNgayCongChuan_ChienCD232928" msprop:Generator_UserColumnName="SoNgayCongChuan_ChienCD232928" msprop:Generator_ColumnPropNameInTable="SoNgayCongChuan_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="SoNgayCongChuan_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnSoNgayCongChuan_ChienCD232928" type="xs:int" />
-              <xs:element name="PhuCap_ChienCD232928" msprop:Generator_UserColumnName="PhuCap_ChienCD232928" msprop:Generator_ColumnPropNameInTable="PhuCap_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="PhuCap_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnPhuCap_ChienCD232928" type="xs:decimal" minOccurs="0" />
-              <xs:element name="KhauTru_ChienCD232928" msprop:Generator_UserColumnName="KhauTru_ChienCD232928" msprop:Generator_ColumnPropNameInTable="KhauTru_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="KhauTru_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnKhauTru_ChienCD232928" type="xs:decimal" minOccurs="0" />
-              <xs:element name="Ghichu_ChienCD232928" msprop:Generator_UserColumnName="Ghichu_ChienCD232928" msprop:Generator_ColumnPropNameInTable="Ghichu_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="Ghichu_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnGhichu_ChienCD232928" minOccurs="0">
+              <xs:element name="Thang_ChienCD232928" msprop:Generator_ColumnPropNameInTable="Thang_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="Thang_ChienCD232928" msprop:Generator_UserColumnName="Thang_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnThang_ChienCD232928" type="xs:int" minOccurs="0" />
+              <xs:element name="Nam_ChienCD232928" msprop:Generator_ColumnPropNameInTable="Nam_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="Nam_ChienCD232928" msprop:Generator_UserColumnName="Nam_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnNam_ChienCD232928" type="xs:int" />
+              <xs:element name="LuongCoBan_ChienCD232928" msprop:Generator_ColumnPropNameInTable="LuongCoBan_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="LuongCoBan_ChienCD232928" msprop:Generator_UserColumnName="LuongCoBan_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnLuongCoBan_ChienCD232928" type="xs:decimal" />
+              <xs:element name="SoNgayCongChuan_ChienCD232928" msprop:Generator_ColumnPropNameInTable="SoNgayCongChuan_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="SoNgayCongChuan_ChienCD232928" msprop:Generator_UserColumnName="SoNgayCongChuan_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnSoNgayCongChuan_ChienCD232928" type="xs:int" />
+              <xs:element name="PhuCap_ChienCD232928" msprop:Generator_ColumnPropNameInTable="PhuCap_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="PhuCap_ChienCD232928" msprop:Generator_UserColumnName="PhuCap_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnPhuCap_ChienCD232928" type="xs:decimal" minOccurs="0" />
+              <xs:element name="KhauTru_ChienCD232928" msprop:Generator_ColumnPropNameInTable="KhauTru_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="KhauTru_ChienCD232928" msprop:Generator_UserColumnName="KhauTru_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnKhauTru_ChienCD232928" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Ghichu_ChienCD232928" msprop:Generator_ColumnPropNameInTable="Ghichu_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="Ghichu_ChienCD232928" msprop:Generator_UserColumnName="Ghichu_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnGhichu_ChienCD232928" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="255" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="DeletedAt_ChienCD232928" msprop:Generator_UserColumnName="DeletedAt_ChienCD232928" msprop:Generator_ColumnPropNameInTable="DeletedAt_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_ChienCD232928" type="xs:int" />
-              <xs:element name="ChamCongId_TuanhCD233018" msprop:Generator_UserColumnName="ChamCongId_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="ChamCongId_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="ChamCongId_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnChamCongId_TuanhCD233018" type="xs:int" minOccurs="0" />
+              <xs:element name="DeletedAt_ChienCD232928" msprop:Generator_ColumnPropNameInTable="DeletedAt_ChienCD232928Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_ChienCD232928" msprop:Generator_UserColumnName="DeletedAt_ChienCD232928" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_ChienCD232928" type="xs:int" />
+              <xs:element name="ChamCongId_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="ChamCongId_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="ChamCongId_TuanhCD233018" msprop:Generator_UserColumnName="ChamCongId_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnChamCongId_TuanhCD233018" type="xs:int" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblNhanVien_TuanhCD233018" msprop:Generator_RowClassName="tblNhanVien_TuanhCD233018Row" msprop:Generator_RowEvHandlerName="tblNhanVien_TuanhCD233018RowChangeEventHandler" msprop:Generator_RowDeletedName="tblNhanVien_TuanhCD233018RowDeleted" msprop:Generator_RowDeletingName="tblNhanVien_TuanhCD233018RowDeleting" msprop:Generator_RowEvArgName="tblNhanVien_TuanhCD233018RowChangeEvent" msprop:Generator_TablePropName="tblNhanVien_TuanhCD233018" msprop:Generator_RowChangedName="tblNhanVien_TuanhCD233018RowChanged" msprop:Generator_UserTableName="tblNhanVien_TuanhCD233018" msprop:Generator_RowChangingName="tblNhanVien_TuanhCD233018RowChanging" msprop:Generator_TableClassName="tblNhanVien_TuanhCD233018DataTable" msprop:Generator_TableVarName="tabletblNhanVien_TuanhCD233018">
+        <xs:element name="tblNhanVien_TuanhCD233018" msprop:Generator_RowEvHandlerName="tblNhanVien_TuanhCD233018RowChangeEventHandler" msprop:Generator_RowDeletedName="tblNhanVien_TuanhCD233018RowDeleted" msprop:Generator_RowDeletingName="tblNhanVien_TuanhCD233018RowDeleting" msprop:Generator_RowEvArgName="tblNhanVien_TuanhCD233018RowChangeEvent" msprop:Generator_TablePropName="tblNhanVien_TuanhCD233018" msprop:Generator_RowChangedName="tblNhanVien_TuanhCD233018RowChanged" msprop:Generator_UserTableName="tblNhanVien_TuanhCD233018" msprop:Generator_RowChangingName="tblNhanVien_TuanhCD233018RowChanging" msprop:Generator_RowClassName="tblNhanVien_TuanhCD233018Row" msprop:Generator_TableClassName="tblNhanVien_TuanhCD233018DataTable" msprop:Generator_TableVarName="tabletblNhanVien_TuanhCD233018">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Id_TuanhCD233018" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="Id_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="Id_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="Id_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnId_TuanhCD233018" type="xs:int" />
-              <xs:element name="MaNV_TuanhCD233018" msprop:Generator_UserColumnName="MaNV_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="MaNV_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="MaNV_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnMaNV_TuanhCD233018">
+              <xs:element name="Id_TuanhCD233018" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInTable="Id_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="Id_TuanhCD233018" msprop:Generator_UserColumnName="Id_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnId_TuanhCD233018" type="xs:int" />
+              <xs:element name="MaNV_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="MaNV_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="MaNV_TuanhCD233018" msprop:Generator_UserColumnName="MaNV_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnMaNV_TuanhCD233018">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="HoTen_TuanhCD233018" msprop:Generator_UserColumnName="HoTen_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="HoTen_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="HoTen_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnHoTen_TuanhCD233018">
+              <xs:element name="HoTen_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="HoTen_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="HoTen_TuanhCD233018" msprop:Generator_UserColumnName="HoTen_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnHoTen_TuanhCD233018">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="100" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="NgaySinh_TuanhCD233018" msprop:Generator_UserColumnName="NgaySinh_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="NgaySinh_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="NgaySinh_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnNgaySinh_TuanhCD233018" type="xs:dateTime" minOccurs="0" />
-              <xs:element name="GioiTinh_TuanhCD233018" msprop:Generator_UserColumnName="GioiTinh_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="GioiTinh_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="GioiTinh_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnGioiTinh_TuanhCD233018" minOccurs="0">
+              <xs:element name="NgaySinh_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="NgaySinh_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="NgaySinh_TuanhCD233018" msprop:Generator_UserColumnName="NgaySinh_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnNgaySinh_TuanhCD233018" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="GioiTinh_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="GioiTinh_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="GioiTinh_TuanhCD233018" msprop:Generator_UserColumnName="GioiTinh_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnGioiTinh_TuanhCD233018" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="DiaChi_TuanhCD233018" msprop:Generator_UserColumnName="DiaChi_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="DiaChi_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="DiaChi_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnDiaChi_TuanhCD233018" minOccurs="0">
+              <xs:element name="DiaChi_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="DiaChi_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="DiaChi_TuanhCD233018" msprop:Generator_UserColumnName="DiaChi_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnDiaChi_TuanhCD233018" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="200" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="SoDienThoai_TuanhCD233018" msprop:Generator_UserColumnName="SoDienThoai_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="SoDienThoai_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="SoDienThoai_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnSoDienThoai_TuanhCD233018" minOccurs="0">
+              <xs:element name="SoDienThoai_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="SoDienThoai_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="SoDienThoai_TuanhCD233018" msprop:Generator_UserColumnName="SoDienThoai_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnSoDienThoai_TuanhCD233018" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="20" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Email_TuanhCD233018" msprop:Generator_UserColumnName="Email_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="Email_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="Email_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnEmail_TuanhCD233018" minOccurs="0">
+              <xs:element name="Email_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="Email_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="Email_TuanhCD233018" msprop:Generator_UserColumnName="Email_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnEmail_TuanhCD233018" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="100" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="MaCV_KhangCD233181" msprop:Generator_UserColumnName="MaCV_KhangCD233181" msprop:Generator_ColumnPropNameInTable="MaCV_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="MaCV_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnMaCV_KhangCD233181">
+              <xs:element name="MaCV_KhangCD233181" msprop:Generator_ColumnPropNameInTable="MaCV_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="MaCV_KhangCD233181" msprop:Generator_UserColumnName="MaCV_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnMaCV_KhangCD233181">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Ghichu_TuanhCD233018" msprop:Generator_UserColumnName="Ghichu_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="Ghichu_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="Ghichu_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnGhichu_TuanhCD233018" minOccurs="0">
+              <xs:element name="Ghichu_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="Ghichu_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="Ghichu_TuanhCD233018" msprop:Generator_UserColumnName="Ghichu_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnGhichu_TuanhCD233018" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="255" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="DeletedAt_TuanhCD233018" msprop:Generator_UserColumnName="DeletedAt_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="DeletedAt_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_TuanhCD233018" type="xs:int" />
+              <xs:element name="DeletedAt_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="DeletedAt_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_TuanhCD233018" msprop:Generator_UserColumnName="DeletedAt_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_TuanhCD233018" type="xs:int" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblPhongBan_ThuanCD233318" msprop:Generator_RowClassName="tblPhongBan_ThuanCD233318Row" msprop:Generator_RowEvHandlerName="tblPhongBan_ThuanCD233318RowChangeEventHandler" msprop:Generator_RowDeletedName="tblPhongBan_ThuanCD233318RowDeleted" msprop:Generator_RowDeletingName="tblPhongBan_ThuanCD233318RowDeleting" msprop:Generator_RowEvArgName="tblPhongBan_ThuanCD233318RowChangeEvent" msprop:Generator_TablePropName="tblPhongBan_ThuanCD233318" msprop:Generator_RowChangedName="tblPhongBan_ThuanCD233318RowChanged" msprop:Generator_UserTableName="tblPhongBan_ThuanCD233318" msprop:Generator_RowChangingName="tblPhongBan_ThuanCD233318RowChanging" msprop:Generator_TableClassName="tblPhongBan_ThuanCD233318DataTable" msprop:Generator_TableVarName="tabletblPhongBan_ThuanCD233318">
+        <xs:element name="tblPhongBan_ThuanCD233318" msprop:Generator_RowEvHandlerName="tblPhongBan_ThuanCD233318RowChangeEventHandler" msprop:Generator_RowDeletedName="tblPhongBan_ThuanCD233318RowDeleted" msprop:Generator_RowDeletingName="tblPhongBan_ThuanCD233318RowDeleting" msprop:Generator_RowEvArgName="tblPhongBan_ThuanCD233318RowChangeEvent" msprop:Generator_TablePropName="tblPhongBan_ThuanCD233318" msprop:Generator_RowChangedName="tblPhongBan_ThuanCD233318RowChanged" msprop:Generator_UserTableName="tblPhongBan_ThuanCD233318" msprop:Generator_RowChangingName="tblPhongBan_ThuanCD233318RowChanging" msprop:Generator_RowClassName="tblPhongBan_ThuanCD233318Row" msprop:Generator_TableClassName="tblPhongBan_ThuanCD233318DataTable" msprop:Generator_TableVarName="tabletblPhongBan_ThuanCD233318">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Id_ThuanCD233318" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="Id_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="Id_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="Id_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnId_ThuanCD233318" type="xs:int" />
-              <xs:element name="MaPB_ThuanCD233318" msprop:Generator_UserColumnName="MaPB_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="MaPB_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="MaPB_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnMaPB_ThuanCD233318">
+              <xs:element name="Id_ThuanCD233318" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInTable="Id_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="Id_ThuanCD233318" msprop:Generator_UserColumnName="Id_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnId_ThuanCD233318" type="xs:int" />
+              <xs:element name="MaPB_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="MaPB_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="MaPB_ThuanCD233318" msprop:Generator_UserColumnName="MaPB_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnMaPB_ThuanCD233318">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="TenPB_ThuanCD233318" msprop:Generator_UserColumnName="TenPB_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="TenPB_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="TenPB_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnTenPB_ThuanCD233318">
+              <xs:element name="TenPB_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="TenPB_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="TenPB_ThuanCD233318" msprop:Generator_UserColumnName="TenPB_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnTenPB_ThuanCD233318">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="100" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="DiaChi_ThuanCD233318" msprop:Generator_UserColumnName="DiaChi_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="DiaChi_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="DiaChi_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnDiaChi_ThuanCD233318" minOccurs="0">
+              <xs:element name="DiaChi_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="DiaChi_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="DiaChi_ThuanCD233318" msprop:Generator_UserColumnName="DiaChi_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnDiaChi_ThuanCD233318" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="200" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="SoDienThoai_ThuanCD233318" msprop:Generator_UserColumnName="SoDienThoai_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="SoDienThoai_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="SoDienThoai_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnSoDienThoai_ThuanCD233318" minOccurs="0">
+              <xs:element name="SoDienThoai_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="SoDienThoai_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="SoDienThoai_ThuanCD233318" msprop:Generator_UserColumnName="SoDienThoai_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnSoDienThoai_ThuanCD233318" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="20" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Ghichu_ThuanCD233318" msprop:Generator_UserColumnName="Ghichu_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="Ghichu_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="Ghichu_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnGhichu_ThuanCD233318" minOccurs="0">
+              <xs:element name="Ghichu_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="Ghichu_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="Ghichu_ThuanCD233318" msprop:Generator_UserColumnName="Ghichu_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnGhichu_ThuanCD233318" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="255" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="DeletedAt_ThuanCD233318" msprop:Generator_UserColumnName="DeletedAt_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="DeletedAt_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_ThuanCD233318" type="xs:int" />
+              <xs:element name="DeletedAt_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="DeletedAt_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_ThuanCD233318" msprop:Generator_UserColumnName="DeletedAt_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_ThuanCD233318" type="xs:int" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblRole_ThuanCD233318" msprop:Generator_RowClassName="tblRole_ThuanCD233318Row" msprop:Generator_RowEvHandlerName="tblRole_ThuanCD233318RowChangeEventHandler" msprop:Generator_RowDeletedName="tblRole_ThuanCD233318RowDeleted" msprop:Generator_RowDeletingName="tblRole_ThuanCD233318RowDeleting" msprop:Generator_RowEvArgName="tblRole_ThuanCD233318RowChangeEvent" msprop:Generator_TablePropName="tblRole_ThuanCD233318" msprop:Generator_RowChangedName="tblRole_ThuanCD233318RowChanged" msprop:Generator_UserTableName="tblRole_ThuanCD233318" msprop:Generator_RowChangingName="tblRole_ThuanCD233318RowChanging" msprop:Generator_TableClassName="tblRole_ThuanCD233318DataTable" msprop:Generator_TableVarName="tabletblRole_ThuanCD233318">
+        <xs:element name="tblRole_ThuanCD233318" msprop:Generator_RowEvHandlerName="tblRole_ThuanCD233318RowChangeEventHandler" msprop:Generator_RowDeletedName="tblRole_ThuanCD233318RowDeleted" msprop:Generator_RowDeletingName="tblRole_ThuanCD233318RowDeleting" msprop:Generator_RowEvArgName="tblRole_ThuanCD233318RowChangeEvent" msprop:Generator_TablePropName="tblRole_ThuanCD233318" msprop:Generator_RowChangedName="tblRole_ThuanCD233318RowChanged" msprop:Generator_UserTableName="tblRole_ThuanCD233318" msprop:Generator_RowChangingName="tblRole_ThuanCD233318RowChanging" msprop:Generator_RowClassName="tblRole_ThuanCD233318Row" msprop:Generator_TableClassName="tblRole_ThuanCD233318DataTable" msprop:Generator_TableVarName="tabletblRole_ThuanCD233318">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Id_ThuanCD233318" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="Id_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="Id_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="Id_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnId_ThuanCD233318" type="xs:int" />
-              <xs:element name="TenRole_ThuanCD233318" msprop:Generator_UserColumnName="TenRole_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="TenRole_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="TenRole_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnTenRole_ThuanCD233318">
+              <xs:element name="Id_ThuanCD233318" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInTable="Id_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="Id_ThuanCD233318" msprop:Generator_UserColumnName="Id_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnId_ThuanCD233318" type="xs:int" />
+              <xs:element name="TenRole_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="TenRole_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="TenRole_ThuanCD233318" msprop:Generator_UserColumnName="TenRole_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnTenRole_ThuanCD233318">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="MoTa_ThuanCD233318" msprop:Generator_UserColumnName="MoTa_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="MoTa_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="MoTa_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnMoTa_ThuanCD233318" minOccurs="0">
+              <xs:element name="MoTa_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="MoTa_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="MoTa_ThuanCD233318" msprop:Generator_UserColumnName="MoTa_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnMoTa_ThuanCD233318" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="200" />
@@ -1164,54 +1164,54 @@ SELECT Id_KhangCD233181, MaTK_KhangCD233181, MaNV_TuanhCD233018, SoDienThoai_Kha
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="tblTaiKhoan_KhangCD233181" msprop:Generator_RowClassName="tblTaiKhoan_KhangCD233181Row" msprop:Generator_RowEvHandlerName="tblTaiKhoan_KhangCD233181RowChangeEventHandler" msprop:Generator_RowDeletedName="tblTaiKhoan_KhangCD233181RowDeleted" msprop:Generator_RowDeletingName="tblTaiKhoan_KhangCD233181RowDeleting" msprop:Generator_RowEvArgName="tblTaiKhoan_KhangCD233181RowChangeEvent" msprop:Generator_TablePropName="tblTaiKhoan_KhangCD233181" msprop:Generator_RowChangedName="tblTaiKhoan_KhangCD233181RowChanged" msprop:Generator_UserTableName="tblTaiKhoan_KhangCD233181" msprop:Generator_RowChangingName="tblTaiKhoan_KhangCD233181RowChanging" msprop:Generator_TableClassName="tblTaiKhoan_KhangCD233181DataTable" msprop:Generator_TableVarName="tabletblTaiKhoan_KhangCD233181">
+        <xs:element name="tblTaiKhoan_KhangCD233181" msprop:Generator_RowEvHandlerName="tblTaiKhoan_KhangCD233181RowChangeEventHandler" msprop:Generator_RowDeletedName="tblTaiKhoan_KhangCD233181RowDeleted" msprop:Generator_RowDeletingName="tblTaiKhoan_KhangCD233181RowDeleting" msprop:Generator_RowEvArgName="tblTaiKhoan_KhangCD233181RowChangeEvent" msprop:Generator_TablePropName="tblTaiKhoan_KhangCD233181" msprop:Generator_RowChangedName="tblTaiKhoan_KhangCD233181RowChanged" msprop:Generator_UserTableName="tblTaiKhoan_KhangCD233181" msprop:Generator_RowChangingName="tblTaiKhoan_KhangCD233181RowChanging" msprop:Generator_RowClassName="tblTaiKhoan_KhangCD233181Row" msprop:Generator_TableClassName="tblTaiKhoan_KhangCD233181DataTable" msprop:Generator_TableVarName="tabletblTaiKhoan_KhangCD233181">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Id_KhangCD233181" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="Id_KhangCD233181" msprop:Generator_ColumnPropNameInTable="Id_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="Id_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnId_KhangCD233181" type="xs:int" />
-              <xs:element name="MaTK_KhangCD233181" msprop:Generator_UserColumnName="MaTK_KhangCD233181" msprop:Generator_ColumnPropNameInTable="MaTK_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="MaTK_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnMaTK_KhangCD233181">
+              <xs:element name="Id_KhangCD233181" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInTable="Id_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="Id_KhangCD233181" msprop:Generator_UserColumnName="Id_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnId_KhangCD233181" type="xs:int" />
+              <xs:element name="MaTK_KhangCD233181" msprop:Generator_ColumnPropNameInTable="MaTK_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="MaTK_KhangCD233181" msprop:Generator_UserColumnName="MaTK_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnMaTK_KhangCD233181">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="MaNV_TuanhCD233018" msprop:Generator_UserColumnName="MaNV_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="MaNV_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="MaNV_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnMaNV_TuanhCD233018">
+              <xs:element name="MaNV_TuanhCD233018" msprop:Generator_ColumnPropNameInTable="MaNV_TuanhCD233018Column" msprop:Generator_ColumnPropNameInRow="MaNV_TuanhCD233018" msprop:Generator_UserColumnName="MaNV_TuanhCD233018" msprop:Generator_ColumnVarNameInTable="columnMaNV_TuanhCD233018">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="10" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="SoDienThoai_KhangCD233181" msprop:Generator_UserColumnName="SoDienThoai_KhangCD233181" msprop:Generator_ColumnPropNameInTable="SoDienThoai_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="SoDienThoai_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnSoDienThoai_KhangCD233181">
+              <xs:element name="SoDienThoai_KhangCD233181" msprop:Generator_ColumnPropNameInTable="SoDienThoai_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="SoDienThoai_KhangCD233181" msprop:Generator_UserColumnName="SoDienThoai_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnSoDienThoai_KhangCD233181">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="MatKhau_KhangCD233181" msprop:Generator_UserColumnName="MatKhau_KhangCD233181" msprop:Generator_ColumnPropNameInTable="MatKhau_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="MatKhau_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnMatKhau_KhangCD233181">
+              <xs:element name="MatKhau_KhangCD233181" msprop:Generator_ColumnPropNameInTable="MatKhau_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="MatKhau_KhangCD233181" msprop:Generator_UserColumnName="MatKhau_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnMatKhau_KhangCD233181">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="255" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Quyen_KhangCD233181" msprop:Generator_UserColumnName="Quyen_KhangCD233181" msprop:Generator_ColumnPropNameInTable="Quyen_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="Quyen_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnQuyen_KhangCD233181" minOccurs="0">
+              <xs:element name="Quyen_KhangCD233181" msprop:Generator_ColumnPropNameInTable="Quyen_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="Quyen_KhangCD233181" msprop:Generator_UserColumnName="Quyen_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnQuyen_KhangCD233181" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="50" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Ghichu_KhangCD233181" msprop:Generator_UserColumnName="Ghichu_KhangCD233181" msprop:Generator_ColumnPropNameInTable="Ghichu_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="Ghichu_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnGhichu_KhangCD233181" minOccurs="0">
+              <xs:element name="Ghichu_KhangCD233181" msprop:Generator_ColumnPropNameInTable="Ghichu_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="Ghichu_KhangCD233181" msprop:Generator_UserColumnName="Ghichu_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnGhichu_KhangCD233181" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="255" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="DeletedAt_KhangCD233181" msprop:Generator_UserColumnName="DeletedAt_KhangCD233181" msprop:Generator_ColumnPropNameInTable="DeletedAt_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_KhangCD233181" type="xs:int" />
-              <xs:element name="RoleId_ThuanCD233318" msprop:Generator_UserColumnName="RoleId_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="RoleId_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="RoleId_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnRoleId_ThuanCD233318" type="xs:int" />
+              <xs:element name="DeletedAt_KhangCD233181" msprop:Generator_ColumnPropNameInTable="DeletedAt_KhangCD233181Column" msprop:Generator_ColumnPropNameInRow="DeletedAt_KhangCD233181" msprop:Generator_UserColumnName="DeletedAt_KhangCD233181" msprop:Generator_ColumnVarNameInTable="columnDeletedAt_KhangCD233181" type="xs:int" />
+              <xs:element name="RoleId_ThuanCD233318" msprop:Generator_ColumnPropNameInTable="RoleId_ThuanCD233318Column" msprop:Generator_ColumnPropNameInRow="RoleId_ThuanCD233318" msprop:Generator_UserColumnName="RoleId_ThuanCD233318" msprop:Generator_ColumnVarNameInTable="columnRoleId_ThuanCD233318" type="xs:int" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -1260,15 +1260,15 @@ SELECT Id_KhangCD233181, MaTK_KhangCD233181, MaNV_TuanhCD233018, SoDienThoai_Kha
   </xs:element>
   <xs:annotation>
     <xs:appinfo>
-      <msdata:Relationship name="FK_tblChamCong_TuanhCD233018_tblNhanVien_TuanhCD233018" msdata:parent="tblNhanVien_TuanhCD233018" msdata:child="tblChamCong_TuanhCD233018" msdata:parentkey="Id_TuanhCD233018" msdata:childkey="NhanVienId_TuanhCD233018" msprop:Generator_UserParentTable="tblNhanVien_TuanhCD233018" msprop:Generator_UserChildTable="tblChamCong_TuanhCD233018" msprop:Generator_RelationVarName="relationFK_tblChamCong_TuanhCD233018_tblNhanVien_TuanhCD233018" msprop:Generator_ChildPropName="GettblChamCong_TuanhCD233018Rows" msprop:Generator_ParentPropName="tblNhanVien_TuanhCD233018Row" msprop:Generator_UserRelationName="FK_tblChamCong_TuanhCD233018_tblNhanVien_TuanhCD233018" />
-      <msdata:Relationship name="FK_tblChiTietDuAn_KienCD233824_tblDuAn_KienCD233824" msdata:parent="tblDuAn_KienCD233824" msdata:child="tblChiTietDuAn_KienCD233824" msdata:parentkey="MaDA_KienCD233824" msdata:childkey="MaDA_KienCD233824" msprop:Generator_UserParentTable="tblDuAn_KienCD233824" msprop:Generator_UserChildTable="tblChiTietDuAn_KienCD233824" msprop:Generator_RelationVarName="relationFK_tblChiTietDuAn_KienCD233824_tblDuAn_KienCD233824" msprop:Generator_ChildPropName="GettblChiTietDuAn_KienCD233824Rows" msprop:Generator_ParentPropName="tblDuAn_KienCD233824Row" msprop:Generator_UserRelationName="FK_tblChiTietDuAn_KienCD233824_tblDuAn_KienCD233824" />
-      <msdata:Relationship name="FK_tblChiTietDuAn_KienCD233824_tblNhanVien_TuanhCD233018" msdata:parent="tblNhanVien_TuanhCD233018" msdata:child="tblChiTietDuAn_KienCD233824" msdata:parentkey="MaNV_TuanhCD233018" msdata:childkey="MaNV_TuanhCD233018" msprop:Generator_UserParentTable="tblNhanVien_TuanhCD233018" msprop:Generator_UserChildTable="tblChiTietDuAn_KienCD233824" msprop:Generator_RelationVarName="relationFK_tblChiTietDuAn_KienCD233824_tblNhanVien_TuanhCD233018" msprop:Generator_ChildPropName="GettblChiTietDuAn_KienCD233824Rows" msprop:Generator_ParentPropName="tblNhanVien_TuanhCD233018Row" msprop:Generator_UserRelationName="FK_tblChiTietDuAn_KienCD233824_tblNhanVien_TuanhCD233018" />
-      <msdata:Relationship name="FK_tblChucVu_KhangCD233181_tblPhongBan_ThuanCD233318" msdata:parent="tblPhongBan_ThuanCD233318" msdata:child="tblChucVu_KhangCD233181" msdata:parentkey="MaPB_ThuanCD233318" msdata:childkey="MaPB_ThuanCD233318" msprop:Generator_UserParentTable="tblPhongBan_ThuanCD233318" msprop:Generator_UserChildTable="tblChucVu_KhangCD233181" msprop:Generator_RelationVarName="relationFK_tblChucVu_KhangCD233181_tblPhongBan_ThuanCD233318" msprop:Generator_ChildPropName="GettblChucVu_KhangCD233181Rows" msprop:Generator_ParentPropName="tblPhongBan_ThuanCD233318Row" msprop:Generator_UserRelationName="FK_tblChucVu_KhangCD233181_tblPhongBan_ThuanCD233318" />
-      <msdata:Relationship name="FK_tblHopDong_ChienCD232928_tblNhanVien_TuanhCD233018" msdata:parent="tblNhanVien_TuanhCD233018" msdata:child="tblHopDong_ChienCD232928" msdata:parentkey="MaNV_TuanhCD233018" msdata:childkey="MaNV_TuanhCD233018" msprop:Generator_UserParentTable="tblNhanVien_TuanhCD233018" msprop:Generator_UserChildTable="tblHopDong_ChienCD232928" msprop:Generator_RelationVarName="relationFK_tblHopDong_ChienCD232928_tblNhanVien_TuanhCD233018" msprop:Generator_ChildPropName="GettblHopDong_ChienCD232928Rows" msprop:Generator_ParentPropName="tblNhanVien_TuanhCD233018Row" msprop:Generator_UserRelationName="FK_tblHopDong_ChienCD232928_tblNhanVien_TuanhCD233018" />
-      <msdata:Relationship name="FK_tblLuong_ChienCD232928_tblChamCong_TuanhCD233018" msdata:parent="tblChamCong_TuanhCD233018" msdata:child="tblLuong_ChienCD232928" msdata:parentkey="Id_TuanhCD233018" msdata:childkey="ChamCongId_TuanhCD233018" msprop:Generator_UserParentTable="tblChamCong_TuanhCD233018" msprop:Generator_UserChildTable="tblLuong_ChienCD232928" msprop:Generator_RelationVarName="relationFK_tblLuong_ChienCD232928_tblChamCong_TuanhCD233018" msprop:Generator_ChildPropName="GettblLuong_ChienCD232928Rows" msprop:Generator_UserRelationName="FK_tblLuong_ChienCD232928_tblChamCong_TuanhCD233018" msprop:Generator_ParentPropName="tblChamCong_TuanhCD233018Row" />
-      <msdata:Relationship name="FK_tblNhanVien_TuanhCD233018_tblChucVu_KhangCD233181" msdata:parent="tblChucVu_KhangCD233181" msdata:child="tblNhanVien_TuanhCD233018" msdata:parentkey="MaCV_KhangCD233181" msdata:childkey="MaCV_KhangCD233181" msprop:Generator_UserParentTable="tblChucVu_KhangCD233181" msprop:Generator_UserChildTable="tblNhanVien_TuanhCD233018" msprop:Generator_RelationVarName="relationFK_tblNhanVien_TuanhCD233018_tblChucVu_KhangCD233181" msprop:Generator_ChildPropName="GettblNhanVien_TuanhCD233018Rows" msprop:Generator_UserRelationName="FK_tblNhanVien_TuanhCD233018_tblChucVu_KhangCD233181" msprop:Generator_ParentPropName="tblChucVu_KhangCD233181Row" />
-      <msdata:Relationship name="FK_tblTaiKhoan_KhangCD233181_tblNhanVien_TuanhCD233018" msdata:parent="tblNhanVien_TuanhCD233018" msdata:child="tblTaiKhoan_KhangCD233181" msdata:parentkey="MaNV_TuanhCD233018" msdata:childkey="MaNV_TuanhCD233018" msprop:Generator_UserParentTable="tblNhanVien_TuanhCD233018" msprop:Generator_UserChildTable="tblTaiKhoan_KhangCD233181" msprop:Generator_RelationVarName="relationFK_tblTaiKhoan_KhangCD233181_tblNhanVien_TuanhCD233018" msprop:Generator_ChildPropName="GettblTaiKhoan_KhangCD233181Rows" msprop:Generator_UserRelationName="FK_tblTaiKhoan_KhangCD233181_tblNhanVien_TuanhCD233018" msprop:Generator_ParentPropName="tblNhanVien_TuanhCD233018Row" />
-      <msdata:Relationship name="FK_tblTaiKhoan_KhangCD233181_tblRole_ThuanCD233318" msdata:parent="tblRole_ThuanCD233318" msdata:child="tblTaiKhoan_KhangCD233181" msdata:parentkey="Id_ThuanCD233318" msdata:childkey="RoleId_ThuanCD233318" msprop:Generator_UserParentTable="tblRole_ThuanCD233318" msprop:Generator_UserChildTable="tblTaiKhoan_KhangCD233181" msprop:Generator_RelationVarName="relationFK_tblTaiKhoan_KhangCD233181_tblRole_ThuanCD233318" msprop:Generator_ChildPropName="GettblTaiKhoan_KhangCD233181Rows" msprop:Generator_UserRelationName="FK_tblTaiKhoan_KhangCD233181_tblRole_ThuanCD233318" msprop:Generator_ParentPropName="tblRole_ThuanCD233318Row" />
+      <msdata:Relationship name="FK_tblChamCong_TuanhCD233018_tblNhanVien_TuanhCD233018" msdata:parent="tblNhanVien_TuanhCD233018" msdata:child="tblChamCong_TuanhCD233018" msdata:parentkey="Id_TuanhCD233018" msdata:childkey="NhanVienId_TuanhCD233018" msprop:Generator_UserParentTable="tblNhanVien_TuanhCD233018" msprop:Generator_UserChildTable="tblChamCong_TuanhCD233018" msprop:Generator_RelationVarName="relationFK_tblChamCong_TuanhCD233018_tblNhanVien_TuanhCD233018" msprop:Generator_ChildPropName="GettblChamCong_TuanhCD233018Rows" msprop:Generator_UserRelationName="FK_tblChamCong_TuanhCD233018_tblNhanVien_TuanhCD233018" msprop:Generator_ParentPropName="tblNhanVien_TuanhCD233018Row" />
+      <msdata:Relationship name="FK_tblChiTietDuAn_KienCD233824_tblDuAn_KienCD233824" msdata:parent="tblDuAn_KienCD233824" msdata:child="tblChiTietDuAn_KienCD233824" msdata:parentkey="MaDA_KienCD233824" msdata:childkey="MaDA_KienCD233824" msprop:Generator_UserParentTable="tblDuAn_KienCD233824" msprop:Generator_UserChildTable="tblChiTietDuAn_KienCD233824" msprop:Generator_RelationVarName="relationFK_tblChiTietDuAn_KienCD233824_tblDuAn_KienCD233824" msprop:Generator_ChildPropName="GettblChiTietDuAn_KienCD233824Rows" msprop:Generator_UserRelationName="FK_tblChiTietDuAn_KienCD233824_tblDuAn_KienCD233824" msprop:Generator_ParentPropName="tblDuAn_KienCD233824Row" />
+      <msdata:Relationship name="FK_tblChiTietDuAn_KienCD233824_tblNhanVien_TuanhCD233018" msdata:parent="tblNhanVien_TuanhCD233018" msdata:child="tblChiTietDuAn_KienCD233824" msdata:parentkey="MaNV_TuanhCD233018" msdata:childkey="MaNV_TuanhCD233018" msprop:Generator_UserParentTable="tblNhanVien_TuanhCD233018" msprop:Generator_UserChildTable="tblChiTietDuAn_KienCD233824" msprop:Generator_RelationVarName="relationFK_tblChiTietDuAn_KienCD233824_tblNhanVien_TuanhCD233018" msprop:Generator_ChildPropName="GettblChiTietDuAn_KienCD233824Rows" msprop:Generator_UserRelationName="FK_tblChiTietDuAn_KienCD233824_tblNhanVien_TuanhCD233018" msprop:Generator_ParentPropName="tblNhanVien_TuanhCD233018Row" />
+      <msdata:Relationship name="FK_tblChucVu_KhangCD233181_tblPhongBan_ThuanCD233318" msdata:parent="tblPhongBan_ThuanCD233318" msdata:child="tblChucVu_KhangCD233181" msdata:parentkey="MaPB_ThuanCD233318" msdata:childkey="MaPB_ThuanCD233318" msprop:Generator_UserParentTable="tblPhongBan_ThuanCD233318" msprop:Generator_UserChildTable="tblChucVu_KhangCD233181" msprop:Generator_RelationVarName="relationFK_tblChucVu_KhangCD233181_tblPhongBan_ThuanCD233318" msprop:Generator_ChildPropName="GettblChucVu_KhangCD233181Rows" msprop:Generator_UserRelationName="FK_tblChucVu_KhangCD233181_tblPhongBan_ThuanCD233318" msprop:Generator_ParentPropName="tblPhongBan_ThuanCD233318Row" />
+      <msdata:Relationship name="FK_tblHopDong_ChienCD232928_tblNhanVien_TuanhCD233018" msdata:parent="tblNhanVien_TuanhCD233018" msdata:child="tblHopDong_ChienCD232928" msdata:parentkey="MaNV_TuanhCD233018" msdata:childkey="MaNV_TuanhCD233018" msprop:Generator_UserParentTable="tblNhanVien_TuanhCD233018" msprop:Generator_UserChildTable="tblHopDong_ChienCD232928" msprop:Generator_RelationVarName="relationFK_tblHopDong_ChienCD232928_tblNhanVien_TuanhCD233018" msprop:Generator_ChildPropName="GettblHopDong_ChienCD232928Rows" msprop:Generator_UserRelationName="FK_tblHopDong_ChienCD232928_tblNhanVien_TuanhCD233018" msprop:Generator_ParentPropName="tblNhanVien_TuanhCD233018Row" />
+      <msdata:Relationship name="FK_tblLuong_ChienCD232928_tblChamCong_TuanhCD233018" msdata:parent="tblChamCong_TuanhCD233018" msdata:child="tblLuong_ChienCD232928" msdata:parentkey="Id_TuanhCD233018" msdata:childkey="ChamCongId_TuanhCD233018" msprop:Generator_UserParentTable="tblChamCong_TuanhCD233018" msprop:Generator_UserChildTable="tblLuong_ChienCD232928" msprop:Generator_RelationVarName="relationFK_tblLuong_ChienCD232928_tblChamCong_TuanhCD233018" msprop:Generator_ChildPropName="GettblLuong_ChienCD232928Rows" msprop:Generator_ParentPropName="tblChamCong_TuanhCD233018Row" msprop:Generator_UserRelationName="FK_tblLuong_ChienCD232928_tblChamCong_TuanhCD233018" />
+      <msdata:Relationship name="FK_tblNhanVien_TuanhCD233018_tblChucVu_KhangCD233181" msdata:parent="tblChucVu_KhangCD233181" msdata:child="tblNhanVien_TuanhCD233018" msdata:parentkey="MaCV_KhangCD233181" msdata:childkey="MaCV_KhangCD233181" msprop:Generator_UserParentTable="tblChucVu_KhangCD233181" msprop:Generator_UserChildTable="tblNhanVien_TuanhCD233018" msprop:Generator_RelationVarName="relationFK_tblNhanVien_TuanhCD233018_tblChucVu_KhangCD233181" msprop:Generator_ChildPropName="GettblNhanVien_TuanhCD233018Rows" msprop:Generator_ParentPropName="tblChucVu_KhangCD233181Row" msprop:Generator_UserRelationName="FK_tblNhanVien_TuanhCD233018_tblChucVu_KhangCD233181" />
+      <msdata:Relationship name="FK_tblTaiKhoan_KhangCD233181_tblNhanVien_TuanhCD233018" msdata:parent="tblNhanVien_TuanhCD233018" msdata:child="tblTaiKhoan_KhangCD233181" msdata:parentkey="MaNV_TuanhCD233018" msdata:childkey="MaNV_TuanhCD233018" msprop:Generator_UserParentTable="tblNhanVien_TuanhCD233018" msprop:Generator_UserChildTable="tblTaiKhoan_KhangCD233181" msprop:Generator_RelationVarName="relationFK_tblTaiKhoan_KhangCD233181_tblNhanVien_TuanhCD233018" msprop:Generator_ChildPropName="GettblTaiKhoan_KhangCD233181Rows" msprop:Generator_ParentPropName="tblNhanVien_TuanhCD233018Row" msprop:Generator_UserRelationName="FK_tblTaiKhoan_KhangCD233181_tblNhanVien_TuanhCD233018" />
+      <msdata:Relationship name="FK_tblTaiKhoan_KhangCD233181_tblRole_ThuanCD233318" msdata:parent="tblRole_ThuanCD233318" msdata:child="tblTaiKhoan_KhangCD233181" msdata:parentkey="Id_ThuanCD233318" msdata:childkey="RoleId_ThuanCD233318" msprop:Generator_UserParentTable="tblRole_ThuanCD233318" msprop:Generator_UserChildTable="tblTaiKhoan_KhangCD233181" msprop:Generator_RelationVarName="relationFK_tblTaiKhoan_KhangCD233181_tblRole_ThuanCD233318" msprop:Generator_ChildPropName="GettblTaiKhoan_KhangCD233181Rows" msprop:Generator_ParentPropName="tblRole_ThuanCD233318Row" msprop:Generator_UserRelationName="FK_tblTaiKhoan_KhangCD233181_tblRole_ThuanCD233318" />
     </xs:appinfo>
   </xs:annotation>
 </xs:schema>
