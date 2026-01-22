@@ -49,7 +49,7 @@ namespace QuanLyNhanVien3
                 return;
             }
 
-            if (role == "nhan vien") //Admin
+            if (role != "Admin") //Admin
             {
                 // 1. Ẩn tất cả menu quản lý
                 phongBanToolStripMenuItem.Enabled = true;
