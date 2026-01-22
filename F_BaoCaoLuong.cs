@@ -247,5 +247,9 @@ namespace QuanLyNhanVien3
         {
         }
 
+        private void btnXuatPDF_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

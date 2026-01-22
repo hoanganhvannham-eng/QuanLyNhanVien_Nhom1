@@ -219,6 +219,7 @@ namespace QuanLyNhanVien3
 
                         currentMaNV = "";
                         txtLuongCoBan.Text = "";
+                        txtSoNgayCong.Text = ""; // Xóa số ngày công khi thay đổi nhân viên
                     }
                 }
             }
@@ -308,12 +309,16 @@ namespace QuanLyNhanVien3
                 {
                     LoadLuongCoBanTuHopDong(maNV);
 
+                    // Tự động load số ngày công từ bảng lương (nếu có)
+                    LoadSoNgayCongTuBangLuong(maNV);
+
                     // Load dữ liệu lương theo nhân viên
                     LoadLuongFilter(maNV: maNV, maCV: currentMaCV, maPB: currentMaPB);
                 }
                 else
                 {
                     txtLuongCoBan.Text = "";
+                    txtSoNgayCong.Text = "";
                     // Load dữ liệu theo chức vụ hoặc phòng ban
                     LoadLuongFilter(maCV: currentMaCV, maPB: currentMaPB);
                 }
@@ -344,7 +349,7 @@ namespace QuanLyNhanVien3
                         l.Thang_ChienCD232928       AS N'Tháng',
                         l.Nam_ChienCD232928         AS N'Năm',
                         l.LuongCoBan_ChienCD232928  AS N'Lương cơ bản',
-                        l.SoNgayCongChuan_ChienCD232928 AS N'Số Ngày công chuẩn',
+                        l.SoNgayCongChuan_ChienCD232928 AS N'Số ngày công',
                         l.PhuCap_ChienCD232928      AS N'Phụ cấp',
                         l.KhauTru_ChienCD232928     AS N'Khấu trừ',
                         l.Ghichu_ChienCD232928      AS N'Ghi chú'
@@ -432,7 +437,7 @@ namespace QuanLyNhanVien3
                         l.Thang_ChienCD232928       AS N'Tháng',
                         l.Nam_ChienCD232928         AS N'Năm',
                         l.LuongCoBan_ChienCD232928  AS N'Lương cơ bản',
-                        l.SoNgayCongChuan_ChienCD232928 AS N'Số Ngày công chuẩn',
+                        l.SoNgayCongChuan_ChienCD232928 AS N'Số ngày công',
                         l.PhuCap_ChienCD232928      AS N'Phụ cấp',
                         l.KhauTru_ChienCD232928     AS N'Khấu trừ',
                         l.Ghichu_ChienCD232928      AS N'Ghi chú'
@@ -495,10 +500,10 @@ namespace QuanLyNhanVien3
 
                 // Chỉ kiểm tra hợp đồng không bị xóa, không kiểm tra ngày hết hạn
                 string sql = @"
-    SELECT TOP 1 LuongCoBan_ChienCD232928
-    FROM tblHopDong_ChienCD232928
-    WHERE MaNV_TuanhCD233018 = @MaNV
-    ORDER BY NgayBatDau_ChienCD232928 DESC";
+                    SELECT TOP 1 LuongCoBan_ChienCD232928
+                    FROM tblHopDong_ChienCD232928
+                    WHERE MaNV_TuanhCD233018 = @MaNV
+                    ORDER BY NgayBatDau_ChienCD232928 DESC";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
@@ -522,6 +527,58 @@ namespace QuanLyNhanVien3
                 MessageBox.Show("Lỗi lấy lương cơ bản: " + ex.Message,
                     "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtLuongCoBan.Text = "0";
+            }
+            finally
+            {
+                cn.disconnect();
+            }
+        }
+
+        // Lấy số ngày công từ bảng lương (nếu đã có lương cho tháng/năm này)
+        private void LoadSoNgayCongTuBangLuong(string maNV)
+        {
+            try
+            {
+                cn.connect();
+
+                int thang = Convert.ToInt32(cbThang.SelectedItem);
+                int nam = (int)numNam.Value;
+
+                // Kiểm tra xem đã có bảng lương cho nhân viên này trong tháng/năm chưa
+                string sql = @"
+                    SELECT TOP 1 l.SoNgayCongChuan_ChienCD232928
+                    FROM tblLuong_ChienCD232928 l
+                    INNER JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
+                    INNER JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                    WHERE nv.MaNV_TuanhCD233018 = @MaNV
+                      AND l.Thang_ChienCD232928 = @Thang
+                      AND l.Nam_ChienCD232928 = @Nam
+                      AND l.DeletedAt_ChienCD232928 = 0";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaNV", maNV);
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+                    cmd.Parameters.AddWithValue("@Nam", nam);
+
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        int soNgayCong = Convert.ToInt32(result);
+                        txtSoNgayCong.Text = soNgayCong.ToString();
+                    }
+                    else
+                    {
+                        // Nếu chưa có lương, để trống cho người dùng nhập
+                        txtSoNgayCong.Text = "";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi lấy số ngày công từ bảng lương: " + ex.Message,
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtSoNgayCong.Text = "";
             }
             finally
             {
@@ -557,8 +614,8 @@ namespace QuanLyNhanVien3
             if (dgvLuong.Columns.Contains("Năm"))
                 dgvLuong.Columns["Năm"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            if (dgvLuong.Columns.Contains("Số Ngày công chuẩn"))
-                dgvLuong.Columns["Số Ngày công chuẩn"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            if (dgvLuong.Columns.Contains("Số ngày công"))
+                dgvLuong.Columns["Số ngày công"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
 
         #endregion
@@ -605,7 +662,7 @@ namespace QuanLyNhanVien3
         {
             // Kiểm tra dữ liệu
             if (cbThang.SelectedItem == null ||
-                string.IsNullOrWhiteSpace(cbMaLuong.Text) || // Thêm kiểm tra mã lương không được trống
+                string.IsNullOrWhiteSpace(cbMaLuong.Text) ||
                 string.IsNullOrWhiteSpace(txtLuongCoBan.Text) ||
                 string.IsNullOrWhiteSpace(txtSoNgayCong.Text) ||
                 string.IsNullOrEmpty(currentMaNV) ||
@@ -620,6 +677,14 @@ namespace QuanLyNhanVien3
             if (CheckMaLuongExist(cbMaLuong.Text))
             {
                 MessageBox.Show("Mã lương đã tồn tại! Vui lòng nhập mã khác.",
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Kiểm tra xem nhân viên đã có lương trong tháng/năm này chưa
+            if (CheckLuongExistForNhanVien(currentMaNV, Convert.ToInt32(cbThang.SelectedItem), (int)numNam.Value))
+            {
+                MessageBox.Show("Nhân viên này đã có bảng lương trong tháng/năm này!",
                     "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -712,6 +777,40 @@ namespace QuanLyNhanVien3
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi kiểm tra mã lương: " + ex.Message);
+                return true; // Trả về true để ngăn thêm nếu có lỗi
+            }
+        }
+
+        private bool CheckLuongExistForNhanVien(string maNV, int thang, int nam)
+        {
+            try
+            {
+                if (cn.conn.State != ConnectionState.Open)
+                    cn.connect();
+
+                string sql = @"
+                    SELECT COUNT(*) 
+                    FROM tblLuong_ChienCD232928 l
+                    INNER JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
+                    INNER JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                    WHERE nv.MaNV_TuanhCD233018 = @MaNV
+                      AND l.Thang_ChienCD232928 = @Thang
+                      AND l.Nam_ChienCD232928 = @Nam
+                      AND l.DeletedAt_ChienCD232928 = 0";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaNV", maNV);
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+                    cmd.Parameters.AddWithValue("@Nam", nam);
+
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    return count > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi kiểm tra lương nhân viên: " + ex.Message);
                 return true; // Trả về true để ngăn thêm nếu có lỗi
             }
         }
@@ -906,8 +1005,8 @@ namespace QuanLyNhanVien3
             if (row.Cells["Lương cơ bản"].Value != null)
                 txtLuongCoBan.Text = Convert.ToDecimal(row.Cells["Lương cơ bản"].Value).ToString("N0");
 
-            if (row.Cells["Số Ngày công chuẩn"].Value != null)
-                txtSoNgayCong.Text = row.Cells["Số Ngày công chuẩn"].Value.ToString();
+            if (row.Cells["Số ngày công"].Value != null)
+                txtSoNgayCong.Text = row.Cells["Số ngày công"].Value.ToString();
 
             if (row.Cells["Phụ cấp"].Value != null)
                 txtPhuCap.Text = Convert.ToDecimal(row.Cells["Phụ cấp"].Value).ToString("N0");
@@ -939,7 +1038,7 @@ namespace QuanLyNhanVien3
                         l.Thang_ChienCD232928       AS N'Tháng',
                         l.Nam_ChienCD232928         AS N'Năm',
                         l.LuongCoBan_ChienCD232928  AS N'Lương cơ bản',
-                        l.SoNgayCongChuan_ChienCD232928 AS N'Số Ngày công chuẩn',
+                        l.SoNgayCongChuan_ChienCD232928 AS N'Số ngày công',
                         l.PhuCap_ChienCD232928      AS N'Phụ cấp',
                         l.KhauTru_ChienCD232928     AS N'Khấu trừ',
                         l.Ghichu_ChienCD232928      AS N'Ghi chú'
@@ -1137,12 +1236,26 @@ namespace QuanLyNhanVien3
         private void numNam_ValueChanged(object sender, EventArgs e)
         {
             if (cbThang.SelectedItem == null) return;
+
+            // Nếu đã chọn nhân viên, tự động load lại số ngày công từ bảng lương
+            if (!string.IsNullOrEmpty(currentMaNV) && currentMaNV != "-- Chọn Nhân Viên --")
+            {
+                LoadSoNgayCongTuBangLuong(currentMaNV);
+            }
+
             LoadLuongFilter(maPB: currentMaPB, maCV: currentMaCV, maNV: currentMaNV);
         }
 
         private void cbThang_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbThang.SelectedItem == null) return;
+
+            // Nếu đã chọn nhân viên, tự động load lại số ngày công từ bảng lương
+            if (!string.IsNullOrEmpty(currentMaNV) && currentMaNV != "-- Chọn Nhân Viên --")
+            {
+                LoadSoNgayCongTuBangLuong(currentMaNV);
+            }
+
             LoadLuongFilter(maPB: currentMaPB, maCV: currentMaCV, maNV: currentMaNV);
         }
 
