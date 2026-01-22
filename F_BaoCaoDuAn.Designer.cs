@@ -20,6 +20,7 @@
 			this.lblSubTitle = new System.Windows.Forms.Label();
 			this.pnlControl = new System.Windows.Forms.Panel();
 			this.grpSearch = new System.Windows.Forms.GroupBox();
+			this.comboBoxduan = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.txtTimKiem = new System.Windows.Forms.TextBox();
 			this.btnTimKiem = new System.Windows.Forms.Button();
@@ -30,7 +31,7 @@
 			this.pnlResult = new System.Windows.Forms.Panel();
 			this.dtGridViewBCDuAn = new System.Windows.Forms.DataGridView();
 			this.lblResult = new System.Windows.Forms.Label();
-			this.comboBoxduan = new System.Windows.Forms.ComboBox();
+			this.buttonpdf = new System.Windows.Forms.Button();
 			this.pnlHeader.SuspendLayout();
 			this.pnlControl.SuspendLayout();
 			this.grpSearch.SuspendLayout();
@@ -96,6 +97,15 @@
 			this.grpSearch.TabStop = false;
 			this.grpSearch.Text = "Tìm kiếm dự án";
 			// 
+			// comboBoxduan
+			// 
+			this.comboBoxduan.FormattingEnabled = true;
+			this.comboBoxduan.Location = new System.Drawing.Point(111, 77);
+			this.comboBoxduan.Name = "comboBoxduan";
+			this.comboBoxduan.Size = new System.Drawing.Size(200, 31);
+			this.comboBoxduan.TabIndex = 3;
+			this.comboBoxduan.SelectedIndexChanged += new System.EventHandler(this.comboBoxduan_SelectedIndexChanged);
+			// 
 			// label2
 			// 
 			this.label2.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -123,20 +133,21 @@
 			// 
 			// grpReport
 			// 
+			this.grpReport.Controls.Add(this.buttonpdf);
 			this.grpReport.Controls.Add(this.btnDSNhanVienTheoDuAn);
 			this.grpReport.Controls.Add(this.btnSoLuongNhanVien);
 			this.grpReport.Controls.Add(this.btnXuatExcel);
 			this.grpReport.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
 			this.grpReport.Location = new System.Drawing.Point(487, 20);
 			this.grpReport.Name = "grpReport";
-			this.grpReport.Size = new System.Drawing.Size(643, 80);
+			this.grpReport.Size = new System.Drawing.Size(707, 80);
 			this.grpReport.TabIndex = 1;
 			this.grpReport.TabStop = false;
 			this.grpReport.Text = "Báo cáo";
 			// 
 			// btnDSNhanVienTheoDuAn
 			// 
-			this.btnDSNhanVienTheoDuAn.Location = new System.Drawing.Point(15, 30);
+			this.btnDSNhanVienTheoDuAn.Location = new System.Drawing.Point(6, 30);
 			this.btnDSNhanVienTheoDuAn.Name = "btnDSNhanVienTheoDuAn";
 			this.btnDSNhanVienTheoDuAn.Size = new System.Drawing.Size(233, 35);
 			this.btnDSNhanVienTheoDuAn.TabIndex = 0;
@@ -145,7 +156,7 @@
 			// 
 			// btnSoLuongNhanVien
 			// 
-			this.btnSoLuongNhanVien.Location = new System.Drawing.Point(254, 30);
+			this.btnSoLuongNhanVien.Location = new System.Drawing.Point(255, 31);
 			this.btnSoLuongNhanVien.Name = "btnSoLuongNhanVien";
 			this.btnSoLuongNhanVien.Size = new System.Drawing.Size(204, 35);
 			this.btnSoLuongNhanVien.TabIndex = 1;
@@ -154,9 +165,9 @@
 			// 
 			// btnXuatExcel
 			// 
-			this.btnXuatExcel.Location = new System.Drawing.Point(474, 30);
+			this.btnXuatExcel.Location = new System.Drawing.Point(484, 32);
 			this.btnXuatExcel.Name = "btnXuatExcel";
-			this.btnXuatExcel.Size = new System.Drawing.Size(108, 35);
+			this.btnXuatExcel.Size = new System.Drawing.Size(108, 34);
 			this.btnXuatExcel.TabIndex = 2;
 			this.btnXuatExcel.Text = "Xuất Excel";
 			this.btnXuatExcel.Click += new System.EventHandler(this.btnXuatExcel_Click);
@@ -196,14 +207,15 @@
 			this.lblResult.TabIndex = 1;
 			this.lblResult.Text = "KẾT QUẢ BÁO CÁO";
 			// 
-			// comboBoxduan
+			// buttonpdf
 			// 
-			this.comboBoxduan.FormattingEnabled = true;
-			this.comboBoxduan.Location = new System.Drawing.Point(111, 77);
-			this.comboBoxduan.Name = "comboBoxduan";
-			this.comboBoxduan.Size = new System.Drawing.Size(200, 31);
-			this.comboBoxduan.TabIndex = 3;
-			this.comboBoxduan.SelectedIndexChanged += new System.EventHandler(this.comboBoxduan_SelectedIndexChanged);
+			this.buttonpdf.Location = new System.Drawing.Point(608, 31);
+			this.buttonpdf.Name = "buttonpdf";
+			this.buttonpdf.Size = new System.Drawing.Size(84, 35);
+			this.buttonpdf.TabIndex = 3;
+			this.buttonpdf.Text = "PDF";
+			this.buttonpdf.UseVisualStyleBackColor = true;
+			this.buttonpdf.Click += new System.EventHandler(this.buttonpdf_Click);
 			// 
 			// F_BaoCaoDuAn
 			// 
@@ -247,5 +259,6 @@
         private System.Windows.Forms.Label lblResult;
         private System.Windows.Forms.DataGridView dtGridViewBCDuAn;
         private System.Windows.Forms.ComboBox comboBoxduan;
+        private System.Windows.Forms.Button buttonpdf;
     }
 }
