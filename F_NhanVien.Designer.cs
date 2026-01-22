@@ -48,6 +48,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.xuatexcel = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.cbBoxChucVu = new System.Windows.Forms.ComboBox();
             this.cbBoxGioiTinh = new System.Windows.Forms.ComboBox();
@@ -64,7 +65,7 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.dtGridViewNhanVien = new System.Windows.Forms.DataGridView();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.xuatexcel = new System.Windows.Forms.Button();
+            this.xuatpdf = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -300,12 +301,26 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.Transparent;
+            this.panel5.Controls.Add(this.xuatpdf);
             this.panel5.Controls.Add(this.xuatexcel);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel5.Location = new System.Drawing.Point(1131, 0);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(467, 450);
             this.panel5.TabIndex = 160;
+            // 
+            // xuatexcel
+            // 
+            this.xuatexcel.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.xuatexcel.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.xuatexcel.Location = new System.Drawing.Point(26, 241);
+            this.xuatexcel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.xuatexcel.Name = "xuatexcel";
+            this.xuatexcel.Size = new System.Drawing.Size(145, 47);
+            this.xuatexcel.TabIndex = 189;
+            this.xuatexcel.Text = "excel";
+            this.xuatexcel.UseVisualStyleBackColor = true;
+            this.xuatexcel.Click += new System.EventHandler(this.xuatexcel_Click);
             // 
             // panel3
             // 
@@ -489,18 +504,18 @@
             this.dtGridViewNhanVien.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewNhanVien_CellClick_2);
             this.dtGridViewNhanVien.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dtGridViewNhanVien_RowPostPaint);
             // 
-            // xuatexcel
+            // xuatpdf
             // 
-            this.xuatexcel.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.xuatexcel.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.xuatexcel.Location = new System.Drawing.Point(161, 202);
-            this.xuatexcel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.xuatexcel.Name = "xuatexcel";
-            this.xuatexcel.Size = new System.Drawing.Size(145, 47);
-            this.xuatexcel.TabIndex = 189;
-            this.xuatexcel.Text = "excel";
-            this.xuatexcel.UseVisualStyleBackColor = true;
-            this.xuatexcel.Click += new System.EventHandler(this.xuatexcel_Click);
+            this.xuatpdf.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.xuatpdf.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.xuatpdf.Location = new System.Drawing.Point(26, 308);
+            this.xuatpdf.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.xuatpdf.Name = "xuatpdf";
+            this.xuatpdf.Size = new System.Drawing.Size(145, 47);
+            this.xuatpdf.TabIndex = 190;
+            this.xuatpdf.Text = "PDF";
+            this.xuatpdf.UseVisualStyleBackColor = true;
+            this.xuatpdf.Click += new System.EventHandler(this.xuatpdf_Click);
             // 
             // F_NhanVien
             // 
@@ -568,5 +583,6 @@
         private System.Windows.Forms.Button btnrestar;
         private System.Windows.Forms.Label lblTongNhanVien;
         private System.Windows.Forms.Button xuatexcel;
+        private System.Windows.Forms.Button xuatpdf;
     }
 }
