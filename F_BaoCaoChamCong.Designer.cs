@@ -131,7 +131,7 @@
             this.btnDiTreVeSom.Name = "btnDiTreVeSom";
             this.btnDiTreVeSom.Size = new System.Drawing.Size(160, 35);
             this.btnDiTreVeSom.TabIndex = 1;
-            this.btnDiTreVeSom.Text = "Đi trễ / Về sớm";
+            this.btnDiTreVeSom.Text = "Chi tiết";
             this.btnDiTreVeSom.Click += new System.EventHandler(this.btnDiTreVeSom_Click);
             // 
             // grpSearch
