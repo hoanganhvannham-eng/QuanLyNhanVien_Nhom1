@@ -25,13 +25,17 @@
             this.btnSoNgayLamViec = new System.Windows.Forms.Button();
             this.btnDiTreVeSom = new System.Windows.Forms.Button();
             this.grpSearch = new System.Windows.Forms.GroupBox();
+            this.xuatpdf = new System.Windows.Forms.Button();
             this.txtTimkiem = new System.Windows.Forms.TextBox();
             this.btnTimKiem = new System.Windows.Forms.Button();
             this.btnXuatexcel = new System.Windows.Forms.Button();
             this.pnlResult = new System.Windows.Forms.Panel();
             this.dtGridViewBCChamCong = new System.Windows.Forms.DataGridView();
             this.lblResult = new System.Windows.Forms.Label();
-            this.xuatpdf = new System.Windows.Forms.Button();
+            this.cbBoxChucVu = new System.Windows.Forms.ComboBox();
+            this.cbBoxMaPB = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.pnlHeader.SuspendLayout();
             this.pnlControl.SuspendLayout();
             this.grpTime.SuspendLayout();
@@ -44,6 +48,10 @@
             // pnlHeader
             // 
             this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(60)))), ((int)(((byte)(114)))));
+            this.pnlHeader.Controls.Add(this.cbBoxChucVu);
+            this.pnlHeader.Controls.Add(this.cbBoxMaPB);
+            this.pnlHeader.Controls.Add(this.label11);
+            this.pnlHeader.Controls.Add(this.label10);
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Controls.Add(this.lblSubTitle);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
@@ -149,6 +157,15 @@
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "Tìm kiếm và xuất";
             // 
+            // xuatpdf
+            // 
+            this.xuatpdf.Location = new System.Drawing.Point(416, 29);
+            this.xuatpdf.Name = "xuatpdf";
+            this.xuatpdf.Size = new System.Drawing.Size(100, 32);
+            this.xuatpdf.TabIndex = 3;
+            this.xuatpdf.Text = "Xuất pdf";
+            this.xuatpdf.Click += new System.EventHandler(this.xuatpdf_Click);
+            // 
             // txtTimkiem
             // 
             this.txtTimkiem.Location = new System.Drawing.Point(15, 32);
@@ -208,14 +225,47 @@
             this.lblResult.TabIndex = 1;
             this.lblResult.Text = "KẾT QUẢ BÁO CÁO";
             // 
-            // xuatpdf
+            // cbBoxChucVu
             // 
-            this.xuatpdf.Location = new System.Drawing.Point(416, 29);
-            this.xuatpdf.Name = "xuatpdf";
-            this.xuatpdf.Size = new System.Drawing.Size(100, 32);
-            this.xuatpdf.TabIndex = 3;
-            this.xuatpdf.Text = "Xuất pdf";
-            this.xuatpdf.Click += new System.EventHandler(this.xuatpdf_Click);
+            this.cbBoxChucVu.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.cbBoxChucVu.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBoxChucVu.FormattingEnabled = true;
+            this.cbBoxChucVu.Location = new System.Drawing.Point(563, 46);
+            this.cbBoxChucVu.Name = "cbBoxChucVu";
+            this.cbBoxChucVu.Size = new System.Drawing.Size(307, 27);
+            this.cbBoxChucVu.TabIndex = 197;
+            // 
+            // cbBoxMaPB
+            // 
+            this.cbBoxMaPB.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.cbBoxMaPB.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBoxMaPB.FormattingEnabled = true;
+            this.cbBoxMaPB.Location = new System.Drawing.Point(563, 8);
+            this.cbBoxMaPB.Name = "cbBoxMaPB";
+            this.cbBoxMaPB.Size = new System.Drawing.Size(307, 27);
+            this.cbBoxMaPB.TabIndex = 196;
+            // 
+            // label11
+            // 
+            this.label11.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(427, 13);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(108, 19);
+            this.label11.TabIndex = 194;
+            this.label11.Text = "Mã Phòng Ban";
+            // 
+            // label10
+            // 
+            this.label10.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(427, 52);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(68, 19);
+            this.label10.TabIndex = 195;
+            this.label10.Text = "Chức Vụ";
             // 
             // F_BaoCaoChamCong
             // 
@@ -228,6 +278,7 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.F_BaoCaoChamCong_Load);
             this.pnlHeader.ResumeLayout(false);
+            this.pnlHeader.PerformLayout();
             this.pnlControl.ResumeLayout(false);
             this.grpTime.ResumeLayout(false);
             this.grpReport.ResumeLayout(false);
@@ -260,5 +311,9 @@
         private System.Windows.Forms.Label lblResult;
         private System.Windows.Forms.DataGridView dtGridViewBCChamCong;
         private System.Windows.Forms.Button xuatpdf;
+        private System.Windows.Forms.ComboBox cbBoxChucVu;
+        private System.Windows.Forms.ComboBox cbBoxMaPB;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label10;
     }
 }

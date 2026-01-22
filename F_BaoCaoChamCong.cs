@@ -591,7 +591,78 @@ ORDER BY nv.MaNV_TuanhCD233018";
             dtpThoiGian.Format = DateTimePickerFormat.Custom;
             dtpThoiGian.CustomFormat = "MM/yyyy";
             dtpThoiGian.ShowUpDown = true;
+            LoadcomboBox();
+        }
 
+
+        private void LoadcomboBox()
+        {
+            try
+            {
+                cn.connect();
+                // Load Phòng ban
+                string sqlLoadcomboBoxtblPhongBan = "SELECT '' AS MaPB_ThuanCD233318, N'-- Tất cả phòng ban --' AS TenPB_ThuanCD233318 UNION ALL SELECT MaPB_ThuanCD233318, TenPB_ThuanCD233318 FROM tblPhongBan_ThuanCD233318 WHERE DeletedAt_ThuanCD233318 = 0";
+                using (SqlDataAdapter da = new SqlDataAdapter(sqlLoadcomboBoxtblPhongBan, cn.conn))
+                {
+                    DataSet ds = new DataSet();
+                    da.Fill(ds);
+
+                    cbBoxMaPB.DataSource = ds.Tables[0];
+                    cbBoxMaPB.DisplayMember = "TenPB_ThuanCD233318";
+                    cbBoxMaPB.ValueMember = "MaPB_ThuanCD233318";
+                }
+
+                // Load Chức vụ - ban đầu hiển thị tất cả
+                LoadChucVuComboBox("");
+
+                cn.disconnect();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi load combobox: " + ex.Message);
+            }
+        }
+
+        // Load chức vụ theo phòng ban
+        private void LoadChucVuComboBox(string maPB)
+        {
+            try
+            {
+                cn.connect();
+                string sqlLoadChucVu = "";
+
+                if (string.IsNullOrEmpty(maPB))
+                {
+                    // Load tất cả chức vụ
+                    sqlLoadChucVu = "SELECT '' AS MaCV_KhangCD233181, N'-- Tất cả chức vụ --' AS TenCV_KhangCD233181 UNION ALL SELECT MaCV_KhangCD233181, TenCV_KhangCD233181 FROM tblChucVu_KhangCD233181 WHERE DeletedAt_KhangCD233181 = 0";
+                }
+                else
+                {
+                    // Load chức vụ theo phòng ban
+                    sqlLoadChucVu = "SELECT '' AS MaCV_KhangCD233181, N'-- Tất cả chức vụ --' AS TenCV_KhangCD233181 UNION ALL SELECT MaCV_KhangCD233181, TenCV_KhangCD233181 FROM tblChucVu_KhangCD233181 WHERE DeletedAt_KhangCD233181 = 0 AND MaPB_ThuanCD233318 = @MaPB";
+                }
+
+                using (SqlCommand cmd = new SqlCommand(sqlLoadChucVu, cn.conn))
+                {
+                    if (!string.IsNullOrEmpty(maPB))
+                    {
+                        cmd.Parameters.AddWithValue("@MaPB", maPB);
+                    }
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataSet ds = new DataSet();
+                    da.Fill(ds);
+
+                    cbBoxChucVu.DataSource = ds.Tables[0];
+                    cbBoxChucVu.DisplayMember = "TenCV_KhangCD233181";
+                    cbBoxChucVu.ValueMember = "MaCV_KhangCD233181";
+                }
+                cn.disconnect();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi load chức vụ: " + ex.Message);
+            }
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
