@@ -200,7 +200,7 @@ namespace QuanLyNhanVien3
 
         private void thongTinDuAnToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            OpenChildForm(new F_DuAnChung());
         }
 
         private void label1_Click(object sender, EventArgs e)
