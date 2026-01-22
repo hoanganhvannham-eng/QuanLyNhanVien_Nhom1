@@ -27,10 +27,11 @@
             this.grpSearch = new System.Windows.Forms.GroupBox();
             this.txtTimkiem = new System.Windows.Forms.TextBox();
             this.btnTimKiem = new System.Windows.Forms.Button();
-            this.btnXuat = new System.Windows.Forms.Button();
+            this.btnXuatexcel = new System.Windows.Forms.Button();
             this.pnlResult = new System.Windows.Forms.Panel();
             this.dtGridViewBCChamCong = new System.Windows.Forms.DataGridView();
             this.lblResult = new System.Windows.Forms.Label();
+            this.xuatpdf = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
             this.pnlControl.SuspendLayout();
             this.grpTime.SuspendLayout();
@@ -48,7 +49,7 @@
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(1119, 80);
+            this.pnlHeader.Size = new System.Drawing.Size(1297, 80);
             this.pnlHeader.TabIndex = 2;
             // 
             // lblTitle
@@ -81,7 +82,7 @@
             this.pnlControl.Location = new System.Drawing.Point(0, 80);
             this.pnlControl.Name = "pnlControl";
             this.pnlControl.Padding = new System.Windows.Forms.Padding(15);
-            this.pnlControl.Size = new System.Drawing.Size(1119, 140);
+            this.pnlControl.Size = new System.Drawing.Size(1297, 140);
             this.pnlControl.TabIndex = 1;
             // 
             // grpTime
@@ -136,13 +137,14 @@
             // 
             // grpSearch
             // 
+            this.grpSearch.Controls.Add(this.xuatpdf);
             this.grpSearch.Controls.Add(this.txtTimkiem);
             this.grpSearch.Controls.Add(this.btnTimKiem);
-            this.grpSearch.Controls.Add(this.btnXuat);
+            this.grpSearch.Controls.Add(this.btnXuatexcel);
             this.grpSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.grpSearch.Location = new System.Drawing.Point(640, 20);
             this.grpSearch.Name = "grpSearch";
-            this.grpSearch.Size = new System.Drawing.Size(420, 80);
+            this.grpSearch.Size = new System.Drawing.Size(582, 102);
             this.grpSearch.TabIndex = 2;
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "Tìm kiếm và xuất";
@@ -163,14 +165,14 @@
             this.btnTimKiem.Text = "Tìm";
             this.btnTimKiem.Click += new System.EventHandler(this.btnTimKiem_Click);
             // 
-            // btnXuat
+            // btnXuatexcel
             // 
-            this.btnXuat.Location = new System.Drawing.Point(310, 30);
-            this.btnXuat.Name = "btnXuat";
-            this.btnXuat.Size = new System.Drawing.Size(100, 32);
-            this.btnXuat.TabIndex = 2;
-            this.btnXuat.Text = "Xuất Excel";
-            this.btnXuat.Click += new System.EventHandler(this.btnXuat_Click);
+            this.btnXuatexcel.Location = new System.Drawing.Point(310, 30);
+            this.btnXuatexcel.Name = "btnXuatexcel";
+            this.btnXuatexcel.Size = new System.Drawing.Size(100, 32);
+            this.btnXuatexcel.TabIndex = 2;
+            this.btnXuatexcel.Text = "Xuất Excel";
+            this.btnXuatexcel.Click += new System.EventHandler(this.btnXuat_Click);
             // 
             // pnlResult
             // 
@@ -181,7 +183,7 @@
             this.pnlResult.Location = new System.Drawing.Point(0, 220);
             this.pnlResult.Name = "pnlResult";
             this.pnlResult.Padding = new System.Windows.Forms.Padding(15);
-            this.pnlResult.Size = new System.Drawing.Size(1119, 450);
+            this.pnlResult.Size = new System.Drawing.Size(1297, 450);
             this.pnlResult.TabIndex = 0;
             // 
             // dtGridViewBCChamCong
@@ -193,7 +195,7 @@
             this.dtGridViewBCChamCong.Name = "dtGridViewBCChamCong";
             this.dtGridViewBCChamCong.ReadOnly = true;
             this.dtGridViewBCChamCong.RowHeadersWidth = 51;
-            this.dtGridViewBCChamCong.Size = new System.Drawing.Size(1089, 390);
+            this.dtGridViewBCChamCong.Size = new System.Drawing.Size(1267, 390);
             this.dtGridViewBCChamCong.TabIndex = 0;
             // 
             // lblResult
@@ -202,13 +204,22 @@
             this.lblResult.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.lblResult.Location = new System.Drawing.Point(15, 15);
             this.lblResult.Name = "lblResult";
-            this.lblResult.Size = new System.Drawing.Size(1089, 30);
+            this.lblResult.Size = new System.Drawing.Size(1267, 30);
             this.lblResult.TabIndex = 1;
             this.lblResult.Text = "KẾT QUẢ BÁO CÁO";
             // 
+            // xuatpdf
+            // 
+            this.xuatpdf.Location = new System.Drawing.Point(416, 29);
+            this.xuatpdf.Name = "xuatpdf";
+            this.xuatpdf.Size = new System.Drawing.Size(100, 32);
+            this.xuatpdf.TabIndex = 3;
+            this.xuatpdf.Text = "Xuất pdf";
+            this.xuatpdf.Click += new System.EventHandler(this.xuatpdf_Click);
+            // 
             // F_BaoCaoChamCong
             // 
-            this.ClientSize = new System.Drawing.Size(1119, 670);
+            this.ClientSize = new System.Drawing.Size(1297, 670);
             this.Controls.Add(this.pnlResult);
             this.Controls.Add(this.pnlControl);
             this.Controls.Add(this.pnlHeader);
@@ -243,10 +254,11 @@
         private System.Windows.Forms.GroupBox grpSearch;
         private System.Windows.Forms.TextBox txtTimkiem;
         private System.Windows.Forms.Button btnTimKiem;
-        private System.Windows.Forms.Button btnXuat;
+        private System.Windows.Forms.Button btnXuatexcel;
 
         private System.Windows.Forms.Panel pnlResult;
         private System.Windows.Forms.Label lblResult;
         private System.Windows.Forms.DataGridView dtGridViewBCChamCong;
+        private System.Windows.Forms.Button xuatpdf;
     }
 }
