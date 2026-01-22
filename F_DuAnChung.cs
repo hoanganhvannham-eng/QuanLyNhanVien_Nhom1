@@ -691,9 +691,95 @@ namespace QuanLyNhanVien3
         {
             LoadDataDuAn();
             LoadComboBoxMaNV();
-            LoadComboBoxMaDA();
+            LoadComboBoxMaDA(); 
+            ApplyPermissions();
         }
 
+        private void ApplyPermissions()
+        {
+            int roleId = F_FormMain.LoginInfo.CurrentRoleId;
+
+            // RoleId = 1: Admin (Full quyền)
+            if (roleId == 1)
+            {
+                btnThemCTDA.Enabled = true;
+                btnThemDA.Enabled = true;
+                btnSuaDA.Enabled = true;
+                btnSuaCTDA.Enabled = true;
+                btnXoaCTDA.Enabled = true;
+                btnXoaDA.Enabled = true;
+                btnXuatExcel.Enabled = true;
+                btnXuatPDF.Enabled = true;
+
+            }
+            // RoleId = 2: Manager (Xem và Sửa, không Xóa)
+            else if (roleId == 2)
+            {
+                btnThemCTDA.Enabled = true;
+                btnThemDA.Enabled = true;
+                btnSuaDA.Enabled = true;
+                btnSuaCTDA.Enabled = true;
+                btnXoaCTDA.Enabled = true;
+                btnXoaDA.Enabled = false;
+                btnXuatExcel.Enabled = false;
+                btnXuatPDF.Enabled = true;
+            }
+            // RoleId = 3: Employee (Chỉ xem)
+            else if (roleId == 3)
+            {
+                btnThemCTDA.Enabled = false;
+                btnThemDA.Enabled = false;
+                btnSuaDA.Enabled = false;
+                btnSuaCTDA.Enabled =false;
+                btnXoaCTDA.Enabled =   false;
+                btnXoaDA.Enabled = false;
+                btnXuatExcel.Enabled = false;
+                btnXuatPDF.Enabled = false;
+
+                // Vô hiệu hóa tất cả textbox/combobox
+                SetControlsReadOnly(this.Controls);
+            }
+            // Các role khác - Không có quyền
+            else
+            {
+
+                btnThemCTDA.Enabled = false;
+                btnThemDA.Enabled = false;
+                btnSuaDA.Enabled = false;
+                btnSuaCTDA.Enabled = false;
+                btnXoaCTDA.Enabled = false;
+                btnXoaDA.Enabled = false;
+                btnXuatExcel.Enabled = false;
+                btnXuatPDF.Enabled = false;
+                SetControlsReadOnly(this.Controls);
+            }
+        }
+
+        // Hàm đệ quy để set ReadOnly cho tất cả TextBox/ComboBox
+        private void SetControlsReadOnly(Control.ControlCollection controls)
+        {
+            foreach (Control control in controls)
+            {
+                if (control is TextBox)
+                {
+                    ((TextBox)control).ReadOnly = true;
+                }
+                else if (control is ComboBox)
+                {
+                    ((ComboBox)control).Enabled = false;
+                }
+                else if (control is DateTimePicker)
+                {
+                    ((DateTimePicker)control).Enabled = false;
+                }
+
+                // Đệ quy với các container (Panel, GroupBox...)
+                if (control.HasChildren)
+                {
+                    SetControlsReadOnly(control.Controls);
+                }
+            }
+        }
         private void cbMaNV_SelectedValueChanged(object sender, EventArgs e)
         {
             if (cbMaNV.SelectedValue == null) return;
