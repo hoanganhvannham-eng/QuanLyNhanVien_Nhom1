@@ -243,5 +243,9 @@ namespace QuanLyNhanVien3
                 else if (ctl.HasChildren) ClearAllInputs(ctl);
             }
         }
+        private void F_BaoCaoLuong_Load(object sender, EventArgs e)
+        {
+        }
+
     }
 }

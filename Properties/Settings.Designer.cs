@@ -44,5 +44,16 @@ namespace QuanLyNhanVien3.Properties {
                 return ((string)(this["QuanLyNhanSuConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-10V42VO\\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom14;Inte" +
+            "grated Security=True;TrustServerCertificate=True")]
+        public string QuanLyNhanVien_Nhom14ConnectionString {
+            get {
+                return ((string)(this["QuanLyNhanVien_Nhom14ConnectionString"]));
+            }
+        }
     }
 }

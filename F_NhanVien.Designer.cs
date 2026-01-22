@@ -63,6 +63,7 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.dtGridViewNhanVien = new System.Windows.Forms.DataGridView();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.lblTongNhanVien = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -74,6 +75,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.lblTongNhanVien);
             this.panel1.Controls.Add(this.btnThoat);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -146,14 +148,13 @@
             // 
             this.btnrestar.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnrestar.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnrestar.Location = new System.Drawing.Point(416, 315);
+            this.btnrestar.Location = new System.Drawing.Point(409, 308);
             this.btnrestar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnrestar.Name = "btnrestar";
-            this.btnrestar.Size = new System.Drawing.Size(134, 44);
+            this.btnrestar.Size = new System.Drawing.Size(145, 47);
             this.btnrestar.TabIndex = 188;
             this.btnrestar.Text = "Refresh";
             this.btnrestar.UseVisualStyleBackColor = true;
-            this.btnrestar.Visible = false;
             this.btnrestar.Click += new System.EventHandler(this.btnrestar_Click);
             // 
             // btnTimKiem
@@ -472,6 +473,18 @@
             this.dtGridViewNhanVien.TabIndex = 120;
             this.dtGridViewNhanVien.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewNhanVien_CellClick_2);
             // 
+            // lblTongNhanVien
+            // 
+            this.lblTongNhanVien.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
+            this.lblTongNhanVien.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lblTongNhanVien.AutoSize = true;
+            this.lblTongNhanVien.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTongNhanVien.Location = new System.Drawing.Point(690, 108);
+            this.lblTongNhanVien.Name = "lblTongNhanVien";
+            this.lblTongNhanVien.Size = new System.Drawing.Size(130, 22);
+            this.lblTongNhanVien.TabIndex = 170;
+            this.lblTongNhanVien.Text = "Tổng nhân viên";
+            // 
             // F_NhanVien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -535,5 +548,6 @@
         private System.Windows.Forms.Button btnThoat;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Button btnrestar;
+        private System.Windows.Forms.Label lblTongNhanVien;
     }
 }

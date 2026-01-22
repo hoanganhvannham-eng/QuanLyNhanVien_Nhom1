@@ -43,14 +43,14 @@ namespace QuanLyNhanVien3
                 cn.connect();
 
                 string sqlLoadDataNhanVien = @"SELECT 
-                                                    MaPB AS [Mã Phòng Ban],
-                                                    TenPB AS [Tên Phòng Ban],
-                                                    DiaChi AS [Địa Chỉ],
-                                                    SoDienThoai AS [Số Điện Thoại],
-                                                    GhiChu AS [Ghi Chú]
-                                                FROM tblPhongBan
-                                                WHERE DeletedAt = 0
-                                                ORDER BY MaPB;
+                                                    MaPB_ThuanCD233318 AS [Mã Phòng Ban],
+                                                    TenPB_ThuanCD233318 AS [Tên Phòng Ban],
+                                                    DiaChi_ThuanCD233318 AS [Địa Chỉ],
+                                                    SoDienThoai_ThuanCD233318 AS [Số Điện Thoại],
+                                                    GhiChu_ThuanCD233318 AS [Ghi Chú]
+                                                FROM tblPhongBan_ThuanCD233318
+                                                WHERE DeletedAt_ThuanCD233318 = 0
+                                                ORDER BY MaPB_ThuanCD233318;
                                                 ";
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(sqlLoadDataNhanVien, cn.conn))
@@ -105,10 +105,10 @@ namespace QuanLyNhanVien3
 
 
                 // check ma phong ban
-                string checkMaPBSql = "SELECT COUNT(*) FROM tblPhongBan  WHERE MaPB  = @MaPB  AND DeletedAt = 0";
+                string checkMaPBSql = "SELECT COUNT(*) FROM tblPhongBan_ThuanCD233318  WHERE MaPB_ThuanCD233318  = @MaPB_ThuanCD233318  AND DeletedAt_ThuanCD233318 = 0";
                 using (SqlCommand cmdcheckMaPBSql = new SqlCommand(checkMaPBSql, cn.conn))
                 {
-                    cmdcheckMaPBSql.Parameters.AddWithValue("@MaPB", tbmaPB.Text);
+                    cmdcheckMaPBSql.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text);
                     int MaPBCount = (int)cmdcheckMaPBSql.ExecuteScalar();
 
                     if (MaPBCount != 0)
@@ -120,11 +120,11 @@ namespace QuanLyNhanVien3
                     }
                 }
 
-                string checkdiachiTenPB = "SELECT COUNT(*) FROM tblPhongBan  WHERE TenPB  = @TenPB AND DiaChi  = @DiaChi";
+                string checkdiachiTenPB = "SELECT COUNT(*) FROM tblPhongBan_ThuanCD233318  WHERE TenPB_ThuanCD233318  = @TenPB_ThuanCD233318 AND DiaChi_ThuanCD233318  = @DiaChi_ThuanCD233318";
                 using (SqlCommand cmd = new SqlCommand(checkdiachiTenPB, cn.conn))
                 {
-                    cmd.Parameters.AddWithValue("@TenPB", tbTenPB.Text.Trim());
-                    cmd.Parameters.AddWithValue("@DiaChi", tbDiaChi.Text.Trim());
+                    cmd.Parameters.AddWithValue("@TenPB_ThuanCD233318", tbTenPB.Text.Trim());
+                    cmd.Parameters.AddWithValue("@DiaChi_ThuanCD233318", tbDiaChi.Text.Trim());
                     int MaPBCount = (int)cmd.ExecuteScalar();
 
                     if (MaPBCount > 0)
@@ -136,17 +136,17 @@ namespace QuanLyNhanVien3
                     }
                 }
 
-                string sqltblNhanVien = @"INSERT INTO tblPhongBan 
-                           (MaPB, TenPB,  DiaChi, SoDienThoai, Ghichu, DeletedAt)
-                           VALUES ( @MaPB, @TenPB, @DiaChi, @SoDienThoai, @GhiChu, 0)";
+                string sqltblNhanVien = @"INSERT INTO tblPhongBan_ThuanCD233318 
+                           (MaPB_ThuanCD233318, TenPB_ThuanCD233318,  DiaChi_ThuanCD233318, SoDienThoai_ThuanCD233318, Ghichu_ThuanCD233318, DeletedAt_ThuanCD233318)
+                           VALUES ( @MaPB_ThuanCD233318, @TenPB_ThuanCD233318, @DiaChi_ThuanCD233318, @SoDienThoai_ThuanCD233318, @GhiChu_ThuanCD233318, 0)";
 
                 using (SqlCommand cmd = new SqlCommand(sqltblNhanVien, cn.conn))
                 {
-                    cmd.Parameters.AddWithValue("@MaPB", tbmaPB.Text.Trim());
-                    cmd.Parameters.AddWithValue("@TenPB", tbTenPB.Text.Trim());
-                    cmd.Parameters.AddWithValue("@DiaChi", tbDiaChi.Text.Trim());
-                    cmd.Parameters.AddWithValue("@SoDienThoai", tbSoDienThoai.Text.Trim());
-                    cmd.Parameters.AddWithValue("@GhiChu", tbGhiChu.Text.Trim());
+                    cmd.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text.Trim());
+                    cmd.Parameters.AddWithValue("@TenPB_ThuanCD233318", tbTenPB.Text.Trim());
+                    cmd.Parameters.AddWithValue("@DiaChi_ThuanCD233318", tbDiaChi.Text.Trim());
+                    cmd.Parameters.AddWithValue("@SoDienThoai_ThuanCD233318", tbSoDienThoai.Text.Trim());
+                    cmd.Parameters.AddWithValue("@GhiChu_ThuanCD233318", tbGhiChu.Text.Trim());
 
                     int rows = cmd.ExecuteNonQuery();
                     if (rows > 0)
@@ -195,10 +195,10 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    string query = "UPDATE tblPhongBan SET DeletedAt = 1 WHERE MaPB = @MaPB";
+                    string query = "UPDATE tblPhongBan_ThuanCD233318 SET DeletedAt_ThuanCD233318 = 1 WHERE MaPB_ThuanCD233318 = @MaPB_ThuanCD233318";
                     using (SqlCommand cmd = new SqlCommand(query, cn.conn))
                     {
-                        cmd.Parameters.AddWithValue("@MaPB", tbmaPB.Text);
+                        cmd.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text);
                         int rowsAffected = cmd.ExecuteNonQuery();
 
                         if (rowsAffected > 0)
@@ -252,14 +252,14 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    string sql = @"UPDATE tblPhongBan SET TenPB = @TenPB, DiaChi = @DiaChi, SoDienThoai = @SoDienThoai, GhiChu= @GhiChu, DeletedAt = 0 WHERE MaPB = @MaPB";
+                    string sql = @"UPDATE tblPhongBan_ThuanCD233318 SET TenPB = @TenPB_ThuanCD233318, DiaChi = @DiaChi_ThuanCD233318, SoDienThoai = @SoDienThoai_ThuanCD233318, GhiChu= @GhiChu_ThuanCD233318, DeletedAt_ThuanCD233318 = 0 WHERE MaPB = @MaPB_ThuanCD233318";
                     using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                     {
-                        cmd.Parameters.AddWithValue("@MaPB", tbmaPB.Text.Trim());
-                        cmd.Parameters.AddWithValue("@TenPB", tbTenPB.Text.Trim());
-                        cmd.Parameters.AddWithValue("@DiaChi", tbDiaChi.Text.Trim());
-                        cmd.Parameters.AddWithValue("@SoDienThoai", tbSoDienThoai.Text.Trim());
-                        cmd.Parameters.AddWithValue("@GhiChu", tbGhiChu.Text.Trim());
+                        cmd.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text.Trim());
+                        cmd.Parameters.AddWithValue("@TenPB_ThuanCD233318", tbTenPB.Text.Trim());
+                        cmd.Parameters.AddWithValue("@DiaChi_ThuanCD233318", tbDiaChi.Text.Trim());
+                        cmd.Parameters.AddWithValue("@SoDienThoai_ThuanCD233318", tbSoDienThoai.Text.Trim());
+                        cmd.Parameters.AddWithValue("@GhiChu_ThuanCD233318", tbGhiChu.Text.Trim());
 
                         int rows = cmd.ExecuteNonQuery();
                         if (rows > 0)
@@ -296,13 +296,13 @@ namespace QuanLyNhanVien3
                 }
                 cn.connect();
                 string MaPBtimkiem = tbmaPB.Text.Trim();
-                string sql = @" SELECT MaPB, TenPB, DiaChi, SoDienThoai, Ghichu
-                                FROM tblPhongBan
-                                WHERE DeletedAt = 0 AND MaPB LIKE @MaPB
-                                ORDER BY MaPB";
+                string sql = @" SELECT MaPB_ThuanCD233318, TenPB_ThuanCD233318, DiaChi_ThuanCD233318, SoDienThoai_ThuanCD233318, Ghichu_ThuanCD233318
+                                FROM tblPhongBan_ThuanCD233318
+                                WHERE DeletedAt_ThuanCD233318 = 0 AND MaPB_ThuanCD233318 LIKE @MaPB_ThuanCD233318
+                                ORDER BY MaPB_ThuanCD233318";
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
-                    cmd.Parameters.AddWithValue("@MaPB", "%" + MaPBtimkiem + "%");
+                    cmd.Parameters.AddWithValue("@MaPB_ThuanCD233318", "%" + MaPBtimkiem + "%");
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
@@ -427,7 +427,7 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-                string query = @" SELECT MaPB, TenPB, DiaChi, SoDienThoai, Ghichu FROM tblPhongBan WHERE DeletedAt =1 ORDER BY MaPB";
+                string query = @" SELECT MaPB_ThuanCD233318, TenPB_ThuanCD233318, DiaChi_ThuanCD233318, SoDienThoai_ThuanCD233318, Ghichu_ThuanCD233318 FROM tblPhongBan_ThuanCD233318 WHERE DeletedAt_ThuanCD233318 =1 ORDER BY MaPB_ThuanCD233318";
                 using (SqlDataAdapter da = new SqlDataAdapter(query, cn.conn))
                 {
                     DataTable dt = new DataTable();
@@ -453,10 +453,10 @@ namespace QuanLyNhanVien3
                 }
 
                 cn.connect();
-                string query = "SELECT COUNT(*) FROM tblPhongBan WHERE MaPB = @MaPB AND DeletedAt = 1";
+                string query = "SELECT COUNT(*) FROM tblPhongBan_ThuanCD233318 WHERE MaPB = @MaPB_ThuanCD233318 AND DeletedAt_ThuanCD233318 = 1";
                 using (SqlCommand cmdcheckPB = new SqlCommand(query, cn.conn))
                 {
-                    cmdcheckPB.Parameters.AddWithValue("@MaPB", tbmaPB.Text.Trim());
+                    cmdcheckPB.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text.Trim());
                     int emailCount = (int)cmdcheckPB.ExecuteScalar();
 
                     if (emailCount == 0)
@@ -476,7 +476,7 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
-                string sqMKkhoiphuc = "SELECT * FROM tblTaiKhoan WHERE Quyen = @Quyen AND MatKhau = @MatKhau";
+                string sqMKkhoiphuc = "SELECT * FROM tblTaiKhoan_KhangCD233181 WHERE Quyen = @Quyen AND MatKhau = @MatKhau_KhangCD233181";
                 SqlCommand cmdkhoiphuc = new SqlCommand(sqMKkhoiphuc, cn.conn);
                 cmdkhoiphuc.Parameters.AddWithValue("@Quyen", "Admin");
                 cmdkhoiphuc.Parameters.AddWithValue("@MatKhau", tbMKkhoiphuc.Text);
@@ -504,11 +504,11 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     tbMKkhoiphuc.Text = "";
-                    string querytblPhongBan = "UPDATE tblPhongBan SET DeletedAt = 0 WHERE MaPB = @MaPB";
+                    string querytblPhongBan = "UPDATE tblPhongBan_ThuanCD233318 SET DeletedAt_ThuanCD233318 = 0 WHERE MaPB = @MaPB_ThuanCD233318";
                     using (SqlCommand cmd = new SqlCommand(querytblPhongBan, cn.conn))
                     {
                         // DELETE FROM tblNhanVien WHERE MaNV = @MaNV / UPDATE tblNhanVien SET DeletedAt = 1 WHERE MaNV = @MaNV
-                        cmd.Parameters.AddWithValue("@MaPB", tbmaPB.Text);
+                        cmd.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text);
                         int rowsAffected = cmd.ExecuteNonQuery();
                         if (rowsAffected > 0)
                         {

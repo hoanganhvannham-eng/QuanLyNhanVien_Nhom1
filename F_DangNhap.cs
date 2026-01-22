@@ -16,7 +16,7 @@ using static QuanLyNhanVien3.F_FormMain;
 
 namespace QuanLyNhanVien3
 {
-    public partial class F_DangNhap: Form
+    public partial class F_DangNhap : Form
     {
         public F_DangNhap()
         {
@@ -25,6 +25,7 @@ namespace QuanLyNhanVien3
         connectData cn = new connectData();
         private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
+
         private void DangNhap_Load(object sender, EventArgs e)
         {
             tbpassword.UseSystemPasswordChar = true;
@@ -33,55 +34,84 @@ namespace QuanLyNhanVien3
 
         private void btndangnhap_Click(object sender, EventArgs e)
         {
-            cn.connect();
-            string username = tbusename.Text.Trim();
-            string password = tbpassword.Text.Trim();
-            string query = "select * from tblTaiKhoan where DeletedAt = 0 AND SoDienThoai = '" + username + "' " + "and MatKhau = '" + password + "'";
-            SqlCommand cmd = new SqlCommand(query, cn.conn);
-            SqlDataReader reader = cmd.ExecuteReader();
+            try
+            {
+                cn.connect();
+                string username = tbusename.Text.Trim();
+                string password = tbpassword.Text.Trim();
 
-            if (tbusename.Text == "" || tbpassword.Text == "")
-            {
-                MessageBox.Show("Vui lòng nhập tài khoản và mật khẩu để đăng nhâp", "Thông báo", MessageBoxButtons.OK,
-                    MessageBoxIcon.Question);
-            }
-            else if (reader.Read() == true)
-            {
-                this.Hide();
-                F_FormMain f_Main = new F_FormMain();
-                //MessageBox.Show("Đăng nhập thành công!",
-                //                            "Thông báo");
+                if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                {
+                    MessageBox.Show("Vui lòng nhập tài khoản và mật khẩu để đăng nhập",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Question);
+                    return;
+                }
 
-                //F_FormMain.LoginInfo.CurrentUserName = reader["TenDangNhap"].ToString();
-                F_FormMain.LoginInfo.CurrentUserRole = reader["Quyen"].ToString();
-                StopCamera();
-                f_Main.ShowDialog();
-                f_Main = null;
-                tbpassword.Text = "";
-                this.Show();
-                this.Close();
+                // ✅ SỬ DỤNG PARAMETERIZED QUERY ĐỂ TRÁNH SQL INJECTION
+                string query = @"SELECT tk.MaTK_KhangCD233181, tk.SoDienThoai_KhangCD233181, tk.Quyen_KhangCD233181, 
+                                        nv.HoTen_TuanhCD233018, r.TenRole_ThuanCD233318
+                                FROM tblTaiKhoan_KhangCD233181 tk
+                                INNER JOIN tblNhanVien_TuanhCD233018 nv ON tk.MaNV_TuanhCD233018 = nv.MaNV_TuanhCD233018
+                                LEFT JOIN tblRole_ThuanCD233318 r ON tk.RoleId_ThuanCD233318 = r.Id_ThuanCD233318
+                                WHERE tk.DeletedAt_KhangCD233181 = 0 
+                                  AND tk.SoDienThoai_KhangCD233181 = @Username 
+                                  AND tk.MatKhau_KhangCD233181 = @Password";
+
+                SqlCommand cmd = new SqlCommand(query, cn.conn);
+                cmd.Parameters.AddWithValue("@Username", username);
+                cmd.Parameters.AddWithValue("@Password", password);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    // ✅ LƯU THÔNG TIN ĐĂNG NHẬP
+                    F_FormMain.LoginInfo.CurrentUserName = reader["HoTen_TuanhCD233018"].ToString();
+                    F_FormMain.LoginInfo.CurrentUserRole = reader["Quyen_KhangCD233181"].ToString();
+
+                    reader.Close();
+
+                    // ✅ MỞ FORM CHÍNH
+                    this.Hide();
+                    F_FormMain f_Main = new F_FormMain();
+                    StopCamera();
+                    f_Main.ShowDialog();
+                    f_Main = null;
+
+                    // ✅ RESET VÀ HIỂN THỊ LẠI FORM ĐĂNG NHẬP
+                    tbusename.Text = "";
+                    tbpassword.Text = "";
+                    this.Show();
+                    this.Close();
+                }
+                else
+                {
+                    reader.Close();
+                    MessageBox.Show("Tài khoản hoặc mật khẩu không đúng! Vui lòng nhập lại",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    tbpassword.Text = "";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Tài khoản hoặc mật khẩu không đúng? Vui lòng nhập lại tài khoản hoặc mật khẩu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Question);
-                tbpassword.Text = "";
+                MessageBox.Show("Lỗi đăng nhập: " + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            cn.disconnect();
+            finally
+            {
+                cn.disconnect();
+            }
         }
 
         private void btnthoat_Click(object sender, EventArgs e)
         {
-            DialogResult rs = MessageBox.Show("Bạn có chắc chắn muốn thoat khong?", "tieu de thoat",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult rs = MessageBox.Show("Bạn có chắc chắn muốn thoát không?",
+                "Xác nhận thoát", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
             if (rs == DialogResult.Yes)
             {
-                this.Close(); 
-                if (videoSource != null && videoSource.IsRunning)
-                {
-                    videoSource.SignalToStop();
-                    videoSource.WaitForStop();
-                    videoSource = null;
-                }
+                StopCamera();
+                this.Close();
             }
         }
 
@@ -98,8 +128,8 @@ namespace QuanLyNhanVien3
                 tbpassword.UseSystemPasswordChar = true;
             }
         }
-        //chekc cam 
 
+        // ===== QUẢN LÝ CAMERA =====
         private void StopCamera()
         {
             try
@@ -137,6 +167,7 @@ namespace QuanLyNhanVien3
                                 "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void StartCamera()
         {
             try
@@ -169,16 +200,77 @@ namespace QuanLyNhanVien3
                 MessageBox.Show("Lỗi khi bật camera: " + ex.Message);
             }
         }
+
         // ===== Hiển thị video từ camera lên PictureBox =====
         private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            Bitmap bitmap = (Bitmap)eventArgs.Frame.Clone();
-            pictureBoxQR.Image = bitmap;
+            try
+            {
+                Bitmap bitmap = (Bitmap)eventArgs.Frame.Clone();
+
+                if (pictureBoxQR.Image != null)
+                {
+                    var oldImage = pictureBoxQR.Image;
+                    pictureBoxQR.Image = null;
+                    oldImage.Dispose();
+                }
+
+                pictureBoxQR.Image = bitmap;
+            }
+            catch { }
         }
 
         // ===== Quét QR mỗi giây =====
         private void timer1_Tick(object sender, EventArgs e)
         {
+            if (pictureBoxQR.Image == null) return;
+
+            Bitmap snapshot = null;
+
+            try
+            {
+                lock (pictureBoxQR)
+                {
+                    snapshot = new Bitmap(pictureBoxQR.Image);
+                }
+            }
+            catch
+            {
+                return;
+            }
+
+            if (snapshot == null) return;
+
+            try
+            {
+                BarcodeReader reader = new BarcodeReader
+                {
+                    Options = new ZXing.Common.DecodingOptions
+                    {
+                        CharacterSet = "UTF-8"
+                    }
+                };
+
+                var result = reader.Decode(snapshot);
+
+                if (result != null)
+                {
+                    timer1.Stop();
+
+                    string maNV = result.Text.Trim();
+
+                    // Đăng nhập bằng QR
+                    DangNhapBangQR(maNV);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi quét QR: " + ex.Message);
+            }
+            finally
+            {
+                snapshot?.Dispose();
+            }
         }
 
         // ===== Đăng nhập bằng mã QR =====
@@ -187,46 +279,62 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-                string sql = @"SELECT TenDangNhap, Quyen 
-                               FROM tblTaiKhoan 
-                               WHERE MaNV = @MaNV AND DeletedAt = 3";
+
+                string sql = @"SELECT tk.SoDienThoai_KhangCD233181, tk.Quyen_KhangCD233181, 
+                                      nv.HoTen_TuanhCD233018, r.TenRole_ThuanCD233318
+                               FROM tblTaiKhoan_KhangCD233181 tk
+                               INNER JOIN tblNhanVien_TuanhCD233018 nv ON tk.MaNV_TuanhCD233018 = nv.MaNV_TuanhCD233018
+                               LEFT JOIN tblRole_ThuanCD233318 r ON tk.RoleId_ThuanCD233318 = r.Id_ThuanCD233318
+                               WHERE tk.MaNV_TuanhCD233018 = @MaNV 
+                                 AND tk.DeletedAt_KhangCD233181 = 0
+                                 AND nv.DeletedAt_TuanhCD233018 = 0";
+
                 SqlCommand cmd = new SqlCommand(sql, cn.conn);
                 cmd.Parameters.AddWithValue("@MaNV", maNV);
 
                 SqlDataReader reader = cmd.ExecuteReader();
+
                 if (reader.Read())
                 {
-                    // Mở form chính
-                    this.Hide();
-                    F_FormMain frm = new F_FormMain();
-                    frm.Show();
-                    if (timer1.Enabled)
-                        timer1.Stop();
+                    // ✅ LƯU THÔNG TIN ĐĂNG NHẬP
+                    F_FormMain.LoginInfo.CurrentUserName = reader["HoTen_TuanhCD233018"].ToString();
+                    F_FormMain.LoginInfo.CurrentUserRole = reader["Quyen_KhangCD233181"].ToString();
 
-                    if (videoSource != null && videoSource.IsRunning)
-                    {
-                        videoSource.SignalToStop();
-                        videoSource.WaitForStop();
-                        videoSource = null;
-                    }
+                    reader.Close();
+
+                    // ✅ DỪNG CAMERA VÀ MỞ FORM CHÍNH
+                    StopCamera();
+                    this.Hide();
+
+                    F_FormMain frm = new F_FormMain();
+                    frm.ShowDialog();
+                    frm = null;
+
+                    // ✅ RESET VÀ HIỂN THỊ LẠI
+                    tbusename.Text = "";
+                    tbpassword.Text = "";
+                    this.Show();
+                    this.Close();
                 }
                 else
                 {
+                    reader.Close();
                     MessageBox.Show("Không tìm thấy tài khoản cho mã QR này!",
                         "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    // Khởi động lại camera để quét tiếp
+                    StartCamera();
                 }
-                reader.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi đăng nhập: " + ex.Message);
+                MessageBox.Show("Lỗi đăng nhập QR: " + ex.Message);
             }
             finally
             {
                 cn.disconnect();
             }
         }
-
 
         private void btnTaiAnhQR_Click(object sender, EventArgs e)
         {
@@ -261,57 +369,21 @@ namespace QuanLyNhanVien3
             }
         }
 
-        //tat cam 
+        // ===== Tắt camera khi đóng form =====
         private void F_DangNhapQR_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (timer1.Enabled)
-                timer1.Stop();
-
-            if (videoSource != null && videoSource.IsRunning)
-            {
-                videoSource.SignalToStop();
-                videoSource.WaitForStop();
-                videoSource = null;
-            }
+            StopCamera();
         }
 
         private void timer1_Tick_1(object sender, EventArgs e)
         {
-            if (pictureBoxQR.Image == null) return;
-
-            try
-            {
-                BarcodeReader reader = new BarcodeReader
-                {
-                    Options = new ZXing.Common.DecodingOptions
-                    {
-                        CharacterSet = "UTF-8"
-                    }
-                };
-
-                var result = reader.Decode((Bitmap)pictureBoxQR.Image);
-
-                if (result != null)
-                {
-                    timer1.Stop();
-                    videoSource.SignalToStop();
-
-                    string maNV = result.Text.Trim();
-                    //cb.Text = maNV;
-
-                    // Đăng nhập luôn
-                    DangNhapBangQR(maNV);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi quét QR: " + ex.Message);
-            }
+            // Gọi hàm timer1_Tick chính
+            timer1_Tick(sender, e);
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
+            // Xử lý sự kiện click vào link label (nếu cần)
         }
     }
 }

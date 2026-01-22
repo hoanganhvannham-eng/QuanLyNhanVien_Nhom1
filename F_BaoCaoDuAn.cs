@@ -42,16 +42,16 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
                 // Join 3 bảng để lấy thông tin: Tên Dự Án - Tên Nhân Viên - Vai Trò
-                string sql = @"SELECT da.TenDA as N'Tên Dự Án', 
-                                      nv.MaNV as N'Mã Nhân Viên', 
-                                      nv.HoTen as N'Tên Nhân Viên', 
-                                      ct.VaiTro as N'Vai Trò',
-                                      da.NgayBatDau as N'Ngày Bắt Đầu Dự Án'
-                               FROM tblDuAn da
-                               JOIN tblChiTietDuAn ct ON da.MaDA = ct.MaDA
-                               JOIN tblNhanVien nv ON ct.MaNV = nv.MaNV
-                               WHERE da.DeletedAt = 0 AND ct.DeletedAt = 0
-                               ORDER BY da.TenDA, nv.HoTen;";
+                string sql = @"SELECT da.TenDA_KienCD233824 as N'Tên Dự Án', 
+                                      nv.MaNV_TuanhCD233018 as N'Mã Nhân Viên', 
+                                      nv.HoTen_TuanhCD233018 as N'Tên Nhân Viên', 
+                                      ct.VaiTro_KienCD233824 as N'Vai Trò',
+                                      da.NgayBatDau_KienCD233824 as N'Ngày Bắt Đầu Dự Án'
+                               FROM tblDuAn_KienCD233824 da
+                               JOIN tblChiTietDuAn_KienCD233824 ct ON da.MaDA_KienCD233824 = ct.MaDA_KienCD233824
+                               JOIN tblNhanVien_TuanhCD233018 nv ON ct.MaNV_TuanhCD233018 = nv.MaNV_TuanhCD233018
+                               WHERE da.DeletedAt_KienCD233824 = 0 AND ct.DeletedAt_KienCD233824 = 0
+                               ORDER BY da.TenDA_KienCD233824, nv.HoTen_TuanhCD233018;";
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(sql, cn.conn))
                 {
@@ -72,14 +72,14 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-                string sql = @"SELECT da.MaDA as N'Mã Dự Án', 
-                                      da.TenDA as N'Tên Dự Án', 
-                                      COUNT(ct.MaNV) as N'Số Lượng Nhân Viên'
-                               FROM tblDuAn da
-                               LEFT JOIN tblChiTietDuAn ct ON da.MaDA = ct.MaDA AND ct.DeletedAt = 0
-                               WHERE da.DeletedAt = 0
-                               GROUP BY da.MaDA, da.TenDA
-                               ORDER BY COUNT(ct.MaNV) DESC;";
+                string sql = @"SELECT da.MaDA_KienCD233824 as N'Mã Dự Án', 
+                                      da.TenDA_KienCD233824 as N'Tên Dự Án', 
+                                      COUNT(ct.MaNV_TuanhCD233018) as N'Số Lượng Nhân Viên'
+                               FROM tblDuAn_KienCD233824 da
+                               LEFT JOIN tblChiTietDuAn_KienCD233824 ct ON da.MaDA_KienCD233824 = ct.MaDA_KienCD233824 AND ct.DeletedAt_KienCD233824 = 0
+                               WHERE da.DeletedAt_KienCD233824 = 0
+                               GROUP BY da.MaDA_KienCD233824, da.TenDA_KienCD233824
+                               ORDER BY COUNT(ct.MaNV_TuanhCD233018) DESC;";
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(sql, cn.conn))
                 {
@@ -107,19 +107,19 @@ namespace QuanLyNhanVien3
 
                 cn.connect();
                 // Tìm kiếm gần đúng theo tên dự án
-                string sql = @"SELECT MaDA as N'Mã Dự Án', 
-                                      TenDA as N'Tên Dự Án', 
-                                      MoTa as N'Mô Tả', 
-                                      NgayBatDau as N'Ngày Bắt Đầu', 
-                                      NgayKetThuc as N'Ngày Kết Thúc'
-                               FROM tblDuAn
-                               WHERE DeletedAt = 0 
-                               AND TenDA LIKE @TenTimKiem
-                               ORDER BY TenDA;";
+                string sql = @"SELECT MaDA_KienCD233824 as N'Mã Dự Án', 
+                                      TenDA_KienCD233824 as N'Tên Dự Án', 
+                                      MoTa_KienCD233824 as N'Mô Tả', 
+                                      NgayBatDau_KienCD233824 as N'Ngày Bắt Đầu', 
+                                      NgayKetThuc_KienCD233824 as N'Ngày Kết Thúc'
+                               FROM tblDuAn_KienCD233824
+                               WHERE DeletedAt_KienCD233824 = 0 
+                               AND TenDA_KienCD233824 LIKE @TenTimKiem_KienCD233824
+                               ORDER BY TenDA_KienCD233824;";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
-                    cmd.Parameters.AddWithValue("@TenTimKiem", "%" + txtTimKiem.Text + "%");
+                    cmd.Parameters.AddWithValue("@TenTimKiem_KienCD233824", "%" + txtTimKiem.Text + "%");
 
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
@@ -221,6 +221,11 @@ namespace QuanLyNhanVien3
                 MessageBox.Show("Không có dữ liệu để xuất!",
                     "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void F_BaoCaoDuAn_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

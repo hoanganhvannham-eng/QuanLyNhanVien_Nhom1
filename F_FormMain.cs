@@ -76,7 +76,7 @@ namespace QuanLyNhanVien3
 
         private void ThongTinDuAnToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new F_DuAn());
+            OpenChildForm(new F_DuAnChung());
             //DuAn DA = new DuAn();
             //DA.MdiParent = this;
             //DA.Show();
@@ -124,7 +124,8 @@ namespace QuanLyNhanVien3
 
         private void chamConngToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new F_ChamCong());
+            //OpenChildForm(new F_ChamCong());
+            OpenChildForm(new F_ChamCongChiTiet());
             //ChamCong CC = new ChamCong();
             //CC.MdiParent = this;
             //CC.Show();
@@ -149,6 +150,8 @@ namespace QuanLyNhanVien3
         private void F_FormMain_Load(object sender, EventArgs e)
         {
             ApplyRole();
+            toolStripLabel1.Text =
+                "Xin chào: " + LoginInfo.CurrentUserName;
         }
 
         private void thoátToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -197,6 +200,11 @@ namespace QuanLyNhanVien3
         }
 
         private void thongTinDuAnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }

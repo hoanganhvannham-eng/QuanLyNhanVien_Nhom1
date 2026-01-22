@@ -47,7 +47,17 @@
             this.tổngHợpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.thoátToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.thoátToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.toolStripLabelUser = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.menuStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.toolStripLabelUser.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -214,6 +224,93 @@
             this.thoátToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
             this.thoátToolStripMenuItem.Text = "Thoát";
             // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.label5);
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Location = new System.Drawing.Point(1065, 50);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(247, 169);
+            this.panel1.TabIndex = 4;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(38, 125);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(140, 22);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Hoàng Tuấn Anh";
+            // 
+            // label4
+            // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(38, 99);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(141, 22);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Cao Nhân Thuận";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(38, 70);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(143, 22);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Trần Đăng Chiến";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(38, 41);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(197, 22);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Nguyễn Trung Kiên 824";
+            // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(38, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(133, 22);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Vũ Minh Khang";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // toolStripLabelUser
+            // 
+            this.toolStripLabelUser.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStripLabelUser.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStripLabelUser.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1});
+            this.toolStripLabelUser.Location = new System.Drawing.Point(0, 550);
+            this.toolStripLabelUser.Name = "toolStripLabelUser";
+            this.toolStripLabelUser.Size = new System.Drawing.Size(1324, 31);
+            this.toolStripLabelUser.TabIndex = 6;
+            this.toolStripLabelUser.Text = "toolStrip1";
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(111, 28);
+            this.toolStripLabel1.Text = "toolStripLabel1";
+            // 
             // F_FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -221,6 +318,8 @@
             this.BackgroundImage = global::QuanLyNhanVien3.Properties.Resources.Screenshot_2025_09_15_0905481;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1324, 581);
+            this.Controls.Add(this.toolStripLabelUser);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
             this.IsMdiContainer = true;
@@ -231,6 +330,10 @@
             this.Load += new System.EventHandler(this.F_FormMain_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.toolStripLabelUser.ResumeLayout(false);
+            this.toolStripLabelUser.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -257,5 +360,13 @@
         private System.Windows.Forms.ToolStripMenuItem báoCáoDựÁnToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem báoCáoChấmCôngToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tổngHợpToolStripMenuItem;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ToolStrip toolStripLabelUser;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
     }
 }

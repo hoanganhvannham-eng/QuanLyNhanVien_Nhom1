@@ -14,7 +14,7 @@ using static QuanLyNhanVien3.F_FormMain;
 
 namespace QuanLyNhanVien3
 {
-    public partial class F_DuAn: Form
+    public partial class F_DuAn : Form
     {
         public F_DuAn()
         {
@@ -43,8 +43,17 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                string sqlLoadDataNhanVien = @"SELECT MaDA as 'Mã dự án', TenDA as ' Tên dự án', MoTa as 'Mô tả', NgayBatDau as 'Ngày bắt đầu', 
-                                    NgayKetThuc as 'Ngày dự kiến / kết thúc', Ghichu as 'Ghi chú' FROM tblDuAn WHERE DeletedAt = 0 ORDER BY MaDA";
+                string sqlLoadDataNhanVien = @"
+                    SELECT 
+                        MaDA_KienCD233824 as 'Mã dự án', 
+                        TenDA_KienCD233824 as 'Tên dự án', 
+                        MoTa_KienCD233824 as 'Mô tả', 
+                        NgayBatDau_KienCD233824 as 'Ngày bắt đầu', 
+                        NgayKetThuc_KienCD233824 as 'Ngày dự kiến / kết thúc', 
+                        Ghichu_KienCD233824 as 'Ghi chú' 
+                    FROM tblDuAn_KienCD233824 
+                    WHERE DeletedAt_KienCD233824 = 0 
+                    ORDER BY MaDA_KienCD233824";
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(sqlLoadDataNhanVien, cn.conn))
                 {
@@ -105,11 +114,12 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
-
-
-
                 // check ma du an
-                string checkMaDASql = "SELECT COUNT(*) FROM tblDuAn  WHERE MaDA  = @MaDA  AND DeletedAt = 0";
+                string checkMaDASql = @"
+                    SELECT COUNT(*) 
+                    FROM tblDuAn_KienCD233824  
+                    WHERE MaDA_KienCD233824 = @MaDA  
+                      AND DeletedAt_KienCD233824 = 0";
                 using (SqlCommand cmdcheckMaDASql = new SqlCommand(checkMaDASql, cn.conn))
                 {
                     cmdcheckMaDASql.Parameters.AddWithValue("@MaDA", tbmaDA.Text);
@@ -124,7 +134,10 @@ namespace QuanLyNhanVien3
                     }
                 }
 
-                string checkTenDA = "SELECT COUNT(*) FROM tblDuAn  WHERE TenDA  = @TenDA";
+                string checkTenDA = @"
+                    SELECT COUNT(*) 
+                    FROM tblDuAn_KienCD233824  
+                    WHERE TenDA_KienCD233824 = @TenDA";
                 using (SqlCommand cmd = new SqlCommand(checkTenDA, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@TenDA", tbTenDA.Text.Trim());
@@ -145,11 +158,14 @@ namespace QuanLyNhanVien3
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                // end check
 
-                string sqltblDuAn = @"INSERT INTO tblDuAn 
-                           (MaDA, TenDA,  MoTa, NgayBatDau, NgayKetThuc, Ghichu, DeletedAt)
-                           VALUES ( @MaDA, @TenDA,  @MoTa, @NgayBatDau, @NgayKetThuc, @GhiChu, 0)";
+                string sqltblDuAn = @"
+                    INSERT INTO tblDuAn_KienCD233824 
+                        (MaDA_KienCD233824, TenDA_KienCD233824, MoTa_KienCD233824, 
+                         NgayBatDau_KienCD233824, NgayKetThuc_KienCD233824, 
+                         Ghichu_KienCD233824, DeletedAt_KienCD233824)
+                    VALUES 
+                        (@MaDA, @TenDA, @MoTa, @NgayBatDau, @NgayKetThuc, @GhiChu, 0)";
 
                 using (SqlCommand cmd = new SqlCommand(sqltblDuAn, cn.conn))
                 {
@@ -204,7 +220,10 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    string query = "UPDATE tblDuAn SET DeletedAt = 1 WHERE MaDA = @MaDA";
+                    string query = @"
+                        UPDATE tblDuAn_KienCD233824 
+                        SET DeletedAt_KienCD233824 = 1 
+                        WHERE MaDA_KienCD233824 = @MaDA";
                     using (SqlCommand cmd = new SqlCommand(query, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaDA", tbmaDA.Text);
@@ -266,7 +285,15 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    string sql = @"UPDATE tblDuAn SET TenDA = @TenDA, MoTa = @MoTa, NgayBatDau = @NgayBatDau, NgayKetThuc = @NgayKetThuc, GhiChu = @GhiChu, DeletedAt = 0 WHERE MaDA = @MaDA";
+                    string sql = @"
+                        UPDATE tblDuAn_KienCD233824 
+                        SET TenDA_KienCD233824 = @TenDA, 
+                            MoTa_KienCD233824 = @MoTa, 
+                            NgayBatDau_KienCD233824 = @NgayBatDau, 
+                            NgayKetThuc_KienCD233824 = @NgayKetThuc, 
+                            GhiChu_KienCD233824 = @GhiChu, 
+                            DeletedAt_KienCD233824 = 0 
+                        WHERE MaDA_KienCD233824 = @MaDA";
                     using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaDA", tbmaDA.Text.Trim());
@@ -308,15 +335,23 @@ namespace QuanLyNhanVien3
             {
                 if (string.IsNullOrEmpty(tbmaDA.Text))
                 {
-                    MessageBox.Show("Vui lòng nhập mã dự án để tìm kiếm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning); // hoặc mã
+                    MessageBox.Show("Vui lòng nhập mã dự án để tìm kiếm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 cn.connect();
                 string MaDAtimkiem = tbmaDA.Text.Trim();
-                string sql = @" SELECT MaDA, TenDA, MoTa, NgayBatDau, NgayKetThuc, Ghichu
-                                FROM tblDuAn
-                                WHERE DeletedAt = 0 AND MaDA LIKE @MaDA
-                                ORDER BY MaDA";
+                string sql = @"
+                    SELECT 
+                        MaDA_KienCD233824, 
+                        TenDA_KienCD233824, 
+                        MoTa_KienCD233824, 
+                        NgayBatDau_KienCD233824, 
+                        NgayKetThuc_KienCD233824, 
+                        Ghichu_KienCD233824
+                    FROM tblDuAn_KienCD233824
+                    WHERE DeletedAt_KienCD233824 = 0 
+                      AND MaDA_KienCD233824 LIKE @MaDA
+                    ORDER BY MaDA_KienCD233824";
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@MaDA", "%" + MaDAtimkiem + "%");
@@ -338,7 +373,17 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-                string query = @" SELECT MaDA, TenDA, MoTa, NgayBatDau, NgayKetThuc, Ghichu FROM tblDuAn WHERE DeletedAt =1 ORDER BY MaDA";
+                string query = @"
+                    SELECT 
+                        MaDA_KienCD233824, 
+                        TenDA_KienCD233824, 
+                        MoTa_KienCD233824, 
+                        NgayBatDau_KienCD233824, 
+                        NgayKetThuc_KienCD233824, 
+                        Ghichu_KienCD233824 
+                    FROM tblDuAn_KienCD233824 
+                    WHERE DeletedAt_KienCD233824 = 1 
+                    ORDER BY MaDA_KienCD233824";
                 using (SqlDataAdapter da = new SqlDataAdapter(query, cn.conn))
                 {
                     DataTable dt = new DataTable();
@@ -364,7 +409,11 @@ namespace QuanLyNhanVien3
                 }
 
                 cn.connect();
-                string query = "SELECT COUNT(*) FROM tblDuAn WHERE MaDA = @MaDA AND DeletedAt = 1";
+                string query = @"
+                    SELECT COUNT(*) 
+                    FROM tblDuAn_KienCD233824 
+                    WHERE MaDA_KienCD233824 = @MaDA 
+                      AND DeletedAt_KienCD233824 = 1";
                 using (SqlCommand cmdcheckPB = new SqlCommand(query, cn.conn))
                 {
                     cmdcheckPB.Parameters.AddWithValue("@MaDA", tbmaDA.Text.Trim());
@@ -379,7 +428,6 @@ namespace QuanLyNhanVien3
                     }
                 }
 
-                //
                 if (tbMKKhoiPhuc.Text == "")
                 {
                     MessageBox.Show("Vui lòng nhập mật khẩu để khôi phục", "Thông báo", MessageBoxButtons.OK,
@@ -387,7 +435,11 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
-                string sqMKKhoiPhuc = "SELECT * FROM tblTaiKhoan WHERE Quyen = @Quyen AND MatKhau = @MatKhau";
+                string sqMKKhoiPhuc = @"
+                    SELECT * 
+                    FROM tblTaiKhoan_KhangCD233181 
+                    WHERE Quyen_KhangCD233181 = @Quyen 
+                      AND MatKhau_KhangCD233181 = @MatKhau";
                 SqlCommand cmdkhoiphuc = new SqlCommand(sqMKKhoiPhuc, cn.conn);
                 cmdkhoiphuc.Parameters.AddWithValue("@Quyen", "Admin");
                 cmdkhoiphuc.Parameters.AddWithValue("@MatKhau", tbMKKhoiPhuc.Text);
@@ -403,7 +455,6 @@ namespace QuanLyNhanVien3
                 }
                 reader.Close();
 
-
                 DialogResult confirm = MessageBox.Show(
                     "Bạn có chắc chắn muốn khôi phục dự án này không?",
                     "Xác nhận khôi phục",
@@ -411,11 +462,13 @@ namespace QuanLyNhanVien3
                     MessageBoxIcon.Question
                 );
 
-
                 if (confirm == DialogResult.Yes)
                 {
                     tbMKKhoiPhuc.Text = "";
-                    string querytblPhongBan = "UPDATE tblDuAn SET DeletedAt = 0 WHERE MaDA = @MaDA";
+                    string querytblPhongBan = @"
+                        UPDATE tblDuAn_KienCD233824 
+                        SET DeletedAt_KienCD233824 = 0 
+                        WHERE MaDA_KienCD233824 = @MaDA";
                     using (SqlCommand cmd = new SqlCommand(querytblPhongBan, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaDA", tbmaDA.Text);
@@ -547,7 +600,6 @@ namespace QuanLyNhanVien3
         F_FormMain main = new F_FormMain();
         private void buttonchiteiteduan_Click(object sender, EventArgs e)
         {
-            //main.OpenChildForm(new F_ChiTietDuAn());
             F_ChiTietDuAn f = new F_ChiTietDuAn();
             f.MdiParent = this.MdiParent;
             f.Show();
