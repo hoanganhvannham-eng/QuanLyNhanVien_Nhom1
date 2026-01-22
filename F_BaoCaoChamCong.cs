@@ -9,6 +9,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
+using PdfFont = iTextSharp.text.Font;
+using PdfRectangle = iTextSharp.text.Rectangle;
+using PdfDocument = iTextSharp.text.Document;
+using PdfWriter = iTextSharp.text.pdf.PdfWriter;
+using PdfPCell = iTextSharp.text.pdf.PdfPCell;
+using PdfPTable = iTextSharp.text.pdf.PdfPTable;
+using BaseFont = iTextSharp.text.pdf.BaseFont;
+using BaseColor = iTextSharp.text.BaseColor;
+using Phrase = iTextSharp.text.Phrase;
+using Paragraph = iTextSharp.text.Paragraph;
+using Element = iTextSharp.text.Element;
+using PageSize = iTextSharp.text.PageSize;
 
 namespace QuanLyNhanVien3
 {
@@ -395,7 +410,6 @@ WHERE NV.DeletedAt_TuanhCD233018 = 0
                 int nam = dtpThoiGian.Value.Year;
 
                 string keyword = txtTimkiem.Text.Trim();
-                bool isMaNV = !string.IsNullOrEmpty(keyword) && !keyword.Contains(" ");
 
                 string sql = @"
 SELECT 
@@ -423,34 +437,28 @@ WHERE cc.DeletedAt_TuanhCD233018 = 0
                 cmd.Parameters.AddWithValue("@Thang", thang);
                 cmd.Parameters.AddWithValue("@Nam", nam);
 
-                // ===== TEXTBOX: MÃ / TÊN NV =====
-                if (!string.IsNullOrEmpty(keyword))
+                // ===== TEXTBOX: MÃ NV / TÊN NV =====
+                if (!string.IsNullOrWhiteSpace(keyword))
                 {
-                    if (isMaNV)
-                    {
-                        sql += " AND nv.MaNV_TuanhCD233018 = @MaNV ";
-                        cmd.Parameters.AddWithValue("@MaNV", keyword);
-                    }
-                    else
-                    {
-                        sql += " AND nv.HoTen_TuanhCD233018 LIKE @TenNV ";
-                        cmd.Parameters.AddWithValue("@TenNV", "%" + keyword + "%");
-                    }
+                    sql += @"
+AND (
+    nv.MaNV_TuanhCD233018 LIKE @Keyword
+    OR nv.HoTen_TuanhCD233018 LIKE @Keyword
+)";
+                    cmd.Parameters.AddWithValue("@Keyword", "%" + keyword + "%");
                 }
 
-                // ===== COMBOBOX PHÒNG BAN =====
-                if (cbBoxMaPB.SelectedValue != null &&
-                    cbBoxMaPB.SelectedValue.ToString() != "")
+                // ===== PHÒNG BAN =====
+                if (!string.IsNullOrEmpty(cbBoxMaPB.SelectedValue?.ToString()))
                 {
-                    sql += " AND pb.MaPB_ThuanCD233318 = @MaPB ";
+                    sql += " AND pb.MaPB_ThuanCD233318 = @MaPB";
                     cmd.Parameters.AddWithValue("@MaPB", cbBoxMaPB.SelectedValue.ToString());
                 }
 
-                // ===== COMBOBOX CHỨC VỤ =====
-                if (cbBoxChucVu.SelectedValue != null &&
-                    cbBoxChucVu.SelectedValue.ToString() != "")
+                // ===== CHỨC VỤ =====
+                if (!string.IsNullOrEmpty(cbBoxChucVu.SelectedValue?.ToString()))
                 {
-                    sql += " AND cv.MaCV_KhangCD233181 = @MaCV ";
+                    sql += " AND cv.MaCV_KhangCD233181 = @MaCV";
                     cmd.Parameters.AddWithValue("@MaCV", cbBoxChucVu.SelectedValue.ToString());
                 }
 
@@ -483,180 +491,179 @@ WHERE cc.DeletedAt_TuanhCD233018 = 0
         // 4. Nút: Xuất Excel (Sử dụng ClosedXML)
         // =======================================================
         private void btnXuat_Click(object sender, EventArgs e)
-{
-    if (dtGridViewBCChamCong.Rows.Count == 0)
-    {
-        MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
-            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        return;
-    }
-
-    using (SaveFileDialog sfd = new SaveFileDialog())
-    {
-        sfd.Filter = "Excel Workbook|*.xlsx";
-        sfd.FileName = $"BaoCaoChamCong_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
-
-        if (sfd.ShowDialog() == DialogResult.OK)
         {
-            try
+            if (dtGridViewBCChamCong.Rows.Count == 0)
             {
-                using (XLWorkbook wb = new XLWorkbook())
+                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Excel Workbook|*.xlsx";
+                sfd.FileName = $"BaoCaoChamCong_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+
+                if (sfd.ShowDialog() != DialogResult.OK) return;
+
+                try
                 {
-                    var ws = wb.Worksheets.Add("Báo cáo chấm công");
-
-                    // Đếm số cột hiển thị
-                    int visibleColCount = 0;
-                    foreach (DataGridViewColumn col in dtGridViewBCChamCong.Columns)
+                    using (XLWorkbook wb = new XLWorkbook())
                     {
-                        if (col.Visible)
-                            visibleColCount++;
-                    }
+                        var ws = wb.Worksheets.Add("Báo cáo chấm công");
 
-                    // ===== TÊN CÔNG TY =====
-                    ws.Cell(1, 1).Value = "CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM";
-                    ws.Range(1, 1, 1, visibleColCount).Merge();
-                    ws.Cell(1, 1).Style.Font.Bold = true;
-                    ws.Cell(1, 1).Style.Font.FontSize = 14;
-                    ws.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    ws.Cell(1, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                        // ===== ĐẾM CỘT HIỂN THỊ =====
+                        var visibleCols = dtGridViewBCChamCong.Columns
+                            .Cast<DataGridViewColumn>()
+                            .Where(c => c.Visible)
+                            .ToList();
 
-                    // ===== TIÊU ĐỀ CHÍNH =====
-                    ws.Cell(2, 1).Value = "BÁO CÁO CHẤM CÔNG NHÂN VIÊN";
-                    ws.Range(2, 1, 2, visibleColCount).Merge();
-                    ws.Cell(2, 1).Style.Font.Bold = true;
-                    ws.Cell(2, 1).Style.Font.FontSize = 16;
-                    ws.Cell(2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    ws.Cell(2, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                        int visibleColCount = visibleCols.Count;
 
-                    // ===== NGÀY LẬP BÁO CÁO =====
-                    ws.Cell(3, 1).Value = "Ngày lập báo cáo: " + DateTime.Now.ToString("dd/MM/yyyy");
-                    ws.Cell(3, 1).Style.Font.Italic = true;
+                        // ===== TÊN CÔNG TY =====
+                        ws.Cell(1, 1).Value = "CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM";
+                        ws.Range(1, 1, 1, visibleColCount).Merge();
+                        ws.Row(1).Style.Font.Bold = true;
+                        ws.Row(1).Style.Font.FontSize = 14;
+                        ws.Row(1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                    // ===== THÔNG TIN THÁNG/NĂM =====
-                    ws.Cell(5, 1).Value = "Tháng/Năm";
-                    ws.Cell(5, 2).Value = dtpThoiGian.Value.ToString("MM/yyyy");
-                    ws.Cell(5, 1).Style.Font.Bold = true;
+                        // ===== TIÊU ĐỀ =====
+                        ws.Cell(2, 1).Value = "BÁO CÁO CHẤM CÔNG NHÂN VIÊN";
+                        ws.Range(2, 1, 2, visibleColCount).Merge();
+                        ws.Row(2).Style.Font.Bold = true;
+                        ws.Row(2).Style.Font.FontSize = 16;
+                        ws.Row(2).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
-                    // ===== HEADER BẢNG DỮ LIỆU =====
-                    int startRow = 7;
-                    ws.Cell(startRow, 1).Value = "BẢNG DỮ LIỆU CHẤM CÔNG";
-                    ws.Range(startRow, 1, startRow, visibleColCount).Merge();
-                    ws.Cell(startRow, 1).Style.Font.Bold = true;
-                    ws.Cell(startRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    ws.Cell(startRow, 1).Style.Fill.BackgroundColor = XLColor.LightGray;
+                        // ===== THỜI GIAN XUẤT =====
+                        ws.Cell(3, 1).Value = "Thời gian xuất: " +
+                            DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                        ws.Row(3).Style.Font.Italic = true;
 
-                    // ===== TIÊU ĐỀ CỘT =====
-                    int headerRow = startRow + 1;
-                    int colIndex = 1;
+                        // ===== THÁNG / NĂM =====
+                        ws.Cell(5, 1).Value = "Tháng/Năm:";
+                        ws.Cell(5, 2).Value = dtpThoiGian.Value.ToString("MM/yyyy");
+                        ws.Cell(5, 1).Style.Font.Bold = true;
+                        // ===== PHÒNG BAN =====
+                        ws.Cell(6, 1).Value = "Phòng ban:";
+                        ws.Cell(6, 2).Value =
+                            cbBoxMaPB.SelectedIndex > 0 ? cbBoxMaPB.Text : "Tất cả";
+                        ws.Cell(6, 1).Style.Font.Bold = true;
 
-                    foreach (DataGridViewColumn col in dtGridViewBCChamCong.Columns)
-                    {
-                        if (col.Visible)
+                        // ===== CHỨC VỤ =====
+                        ws.Cell(7, 1).Value = "Chức vụ:";
+                        ws.Cell(7, 2).Value =
+                            cbBoxChucVu.SelectedIndex > 0 ? cbBoxChucVu.Text : "Tất cả";
+                        ws.Cell(7, 1).Style.Font.Bold = true;
+
+
+                        // ===== HEADER BẢNG =====
+                        int startRow = 9;
+                        ws.Cell(startRow, 1).Value = "BẢNG DỮ LIỆU CHẤM CÔNG";
+                        ws.Range(startRow, 1, startRow, visibleColCount).Merge();
+                        ws.Row(startRow).Style.Font.Bold = true;
+                        ws.Row(startRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        ws.Row(startRow).Style.Fill.BackgroundColor = XLColor.LightGray;
+
+                        // ===== TIÊU ĐỀ CỘT =====
+                        int headerRow = startRow + 1;
+                        for (int i = 0; i < visibleCols.Count; i++)
                         {
-                            ws.Cell(headerRow, colIndex).Value = col.HeaderText;
-                            ws.Cell(headerRow, colIndex).Style.Font.Bold = true;
-                            ws.Cell(headerRow, colIndex).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                            ws.Cell(headerRow, colIndex).Style.Fill.BackgroundColor = XLColor.LightGray;
-                            colIndex++;
+                            ws.Cell(headerRow, i + 1).Value = visibleCols[i].HeaderText;
+                            ws.Cell(headerRow, i + 1).Style.Font.Bold = true;
+                            ws.Cell(headerRow, i + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            ws.Cell(headerRow, i + 1).Style.Fill.BackgroundColor = XLColor.LightGray;
                         }
-                    }
 
-                    // ===== GHI DỮ LIỆU =====
-                    int dataStartRow = headerRow + 1;
-                    for (int i = 0; i < dtGridViewBCChamCong.Rows.Count; i++)
-                    {
-                        colIndex = 1;
-                        foreach (DataGridViewColumn col in dtGridViewBCChamCong.Columns)
+                        // ===== GHI DỮ LIỆU =====
+                        int dataStartRow = headerRow + 1;
+
+                        for (int r = 0; r < dtGridViewBCChamCong.Rows.Count; r++)
                         {
-                            if (col.Visible)
+                            for (int c = 0; c < visibleCols.Count; c++)
                             {
-                                var cellValue = dtGridViewBCChamCong.Rows[i].Cells[col.Index].Value;
+                                var col = visibleCols[c];
+                                var val = dtGridViewBCChamCong.Rows[r].Cells[col.Index].Value;
 
-                                // Xử lý DateTime
-                                if (cellValue is DateTime)
-                                {
-                                    ws.Cell(dataStartRow + i, colIndex).Value = ((DateTime)cellValue).ToString("dd/MM/yyyy");
-                                }
-                                else if (cellValue is TimeSpan)
-                                {
-                                    ws.Cell(dataStartRow + i, colIndex).Value = ((TimeSpan)cellValue).ToString(@"hh\:mm\:ss");
-                                }
+                                var cell = ws.Cell(dataStartRow + r, c + 1);
+
+                                if (val is DateTime dt)
+                                    cell.Value = dt.ToString("dd/MM/yyyy");
+                                else if (val is TimeSpan ts)
+                                    cell.Value = ts.ToString(@"hh\:mm");
                                 else
-                                {
-                                    ws.Cell(dataStartRow + i, colIndex).Value = cellValue?.ToString() ?? "";
-                                }
+                                    cell.Value = val?.ToString() ?? "";
 
-                                ws.Cell(dataStartRow + i, colIndex).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                                colIndex++;
+                                cell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+                                // Căn lề đẹp
+                                if (col.Name.Contains("HoTen") || col.HeaderText.Contains("Họ"))
+                                    cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                                else
+                                    cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                             }
                         }
+
+                        int lastDataRow = dataStartRow + dtGridViewBCChamCong.Rows.Count - 1;
+
+                        // ===== BORDER =====
+                        ws.Range(startRow, 1, lastDataRow, visibleColCount)
+                            .Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+                        ws.Range(startRow, 1, lastDataRow, visibleColCount)
+                            .Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                        // ===== CĂN ĐỘ RỘNG CỘT (QUAN TRỌNG) =====
+                        for (int i = 0; i < visibleCols.Count; i++)
+                        {
+                            var col = visibleCols[i];
+
+                            if (col.Name.Contains("HoTen") || col.HeaderText.Contains("Họ"))
+                                ws.Column(i + 1).Width = 30;      // 👈 HỌ TÊN
+                            else if (col.Name.Contains("MaNV") || col.HeaderText.Contains("Mã"))
+                                ws.Column(i + 1).Width = 18;      // 👈 MÃ NV
+                            else
+                                ws.Column(i + 1).Width = 12;      // 👈 CỘT NGÀY / GIỜ
+                        }
+
+                        // ===== CHỮ KÝ =====
+                        int signRow = lastDataRow + 2;
+                        int signCol = visibleColCount - 2;
+
+                        ws.Cell(signRow, signCol).Value =
+                            $"Hà Nội, ngày {DateTime.Now:dd} tháng {DateTime.Now:MM} năm {DateTime.Now:yyyy}";
+                        ws.Range(signRow, signCol, signRow, visibleColCount).Merge();
+                        ws.Row(signRow).Style.Font.Italic = true;
+                        ws.Row(signRow).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                        ws.Cell(signRow + 1, signCol).Value = "Người lập báo cáo";
+                        ws.Range(signRow + 1, signCol, signRow + 1, visibleColCount).Merge();
+                        ws.Row(signRow + 1).Style.Font.Bold = true;
+                        ws.Row(signRow + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                        ws.Cell(signRow + 4, signCol).Value = nguoiDangNhap;
+                        ws.Range(signRow + 4, signCol, signRow + 4, visibleColCount).Merge();
+                        ws.Row(signRow + 4).Style.Font.Bold = true;
+                        ws.Row(signRow + 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                        wb.SaveAs(sfd.FileName);
                     }
 
-                    // ===== BORDER CHO BẢNG DỮ LIỆU =====
-                    int lastDataRow = dataStartRow + dtGridViewBCChamCong.Rows.Count - 1;
-                    var tableRange = ws.Range(startRow, 1, lastDataRow, visibleColCount);
-                    tableRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    tableRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    MessageBox.Show("Xuất Excel thành công!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // ===== PHẦN CHỮ KÝ =====
-                    int signatureRow = lastDataRow + 2;
-                    
-                    // Tính vị trí cột cho chữ ký (3 cột cuối)
-                    int signatureStartCol = visibleColCount - 2;
-                    
-                    ws.Cell(signatureRow, signatureStartCol).Value = "Hà Nội, ngày " + DateTime.Now.Day + " tháng " + DateTime.Now.Month + " năm " + DateTime.Now.Year;
-                    ws.Cell(signatureRow, signatureStartCol).Style.Font.Italic = true;
-                    ws.Cell(signatureRow, signatureStartCol).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    ws.Range(signatureRow, signatureStartCol, signatureRow, visibleColCount).Merge();
-
-                    ws.Cell(signatureRow + 1, signatureStartCol).Value = "Người lập báo cáo";
-                    ws.Cell(signatureRow + 1, signatureStartCol).Style.Font.Bold = true;
-                    ws.Cell(signatureRow + 1, signatureStartCol).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    ws.Range(signatureRow + 1, signatureStartCol, signatureRow + 1, visibleColCount).Merge();
-
-                    ws.Cell(signatureRow + 4, signatureStartCol).Value = nguoiDangNhap;
-                    ws.Cell(signatureRow + 4, signatureStartCol).Style.Font.Bold = true;
-                    ws.Cell(signatureRow + 4, signatureStartCol).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    ws.Range(signatureRow + 4, signatureStartCol, signatureRow + 4, visibleColCount).Merge();
-
-                    // ===== TỰ ĐỘNG ĐIỀU CHỈNH CỘT =====
-                    ws.Columns().AdjustToContents();
-
-                    // Đặt chiều rộng tối thiểu cho các cột
-                    for (int i = 1; i <= visibleColCount; i++)
+                    if (MessageBox.Show("Bạn có muốn mở file vừa xuất?",
+                        "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
-                        if (ws.Column(i).Width < 12)
-                            ws.Column(i).Width = 12;
+                        System.Diagnostics.Process.Start(sfd.FileName);
                     }
-
-                    // Đặt chiều cao dòng
-                    ws.Row(1).Height = 20;
-                    ws.Row(2).Height = 25;
-                    ws.Row(startRow).Height = 20;
-                    ws.Row(headerRow).Height = 20;
-
-                    // Lưu file
-                    wb.SaveAs(sfd.FileName);
                 }
-
-                MessageBox.Show("Xuất Excel thành công!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // Hỏi có muốn mở file không
-                if (MessageBox.Show("Bạn có muốn mở file vừa xuất?", "Xác nhận",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                catch (Exception ex)
                 {
-                    System.Diagnostics.Process.Start(sfd.FileName);
+                    MessageBox.Show("Lỗi xuất Excel: " + ex.Message,
+                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi xuất Excel: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-    }
-}
 
 
         private void F_BaoCaoChamCong_Load(object sender, EventArgs e)
@@ -760,10 +767,190 @@ WHERE cc.DeletedAt_TuanhCD233018 = 0
                 HienThiChamCong(thang, nam);
             }
         }
-
         private void xuatpdf_Click(object sender, EventArgs e)
         {
+            if (dtGridViewBCChamCong.Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu để xuất PDF!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "PDF File (*.pdf)|*.pdf",
+                FileName = $"BaoCaoChamCong_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
+            };
+
+            if (sfd.ShowDialog() != DialogResult.OK) return;
+
+            try
+            {
+                Document doc = new Document(PageSize.A4.Rotate(), 20, 20, 20, 20);
+                PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
+                doc.Open();
+
+                // ===== FONT TIẾNG VIỆT =====
+                string fontPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Fonts),
+                    "arial.ttf");
+
+                BaseFont bf = BaseFont.CreateFont(
+                    fontPath,
+                    BaseFont.IDENTITY_H,
+                    BaseFont.EMBEDDED);
+
+                iTextSharp.text.Font fTitle = new iTextSharp.text.Font(bf, 16, iTextSharp.text.Font.BOLD);
+                iTextSharp.text.Font fHeader = new iTextSharp.text.Font(bf, 10, iTextSharp.text.Font.BOLD);
+                iTextSharp.text.Font fCell = new iTextSharp.text.Font(bf, 10);
+                iTextSharp.text.Font fItalic = new iTextSharp.text.Font(bf, 10, iTextSharp.text.Font.ITALIC);
+
+                // ===== TÊN CÔNG TY =====
+                Paragraph company = new Paragraph(
+                    "CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM\n\n", fHeader);
+                company.Alignment = Element.ALIGN_CENTER;
+                doc.Add(company);
+
+                // ===== TIÊU ĐỀ =====
+                Paragraph title = new Paragraph(
+                    "BÁO CÁO CHẤM CÔNG NHÂN VIÊN\n\n", fTitle);
+                title.Alignment = Element.ALIGN_CENTER;
+                doc.Add(title);
+
+                // ===== THỜI GIAN XUẤT =====
+                Paragraph exportTime = new Paragraph(
+                    $"Thời gian xuất: {DateTime.Now:dd/MM/yyyy HH:mm}\n",
+                    fCell);
+                doc.Add(exportTime);
+
+                // ===== THÁNG / NĂM =====
+                Paragraph time = new Paragraph(
+                    $"Tháng/Năm: {dtpThoiGian.Value:MM/yyyy}\n" +
+                    $"Phòng ban: {cbBoxMaPB.Text}\n" +
+                    $"Chức vụ: {cbBoxChucVu.Text}\n\n",
+                    fCell);
+                doc.Add(time);
+
+                // ===== TẠO BẢNG =====
+                int visibleColCount = dtGridViewBCChamCong.Columns
+                    .Cast<DataGridViewColumn>()
+                    .Count(c => c.Visible);
+
+                PdfPTable table = new PdfPTable(visibleColCount);
+                table.WidthPercentage = 100;
+                table.SpacingBefore = 10;
+
+                // ===== SET WIDTH CỘT (HỌ TÊN RỘNG) =====
+                List<float> widths = new List<float>();
+
+                foreach (DataGridViewColumn col in dtGridViewBCChamCong.Columns)
+                {
+                    if (!col.Visible) continue;
+                    if (col.Name.Contains("MaNV") || col.HeaderText.Contains("Mã"))
+                    {
+                        widths.Add(3f); // 👈 MÃ NV – TỰ CĂN RỘNG
+                    }
+                    else if (col.Name.Contains("HoTen") || col.HeaderText.Contains("Họ"))
+                    {
+                        widths.Add(5.5f); // 👈 HỌ TÊN – RỘNG NHẤT
+                    }
+                    else
+                    {
+                        widths.Add(2.5f); // các cột ngày / giờ
+                    }
+
+                }
+
+                table.SetWidths(widths.ToArray());
+
+                // ===== HEADER =====
+                foreach (DataGridViewColumn col in dtGridViewBCChamCong.Columns)
+                {
+                    if (!col.Visible) continue;
+
+                    PdfPCell cell = new PdfPCell(new Phrase(col.HeaderText, fHeader));
+                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    cell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    cell.BackgroundColor = BaseColor.LIGHT_GRAY;
+                    cell.Padding = 5;
+                    table.AddCell(cell);
+                }
+
+                // ===== DATA =====
+                foreach (DataGridViewRow row in dtGridViewBCChamCong.Rows)
+                {
+                    foreach (DataGridViewColumn col in dtGridViewBCChamCong.Columns)
+                    {
+                        if (!col.Visible) continue;
+
+                        string value = "";
+
+                        if (row.Cells[col.Index].Value is DateTime dt)
+                            value = dt.ToString("dd/MM/yyyy");
+                        else if (row.Cells[col.Index].Value is TimeSpan ts)
+                            value = ts.ToString(@"hh\:mm");
+                        else
+                            value = row.Cells[col.Index].Value?.ToString() ?? "";
+
+                        PdfPCell cell = new PdfPCell(new Phrase(value, fCell));
+
+                        // HỌ TÊN CĂN TRÁI + XUỐNG DÒNG
+                        if (col.Name.Contains("HoTen") || col.HeaderText.Contains("Họ"))
+                        {
+                            cell.HorizontalAlignment = Element.ALIGN_LEFT;
+                            cell.NoWrap = false;
+                        }
+                        else if (col.Name.Contains("MaNV") || col.HeaderText.Contains("Mã"))
+                        {
+                            cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                            cell.NoWrap = true;
+                        }
+                        else
+                        {
+                            cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        }
+
+                        cell.Padding = 4;
+                        table.AddCell(cell);
+                    }
+                }
+
+                doc.Add(table);
+
+                // ===== CHỮ KÝ =====
+                doc.Add(new Paragraph("\n\n"));
+
+                PdfPTable signTable = new PdfPTable(1);
+                signTable.WidthPercentage = 40;
+                signTable.HorizontalAlignment = Element.ALIGN_RIGHT;
+
+                PdfPCell signCell = new PdfPCell(new Phrase(
+                    $"Hà Nội, ngày {DateTime.Now:dd} tháng {DateTime.Now:MM} năm {DateTime.Now:yyyy}\n\n" +
+                    "Người lập báo cáo\n\n\n" +
+                    nguoiDangNhap,
+                    fItalic));
+
+                signCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
+                signCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                signTable.AddCell(signCell);
+
+                doc.Add(signTable);
+                doc.Close();
+
+                MessageBox.Show("Xuất PDF thành công!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                if (MessageBox.Show("Bạn có muốn mở file PDF không?",
+                    "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    System.Diagnostics.Process.Start(sfd.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi xuất PDF: " + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void cbBoxMaPB_SelectedIndexChanged(object sender, EventArgs e)
