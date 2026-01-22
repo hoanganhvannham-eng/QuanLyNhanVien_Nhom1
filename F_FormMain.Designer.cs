@@ -226,12 +226,13 @@
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(12, 47);
+            this.panel1.Location = new System.Drawing.Point(1065, 50);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(247, 169);
             this.panel1.TabIndex = 4;
@@ -298,16 +299,16 @@
             this.toolStripLabelUser.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStripLabelUser.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1});
-            this.toolStripLabelUser.Location = new System.Drawing.Point(0, 556);
+            this.toolStripLabelUser.Location = new System.Drawing.Point(0, 550);
             this.toolStripLabelUser.Name = "toolStripLabelUser";
-            this.toolStripLabelUser.Size = new System.Drawing.Size(1324, 25);
+            this.toolStripLabelUser.Size = new System.Drawing.Size(1324, 31);
             this.toolStripLabelUser.TabIndex = 6;
             this.toolStripLabelUser.Text = "toolStrip1";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(111, 22);
+            this.toolStripLabel1.Size = new System.Drawing.Size(111, 28);
             this.toolStripLabel1.Text = "toolStripLabel1";
             // 
             // F_FormMain
