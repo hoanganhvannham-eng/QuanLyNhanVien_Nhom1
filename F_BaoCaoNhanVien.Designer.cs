@@ -68,9 +68,9 @@
             this.lblSubTitle.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblSubTitle.Location = new System.Drawing.Point(20, 45);
             this.lblSubTitle.Name = "lblSubTitle";
-            this.lblSubTitle.Size = new System.Drawing.Size(237, 23);
+            this.lblSubTitle.Size = new System.Drawing.Size(232, 23);
             this.lblSubTitle.TabIndex = 1;
-            this.lblSubTitle.Text = "Thống kê & tìm kiếm nhân viên";
+            this.lblSubTitle.Text = "Thống kê tìm kiếm nhân viên";
             // 
             // panelTop
             // 
