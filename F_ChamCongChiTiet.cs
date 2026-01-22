@@ -286,11 +286,11 @@ namespace QuanLyNhanVien3
         private void cbBoxMaPB_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbBoxMaPB.SelectedValue != null)
-            {
-                string maPB = cbBoxMaPB.SelectedValue.ToString();
+                {
+                    string maPB = cbBoxMaPB.SelectedValue.ToString();
 
-                // Load chức vụ theo phòng ban
-                LoadChucVuComboBox(maPB);
+                    // Load chức vụ theo phòng ban
+                    LoadChucVuComboBox(maPB);
 
                 // Load danh sách chấm công theo phòng ban
                 LoadChamCongTheoDieuKien();

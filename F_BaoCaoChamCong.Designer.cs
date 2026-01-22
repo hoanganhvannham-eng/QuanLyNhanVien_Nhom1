@@ -172,6 +172,7 @@
             this.txtTimkiem.Name = "txtTimkiem";
             this.txtTimkiem.Size = new System.Drawing.Size(200, 30);
             this.txtTimkiem.TabIndex = 0;
+            this.txtTimkiem.TextChanged += new System.EventHandler(this.txtTimkiem_TextChanged);
             // 
             // btnTimKiem
             // 
@@ -234,6 +235,7 @@
             this.cbBoxChucVu.Name = "cbBoxChucVu";
             this.cbBoxChucVu.Size = new System.Drawing.Size(307, 27);
             this.cbBoxChucVu.TabIndex = 197;
+            this.cbBoxChucVu.SelectedIndexChanged += new System.EventHandler(this.cbBoxChucVu_SelectedIndexChanged);
             // 
             // cbBoxMaPB
             // 
@@ -244,6 +246,7 @@
             this.cbBoxMaPB.Name = "cbBoxMaPB";
             this.cbBoxMaPB.Size = new System.Drawing.Size(307, 27);
             this.cbBoxMaPB.TabIndex = 196;
+            this.cbBoxMaPB.SelectedIndexChanged += new System.EventHandler(this.cbBoxMaPB_SelectedIndexChanged);
             // 
             // label11
             // 
