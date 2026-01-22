@@ -285,11 +285,10 @@
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 28.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(886, 9);
+            this.label1.Location = new System.Drawing.Point(640, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(338, 53);
             this.label1.TabIndex = 1;
@@ -442,6 +441,7 @@
             this.cbMaNV.Name = "cbMaNV";
             this.cbMaNV.Size = new System.Drawing.Size(329, 27);
             this.cbMaNV.TabIndex = 71;
+            this.cbMaNV.SelectedValueChanged += new System.EventHandler(this.cbMaNV_SelectedValueChanged);
             // 
             // tbGhiChuCTDA
             // 
@@ -509,6 +509,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "F_DuAnChung";
             this.Text = "F_DuAnChung";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.F_DuAnChung_Load);
             this.panel1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
