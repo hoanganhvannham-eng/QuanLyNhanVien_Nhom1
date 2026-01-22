@@ -68,7 +68,7 @@ namespace QuanLyNhanVien3
                     // Thêm dòng "Tất cả"
                     DataRow row = dt.NewRow();
                     row["MaPB_ThuanCD233318"] = "";
-                    row["TenPB_ThuanCD233318"] = "-- Tất cả Phòng Ban --";
+                    row["TenPB_ThuanCD233318"] = "-- Chọn Phòng Ban --";
                     dt.Rows.InsertAt(row, 0);
 
                     isLoadingComboBox = true;
@@ -127,7 +127,7 @@ namespace QuanLyNhanVien3
                         // Thêm dòng "Tất cả"
                         DataRow row = dt.NewRow();
                         row["MaCV_KhangCD233181"] = "";
-                        row["TenCV_KhangCD233181"] = "-- Tất cả Chức Vụ --";
+                        row["TenCV_KhangCD233181"] = "-- Chọn Chức Vụ --";
                         row["MaPB_ThuanCD233318"] = "";
                         row["TenPB_ThuanCD233318"] = "";
                         dt.Rows.InsertAt(row, 0);
@@ -243,11 +243,12 @@ namespace QuanLyNhanVien3
                 string maPB = cbPB.SelectedValue.ToString();
                 currentMaPB = maPB;
 
-                if (string.IsNullOrEmpty(maPB) || maPB == "-- Tất cả Phòng Ban --")
+                if (string.IsNullOrEmpty(maPB) || maPB == "-- Chọn Phòng Ban --")
                 {
                     // Load tất cả chức vụ và nhân viên
                     LoadComboBoxChucVu();
                     LoadComboBoxNhanVien();
+                    LoadLuongFilter(); // Load dữ liệu không lọc
                 }
                 else
                 {
@@ -256,10 +257,10 @@ namespace QuanLyNhanVien3
 
                     // Load nhân viên theo phòng ban
                     LoadComboBoxNhanVien("", maPB);
-                }
 
-                // Load lại DataGridView với filter
-                LoadLuongTheoThangNam();
+                    // Load dữ liệu lương theo phòng ban
+                    LoadLuongFilter(maPB: maPB);
+                }
             }
         }
 
@@ -273,19 +274,22 @@ namespace QuanLyNhanVien3
                 string maCV = cbCV.SelectedValue.ToString();
                 currentMaCV = maCV;
 
-                if (string.IsNullOrEmpty(maCV) || maCV == "-- Tất cả Chức Vụ --")
+                if (string.IsNullOrEmpty(maCV) || maCV == "-- Chọn Chức Vụ --")
                 {
                     // Load nhân viên theo phòng ban (nếu có) hoặc tất cả
                     LoadComboBoxNhanVien("", currentMaPB);
+
+                    // Load dữ liệu lương theo phòng ban (nếu có) hoặc tất cả
+                    LoadLuongFilter(maPB: currentMaPB);
                 }
                 else
                 {
                     // Load nhân viên theo chức vụ
                     LoadComboBoxNhanVien(maCV, currentMaPB);
-                }
 
-                // Load lại DataGridView với filter
-                LoadLuongTheoThangNam();
+                    // Load dữ liệu lương theo chức vụ
+                    LoadLuongFilter(maCV: maCV, maPB: currentMaPB);
+                }
             }
         }
 
@@ -303,10 +307,15 @@ namespace QuanLyNhanVien3
                 if (!string.IsNullOrEmpty(maNV) && maNV != "-- Chọn Nhân Viên --")
                 {
                     LoadLuongCoBanTuHopDong(maNV);
+
+                    // Load dữ liệu lương theo nhân viên
+                    LoadLuongFilter(maNV: maNV, maCV: currentMaCV, maPB: currentMaPB);
                 }
                 else
                 {
                     txtLuongCoBan.Text = "";
+                    // Load dữ liệu theo chức vụ hoặc phòng ban
+                    LoadLuongFilter(maCV: currentMaCV, maPB: currentMaPB);
                 }
             }
         }
@@ -315,7 +324,8 @@ namespace QuanLyNhanVien3
 
         #region LOAD LƯƠNG VÀ FILTER
 
-        private void LoadLuongTheoThangNam()
+        // Phương thức load lương với bộ lọc
+        private void LoadLuongFilter(string maPB = "", string maCV = "", string maNV = "")
         {
             try
             {
@@ -347,33 +357,38 @@ namespace QuanLyNhanVien3
                       AND l.Thang_ChienCD232928 = @Thang
                       AND l.Nam_ChienCD232928 = @Nam";
 
-                // Thêm điều kiện lọc theo Phòng Ban
-                if (!string.IsNullOrEmpty(currentMaPB) && currentMaPB != "-- Tất cả Phòng Ban --")
+                // Thêm điều kiện lọc
+                if (!string.IsNullOrEmpty(maNV))
+                {
+                    sql += " AND nv.MaNV_TuanhCD233018 = @MaNV";
+                }
+                else if (!string.IsNullOrEmpty(maCV))
+                {
+                    sql += " AND cv.MaCV_KhangCD233181 = @MaCV";
+                }
+                else if (!string.IsNullOrEmpty(maPB))
                 {
                     sql += " AND pb.MaPB_ThuanCD233318 = @MaPB";
                 }
 
-                // Thêm điều kiện lọc theo Chức Vụ
-                if (!string.IsNullOrEmpty(currentMaCV) && currentMaCV != "-- Tất cả Chức Vụ --")
-                {
-                    sql += " AND cv.MaCV_KhangCD233181 = @MaCV";
-                }
-
-                sql += " ORDER BY pb.TenPB_ThuanCD233318, cv.TenCV_KhangCD233181, nv.HoTen_TuanhCD233018, l.Maluong_ChienCD232928";
+                sql += " ORDER BY nv.HoTen_TuanhCD233018, l.Maluong_ChienCD232928";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@Thang", thang);
                     cmd.Parameters.AddWithValue("@Nam", nam);
 
-                    if (!string.IsNullOrEmpty(currentMaPB) && currentMaPB != "-- Tất cả Phòng Ban --")
+                    if (!string.IsNullOrEmpty(maNV))
                     {
-                        cmd.Parameters.AddWithValue("@MaPB", currentMaPB);
+                        cmd.Parameters.AddWithValue("@MaNV", maNV);
                     }
-
-                    if (!string.IsNullOrEmpty(currentMaCV) && currentMaCV != "-- Tất cả Chức Vụ --")
+                    else if (!string.IsNullOrEmpty(maCV))
                     {
-                        cmd.Parameters.AddWithValue("@MaCV", currentMaCV);
+                        cmd.Parameters.AddWithValue("@MaCV", maCV);
+                    }
+                    else if (!string.IsNullOrEmpty(maPB))
+                    {
+                        cmd.Parameters.AddWithValue("@MaPB", maPB);
                     }
 
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -386,9 +401,66 @@ namespace QuanLyNhanVien3
 
                     // Điều chỉnh độ rộng cột tự động
                     dgvLuong.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi load lương: " + ex.Message);
+            }
+            finally
+            {
+                cn.disconnect();
+            }
+        }
 
-                    // Hiển thị số lượng bản ghi
-                    //lblTongSo.Text = $"Tổng số: {dt.Rows.Count} bản ghi";
+        private void LoadLuongTheoThangNam()
+        {
+            try
+            {
+                cn.connect();
+
+                int thang = Convert.ToInt32(cbThang.SelectedItem);
+                int nam = (int)numNam.Value;
+
+                string sql = @"
+                    SELECT 
+                        l.Maluong_ChienCD232928     AS N'Mã Lương',
+                        nv.MaNV_TuanhCD233018       AS N'Mã NV',
+                        nv.HoTen_TuanhCD233018      AS N'Tên nhân viên',
+                        cv.TenCV_KhangCD233181      AS N'Chức Vụ',
+                        pb.TenPB_ThuanCD233318      AS N'Phòng Ban',
+                        l.Thang_ChienCD232928       AS N'Tháng',
+                        l.Nam_ChienCD232928         AS N'Năm',
+                        l.LuongCoBan_ChienCD232928  AS N'Lương cơ bản',
+                        l.SoNgayCongChuan_ChienCD232928 AS N'Số Ngày công chuẩn',
+                        l.PhuCap_ChienCD232928      AS N'Phụ cấp',
+                        l.KhauTru_ChienCD232928     AS N'Khấu trừ',
+                        l.Ghichu_ChienCD232928      AS N'Ghi chú'
+                    FROM tblLuong_ChienCD232928 l
+                    INNER JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
+                    INNER JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                    INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+                    INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+                    WHERE l.DeletedAt_ChienCD232928 = 0
+                      AND l.Thang_ChienCD232928 = @Thang
+                      AND l.Nam_ChienCD232928 = @Nam
+                    ORDER BY nv.HoTen_TuanhCD233018, l.Maluong_ChienCD232928";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+                    cmd.Parameters.AddWithValue("@Nam", nam);
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    dgvLuong.DataSource = dt;
+
+                    // Định dạng số cho các cột tiền
+                    FormatCurrencyColumns();
+
+                    // Điều chỉnh độ rộng cột tự động
+                    dgvLuong.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
                 }
             }
             catch (Exception ex)
@@ -880,44 +952,53 @@ namespace QuanLyNhanVien3
                       AND l.Thang_ChienCD232928 = @Thang
                       AND l.Nam_ChienCD232928 = @Nam";
 
-                // Thêm điều kiện lọc theo Phòng Ban
-                if (!string.IsNullOrEmpty(currentMaPB) && currentMaPB != "-- Tất cả Phòng Ban --")
-                {
-                    sqlSearch += " AND pb.MaPB_ThuanCD233318 = @MaPB";
-                }
-
-                // Thêm điều kiện lọc theo Chức Vụ
-                if (!string.IsNullOrEmpty(currentMaCV) && currentMaCV != "-- Tất cả Chức Vụ --")
-                {
-                    sqlSearch += " AND cv.MaCV_KhangCD233181 = @MaCV";
-                }
-
-                // Thêm điều kiện tìm kiếm theo từ khóa
+                // Lọc theo tìm kiếm hoặc theo phòng ban/chức vụ/nhân viên đã chọn
                 if (!string.IsNullOrWhiteSpace(txtTimKiem.Text))
                 {
                     sqlSearch += " AND (l.Maluong_ChienCD232928 LIKE @Search OR nv.HoTen_TuanhCD233018 LIKE @Search OR nv.MaNV_TuanhCD233018 LIKE @Search)";
                 }
+                else
+                {
+                    // Nếu không có tìm kiếm, lọc theo combobox đã chọn
+                    if (!string.IsNullOrEmpty(currentMaNV))
+                    {
+                        sqlSearch += " AND nv.MaNV_TuanhCD233018 = @MaNV";
+                    }
+                    else if (!string.IsNullOrEmpty(currentMaCV))
+                    {
+                        sqlSearch += " AND cv.MaCV_KhangCD233181 = @MaCV";
+                    }
+                    else if (!string.IsNullOrEmpty(currentMaPB))
+                    {
+                        sqlSearch += " AND pb.MaPB_ThuanCD233318 = @MaPB";
+                    }
+                }
 
-                sqlSearch += " ORDER BY pb.TenPB_ThuanCD233318, cv.TenCV_KhangCD233181, nv.HoTen_TuanhCD233018, l.Maluong_ChienCD232928";
+                sqlSearch += " ORDER BY nv.HoTen_TuanhCD233018, l.Maluong_ChienCD232928";
 
                 using (SqlCommand cmd = new SqlCommand(sqlSearch, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@Thang", Convert.ToInt32(cbThang.SelectedItem));
                     cmd.Parameters.AddWithValue("@Nam", (int)numNam.Value);
 
-                    if (!string.IsNullOrEmpty(currentMaPB) && currentMaPB != "-- Tất cả Phòng Ban --")
-                    {
-                        cmd.Parameters.AddWithValue("@MaPB", currentMaPB);
-                    }
-
-                    if (!string.IsNullOrEmpty(currentMaCV) && currentMaCV != "-- Tất cả Chức Vụ --")
-                    {
-                        cmd.Parameters.AddWithValue("@MaCV", currentMaCV);
-                    }
-
                     if (!string.IsNullOrWhiteSpace(txtTimKiem.Text))
                     {
                         cmd.Parameters.AddWithValue("@Search", "%" + txtTimKiem.Text.Trim() + "%");
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(currentMaNV))
+                        {
+                            cmd.Parameters.AddWithValue("@MaNV", currentMaNV);
+                        }
+                        else if (!string.IsNullOrEmpty(currentMaCV))
+                        {
+                            cmd.Parameters.AddWithValue("@MaCV", currentMaCV);
+                        }
+                        else if (!string.IsNullOrEmpty(currentMaPB))
+                        {
+                            cmd.Parameters.AddWithValue("@MaPB", currentMaPB);
+                        }
                     }
 
                     using (SqlDataAdapter da = new SqlDataAdapter(cmd))
@@ -931,9 +1012,6 @@ namespace QuanLyNhanVien3
 
                         // Điều chỉnh độ rộng cột tự động
                         dgvLuong.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-
-                        // Hiển thị số lượng bản ghi
-                        //lblTongSo.Text = $"Tổng số: {dt.Rows.Count} bản ghi";
                     }
                 }
             }
@@ -990,35 +1068,15 @@ namespace QuanLyNhanVien3
                                 ws.Range(3, 1, 3, colCount).Style.Alignment.Horizontal =
                                     XLAlignmentHorizontalValues.Center;
 
-                                /* ========== LỌC THEO ========= */
-                                string filterText = "";
-                                if (!string.IsNullOrEmpty(currentMaPB) && currentMaPB != "-- Tất cả Phòng Ban --")
-                                {
-                                    filterText += $"Phòng Ban: {cbPB.Text}";
-                                }
-                                if (!string.IsNullOrEmpty(currentMaCV) && currentMaCV != "-- Tất cả Chức Vụ --")
-                                {
-                                    if (!string.IsNullOrEmpty(filterText)) filterText += " - ";
-                                    filterText += $"Chức Vụ: {cbCV.Text}";
-                                }
-                                if (!string.IsNullOrEmpty(filterText))
-                                {
-                                    ws.Cell(4, 1).Value = filterText;
-                                    ws.Range(4, 1, 4, colCount).Merge();
-                                    ws.Range(4, 1, 4, colCount).Style.Alignment.Horizontal =
-                                        XLAlignmentHorizontalValues.Center;
-                                    ws.Range(4, 1, 4, colCount).Style.Font.Italic = true;
-                                }
-
                                 /* ========== HEADER ========= */
                                 for (int i = 0; i < colCount; i++)
                                 {
                                     string headerText = dgvLuong.Columns[i].HeaderText;
-                                    ws.Cell(6, i + 1).Value = headerText;
-                                    ws.Cell(6, i + 1).Style.Font.Bold = true;
-                                    ws.Cell(6, i + 1).Style.Alignment.Horizontal =
+                                    ws.Cell(5, i + 1).Value = headerText;
+                                    ws.Cell(5, i + 1).Style.Font.Bold = true;
+                                    ws.Cell(5, i + 1).Style.Alignment.Horizontal =
                                         XLAlignmentHorizontalValues.Center;
-                                    ws.Cell(6, i + 1).Style.Fill.BackgroundColor = XLColor.LightGray;
+                                    ws.Cell(5, i + 1).Style.Fill.BackgroundColor = XLColor.LightGray;
                                 }
 
                                 /* ========== DỮ LIỆU ========= */
@@ -1027,16 +1085,15 @@ namespace QuanLyNhanVien3
                                     for (int j = 0; j < colCount; j++)
                                     {
                                         var value = dgvLuong.Rows[i].Cells[j].Value;
-                                        ws.Cell(i + 7, j + 1).Value =
+                                        ws.Cell(i + 6, j + 1).Value =
                                             value != null ? value.ToString() : "";
                                     }
                                 }
 
                                 /* ========== BORDER ========= */
-                                int startRow = string.IsNullOrEmpty(filterText) ? 6 : 7;
                                 var range = ws.Range(
-                                    startRow, 1,
-                                    dgvLuong.Rows.Count + startRow - 1,
+                                    5, 1,
+                                    dgvLuong.Rows.Count + 5,
                                     colCount
                                 );
 
@@ -1080,13 +1137,13 @@ namespace QuanLyNhanVien3
         private void numNam_ValueChanged(object sender, EventArgs e)
         {
             if (cbThang.SelectedItem == null) return;
-            LoadLuongTheoThangNam();
+            LoadLuongFilter(maPB: currentMaPB, maCV: currentMaCV, maNV: currentMaNV);
         }
 
         private void cbThang_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbThang.SelectedItem == null) return;
-            LoadLuongTheoThangNam();
+            LoadLuongFilter(maPB: currentMaPB, maCV: currentMaCV, maNV: currentMaNV);
         }
 
         private void btnThoat_Click(object sender, EventArgs e)
