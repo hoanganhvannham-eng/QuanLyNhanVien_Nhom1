@@ -321,10 +321,10 @@
             this.dtGridViewBCTongHop.RowHeadersVisible = false;
             this.dtGridViewBCTongHop.RowHeadersWidth = 51;
             this.dtGridViewBCTongHop.RowTemplate.Height = 28;
-            this.dtGridViewBCTongHop.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dtGridViewBCTongHop.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dtGridViewBCTongHop.Size = new System.Drawing.Size(1285, 299);
             this.dtGridViewBCTongHop.TabIndex = 1;
-            this.dtGridViewBCTongHop.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewBCTongHop_CellContentClick);
+            this.dtGridViewBCTongHop.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewBCTongHop_CellDoubleClick);
             this.dtGridViewBCTongHop.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewBCTongHop_CellDoubleClick);
             // 
             // lblGridTitle
@@ -397,6 +397,7 @@
             this.btnXuatPDF.TabIndex = 1;
             this.btnXuatPDF.Text = "Xuất PDF";
             this.btnXuatPDF.UseVisualStyleBackColor = true;
+            this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
             // 
             // btnXuatExcel
             // 
@@ -408,6 +409,7 @@
             this.btnXuatExcel.TabIndex = 0;
             this.btnXuatExcel.Text = "Xuất Excel";
             this.btnXuatExcel.UseVisualStyleBackColor = true;
+            this.btnXuatExcel.Click += new System.EventHandler(this.btnXuatExcel_Click);
             // 
             // F_BaoCaoTongHop
             // 
