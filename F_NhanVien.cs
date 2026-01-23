@@ -10,6 +10,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using static QuanLyNhanVien3.F_FormMain;
 using System.IO;
+using System.Collections.Generic;
 
 
 namespace QuanLyNhanVien3
@@ -732,58 +733,108 @@ namespace QuanLyNhanVien3
         {
             try
             {
-                if (string.IsNullOrEmpty(tbHoTen.Text))
+                cn.connect();
+
+                int thang = dateTimePickerNgaySinh.Value.Month;
+                int nam = dateTimePickerNgaySinh.Value.Year;
+
+                // ⭐ LẤY KEYWORD TỪ TEXTBOX MÃ NV VÀ HỌ TÊN
+                string maNV = tbmaNV.Text.Trim();
+                string hoTen = tbHoTen.Text.Trim();
+
+                // ⭐ KIỂM TRA PHẢI NHẬP ÍT NHẤT 1 TRƯỜNG
+                if (string.IsNullOrWhiteSpace(maNV) && string.IsNullOrWhiteSpace(hoTen))
                 {
-                    MessageBox.Show("Vui lòng nhập tên nhân viên để tìm kiếm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vui lòng nhập Mã NV hoặc Tên nhân viên để tìm kiếm!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                string sql = @"SELECT tblNhanVien_TuanhCD233018.MaNV_TuanhCD233018 AS [Mã nhân viên], 
-                              tblNhanVien_TuanhCD233018.HoTen_TuanhCD233018 AS [Họ tên], 
-                              tblNhanVien_TuanhCD233018.NgaySinh_TuanhCD233018 AS [Ngày sinh], 
-                              tblNhanVien_TuanhCD233018.GioiTinh_TuanhCD233018 AS [Giới tính], 
-                              tblNhanVien_TuanhCD233018.DiaChi_TuanhCD233018 AS [Địa chỉ], 
-                              tblNhanVien_TuanhCD233018.SoDienThoai_TuanhCD233018 AS [Điện thoại], 
-                              tblNhanVien_TuanhCD233018.Email_TuanhCD233018 AS Email, 
-                              tblNhanVien_TuanhCD233018.Ghichu_TuanhCD233018 AS [Ghi chú], 
-                              tblPhongBan_ThuanCD233318.TenPB_ThuanCD233318 AS [Phòng ban], 
-                              tblChucVu_KhangCD233181.TenCV_KhangCD233181 AS [Chức vụ]
-                        FROM tblNhanVien_TuanhCD233018 
-                        INNER JOIN tblChucVu_KhangCD233181 ON tblNhanVien_TuanhCD233018.MaCV_KhangCD233181 = tblChucVu_KhangCD233181.MaCV_KhangCD233181 
-                        INNER JOIN tblPhongBan_ThuanCD233318 ON tblChucVu_KhangCD233181.MaPB_ThuanCD233318 = tblPhongBan_ThuanCD233318.MaPB_ThuanCD233318
-                        WHERE DeletedAt_TuanhCD233018 = 0
-                          AND HoTen_TuanhCD233018 COLLATE Vietnamese_CI_AI LIKE @TenTimKiem
-                        ORDER BY MaNV_TuanhCD233018";
 
-                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                string sql = @"
+                            SELECT 
+                                ROW_NUMBER() OVER (ORDER BY nv.MaNV_TuanhCD233018) AS [STT],
+                                nv.MaNV_TuanhCD233018 AS [Mã NV],
+                                nv.HoTen_TuanhCD233018 AS [Họ tên],
+                                pb.TenPB_ThuanCD233318 AS [Phòng ban],
+                                cv.TenCV_KhangCD233181 AS [Chức vụ],
+                                cc.Ngay_TuanhCD233018 AS [Ngày],
+                                cc.GioVao_TuanhCD233018 AS [Giờ vào],
+                                cc.GioVe_TuanhCD233018 AS [Giờ về]
+                            FROM tblNhanVien_TuanhCD233018 nv
+                            JOIN tblChucVu_KhangCD233181 cv 
+                                ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+                            JOIN tblPhongBan_ThuanCD233318 pb 
+                                ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+                            LEFT JOIN tblChamCong_TuanhCD233018 cc 
+                                ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                AND cc.DeletedAt_TuanhCD233018 = 0
+                                AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                            WHERE nv.DeletedAt_TuanhCD233018 = 0
+                            ";
+                SqlCommand cmd = new SqlCommand(sql, cn.conn);
+                cmd.Parameters.AddWithValue("@Thang", thang);
+                cmd.Parameters.AddWithValue("@Nam", nam);
+
+                // ⭐ TÌM KIẾM THEO MÃ NV HOẶC HỌ TÊN
+                List<string> conditions = new List<string>();
+                if (!string.IsNullOrWhiteSpace(maNV))
                 {
-                    cmd.Parameters.AddWithValue("@TenTimKiem", "%" + tbHoTen.Text + "%");
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
+                    conditions.Add("nv.MaNV_TuanhCD233018 LIKE @MaNV");
+                    cmd.Parameters.AddWithValue("@MaNV", "%" + maNV + "%");
+                }
 
-                    // Thêm cột STT
-                    dt.Columns.Add("STT", typeof(int));
-                    dt.Columns["STT"].SetOrdinal(0);
+                if (!string.IsNullOrWhiteSpace(hoTen))
+                {
+                    conditions.Add("nv.HoTen_TuanhCD233018 COLLATE Vietnamese_CI_AI LIKE @HoTen");
+                    cmd.Parameters.AddWithValue("@HoTen", "%" + hoTen + "%");
+                }
+                if (conditions.Count > 0)
+                {
+                    sql += " AND (" + string.Join(" OR ", conditions) + ")";
+                }
 
-                    for (int i = 0; i < dt.Rows.Count; i++)
-                    {
-                        dt.Rows[i]["STT"] = i + 1;
-                    }
+                if (!string.IsNullOrEmpty(cbBoxMaPB.SelectedValue?.ToString()))
+                {
+                    sql += " AND pb.MaPB_ThuanCD233318 = @MaPB";
+                    cmd.Parameters.AddWithValue("@MaPB", cbBoxMaPB.SelectedValue.ToString());
+                }
 
-                    dtGridViewNhanVien.DataSource = dt;
+                if (!string.IsNullOrEmpty(cbBoxChucVu.SelectedValue?.ToString()))
+                {
+                    sql += " AND cv.MaCV_KhangCD233181 = @MaCV";
+                    cmd.Parameters.AddWithValue("@MaCV", cbBoxChucVu.SelectedValue.ToString());
+                }
+                sql += " ORDER BY nv.MaNV_TuanhCD233018, cc.Ngay_TuanhCD233018";
+                cmd.CommandText = sql;
 
-                    // Tùy chỉnh cột STT
-                    if (dtGridViewNhanVien.Columns["STT"] != null)
-                    {
-                        dtGridViewNhanVien.Columns["STT"].HeaderText = "STT";
-                        dtGridViewNhanVien.Columns["STT"].Width = 50;
-                        dtGridViewNhanVien.Columns["STT"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                    }
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                dtGridViewNhanVien.DataSource = dt;
+
+                // ⭐ TÙY CHỈNH CỘT STT
+                if (dtGridViewNhanVien.Columns["STT"] != null)
+                {
+                    dtGridViewNhanVien.Columns["STT"].HeaderText = "STT";
+                    dtGridViewNhanVien.Columns["STT"].Width = 50;
+                    dtGridViewNhanVien.Columns["STT"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                }
+
+                if (dt.Rows.Count == 0)
+                {
+                    MessageBox.Show("Không tìm thấy dữ liệu phù hợp!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("loi " + ex.Message);
+                MessageBox.Show("Lỗi tìm kiếm: " + ex.Message);
+            }
+            finally
+            {
+                cn.disconnect();
             }
         }
 
@@ -1339,7 +1390,7 @@ namespace QuanLyNhanVien3
                     // Độ rộng cột
                     float[] columnWidths = new float[columnCount];
                     for (int i = 0; i < columnCount; i++)
-                        columnWidths[i] = (i == 0 && dtGridViewNhanVien.Columns[i].Name == "STT") ? 0.5f : 2f;
+                        columnWidths[i] = (i == 0 && dtGridViewNhanVien.Columns[i].Name == "STT") ? 1f : 2f;
                     table.SetWidths(columnWidths);
 
                     // Header bảng
