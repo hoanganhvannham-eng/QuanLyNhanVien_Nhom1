@@ -182,6 +182,7 @@ namespace QuanLyNhanVien3
             loadcbbCV();
             LoadNhanVienTheoDieuKien();
             LoadTongSoNhanVien();
+            dtGridViewNhanVien.RowPostPaint += dtGridViewNhanVien_RowPostPaint;
             if (LoginInfo.CurrentUserRole.ToLower() == "user")
             {
                 btnThem.Enabled = false;
@@ -221,24 +222,28 @@ namespace QuanLyNhanVien3
         }
 
         //tong nhan vien and
+        // ===== 4. SỬA PHẦN dtGridViewNhanVien_CellClick_2 - CẬP NHẬT INDEX CỘT =====
         private void dtGridViewNhanVien_CellClick_2(object sender, DataGridViewCellEventArgs e)
         {
             int i = e.RowIndex;
             if (i >= 0)
             {
-                isLoadingNhanVien = true; // 🔒 KHÓA EVENT
-                isEditingNhanVien = true; // 🔴 ĐANG SỬA
-                tbmaNV.Text = dtGridViewNhanVien.Rows[i].Cells[0].Value.ToString();
-                tbHoTen.Text = dtGridViewNhanVien.Rows[i].Cells[1].Value.ToString();
-                dateTimePickerNgaySinh.Value = Convert.ToDateTime(dtGridViewNhanVien.Rows[i].Cells[2].Value);
-                cbBoxGioiTinh.Text = dtGridViewNhanVien.Rows[i].Cells[3].Value.ToString();
-                tbDiaChi.Text = dtGridViewNhanVien.Rows[i].Cells[4].Value.ToString();
-                tbSoDienThoai.Text = dtGridViewNhanVien.Rows[i].Cells[5].Value.ToString();
-                tbEmail.Text = dtGridViewNhanVien.Rows[i].Cells[6].Value.ToString();
-                cbBoxMaPB.SelectedValue = dtGridViewNhanVien.Rows[i].Cells[7].Value.ToString();
-                cbBoxChucVu.SelectedValue = dtGridViewNhanVien.Rows[i].Cells[8].Value.ToString();
-                tbGhiChu.Text = dtGridViewNhanVien.Rows[i].Cells[9].Value.ToString();
-                isLoadingNhanVien = false; // 🔓 MỞ KHÓA
+                isLoadingNhanVien = true;
+                isEditingNhanVien = true;
+
+                // LƯU Ý: Cột 0 là STT, dữ liệu bắt đầu từ cột 1
+                tbmaNV.Text = dtGridViewNhanVien.Rows[i].Cells[1].Value.ToString();
+                tbHoTen.Text = dtGridViewNhanVien.Rows[i].Cells[2].Value.ToString();
+                dateTimePickerNgaySinh.Value = Convert.ToDateTime(dtGridViewNhanVien.Rows[i].Cells[3].Value);
+                cbBoxGioiTinh.Text = dtGridViewNhanVien.Rows[i].Cells[4].Value.ToString();
+                tbDiaChi.Text = dtGridViewNhanVien.Rows[i].Cells[5].Value.ToString();
+                tbSoDienThoai.Text = dtGridViewNhanVien.Rows[i].Cells[6].Value.ToString();
+                tbEmail.Text = dtGridViewNhanVien.Rows[i].Cells[7].Value.ToString();
+                cbBoxMaPB.SelectedValue = dtGridViewNhanVien.Rows[i].Cells[8].Value.ToString();
+                cbBoxChucVu.SelectedValue = dtGridViewNhanVien.Rows[i].Cells[9].Value.ToString();
+                tbGhiChu.Text = dtGridViewNhanVien.Rows[i].Cells[10].Value.ToString();
+
+                isLoadingNhanVien = false;
             }
         }
 
@@ -407,75 +412,177 @@ namespace QuanLyNhanVien3
             LoadNhanVienTheoDieuKien();
         }
 
-        private void btnxuatExcel_Click_1(object sender, EventArgs e)
+        // ==================== XUẤT EXCEL - ĐÃ GỌN GỌN ====================
+        private void xuatexcel_Click(object sender, EventArgs e)
         {
-            if (dtGridViewNhanVien.Rows.Count > 0)
-            {
-                using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel Workbook|*.xlsx" })
-                {
-                    if (sfd.ShowDialog() == DialogResult.OK)
-                    {
-                        try
-                        {
-                            using (XLWorkbook wb = new XLWorkbook())
-                            {
-                                var ws = wb.Worksheets.Add("NhanVien");
-
-                                // Ghi header
-                                for (int i = 0; i < dtGridViewNhanVien.Columns.Count; i++)
-                                {
-                                    ws.Cell(1, i + 1).Value = dtGridViewNhanVien.Columns[i].HeaderText;
-                                }
-
-                                // Ghi dữ liệu
-                                for (int i = 0; i < dtGridViewNhanVien.Rows.Count; i++)
-                                {
-                                    for (int j = 0; j < dtGridViewNhanVien.Columns.Count; j++)
-                                    {
-                                        ws.Cell(i + 2, j + 1).Value = dtGridViewNhanVien.Rows[i].Cells[j].Value?.ToString();
-                                    }
-                                }
-
-                                // Thêm border cho toàn bảng
-                                var range = ws.Range(1, 1, dtGridViewNhanVien.Rows.Count + 1, dtGridViewNhanVien.Columns.Count);
-                                range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                                range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-
-                                // Tự động co giãn cột
-                                ws.Columns().AdjustToContents();
-
-                                // Lưu file
-                                wb.SaveAs(sfd.FileName);
-                            }
-
-                            MessageBox.Show("Xuất Excel thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                }
-            }
-            else
+            if (dtGridViewNhanVien.Rows.Count == 0)
             {
                 MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog sfd = new SaveFileDialog()
+            {
+                Filter = "Excel Workbook|*.xlsx",
+                FileName = $"DanhSachNhanVien_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"
+            })
+            {
+                if (sfd.ShowDialog() != DialogResult.OK) return;
+
+                try
+                {
+                    using (XLWorkbook wb = new XLWorkbook())
+                    {
+                        var ws = wb.Worksheets.Add("NhanVien");
+                        int totalColumns = dtGridViewNhanVien.Columns.Count;
+
+                        // ===== PHẦN HEADER =====
+                        ws.Cell(1, 1).Value = "CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM";
+                        ws.Range(1, 1, 1, totalColumns).Merge().Style.Font.Bold = true;
+                        ws.Cell(1, 1).Style.Font.FontSize = 14;
+                        ws.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        ws.Row(1).Height = 20;
+
+                        ws.Cell(2, 1).Value = "DANH SÁCH NHÂN VIÊN";
+                        ws.Range(2, 1, 2, totalColumns).Merge().Style.Font.Bold = true;
+                        ws.Cell(2, 1).Style.Font.FontSize = 16;
+                        ws.Cell(2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        ws.Row(2).Height = 25;
+
+                        ws.Cell(3, 1).Value = $"Ngày lập báo cáo: {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
+                        ws.Cell(3, 1).Style.Font.Italic = true;
+
+                        // ===== THÔNG TIN LỌC =====
+                        ws.Cell(5, 1).Value = "Phòng Ban:";
+                        ws.Cell(5, 2).Value = cbBoxMaPB.Text;
+                        ws.Cell(5, 1).Style.Font.Bold = true;
+
+                        ws.Cell(6, 1).Value = "Chức vụ:";
+                        ws.Cell(6, 2).Value = string.IsNullOrEmpty(cbBoxChucVu.Text) ? "Tất cả" : cbBoxChucVu.Text;
+                        ws.Cell(6, 1).Style.Font.Bold = true;
+
+                        // ===== BẢNG DỮ LIỆU =====
+                        int startRow = 8;
+                        ws.Cell(startRow, 1).Value = "DANH SÁCH NHÂN VIÊN";
+                        ws.Range(startRow, 1, startRow, totalColumns).Merge();
+                        ws.Cell(startRow, 1).Style.Font.Bold = true;
+                        ws.Cell(startRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        ws.Cell(startRow, 1).Style.Fill.BackgroundColor = XLColor.LightGray;
+
+                        // Tiêu đề cột
+                        int headerRow = startRow + 1;
+                        for (int i = 0; i < totalColumns; i++)
+                        {
+                            var cell = ws.Cell(headerRow, i + 1);
+                            cell.Value = dtGridViewNhanVien.Columns[i].HeaderText;
+                            cell.Style.Font.Bold = true;
+                            cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            cell.Style.Fill.BackgroundColor = XLColor.LightGray;
+                        }
+
+                        // Dữ liệu
+                        int dataStartRow = headerRow + 1;
+                        for (int i = 0; i < dtGridViewNhanVien.Rows.Count; i++)
+                        {
+                            for (int j = 0; j < totalColumns; j++)
+                            {
+                                var cellValue = dtGridViewNhanVien.Rows[i].Cells[j].Value;
+                                var cell = ws.Cell(dataStartRow + i, j + 1);
+                                cell.Value = cellValue is DateTime dt ? dt.ToString("dd/MM/yyyy") : cellValue?.ToString();
+                                cell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                            }
+                        }
+
+                        // Border
+                        int lastDataRow = dataStartRow + dtGridViewNhanVien.Rows.Count - 1;
+                        ws.Range(startRow, 1, lastDataRow, totalColumns).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        ws.Range(startRow, 1, lastDataRow, totalColumns).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                        // ===== CHỮ KÝ =====
+                        int signatureRow = lastDataRow + 2;
+                        int signatureStartCol = Math.Max(1, totalColumns - 2);
+
+                        ws.Cell(signatureRow, signatureStartCol).Value = $"Hà Nội, ngày {DateTime.Now.Day} tháng {DateTime.Now.Month} năm {DateTime.Now.Year}";
+                        ws.Range(signatureRow, signatureStartCol, signatureRow, totalColumns).Merge();
+                        ws.Cell(signatureRow, signatureStartCol).Style.Font.Italic = true;
+                        ws.Cell(signatureRow, signatureStartCol).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                        ws.Cell(signatureRow + 1, signatureStartCol).Value = "Người lập báo cáo";
+                        ws.Range(signatureRow + 1, signatureStartCol, signatureRow + 1, totalColumns).Merge();
+                        ws.Cell(signatureRow + 1, signatureStartCol).Style.Font.Bold = true;
+                        ws.Cell(signatureRow + 1, signatureStartCol).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                        ws.Cell(signatureRow + 4, signatureStartCol).Value = nguoiDangNhap;
+                        ws.Range(signatureRow + 4, signatureStartCol, signatureRow + 4, totalColumns).Merge();
+                        ws.Cell(signatureRow + 4, signatureStartCol).Style.Font.Bold = true;
+                        ws.Cell(signatureRow + 4, signatureStartCol).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                        // ===== TỰ ĐỘNG ĐIỀU CHỈNH =====
+                        // Cột STT: fix cứng vừa đủ
+                        if (totalColumns > 0 && dtGridViewNhanVien.Columns[0].Name == "STT")
+                        {
+                            ws.Column(1).Width = 12; // Vừa đủ cho 2-3 chữ số
+                        }
+
+                        // Các cột khác: tự động nhưng có giới hạn
+                        for (int i = 2; i <= totalColumns; i++)
+                        {
+                            ws.Column(i).AdjustToContents();
+
+                            // Đặt độ rộng tối thiểu và tối đa
+                            if (ws.Column(i).Width < 12)
+                                ws.Column(i).Width = 12;
+                            else if (ws.Column(i).Width > 40)
+                                ws.Column(i).Width = 40; // Tránh quá rộng
+                        }
+
+                        wb.SaveAs(sfd.FileName);
+                    }
+
+                    MessageBox.Show("Xuất Excel thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    System.Diagnostics.Process.Start(sfd.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi xuất Excel: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
-
+        // ===== 6. SỬA PHẦN btnNVDaNghiViec_Click_1 - THÊM STT =====
         private void btnNVDaNghiViec_Click_1(object sender, EventArgs e)
         {
             try
             {
                 cn.connect();
-                string query = @"SELECT  MaNV_TuanhCD233018, HoTen_TuanhCD233018, NgaySinh_TuanhCD233018, GioiTinh_TuanhCD233018, DiaChi_TuanhCD233018, SoDienThoai_TuanhCD233018, Email_TuanhCD233018, MaCV_KhangCD233181, Ghichu_TuanhCD233018
-                                FROM tblNhanVien_TuanhCD233018
-                                WHERE DeletedAt_TuanhCD233018 = 1 ORDER BY MaNV_TuanhCD233018";
+                string query = @"SELECT MaNV_TuanhCD233018, HoTen_TuanhCD233018, NgaySinh_TuanhCD233018, 
+                                GioiTinh_TuanhCD233018, DiaChi_TuanhCD233018, SoDienThoai_TuanhCD233018, 
+                                Email_TuanhCD233018, MaCV_KhangCD233181, Ghichu_TuanhCD233018
+                        FROM tblNhanVien_TuanhCD233018
+                        WHERE DeletedAt_TuanhCD233018 = 1 
+                        ORDER BY MaNV_TuanhCD233018";
                 using (SqlDataAdapter da = new SqlDataAdapter(query, cn.conn))
                 {
                     DataTable dt = new DataTable();
                     da.Fill(dt);
+
+                    // Thêm cột STT
+                    dt.Columns.Add("STT", typeof(int));
+                    dt.Columns["STT"].SetOrdinal(0);
+
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        dt.Rows[i]["STT"] = i + 1;
+                    }
+
                     dtGridViewNhanVien.DataSource = dt;
+
+                    // Tùy chỉnh cột STT
+                    if (dtGridViewNhanVien.Columns["STT"] != null)
+                    {
+                        dtGridViewNhanVien.Columns["STT"].HeaderText = "STT";
+                        dtGridViewNhanVien.Columns["STT"].Width = 50;
+                        dtGridViewNhanVien.Columns["STT"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    }
                 }
                 cn.disconnect();
             }
@@ -484,7 +591,6 @@ namespace QuanLyNhanVien3
                 MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
-
         private void btnKhoiPhucNhanVien_Click_1(object sender, EventArgs e)
         {
         }
@@ -621,6 +727,7 @@ namespace QuanLyNhanVien3
             }
         }
 
+        // ===== 5. SỬA PHẦN btnTimKiem_Click - THÊM STT =====
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
             try
@@ -630,16 +737,22 @@ namespace QuanLyNhanVien3
                     MessageBox.Show("Vui lòng nhập tên nhân viên để tìm kiếm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                string sql = @"SELECT tblNhanVien_TuanhCD233018.MaNV_TuanhCD233018 AS [Mã nhân viên], tblNhanVien_TuanhCD233018.HoTen_TuanhCD233018 AS [Họ tên], tblNhanVien_TuanhCD233018.NgaySinh_TuanhCD233018 AS [Ngày sinh], 
-                  tblNhanVien_TuanhCD233018.GioiTinh_TuanhCD233018 AS [Giới tính], tblNhanVien_TuanhCD233018.DiaChi_TuanhCD233018 AS [Địa chỉ], tblNhanVien_TuanhCD233018.SoDienThoai_TuanhCD233018 AS [Điện thoại], 
-                  tblNhanVien_TuanhCD233018.Email_TuanhCD233018 AS Email, tblNhanVien_TuanhCD233018.Ghichu_TuanhCD233018 AS [Ghi chú], tblPhongBan_ThuanCD233318.TenPB_ThuanCD233318 AS [Phòng ban], 
-                  tblChucVu_KhangCD233181.TenCV_KhangCD233181 AS [Chức vụ]
-FROM     tblNhanVien_TuanhCD233018 INNER JOIN
-                  tblChucVu_KhangCD233181 ON tblNhanVien_TuanhCD233018.MaCV_KhangCD233181 = tblChucVu_KhangCD233181.MaCV_KhangCD233181 INNER JOIN
-                  tblPhongBan_ThuanCD233318 ON tblChucVu_KhangCD233181.MaPB_ThuanCD233318 = tblPhongBan_ThuanCD233318.MaPB_ThuanCD233318
-                                WHERE DeletedAt_TuanhCD233018 = 0
-                                  AND HoTen_TuanhCD233018 COLLATE Vietnamese_CI_AI LIKE @TenTimKiem
-                                ORDER BY MaNV_TuanhCD233018";
+                string sql = @"SELECT tblNhanVien_TuanhCD233018.MaNV_TuanhCD233018 AS [Mã nhân viên], 
+                              tblNhanVien_TuanhCD233018.HoTen_TuanhCD233018 AS [Họ tên], 
+                              tblNhanVien_TuanhCD233018.NgaySinh_TuanhCD233018 AS [Ngày sinh], 
+                              tblNhanVien_TuanhCD233018.GioiTinh_TuanhCD233018 AS [Giới tính], 
+                              tblNhanVien_TuanhCD233018.DiaChi_TuanhCD233018 AS [Địa chỉ], 
+                              tblNhanVien_TuanhCD233018.SoDienThoai_TuanhCD233018 AS [Điện thoại], 
+                              tblNhanVien_TuanhCD233018.Email_TuanhCD233018 AS Email, 
+                              tblNhanVien_TuanhCD233018.Ghichu_TuanhCD233018 AS [Ghi chú], 
+                              tblPhongBan_ThuanCD233318.TenPB_ThuanCD233318 AS [Phòng ban], 
+                              tblChucVu_KhangCD233181.TenCV_KhangCD233181 AS [Chức vụ]
+                        FROM tblNhanVien_TuanhCD233018 
+                        INNER JOIN tblChucVu_KhangCD233181 ON tblNhanVien_TuanhCD233018.MaCV_KhangCD233181 = tblChucVu_KhangCD233181.MaCV_KhangCD233181 
+                        INNER JOIN tblPhongBan_ThuanCD233318 ON tblChucVu_KhangCD233181.MaPB_ThuanCD233318 = tblPhongBan_ThuanCD233318.MaPB_ThuanCD233318
+                        WHERE DeletedAt_TuanhCD233018 = 0
+                          AND HoTen_TuanhCD233018 COLLATE Vietnamese_CI_AI LIKE @TenTimKiem
+                        ORDER BY MaNV_TuanhCD233018";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
@@ -647,7 +760,25 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
+
+                    // Thêm cột STT
+                    dt.Columns.Add("STT", typeof(int));
+                    dt.Columns["STT"].SetOrdinal(0);
+
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        dt.Rows[i]["STT"] = i + 1;
+                    }
+
                     dtGridViewNhanVien.DataSource = dt;
+
+                    // Tùy chỉnh cột STT
+                    if (dtGridViewNhanVien.Columns["STT"] != null)
+                    {
+                        dtGridViewNhanVien.Columns["STT"].HeaderText = "STT";
+                        dtGridViewNhanVien.Columns["STT"].Width = 50;
+                        dtGridViewNhanVien.Columns["STT"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    }
                 }
             }
             catch (Exception ex)
@@ -731,6 +862,7 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
         }
 
         // su ly load nhanh vien
+        // ===== 2. SỬA PHẦN LoadNhanVienTheoDieuKien - THÊM CỘT STT =====
         private void LoadNhanVienTheoDieuKien()
         {
             if (cbBoxMaPB.SelectedValue == null ||
@@ -739,25 +871,25 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
 
             cn.connect();
             string sql = @"
-                            SELECT 
-                                nv.MaNV_TuanhCD233018 AS [Mã nhân viên],
-                                nv.HoTen_TuanhCD233018 AS [Họ tên],
-                                nv.NgaySinh_TuanhCD233018 AS [Ngày sinh],
-                                nv.GioiTinh_TuanhCD233018 AS [Giới tính],
-                                nv.DiaChi_TuanhCD233018 AS [Địa chỉ],
-                                nv.SoDienThoai_TuanhCD233018 AS [Điện thoại],
-                                nv.Email_TuanhCD233018 AS [Email],
-                                pb.MaPB_ThuanCD233318 AS [Mã PB],
-                                nv.MaCV_KhangCD233181 AS [Mã CV],
-                                nv.Ghichu_TuanhCD233018 AS [Ghi chú]
-                            FROM tblNhanVien_TuanhCD233018 nv
-                            INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
-                            INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
-                            WHERE pb.MaPB_ThuanCD233318 = @MaPB
-                            AND nv.DeletedAt_TuanhCD233018 = 0
-                            AND cv.DeletedAt_KhangCD233181 = 0
-                            AND pb.DeletedAt_ThuanCD233318 = 0
-                            ";
+                    SELECT 
+                        nv.MaNV_TuanhCD233018 AS [Mã nhân viên],
+                        nv.HoTen_TuanhCD233018 AS [Họ tên],
+                        nv.NgaySinh_TuanhCD233018 AS [Ngày sinh],
+                        nv.GioiTinh_TuanhCD233018 AS [Giới tính],
+                        nv.DiaChi_TuanhCD233018 AS [Địa chỉ],
+                        nv.SoDienThoai_TuanhCD233018 AS [Điện thoại],
+                        nv.Email_TuanhCD233018 AS [Email],
+                        pb.MaPB_ThuanCD233318 AS [Mã PB],
+                        nv.MaCV_KhangCD233181 AS [Mã CV],
+                        nv.Ghichu_TuanhCD233018 AS [Ghi chú]
+                    FROM tblNhanVien_TuanhCD233018 nv
+                    INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+                    INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+                    WHERE pb.MaPB_ThuanCD233318 = @MaPB
+                    AND nv.DeletedAt_TuanhCD233018 = 0
+                    AND cv.DeletedAt_KhangCD233181 = 0
+                    AND pb.DeletedAt_ThuanCD233318 = 0
+                    ";
 
             // 🔹 LỌC CHỨC VỤ
             if (cbBoxChucVu.SelectedValue != null &&
@@ -765,12 +897,6 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
             {
                 sql += " AND nv.MaCV_KhangCD233181 = @MaCV";
             }
-
-            //// 🔹 LỌC GIỚI TÍNH
-            //if (cbBoxGioiTinh.SelectedIndex != -1)
-            //{
-            //    sql += " AND nv.GioiTinh_TuanhCD233018 = @GioiTinh";
-            //}
 
             SqlCommand cmd = new SqlCommand(sql, cn.conn);
             cmd.Parameters.AddWithValue("@MaPB", cbBoxMaPB.SelectedValue);
@@ -790,13 +916,32 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
             DataTable dt = new DataTable();
             da.Fill(dt);
 
+            // ===== THÊM CỘT STT =====
+            dt.Columns.Add("STT", typeof(int));
+            dt.Columns["STT"].SetOrdinal(0); // Đặt cột STT ở vị trí đầu tiên
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                dt.Rows[i]["STT"] = i + 1;
+            }
+
             dtGridViewNhanVien.DataSource = dt;
+
+            // Tùy chỉnh cột STT
+            if (dtGridViewNhanVien.Columns["STT"] != null)
+            {
+                dtGridViewNhanVien.Columns["STT"].HeaderText = "STT";
+                dtGridViewNhanVien.Columns["STT"].Width = 50;
+                dtGridViewNhanVien.Columns["STT"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dtGridViewNhanVien.Columns["STT"].ReadOnly = true;
+            }
 
             cn.disconnect();
         }
 
         //
 
+        // ===== 3. SỬA PHẦN LoadNhanVienTheoDieuKiengioitinh - THÊM CỘT STT =====
         private void LoadNhanVienTheoDieuKiengioitinh()
         {
             if (cbBoxMaPB.SelectedValue == null ||
@@ -805,25 +950,25 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
 
             cn.connect();
             string sql = @"
-                            SELECT 
-                                nv.MaNV_TuanhCD233018 AS [Mã nhân viên],
-                                nv.HoTen_TuanhCD233018 AS [Họ tên],
-                                nv.NgaySinh_TuanhCD233018 AS [Ngày sinh],
-                                nv.GioiTinh_TuanhCD233018 AS [Giới tính],
-                                nv.DiaChi_TuanhCD233018 AS [Địa chỉ],
-                                nv.SoDienThoai_TuanhCD233018 AS [Điện thoại],
-                                nv.Email_TuanhCD233018 AS [Email],
-                                pb.MaPB_ThuanCD233318 AS [Mã PB],
-                                nv.MaCV_KhangCD233181 AS [Mã CV],
-                                nv.Ghichu_TuanhCD233018 AS [Ghi chú]
-                            FROM tblNhanVien_TuanhCD233018 nv
-                            INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
-                            INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
-                            WHERE pb.MaPB_ThuanCD233318 = @MaPB
-                            AND nv.DeletedAt_TuanhCD233018 = 0
-                            AND cv.DeletedAt_KhangCD233181 = 0
-                            AND pb.DeletedAt_ThuanCD233318 = 0
-                            ";
+                    SELECT 
+                        nv.MaNV_TuanhCD233018 AS [Mã nhân viên],
+                        nv.HoTen_TuanhCD233018 AS [Họ tên],
+                        nv.NgaySinh_TuanhCD233018 AS [Ngày sinh],
+                        nv.GioiTinh_TuanhCD233018 AS [Giới tính],
+                        nv.DiaChi_TuanhCD233018 AS [Địa chỉ],
+                        nv.SoDienThoai_TuanhCD233018 AS [Điện thoại],
+                        nv.Email_TuanhCD233018 AS [Email],
+                        pb.MaPB_ThuanCD233318 AS [Mã PB],
+                        nv.MaCV_KhangCD233181 AS [Mã CV],
+                        nv.Ghichu_TuanhCD233018 AS [Ghi chú]
+                    FROM tblNhanVien_TuanhCD233018 nv
+                    INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+                    INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+                    WHERE pb.MaPB_ThuanCD233318 = @MaPB
+                    AND nv.DeletedAt_TuanhCD233018 = 0
+                    AND cv.DeletedAt_KhangCD233181 = 0
+                    AND pb.DeletedAt_ThuanCD233318 = 0
+                    ";
 
             // 🔹 LỌC CHỨC VỤ
             if (cbBoxChucVu.SelectedValue != null &&
@@ -856,11 +1001,29 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
             DataTable dt = new DataTable();
             da.Fill(dt);
 
+            // ===== THÊM CỘT STT =====
+            dt.Columns.Add("STT", typeof(int));
+            dt.Columns["STT"].SetOrdinal(0);
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                dt.Rows[i]["STT"] = i + 1;
+            }
+
             dtGridViewNhanVien.DataSource = dt;
+
+            // Tùy chỉnh cột STT
+            if (dtGridViewNhanVien.Columns["STT"] != null)
+            {
+                dtGridViewNhanVien.Columns["STT"].HeaderText = "STT";
+                dtGridViewNhanVien.Columns["STT"].Width = 50;
+                dtGridViewNhanVien.Columns["STT"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dtGridViewNhanVien.Columns["STT"].ReadOnly = true;
+            }
 
             cn.disconnect();
         }
-        //
+
         void loadcbbCV()
         {
 
@@ -930,7 +1093,7 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
             isEditingNhanVien = false;
         }
 
-        private void xuatexcel_Click(object sender, EventArgs e)
+        private void btnxuatexcel_Click(object sender, EventArgs e)
         {
 
             if (dtGridViewNhanVien.Rows.Count > 0)
@@ -1079,7 +1242,35 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
 
         private void dtGridViewNhanVien_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            //dtGridViewNhanVien.Rows[e.RowIndex].Cells["colSTT"].Value = e.RowIndex + 1;
+            // Vẽ số thứ tự ở đầu mỗi row
+
+            DataGridView grid = sender as DataGridView;
+            if (grid == null) return;
+
+            string rowNumber = (e.RowIndex + 1).ToString();
+
+            using (StringFormat format = new StringFormat()
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            })
+            {
+                System.Drawing.Rectangle headerBounds =
+                    new System.Drawing.Rectangle(
+                        e.RowBounds.Left,
+                        e.RowBounds.Top,
+                        grid.RowHeadersWidth,
+                        e.RowBounds.Height
+                    );
+
+                e.Graphics.DrawString(
+                    rowNumber,
+                    grid.Font,
+                    SystemBrushes.ControlText,
+                    headerBounds,
+                    format
+                );
+            }
         }
         // HÀM XUẤT PDF - PHIÊN BẢN ĐƠN GIẢN, TRÁNH LỖI SMARTMODE
         // Thay thế hàm xuatpdf_Click hiện tại bằng code này
@@ -1092,157 +1283,126 @@ FROM     tblNhanVien_TuanhCD233018 INNER JOIN
 
         private void xuatpdf_Click(object sender, EventArgs e)
         {
-            if (dtGridViewNhanVien.Rows.Count > 0)
-            {
-                using (SaveFileDialog sfd = new SaveFileDialog()
-                {
-                    Filter = "PDF File|*.pdf",
-                    FileName = "DanhSachNhanVien_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".pdf"
-                })
-                {
-                    if (sfd.ShowDialog() == DialogResult.OK)
-                    {
-                        try
-                        {
-                            // Tạo document PDF - LANDSCAPE (ngang)
-                            iTextSharp.text.Document doc = new iTextSharp.text.Document(PageSize.A4.Rotate(), 20, 20, 20, 20);
-                            PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
-                            doc.Open();
 
-                            // ===== LOAD FONT TIẾNG VIỆT =====
-                            string fontPath = @"C:\Windows\Fonts\arial.ttf";
-                            string fontBoldPath = @"C:\Windows\Fonts\arialbd.ttf";
-                            string fontItalicPath = @"C:\Windows\Fonts\ariali.ttf";
 
-                            BaseFont baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                            BaseFont baseFontBold = BaseFont.CreateFont(fontBoldPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                            BaseFont baseFontItalic = BaseFont.CreateFont(fontItalicPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-
-                            iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 10);
-                            iTextSharp.text.Font fontBold = new iTextSharp.text.Font(baseFontBold, 13);
-                            iTextSharp.text.Font fontBold15 = new iTextSharp.text.Font(baseFontBold, 15);
-                            iTextSharp.text.Font fontBold10 = new iTextSharp.text.Font(baseFontBold, 10);
-                            iTextSharp.text.Font fontBold8 = new iTextSharp.text.Font(baseFontBold, 8);
-                            iTextSharp.text.Font fontItalic = new iTextSharp.text.Font(baseFontItalic, 10);
-                            iTextSharp.text.Font fontSmall = new iTextSharp.text.Font(baseFont, 7.5f);
-
-                            // ===== TÊN CÔNG TY =====
-                            Paragraph companyName = new Paragraph("CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM", fontBold);
-                            companyName.Alignment = Element.ALIGN_CENTER;
-                            doc.Add(companyName);
-
-                            // ===== TIÊU ĐỀ CHÍNH =====
-                            Paragraph title = new Paragraph("DANH SÁCH NHÂN VIÊN", fontBold15);
-                            title.Alignment = Element.ALIGN_CENTER;
-                            title.SpacingBefore = 5;
-                            doc.Add(title);
-
-                            // ===== NGÀY LẬP BÁO CÁO =====
-                            Paragraph dateReport = new Paragraph("Ngày lập báo cáo: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), fontItalic);
-                            dateReport.SpacingAfter = 10;
-                            doc.Add(dateReport);
-
-                            // ===== THÔNG TIN PHÒNG BAN =====
-                            Paragraph department = new Paragraph("Phòng Ban: " + cbBoxMaPB.Text, fontBold10);
-                            doc.Add(department);
-
-                            // ===== THÔNG TIN CHỨC VỤ =====
-                            Paragraph position = new Paragraph("Chức vụ: " + (cbBoxChucVu.Text != "" ? cbBoxChucVu.Text : "Tất cả"), fontBold10);
-                            position.SpacingAfter = 10;
-                            doc.Add(position);
-
-                            // ===== BẢNG DỮ LIỆU =====
-                            int columnCount = dtGridViewNhanVien.Columns.Count;
-                            PdfPTable table = new PdfPTable(columnCount);
-                            table.WidthPercentage = 100;
-
-                            // ===== HEADER BẢNG =====
-                            for (int i = 0; i < columnCount; i++)
-                            {
-                                PdfPCell headerCell = new PdfPCell(new Phrase(dtGridViewNhanVien.Columns[i].HeaderText, fontBold8));
-                                headerCell.BackgroundColor = BaseColor.LIGHT_GRAY;
-                                headerCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                                headerCell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                                headerCell.Padding = 3;
-                                table.AddCell(headerCell);
-                            }
-
-                            // ===== GHI DỮ LIỆU =====
-                            for (int i = 0; i < dtGridViewNhanVien.Rows.Count; i++)
-                            {
-                                for (int j = 0; j < columnCount; j++)
-                                {
-                                    var cellValue = dtGridViewNhanVien.Rows[i].Cells[j].Value;
-                                    string displayValue = "";
-
-                                    if (cellValue is DateTime)
-                                    {
-                                        displayValue = ((DateTime)cellValue).ToString("dd/MM/yyyy");
-                                    }
-                                    else
-                                    {
-                                        displayValue = cellValue?.ToString() ?? "";
-                                    }
-
-                                    PdfPCell dataCell = new PdfPCell(new Phrase(displayValue, fontSmall));
-                                    dataCell.HorizontalAlignment = Element.ALIGN_LEFT;
-                                    dataCell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                                    dataCell.Padding = 2;
-                                    table.AddCell(dataCell);
-                                }
-                            }
-
-                            doc.Add(table);
-
-                            // ===== PHẦN CHỮ KÝ =====
-                            doc.Add(new Paragraph("\n"));
-
-                            // Tạo bảng 2 cột cho chữ ký
-                            PdfPTable signatureTable = new PdfPTable(2);
-                            signatureTable.WidthPercentage = 100;
-
-                            // Cột trái rỗng
-                            PdfPCell leftCell = new PdfPCell(new Phrase(""));
-                            leftCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
-                            signatureTable.AddCell(leftCell);
-
-                            // Cột phải - chữ ký
-                            Paragraph dateSign = new Paragraph("Hà Nội, ngày " + DateTime.Now.Day + " tháng " + DateTime.Now.Month + " năm " + DateTime.Now.Year, fontItalic);
-                            dateSign.Alignment = Element.ALIGN_CENTER;
-
-                            Paragraph signTitle = new Paragraph("Người lập báo cáo", fontBold10);
-                            signTitle.Alignment = Element.ALIGN_CENTER;
-                            signTitle.SpacingBefore = 5;
-
-                            Paragraph signerName = new Paragraph(nguoiDangNhap, fontBold10);
-                            signerName.Alignment = Element.ALIGN_CENTER;
-                            signerName.SpacingBefore = 30;
-
-                            PdfPCell rightCell = new PdfPCell();
-                            rightCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
-                            rightCell.AddElement(dateSign);
-                            rightCell.AddElement(signTitle);
-                            rightCell.AddElement(signerName);
-                            signatureTable.AddCell(rightCell);
-
-                            doc.Add(signatureTable);
-
-                            doc.Close();
-
-                            MessageBox.Show("Xuất PDF thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            System.Diagnostics.Process.Start(sfd.FileName);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Lỗi xuất PDF:\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                }
-            }
-            else
+            if (dtGridViewNhanVien.Rows.Count == 0)
             {
                 MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog sfd = new SaveFileDialog()
+            {
+                Filter = "PDF File|*.pdf",
+                FileName = $"DanhSachNhanVien_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
+            })
+            {
+                if (sfd.ShowDialog() != DialogResult.OK) return;
+
+                try
+                {
+                    iTextSharp.text.Document doc = new iTextSharp.text.Document(PageSize.A4.Rotate(), 20, 20, 20, 20);
+                    PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
+                    doc.Open();
+
+                    // ===== LOAD FONT =====
+                    BaseFont baseFont = BaseFont.CreateFont(@"C:\Windows\Fonts\arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                    BaseFont baseFontBold = BaseFont.CreateFont(@"C:\Windows\Fonts\arialbd.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                    BaseFont baseFontItalic = BaseFont.CreateFont(@"C:\Windows\Fonts\ariali.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+                    iTextSharp.text.Font fontBold = new iTextSharp.text.Font(baseFontBold, 13);
+                    iTextSharp.text.Font fontBold15 = new iTextSharp.text.Font(baseFontBold, 15);
+                    iTextSharp.text.Font fontBold10 = new iTextSharp.text.Font(baseFontBold, 10);
+                    iTextSharp.text.Font fontBold8 = new iTextSharp.text.Font(baseFontBold, 8);
+                    iTextSharp.text.Font fontItalic = new iTextSharp.text.Font(baseFontItalic, 10);
+                    iTextSharp.text.Font fontSmall = new iTextSharp.text.Font(baseFont, 7.5f);
+
+                    // ===== HEADER =====
+                    doc.Add(new Paragraph("CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM", fontBold)
+                    { Alignment = Element.ALIGN_CENTER });
+
+                    doc.Add(new Paragraph("DANH SÁCH NHÂN VIÊN", fontBold15)
+                    { Alignment = Element.ALIGN_CENTER, SpacingBefore = 5 });
+
+                    doc.Add(new Paragraph($"Ngày lập báo cáo: {DateTime.Now:dd/MM/yyyy HH:mm:ss}", fontItalic)
+                    { SpacingAfter = 10 });
+
+                    // ===== THÔNG TIN LỌC =====
+                    doc.Add(new Paragraph($"Phòng Ban: {cbBoxMaPB.Text}", fontBold10));
+                    doc.Add(new Paragraph($"Chức vụ: {(string.IsNullOrEmpty(cbBoxChucVu.Text) ? "Tất cả" : cbBoxChucVu.Text)}", fontBold10)
+                    { SpacingAfter = 10 });
+
+                    // ===== BẢNG DỮ LIỆU =====
+                    int columnCount = dtGridViewNhanVien.Columns.Count;
+                    PdfPTable table = new PdfPTable(columnCount) { WidthPercentage = 100 };
+
+                    // Độ rộng cột
+                    float[] columnWidths = new float[columnCount];
+                    for (int i = 0; i < columnCount; i++)
+                        columnWidths[i] = (i == 0 && dtGridViewNhanVien.Columns[i].Name == "STT") ? 0.5f : 2f;
+                    table.SetWidths(columnWidths);
+
+                    // Header bảng
+                    for (int i = 0; i < columnCount; i++)
+                    {
+                        PdfPCell cell = new PdfPCell(new Phrase(dtGridViewNhanVien.Columns[i].HeaderText, fontBold8))
+                        {
+                            BackgroundColor = BaseColor.LIGHT_GRAY,
+                            HorizontalAlignment = Element.ALIGN_CENTER,
+                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            Padding = 3
+                        };
+                        table.AddCell(cell);
+                    }
+
+                    // Dữ liệu
+                    for (int i = 0; i < dtGridViewNhanVien.Rows.Count; i++)
+                    {
+                        for (int j = 0; j < columnCount; j++)
+                        {
+                            var cellValue = dtGridViewNhanVien.Rows[i].Cells[j].Value;
+                            string displayValue = cellValue is DateTime dt ? dt.ToString("dd/MM/yyyy") : cellValue?.ToString() ?? "";
+
+                            PdfPCell cell = new PdfPCell(new Phrase(displayValue, fontSmall))
+                            {
+                                HorizontalAlignment = (j == 0 && dtGridViewNhanVien.Columns[j].Name == "STT")
+                                    ? Element.ALIGN_CENTER : Element.ALIGN_LEFT,
+                                VerticalAlignment = Element.ALIGN_MIDDLE,
+                                Padding = 2
+                            };
+                            table.AddCell(cell);
+                        }
+                    }
+
+                    doc.Add(table);
+
+                    // ===== CHỮ KÝ =====
+                    doc.Add(new Paragraph("\n"));
+                    PdfPTable signatureTable = new PdfPTable(2) { WidthPercentage = 100 };
+
+                    signatureTable.AddCell(new PdfPCell(new Phrase("")) { Border = iTextSharp.text.Rectangle.NO_BORDER });
+
+                    PdfPCell rightCell = new PdfPCell() { Border = iTextSharp.text.Rectangle.NO_BORDER };
+                    rightCell.AddElement(new Paragraph(
+                        $"Hà Nội, ngày {DateTime.Now.Day} tháng {DateTime.Now.Month} năm {DateTime.Now.Year}",
+                        fontItalic)
+                    { Alignment = Element.ALIGN_CENTER });
+                    rightCell.AddElement(new Paragraph("Người lập báo cáo", fontBold10)
+                    { Alignment = Element.ALIGN_CENTER, SpacingBefore = 5 });
+                    rightCell.AddElement(new Paragraph(nguoiDangNhap, fontBold10)
+                    { Alignment = Element.ALIGN_CENTER, SpacingBefore = 30 });
+                    signatureTable.AddCell(rightCell);
+
+                    doc.Add(signatureTable);
+                    doc.Close();
+
+                    MessageBox.Show("Xuất PDF thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    System.Diagnostics.Process.Start(sfd.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi xuất PDF: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }
