@@ -97,6 +97,8 @@ SoNgayCongChuan AS (
 )
 
 SELECT 
+    -- ⭐ THÊM STT
+    ROW_NUMBER() OVER (ORDER BY nv.MaNV_TuanhCD233018) AS N'STT',
     nv.MaNV_TuanhCD233018      AS N'Mã NV',
     nv.HoTen_TuanhCD233018     AS N'Họ tên',
     @Thang                     AS N'Tháng',
@@ -167,7 +169,6 @@ ORDER BY nv.MaNV_TuanhCD233018";
                 cn.disconnect();
             }
         }
-
         // =======================================================
         // 2. Nút: Nhân viên đi trễ hoặc về sớm
         // =======================================================
@@ -184,7 +185,6 @@ ORDER BY nv.MaNV_TuanhCD233018";
 
             HienThiChamCong(thang, nam);
         }
-
         private void HienThiChamCong(int thang, int nam)
         {
             try
@@ -226,7 +226,6 @@ WHERE NV.DeletedAt_TuanhCD233018 = 0
                 string keyword = txtTimkiem.Text.Trim();
                 if (!string.IsNullOrEmpty(keyword))
                 {
-                    // Nếu không có khoảng trắng → coi là Mã NV
                     if (!keyword.Contains(" "))
                     {
                         sql += " AND NV.MaNV_TuanhCD233018 LIKE @MaNV ";
@@ -262,6 +261,8 @@ WHERE NV.DeletedAt_TuanhCD233018 = 0
 
                 // ================== TẠO BẢNG HIỂN THỊ ==================
                 DataTable table = new DataTable();
+                // ⭐ THÊM CỘT STT
+                table.Columns.Add("STT");
                 table.Columns.Add("Mã NV");
                 table.Columns.Add("Họ tên");
 
@@ -272,9 +273,13 @@ WHERE NV.DeletedAt_TuanhCD233018 = 0
                 DataTable dsNV = dtNguon.DefaultView.ToTable(
                     true, "Id_TuanhCD233018", "MaNV_TuanhCD233018", "HoTen_TuanhCD233018");
 
+                // ⭐ BIẾN ĐẾM STT
+                int stt = 1;
                 foreach (DataRow nv in dsNV.Rows)
                 {
                     DataRow row = table.NewRow();
+                    // ⭐ GÁN STT
+                    row["STT"] = stt++;
                     row["Mã NV"] = nv["MaNV_TuanhCD233018"];
                     row["Họ tên"] = nv["HoTen_TuanhCD233018"];
 
@@ -325,8 +330,8 @@ WHERE NV.DeletedAt_TuanhCD233018 = 0
                             break;
                     }
 
-                    // +2 vì cột 0 = Mã NV, cột 1 = Họ tên
-                    DataGridViewColumn col = dtGridViewBCChamCong.Columns[i + 1];
+                    // ⭐ +3 vì cột 0 = STT, cột 1 = Mã NV, cột 2 = Họ tên
+                    DataGridViewColumn col = dtGridViewBCChamCong.Columns[i + 2];
 
                     col.HeaderText = i.ToString("00") + "\n" + thu;
                     col.HeaderCell.Style.BackColor = bg;
@@ -334,7 +339,6 @@ WHERE NV.DeletedAt_TuanhCD233018 = 0
                     col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                     col.Width = 40;
                 }
-
 
                 // ================== GIAO DIỆN ==================
                 dtGridViewBCChamCong.ReadOnly = true;
@@ -349,14 +353,11 @@ WHERE NV.DeletedAt_TuanhCD233018 = 0
                 cn.disconnect();
             }
         }
-
-
-
         private void dtGridViewBCChamCong_CellFormatting(
     object sender, DataGridViewCellFormattingEventArgs e)
         {
-            // Bỏ qua 2 cột đầu (Mã NV, Họ tên)
-            if (e.RowIndex < 0 || e.ColumnIndex < 2) return;
+            // ⭐ Bỏ qua 3 cột đầu (STT, Mã NV, Họ tên)
+            if (e.RowIndex < 0 || e.ColumnIndex < 3) return;
 
             if (e.Value == null) return;
 
@@ -396,7 +397,6 @@ WHERE NV.DeletedAt_TuanhCD233018 = 0
             }
         }
 
-
         // =======================================================
         // 3. Nút: Tìm kiếm (Thông minh theo ngữ cảnh)
         // =======================================================
@@ -413,6 +413,8 @@ WHERE NV.DeletedAt_TuanhCD233018 = 0
 
                 string sql = @"
 SELECT 
+    -- ⭐ THÊM STT
+    ROW_NUMBER() OVER (ORDER BY nv.HoTen_TuanhCD233018) AS [STT],
     nv.MaNV_TuanhCD233018 AS [Mã NV],
     nv.HoTen_TuanhCD233018 AS [Họ tên],
     pb.TenPB_ThuanCD233318 AS [Phòng ban],
@@ -486,7 +488,6 @@ AND (
                 cn.disconnect();
             }
         }
-
         // =======================================================
         // 4. Nút: Xuất Excel (Sử dụng ClosedXML)
         // =======================================================
@@ -566,12 +567,20 @@ AND (
 
                         // ===== TIÊU ĐỀ CỘT =====
                         int headerRow = startRow + 1;
+                        // ===== CĂN ĐỘ RỘNG CỘT (QUAN TRỌNG) =====
                         for (int i = 0; i < visibleCols.Count; i++)
                         {
-                            ws.Cell(headerRow, i + 1).Value = visibleCols[i].HeaderText;
-                            ws.Cell(headerRow, i + 1).Style.Font.Bold = true;
-                            ws.Cell(headerRow, i + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                            ws.Cell(headerRow, i + 1).Style.Fill.BackgroundColor = XLColor.LightGray;
+                            var col = visibleCols[i];
+
+                            // 🔹 GHI CHÚ: CHỈNH ĐỘ RỘNG CỘT STT CHO EXCEL
+                            if (col.Name.Contains("STT") || col.HeaderText.Contains("STT"))
+                                ws.Column(i + 1).Width = 8;       // 👈 CỘT STT
+                            else if (col.Name.Contains("HoTen") || col.HeaderText.Contains("Họ"))
+                                ws.Column(i + 1).Width = 30;      // 👈 HỌ TÊN
+                            else if (col.Name.Contains("MaNV") || col.HeaderText.Contains("Mã"))
+                                ws.Column(i + 1).Width = 18;      // 👈 MÃ NV
+                            else
+                                ws.Column(i + 1).Width = 12;      // 👈 CỘT NGÀY / GIỜ
                         }
 
                         // ===== GHI DỮ LIỆU =====
@@ -846,9 +855,15 @@ AND (
                 foreach (DataGridViewColumn col in dtGridViewBCChamCong.Columns)
                 {
                     if (!col.Visible) continue;
-                    if (col.Name.Contains("MaNV") || col.HeaderText.Contains("Mã"))
+
+                    // 🔹 GHI CHÚ: CHỈNH ĐỘ RỘNG CỘT STT CHO PDF
+                    if (col.Name.Contains("STT") || col.HeaderText.Contains("STT"))
                     {
-                        widths.Add(3f); // 👈 MÃ NV – TỰ CĂN RỘNG
+                        widths.Add(1.5f); // 👈 CỘT STT – HẸP
+                    }
+                    else if (col.Name.Contains("MaNV") || col.HeaderText.Contains("Mã"))
+                    {
+                        widths.Add(3f); // 👈 MÃ NV
                     }
                     else if (col.Name.Contains("HoTen") || col.HeaderText.Contains("Họ"))
                     {
@@ -858,7 +873,6 @@ AND (
                     {
                         widths.Add(2.5f); // các cột ngày / giờ
                     }
-
                 }
 
                 table.SetWidths(widths.ToArray());
