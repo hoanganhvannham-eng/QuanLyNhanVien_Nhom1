@@ -109,7 +109,6 @@ namespace QuanLyNhanVien3
             try
             {
                 cn.connect();
-
                 string sql = @"
             SELECT 
                 ROW_NUMBER() OVER (ORDER BY cc.Ngay_TuanhCD233018 DESC, nv.HoTen_TuanhCD233018) AS [STT],
@@ -134,6 +133,11 @@ namespace QuanLyNhanVien3
 
                 SqlCommand cmd = new SqlCommand(sql, cn.conn);
 
+                // ===== THÊM LỌC THEO NGÀY =====
+                sql += " AND CAST(cc.Ngay_TuanhCD233018 AS DATE) = @Ngay";
+                cmd.Parameters.AddWithValue("@Ngay", dateTimeNgayChamCong.Value.Date);
+                cmd.CommandText = sql;
+
                 // Lọc theo phòng ban
                 if (cbBoxMaPB.SelectedValue != null && !string.IsNullOrEmpty(cbBoxMaPB.SelectedValue.ToString()))
                 {
@@ -156,7 +160,6 @@ namespace QuanLyNhanVien3
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
-
                 dtGridViewChamCong.DataSource = dt;
 
                 // Ẩn cột ID
@@ -291,7 +294,8 @@ namespace QuanLyNhanVien3
         // ===== SỰ KIỆN THAY ĐỔI NGÀY =====
         private void dateTimeNgayChamCong_ValueChanged(object sender, EventArgs e)
         {
-            LoadChamCongTheoNgay(dateTimeNgayChamCong.Value);
+            //LoadChamCongTheoNgay(dateTimeNgayChamCong.Value);
+            LoadChamCongTheoDieuKien();
         }
 
         // ===== SỰ KIỆN THAY ĐỔI PHÒNG BAN =====
