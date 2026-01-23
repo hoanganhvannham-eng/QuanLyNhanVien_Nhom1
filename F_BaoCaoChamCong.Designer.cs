@@ -16,6 +16,10 @@
         private void InitializeComponent()
         {
             this.pnlHeader = new System.Windows.Forms.Panel();
+            this.cbBoxChucVu = new System.Windows.Forms.ComboBox();
+            this.cbBoxMaPB = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblSubTitle = new System.Windows.Forms.Label();
             this.pnlControl = new System.Windows.Forms.Panel();
@@ -32,10 +36,7 @@
             this.pnlResult = new System.Windows.Forms.Panel();
             this.dtGridViewBCChamCong = new System.Windows.Forms.DataGridView();
             this.lblResult = new System.Windows.Forms.Label();
-            this.cbBoxChucVu = new System.Windows.Forms.ComboBox();
-            this.cbBoxMaPB = new System.Windows.Forms.ComboBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
+            this.btnGioravao = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
             this.pnlControl.SuspendLayout();
             this.grpTime.SuspendLayout();
@@ -57,8 +58,52 @@
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(1297, 80);
+            this.pnlHeader.Size = new System.Drawing.Size(1572, 80);
             this.pnlHeader.TabIndex = 2;
+            // 
+            // cbBoxChucVu
+            // 
+            this.cbBoxChucVu.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.cbBoxChucVu.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBoxChucVu.FormattingEnabled = true;
+            this.cbBoxChucVu.Location = new System.Drawing.Point(701, 46);
+            this.cbBoxChucVu.Name = "cbBoxChucVu";
+            this.cbBoxChucVu.Size = new System.Drawing.Size(307, 27);
+            this.cbBoxChucVu.TabIndex = 197;
+            this.cbBoxChucVu.SelectedIndexChanged += new System.EventHandler(this.cbBoxChucVu_SelectedIndexChanged);
+            // 
+            // cbBoxMaPB
+            // 
+            this.cbBoxMaPB.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.cbBoxMaPB.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBoxMaPB.FormattingEnabled = true;
+            this.cbBoxMaPB.Location = new System.Drawing.Point(701, 8);
+            this.cbBoxMaPB.Name = "cbBoxMaPB";
+            this.cbBoxMaPB.Size = new System.Drawing.Size(307, 27);
+            this.cbBoxMaPB.TabIndex = 196;
+            this.cbBoxMaPB.SelectedIndexChanged += new System.EventHandler(this.cbBoxMaPB_SelectedIndexChanged);
+            // 
+            // label11
+            // 
+            this.label11.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(565, 13);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(108, 19);
+            this.label11.TabIndex = 194;
+            this.label11.Text = "Mã Phòng Ban";
+            // 
+            // label10
+            // 
+            this.label10.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(565, 52);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(68, 19);
+            this.label10.TabIndex = 195;
+            this.label10.Text = "Chức Vụ";
             // 
             // lblTitle
             // 
@@ -90,7 +135,7 @@
             this.pnlControl.Location = new System.Drawing.Point(0, 80);
             this.pnlControl.Name = "pnlControl";
             this.pnlControl.Padding = new System.Windows.Forms.Padding(15);
-            this.pnlControl.Size = new System.Drawing.Size(1297, 140);
+            this.pnlControl.Size = new System.Drawing.Size(1572, 140);
             this.pnlControl.TabIndex = 1;
             // 
             // grpTime
@@ -115,12 +160,13 @@
             // 
             // grpReport
             // 
+            this.grpReport.Controls.Add(this.btnGioravao);
             this.grpReport.Controls.Add(this.btnSoNgayLamViec);
             this.grpReport.Controls.Add(this.btnDiTreVeSom);
             this.grpReport.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.grpReport.Location = new System.Drawing.Point(260, 20);
             this.grpReport.Name = "grpReport";
-            this.grpReport.Size = new System.Drawing.Size(360, 80);
+            this.grpReport.Size = new System.Drawing.Size(581, 80);
             this.grpReport.TabIndex = 1;
             this.grpReport.TabStop = false;
             this.grpReport.Text = "Loại báo cáo";
@@ -136,7 +182,7 @@
             // 
             // btnDiTreVeSom
             // 
-            this.btnDiTreVeSom.Location = new System.Drawing.Point(185, 30);
+            this.btnDiTreVeSom.Location = new System.Drawing.Point(194, 28);
             this.btnDiTreVeSom.Name = "btnDiTreVeSom";
             this.btnDiTreVeSom.Size = new System.Drawing.Size(160, 35);
             this.btnDiTreVeSom.TabIndex = 1;
@@ -150,7 +196,7 @@
             this.grpSearch.Controls.Add(this.btnTimKiem);
             this.grpSearch.Controls.Add(this.btnXuatexcel);
             this.grpSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.grpSearch.Location = new System.Drawing.Point(640, 20);
+            this.grpSearch.Location = new System.Drawing.Point(925, 18);
             this.grpSearch.Name = "grpSearch";
             this.grpSearch.Size = new System.Drawing.Size(582, 102);
             this.grpSearch.TabIndex = 2;
@@ -201,7 +247,7 @@
             this.pnlResult.Location = new System.Drawing.Point(0, 220);
             this.pnlResult.Name = "pnlResult";
             this.pnlResult.Padding = new System.Windows.Forms.Padding(15);
-            this.pnlResult.Size = new System.Drawing.Size(1297, 450);
+            this.pnlResult.Size = new System.Drawing.Size(1572, 450);
             this.pnlResult.TabIndex = 0;
             // 
             // dtGridViewBCChamCong
@@ -213,7 +259,7 @@
             this.dtGridViewBCChamCong.Name = "dtGridViewBCChamCong";
             this.dtGridViewBCChamCong.ReadOnly = true;
             this.dtGridViewBCChamCong.RowHeadersWidth = 51;
-            this.dtGridViewBCChamCong.Size = new System.Drawing.Size(1267, 390);
+            this.dtGridViewBCChamCong.Size = new System.Drawing.Size(1542, 390);
             this.dtGridViewBCChamCong.TabIndex = 0;
             // 
             // lblResult
@@ -222,57 +268,22 @@
             this.lblResult.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.lblResult.Location = new System.Drawing.Point(15, 15);
             this.lblResult.Name = "lblResult";
-            this.lblResult.Size = new System.Drawing.Size(1267, 30);
+            this.lblResult.Size = new System.Drawing.Size(1542, 30);
             this.lblResult.TabIndex = 1;
             this.lblResult.Text = "KẾT QUẢ BÁO CÁO";
             // 
-            // cbBoxChucVu
+            // btnGioravao
             // 
-            this.cbBoxChucVu.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.cbBoxChucVu.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbBoxChucVu.FormattingEnabled = true;
-            this.cbBoxChucVu.Location = new System.Drawing.Point(563, 46);
-            this.cbBoxChucVu.Name = "cbBoxChucVu";
-            this.cbBoxChucVu.Size = new System.Drawing.Size(307, 27);
-            this.cbBoxChucVu.TabIndex = 197;
-            this.cbBoxChucVu.SelectedIndexChanged += new System.EventHandler(this.cbBoxChucVu_SelectedIndexChanged);
-            // 
-            // cbBoxMaPB
-            // 
-            this.cbBoxMaPB.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.cbBoxMaPB.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbBoxMaPB.FormattingEnabled = true;
-            this.cbBoxMaPB.Location = new System.Drawing.Point(563, 8);
-            this.cbBoxMaPB.Name = "cbBoxMaPB";
-            this.cbBoxMaPB.Size = new System.Drawing.Size(307, 27);
-            this.cbBoxMaPB.TabIndex = 196;
-            this.cbBoxMaPB.SelectedIndexChanged += new System.EventHandler(this.cbBoxMaPB_SelectedIndexChanged);
-            // 
-            // label11
-            // 
-            this.label11.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(427, 13);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(108, 19);
-            this.label11.TabIndex = 194;
-            this.label11.Text = "Mã Phòng Ban";
-            // 
-            // label10
-            // 
-            this.label10.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(427, 52);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(68, 19);
-            this.label10.TabIndex = 195;
-            this.label10.Text = "Chức Vụ";
+            this.btnGioravao.Location = new System.Drawing.Point(371, 30);
+            this.btnGioravao.Name = "btnGioravao";
+            this.btnGioravao.Size = new System.Drawing.Size(160, 35);
+            this.btnGioravao.TabIndex = 2;
+            this.btnGioravao.Text = "Thời gian ra vào";
+            this.btnGioravao.Click += new System.EventHandler(this.btnGioravao_Click);
             // 
             // F_BaoCaoChamCong
             // 
-            this.ClientSize = new System.Drawing.Size(1297, 670);
+            this.ClientSize = new System.Drawing.Size(1572, 670);
             this.Controls.Add(this.pnlResult);
             this.Controls.Add(this.pnlControl);
             this.Controls.Add(this.pnlHeader);
@@ -318,5 +329,6 @@
         private System.Windows.Forms.ComboBox cbBoxMaPB;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btnGioravao;
     }
 }

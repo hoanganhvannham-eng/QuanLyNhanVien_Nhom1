@@ -223,21 +223,29 @@ WHERE NV.DeletedAt_TuanhCD233018 = 0
                 cmd.Parameters.AddWithValue("@Nam", nam);
 
                 // ================= TEXTBOX TÌM KIẾM =================
+                //tìm kiếm thông minh theo khoảng trắng phân biẹt rõ mã và tên 
+                //string keyword = txtTimkiem.Text.Trim();
+                //if (!string.IsNullOrEmpty(keyword))
+                //{
+                //    if (!keyword.Contains(" "))
+                //    {
+                //        sql += " AND NV.MaNV_TuanhCD233018 LIKE @MaNV ";
+                //        cmd.Parameters.AddWithValue("@MaNV", "%" + keyword + "%");
+                //    }
+                //    else
+                //    {
+                //        sql += " AND NV.HoTen_TuanhCD233018 LIKE @TenNV ";
+                //        cmd.Parameters.AddWithValue("@TenNV", "%" + keyword + "%");
+                //    }
+                //}
+
+                // ================= TEXTBOX TÌM KIẾM (TÌM CẢ MÃ VÀ TÊN) =================
                 string keyword = txtTimkiem.Text.Trim();
                 if (!string.IsNullOrEmpty(keyword))
                 {
-                    if (!keyword.Contains(" "))
-                    {
-                        sql += " AND NV.MaNV_TuanhCD233018 LIKE @MaNV ";
-                        cmd.Parameters.AddWithValue("@MaNV", "%" + keyword + "%");
-                    }
-                    else
-                    {
-                        sql += " AND NV.HoTen_TuanhCD233018 LIKE @TenNV ";
-                        cmd.Parameters.AddWithValue("@TenNV", "%" + keyword + "%");
-                    }
+                    sql += " AND (NV.MaNV_TuanhCD233018 LIKE @Keyword OR NV.HoTen_TuanhCD233018 LIKE @Keyword) ";
+                    cmd.Parameters.AddWithValue("@Keyword", "%" + keyword + "%");
                 }
-
                 // ================= COMBOBOX PHÒNG BAN =================
                 if (cbBoxMaPB.SelectedValue != null &&
                     cbBoxMaPB.SelectedValue.ToString() != "")
@@ -408,20 +416,99 @@ WHERE NV.DeletedAt_TuanhCD233018 = 0
 
                 int thang = dtpThoiGian.Value.Month;
                 int nam = dtpThoiGian.Value.Year;
-
                 string keyword = txtTimkiem.Text.Trim();
 
-                string sql = @"
+                // ===== TÌM KIẾM THEO CHẾ ĐỘ =====
+                if (currentMode == 1) // SỐ NGÀY LÀM VIỆC
+                {
+                    string sql = @"
+SET DATEFIRST 7;
+
+WITH AllDays AS (
+    SELECT 
+        DATEADD(DAY, v.number, DATEFROMPARTS(@Nam, @Thang, 1)) AS Ngay
+    FROM master.dbo.spt_values v
+    WHERE v.type = 'P'
+      AND v.number < DAY(EOMONTH(DATEFROMPARTS(@Nam, @Thang, 1)))
+),
+SoNgayCongChuan AS (
+    SELECT COUNT(*) AS SoNgayCongChuan
+    FROM AllDays
+    WHERE DATEPART(WEEKDAY, Ngay) <> 1
+)
+
 SELECT 
-    -- ⭐ THÊM STT
+    ROW_NUMBER() OVER (ORDER BY nv.MaNV_TuanhCD233018) AS N'STT',
+    nv.MaNV_TuanhCD233018      AS N'Mã NV',
+    nv.HoTen_TuanhCD233018     AS N'Họ tên',
+    @Thang                     AS N'Tháng',
+    @Nam                       AS N'Năm',
+    COUNT(DISTINCT cc.Ngay_TuanhCD233018) AS N'Ngày công',
+    s.SoNgayCongChuan           AS N'Công chuẩn'
+
+FROM tblNhanVien_TuanhCD233018 nv
+JOIN tblChucVu_KhangCD233181 cv 
+    ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+JOIN tblPhongBan_ThuanCD233318 pb 
+    ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+LEFT JOIN tblChamCong_TuanhCD233018 cc 
+    ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+   AND cc.DeletedAt_TuanhCD233018 = 0
+   AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+   AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+CROSS JOIN SoNgayCongChuan s
+WHERE nv.DeletedAt_TuanhCD233018 = 0";
+
+                    SqlCommand cmd = new SqlCommand(sql, cn.conn);
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+                    cmd.Parameters.AddWithValue("@Nam", nam);
+
+                    // TÌM KIẾM
+                    if (!string.IsNullOrWhiteSpace(keyword))
+                    {
+                        sql += @" AND (nv.MaNV_TuanhCD233018 LIKE @Keyword 
+                          OR nv.HoTen_TuanhCD233018 LIKE @Keyword)";
+                        cmd.Parameters.AddWithValue("@Keyword", "%" + keyword + "%");
+                    }
+
+                    if (!string.IsNullOrEmpty(cbBoxMaPB.SelectedValue?.ToString()))
+                    {
+                        sql += " AND pb.MaPB_ThuanCD233318 = @MaPB";
+                        cmd.Parameters.AddWithValue("@MaPB", cbBoxMaPB.SelectedValue.ToString());
+                    }
+
+                    if (!string.IsNullOrEmpty(cbBoxChucVu.SelectedValue?.ToString()))
+                    {
+                        sql += " AND cv.MaCV_KhangCD233181 = @MaCV";
+                        cmd.Parameters.AddWithValue("@MaCV", cbBoxChucVu.SelectedValue.ToString());
+                    }
+
+                    sql += @"
+GROUP BY nv.MaNV_TuanhCD233018, nv.HoTen_TuanhCD233018, s.SoNgayCongChuan
+ORDER BY nv.MaNV_TuanhCD233018";
+
+                    cmd.CommandText = sql;
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    dtGridViewBCChamCong.DataSource = dt;
+                }
+                else if (currentMode == 2) // ĐI TRỄ VỀ SỚM
+                {
+                    HienThiChamCong(thang, nam);
+                }
+                else if (currentMode == 3) // GIỜ RA VÀO
+                {
+                    string sql = @"
+SELECT 
     ROW_NUMBER() OVER (ORDER BY nv.HoTen_TuanhCD233018) AS [STT],
     nv.MaNV_TuanhCD233018 AS [Mã NV],
     nv.HoTen_TuanhCD233018 AS [Họ tên],
     pb.TenPB_ThuanCD233318 AS [Phòng ban],
     cv.TenCV_KhangCD233181 AS [Chức vụ],
     cc.Ngay_TuanhCD233018 AS [Ngày],
-    cc.GioVao_TuanhCD233018 AS [Giờ vào],
-    cc.GioVe_TuanhCD233018 AS [Giờ về]
+    CONVERT(VARCHAR(8), cc.GioVao_TuanhCD233018, 108) AS [Giờ vào],
+    CONVERT(VARCHAR(8), cc.GioVe_TuanhCD233018, 108) AS [Giờ về]
 FROM tblChamCong_TuanhCD233018 cc
 JOIN tblNhanVien_TuanhCD233018 nv 
     ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
@@ -432,48 +519,42 @@ JOIN tblPhongBan_ThuanCD233318 pb
 WHERE cc.DeletedAt_TuanhCD233018 = 0
   AND nv.DeletedAt_TuanhCD233018 = 0
   AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-";
+  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam";
 
-                SqlCommand cmd = new SqlCommand(sql, cn.conn);
-                cmd.Parameters.AddWithValue("@Thang", thang);
-                cmd.Parameters.AddWithValue("@Nam", nam);
+                    SqlCommand cmd = new SqlCommand(sql, cn.conn);
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+                    cmd.Parameters.AddWithValue("@Nam", nam);
 
-                // ===== TEXTBOX: MÃ NV / TÊN NV =====
-                if (!string.IsNullOrWhiteSpace(keyword))
-                {
-                    sql += @"
-AND (
-    nv.MaNV_TuanhCD233018 LIKE @Keyword
-    OR nv.HoTen_TuanhCD233018 LIKE @Keyword
-)";
-                    cmd.Parameters.AddWithValue("@Keyword", "%" + keyword + "%");
+                    // TÌM KIẾM
+                    if (!string.IsNullOrWhiteSpace(keyword))
+                    {
+                        sql += @" AND (nv.MaNV_TuanhCD233018 LIKE @Keyword 
+                          OR nv.HoTen_TuanhCD233018 LIKE @Keyword)";
+                        cmd.Parameters.AddWithValue("@Keyword", "%" + keyword + "%");
+                    }
+
+                    if (!string.IsNullOrEmpty(cbBoxMaPB.SelectedValue?.ToString()))
+                    {
+                        sql += " AND pb.MaPB_ThuanCD233318 = @MaPB";
+                        cmd.Parameters.AddWithValue("@MaPB", cbBoxMaPB.SelectedValue.ToString());
+                    }
+
+                    if (!string.IsNullOrEmpty(cbBoxChucVu.SelectedValue?.ToString()))
+                    {
+                        sql += " AND cv.MaCV_KhangCD233181 = @MaCV";
+                        cmd.Parameters.AddWithValue("@MaCV", cbBoxChucVu.SelectedValue.ToString());
+                    }
+
+                    sql += " ORDER BY nv.HoTen_TuanhCD233018, cc.Ngay_TuanhCD233018";
+                    cmd.CommandText = sql;
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    dtGridViewBCChamCong.DataSource = dt;
                 }
 
-                // ===== PHÒNG BAN =====
-                if (!string.IsNullOrEmpty(cbBoxMaPB.SelectedValue?.ToString()))
-                {
-                    sql += " AND pb.MaPB_ThuanCD233318 = @MaPB";
-                    cmd.Parameters.AddWithValue("@MaPB", cbBoxMaPB.SelectedValue.ToString());
-                }
-
-                // ===== CHỨC VỤ =====
-                if (!string.IsNullOrEmpty(cbBoxChucVu.SelectedValue?.ToString()))
-                {
-                    sql += " AND cv.MaCV_KhangCD233181 = @MaCV";
-                    cmd.Parameters.AddWithValue("@MaCV", cbBoxChucVu.SelectedValue.ToString());
-                }
-
-                sql += " ORDER BY nv.HoTen_TuanhCD233018";
-                cmd.CommandText = sql;
-
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                dtGridViewBCChamCong.DataSource = dt;
-
-                if (dt.Rows.Count == 0)
+                if (dtGridViewBCChamCong.Rows.Count == 0)
                 {
                     MessageBox.Show("Không tìm thấy dữ liệu phù hợp!",
                         "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -779,15 +860,17 @@ AND (
             // Kiểm tra chế độ hiện tại và load lại tương ứng
             if (currentMode == 1)
             {
-                // Đang ở chế độ Số ngày làm việc
                 LoadSoNgayLamViec();
             }
             else if (currentMode == 2)
             {
-                // Đang ở chế độ Đi trễ về sớm
                 HienThiChamCong(thang, nam);
             }
+            else if (currentMode == 3) // ⭐ THÊM
+            {
+                LoadGioRaVao();
             }
+        }
         private void xuatpdf_Click(object sender, EventArgs e)
             {
                 if (dtGridViewBCChamCong.Rows.Count == 0)
@@ -980,25 +1063,24 @@ AND (
 
         private void cbBoxMaPB_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             int thang = dtpThoiGian.Value.Month;
             int nam = dtpThoiGian.Value.Year;
 
             // Kiểm tra chế độ hiện tại và load lại tương ứng
             if (currentMode == 1)
             {
-                // Đang ở chế độ Số ngày làm việc
                 LoadSoNgayLamViec();
             }
             else if (currentMode == 2)
             {
-                // Đang ở chế độ Đi trễ về sớm
                 HienThiChamCong(thang, nam);
+            }
+            else if (currentMode == 3) // ⭐ THÊM
+            {
+                LoadGioRaVao();
             }
 
             string maPB = cbBoxMaPB.SelectedValue.ToString();
-
-            // Load chức vụ theo phòng ban
             LoadChucVuComboBox(maPB);
         }
 
@@ -1010,19 +1092,109 @@ AND (
             // Kiểm tra chế độ hiện tại và load lại tương ứng
             if (currentMode == 1)
             {
-                // Đang ở chế độ Số ngày làm việc
                 LoadSoNgayLamViec();
             }
             else if (currentMode == 2)
             {
-                // Đang ở chế độ Đi trễ về sớm
                 HienThiChamCong(thang, nam);
+            }
+            else if (currentMode == 3) // ⭐ THÊM
+            {
+                LoadGioRaVao();
             }
         }
 
         private void txtTimkiem_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnGioravao_Click(object sender, EventArgs e)
+        {
+            currentMode = 3; // Đặt chế độ là Giờ ra vào
+            LoadGioRaVao();
+        }
+        private void LoadGioRaVao()
+        {
+            try
+            {
+                // GỠ EVENT CŨ (nếu có)
+                dtGridViewBCChamCong.CellFormatting -= dtGridViewBCChamCong_CellFormatting;
+
+                int thang = dtpThoiGian.Value.Month;
+                int nam = dtpThoiGian.Value.Year;
+
+                cn.connect();
+
+                string sql = @"  SELECT 
+                                ROW_NUMBER() OVER (ORDER BY nv.HoTen_TuanhCD233018) AS [STT],
+                                nv.MaNV_TuanhCD233018 AS [Mã NV],
+                                nv.HoTen_TuanhCD233018 AS [Họ tên],
+                                pb.TenPB_ThuanCD233318 AS [Phòng ban],
+                                cv.TenCV_KhangCD233181 AS [Chức vụ],
+                                cc.Ngay_TuanhCD233018 AS [Ngày],
+                                CONVERT(VARCHAR(8), cc.GioVao_TuanhCD233018, 108) AS [Giờ vào],
+                                CONVERT(VARCHAR(8), cc.GioVe_TuanhCD233018, 108) AS [Giờ về]
+                            FROM tblChamCong_TuanhCD233018 cc
+                            JOIN tblNhanVien_TuanhCD233018 nv 
+                                ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                            JOIN tblChucVu_KhangCD233181 cv 
+                                ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+                            JOIN tblPhongBan_ThuanCD233318 pb 
+                                ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+                            WHERE cc.DeletedAt_TuanhCD233018 = 0
+                              AND nv.DeletedAt_TuanhCD233018 = 0
+                              AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                              AND YEAR(cc.Ngay_TuanhCD233018) = @Nam";
+
+                SqlCommand cmd = new SqlCommand(sql, cn.conn);
+                cmd.Parameters.AddWithValue("@Thang", thang);
+                cmd.Parameters.AddWithValue("@Nam", nam);
+
+                // ===== PHÒNG BAN =====
+                if (cbBoxMaPB.SelectedValue != null &&
+                    cbBoxMaPB.SelectedValue.ToString() != "")
+                {
+                    sql += " AND pb.MaPB_ThuanCD233318 = @MaPB ";
+                    cmd.Parameters.AddWithValue("@MaPB", cbBoxMaPB.SelectedValue.ToString());
+                }
+
+                // ===== CHỨC VỤ =====
+                if (cbBoxChucVu.SelectedValue != null &&
+                    cbBoxChucVu.SelectedValue.ToString() != "")
+                {
+                    sql += " AND cv.MaCV_KhangCD233181 = @MaCV ";
+                    cmd.Parameters.AddWithValue("@MaCV", cbBoxChucVu.SelectedValue.ToString());
+                }
+
+                sql += " ORDER BY nv.HoTen_TuanhCD233018, cc.Ngay_TuanhCD233018";
+                cmd.CommandText = sql;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                dtGridViewBCChamCong.DataSource = dt;
+
+                // ===== ĐỊNH DẠNG HIỂN THỊ =====
+                dtGridViewBCChamCong.EnableHeadersVisualStyles = true;
+                dtGridViewBCChamCong.ColumnHeadersHeight = 25;
+                dtGridViewBCChamCong.ReadOnly = true;
+                dtGridViewBCChamCong.AllowUserToAddRows = false;
+
+                // ===== ĐẶT ĐỘ RỘNG CỘT =====
+                if (dtGridViewBCChamCong.Columns["STT"] != null)
+                    dtGridViewBCChamCong.Columns["STT"].Width = 50;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi load giờ ra vào: " + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.disconnect();
+            }
         }
     }
 }
