@@ -22,6 +22,7 @@ namespace QuanLyNhanVien3
             InitializeComponent();
         }
 
+        string nguoiDangNhap = F_FormMain.LoginInfo.CurrentUserName;
         private void F_Luong_Load(object sender, EventArgs e)
         {
             InitThangNam();
@@ -1155,7 +1156,7 @@ namespace QuanLyNhanVien3
                                     XLAlignmentHorizontalValues.Center;
 
                                 /* ========== TIÊU ĐỀ BÁO CÁO ========= */
-                                ws.Cell(2, 1).Value = "BÁO CÁO LƯỢNG NHÂN VIÊN";
+                                ws.Cell(2, 1).Value = "BÁO CÁO LƯƠNG NHÂN VIÊN";
                                 ws.Range(2, 1, 2, colCount).Merge();
                                 ws.Range(2, 1, 2, colCount).Style.Font.Bold = true;
                                 ws.Range(2, 1, 2, colCount).Style.Font.FontSize = 12;
@@ -1296,7 +1297,8 @@ namespace QuanLyNhanVien3
                                 // Dòng 3: Tên người xuất (căn phải)
                                 if (userInfo != null)
                                 {
-                                    ws.Cell(signatureRow + 2, colCount - 1).Value = userInfo["HoTen"]?.ToString() ?? "";
+                                    //ws.Cell(signatureRow + 2, colCount - 1).Value = userInfo["HoTen"]?.ToString() ?? "";
+                                    ws.Cell(signatureRow + 2, colCount - 1).Value =nguoiDangNhap;
                                     ws.Range(signatureRow + 2, colCount - 1, signatureRow + 2, colCount).Merge();
                                     ws.Range(signatureRow + 2, colCount - 1, signatureRow + 2, colCount).Style.Font.Bold = true;
                                     ws.Range(signatureRow + 2, colCount - 1, signatureRow + 2, colCount).Style.Alignment.Horizontal =
@@ -1464,7 +1466,7 @@ namespace QuanLyNhanVien3
                             title1.SpacingAfter = 5f;
                             doc.Add(title1);
 
-                            Paragraph title2 = new Paragraph("BÁO CÁO LƯỢNG NHÂN VIÊN", fontHeader);
+                            Paragraph title2 = new Paragraph("BÁO CÁO LƯƠNG NHÂN VIÊN", fontHeader);
                             title2.Alignment = Element.ALIGN_CENTER;
                             title2.SpacingAfter = 10f;
                             doc.Add(title2);
@@ -1652,7 +1654,7 @@ namespace QuanLyNhanVien3
                             // Người xuất
                             if (userInfo != null)
                             {
-                                PdfPCell signatureCell = new PdfPCell(new Phrase("Người xuất\n\n" + userInfo["HoTen"], fontSubTitle));
+                                PdfPCell signatureCell = new PdfPCell(new Phrase("Người xuất\n\n" + nguoiDangNhap, fontSubTitle));
                                 signatureCell.Border = Rectangle.NO_BORDER;
                                 signatureCell.HorizontalAlignment = Element.ALIGN_RIGHT;
                                 signatureCell.Padding = 5f;
