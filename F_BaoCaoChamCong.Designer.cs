@@ -26,6 +26,7 @@
             this.grpTime = new System.Windows.Forms.GroupBox();
             this.dtpThoiGian = new System.Windows.Forms.DateTimePicker();
             this.grpReport = new System.Windows.Forms.GroupBox();
+            this.btnGioravao = new System.Windows.Forms.Button();
             this.btnSoNgayLamViec = new System.Windows.Forms.Button();
             this.btnDiTreVeSom = new System.Windows.Forms.Button();
             this.grpSearch = new System.Windows.Forms.GroupBox();
@@ -36,7 +37,6 @@
             this.pnlResult = new System.Windows.Forms.Panel();
             this.dtGridViewBCChamCong = new System.Windows.Forms.DataGridView();
             this.lblResult = new System.Windows.Forms.Label();
-            this.btnGioravao = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
             this.pnlControl.SuspendLayout();
             this.grpTime.SuspendLayout();
@@ -49,16 +49,12 @@
             // pnlHeader
             // 
             this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(60)))), ((int)(((byte)(114)))));
-            this.pnlHeader.Controls.Add(this.cbBoxChucVu);
-            this.pnlHeader.Controls.Add(this.cbBoxMaPB);
-            this.pnlHeader.Controls.Add(this.label11);
-            this.pnlHeader.Controls.Add(this.label10);
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Controls.Add(this.lblSubTitle);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(1572, 80);
+            this.pnlHeader.Size = new System.Drawing.Size(1821, 80);
             this.pnlHeader.TabIndex = 2;
             // 
             // cbBoxChucVu
@@ -66,7 +62,7 @@
             this.cbBoxChucVu.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cbBoxChucVu.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbBoxChucVu.FormattingEnabled = true;
-            this.cbBoxChucVu.Location = new System.Drawing.Point(701, 46);
+            this.cbBoxChucVu.Location = new System.Drawing.Point(821, 54);
             this.cbBoxChucVu.Name = "cbBoxChucVu";
             this.cbBoxChucVu.Size = new System.Drawing.Size(307, 27);
             this.cbBoxChucVu.TabIndex = 197;
@@ -77,7 +73,7 @@
             this.cbBoxMaPB.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cbBoxMaPB.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbBoxMaPB.FormattingEnabled = true;
-            this.cbBoxMaPB.Location = new System.Drawing.Point(701, 8);
+            this.cbBoxMaPB.Location = new System.Drawing.Point(821, 16);
             this.cbBoxMaPB.Name = "cbBoxMaPB";
             this.cbBoxMaPB.Size = new System.Drawing.Size(307, 27);
             this.cbBoxMaPB.TabIndex = 196;
@@ -88,7 +84,7 @@
             this.label11.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(565, 13);
+            this.label11.Location = new System.Drawing.Point(685, 21);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(108, 19);
             this.label11.TabIndex = 194;
@@ -99,7 +95,7 @@
             this.label10.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(565, 52);
+            this.label10.Location = new System.Drawing.Point(685, 60);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(68, 19);
             this.label10.TabIndex = 195;
@@ -128,21 +124,26 @@
             // pnlControl
             // 
             this.pnlControl.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pnlControl.Controls.Add(this.cbBoxChucVu);
+            this.pnlControl.Controls.Add(this.cbBoxMaPB);
             this.pnlControl.Controls.Add(this.grpTime);
+            this.pnlControl.Controls.Add(this.label11);
             this.pnlControl.Controls.Add(this.grpReport);
+            this.pnlControl.Controls.Add(this.label10);
             this.pnlControl.Controls.Add(this.grpSearch);
             this.pnlControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlControl.Location = new System.Drawing.Point(0, 80);
             this.pnlControl.Name = "pnlControl";
             this.pnlControl.Padding = new System.Windows.Forms.Padding(15);
-            this.pnlControl.Size = new System.Drawing.Size(1572, 140);
+            this.pnlControl.Size = new System.Drawing.Size(1821, 223);
             this.pnlControl.TabIndex = 1;
             // 
             // grpTime
             // 
+            this.grpTime.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.grpTime.Controls.Add(this.dtpThoiGian);
             this.grpTime.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.grpTime.Location = new System.Drawing.Point(20, 20);
+            this.grpTime.Location = new System.Drawing.Point(177, 105);
             this.grpTime.Name = "grpTime";
             this.grpTime.Size = new System.Drawing.Size(220, 80);
             this.grpTime.TabIndex = 0;
@@ -160,16 +161,26 @@
             // 
             // grpReport
             // 
+            this.grpReport.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.grpReport.Controls.Add(this.btnGioravao);
             this.grpReport.Controls.Add(this.btnSoNgayLamViec);
             this.grpReport.Controls.Add(this.btnDiTreVeSom);
             this.grpReport.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.grpReport.Location = new System.Drawing.Point(260, 20);
+            this.grpReport.Location = new System.Drawing.Point(417, 105);
             this.grpReport.Name = "grpReport";
             this.grpReport.Size = new System.Drawing.Size(581, 80);
             this.grpReport.TabIndex = 1;
             this.grpReport.TabStop = false;
             this.grpReport.Text = "Loại báo cáo";
+            // 
+            // btnGioravao
+            // 
+            this.btnGioravao.Location = new System.Drawing.Point(371, 30);
+            this.btnGioravao.Name = "btnGioravao";
+            this.btnGioravao.Size = new System.Drawing.Size(160, 35);
+            this.btnGioravao.TabIndex = 2;
+            this.btnGioravao.Text = "Thời gian ra vào";
+            this.btnGioravao.Click += new System.EventHandler(this.btnGioravao_Click);
             // 
             // btnSoNgayLamViec
             // 
@@ -191,14 +202,15 @@
             // 
             // grpSearch
             // 
+            this.grpSearch.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.grpSearch.Controls.Add(this.xuatpdf);
             this.grpSearch.Controls.Add(this.txtTimkiem);
             this.grpSearch.Controls.Add(this.btnTimKiem);
             this.grpSearch.Controls.Add(this.btnXuatexcel);
             this.grpSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.grpSearch.Location = new System.Drawing.Point(925, 18);
+            this.grpSearch.Location = new System.Drawing.Point(1025, 105);
             this.grpSearch.Name = "grpSearch";
-            this.grpSearch.Size = new System.Drawing.Size(582, 102);
+            this.grpSearch.Size = new System.Drawing.Size(582, 80);
             this.grpSearch.TabIndex = 2;
             this.grpSearch.TabStop = false;
             this.grpSearch.Text = "Tìm kiếm và xuất";
@@ -244,10 +256,10 @@
             this.pnlResult.Controls.Add(this.dtGridViewBCChamCong);
             this.pnlResult.Controls.Add(this.lblResult);
             this.pnlResult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlResult.Location = new System.Drawing.Point(0, 220);
+            this.pnlResult.Location = new System.Drawing.Point(0, 303);
             this.pnlResult.Name = "pnlResult";
             this.pnlResult.Padding = new System.Windows.Forms.Padding(15);
-            this.pnlResult.Size = new System.Drawing.Size(1572, 450);
+            this.pnlResult.Size = new System.Drawing.Size(1821, 367);
             this.pnlResult.TabIndex = 0;
             // 
             // dtGridViewBCChamCong
@@ -259,7 +271,7 @@
             this.dtGridViewBCChamCong.Name = "dtGridViewBCChamCong";
             this.dtGridViewBCChamCong.ReadOnly = true;
             this.dtGridViewBCChamCong.RowHeadersWidth = 51;
-            this.dtGridViewBCChamCong.Size = new System.Drawing.Size(1542, 390);
+            this.dtGridViewBCChamCong.Size = new System.Drawing.Size(1791, 307);
             this.dtGridViewBCChamCong.TabIndex = 0;
             // 
             // lblResult
@@ -268,22 +280,13 @@
             this.lblResult.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.lblResult.Location = new System.Drawing.Point(15, 15);
             this.lblResult.Name = "lblResult";
-            this.lblResult.Size = new System.Drawing.Size(1542, 30);
+            this.lblResult.Size = new System.Drawing.Size(1791, 30);
             this.lblResult.TabIndex = 1;
             this.lblResult.Text = "KẾT QUẢ BÁO CÁO";
             // 
-            // btnGioravao
-            // 
-            this.btnGioravao.Location = new System.Drawing.Point(371, 30);
-            this.btnGioravao.Name = "btnGioravao";
-            this.btnGioravao.Size = new System.Drawing.Size(160, 35);
-            this.btnGioravao.TabIndex = 2;
-            this.btnGioravao.Text = "Thời gian ra vào";
-            this.btnGioravao.Click += new System.EventHandler(this.btnGioravao_Click);
-            // 
             // F_BaoCaoChamCong
             // 
-            this.ClientSize = new System.Drawing.Size(1572, 670);
+            this.ClientSize = new System.Drawing.Size(1821, 670);
             this.Controls.Add(this.pnlResult);
             this.Controls.Add(this.pnlControl);
             this.Controls.Add(this.pnlHeader);
@@ -292,8 +295,8 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.F_BaoCaoChamCong_Load);
             this.pnlHeader.ResumeLayout(false);
-            this.pnlHeader.PerformLayout();
             this.pnlControl.ResumeLayout(false);
+            this.pnlControl.PerformLayout();
             this.grpTime.ResumeLayout(false);
             this.grpReport.ResumeLayout(false);
             this.grpSearch.ResumeLayout(false);
