@@ -928,7 +928,7 @@ WHERE cc.DeletedAt_TuanhCD233018 = 0
 
                     // ===== THÁNG / NĂM =====
                     Paragraph time = new Paragraph(
-                        $"Tháng/Năm: {dtpThoiGian.Value:MM/yyyy}\n" +
+                        //$"Tháng/Năm: {dtpThoiGian.Value:MM/yyyy}\n" +
                         $"Phòng ban: {cbBoxMaPB.Text}\n" +
                         $"Chức vụ: {cbBoxChucVu.Text}\n\n",
                         fCell);

@@ -16,12 +16,12 @@
         private void InitializeComponent()
         {
             this.pnlHeader = new System.Windows.Forms.Panel();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.lblSubTitle = new System.Windows.Forms.Label();
             this.cbBoxChucVu = new System.Windows.Forms.ComboBox();
             this.cbBoxMaPB = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.lblSubTitle = new System.Windows.Forms.Label();
             this.pnlControl = new System.Windows.Forms.Panel();
             this.grpTime = new System.Windows.Forms.GroupBox();
             this.dtpThoiGian = new System.Windows.Forms.DateTimePicker();
@@ -56,6 +56,26 @@
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(1821, 80);
             this.pnlHeader.TabIndex = 2;
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.ForeColor = System.Drawing.Color.White;
+            this.lblTitle.Location = new System.Drawing.Point(20, 10);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(445, 38);
+            this.lblTitle.TabIndex = 0;
+            this.lblTitle.Text = "BÁO CÁO CHẤM CÔNG";
+            // 
+            // lblSubTitle
+            // 
+            this.lblSubTitle.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblSubTitle.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lblSubTitle.Location = new System.Drawing.Point(22, 48);
+            this.lblSubTitle.Name = "lblSubTitle";
+            this.lblSubTitle.Size = new System.Drawing.Size(332, 23);
+            this.lblSubTitle.TabIndex = 1;
+            this.lblSubTitle.Text = "Thống kê phân tích theo tháng";
             // 
             // cbBoxChucVu
             // 
@@ -100,26 +120,6 @@
             this.label10.Size = new System.Drawing.Size(76, 23);
             this.label10.TabIndex = 195;
             this.label10.Text = "Chức Vụ";
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.White;
-            this.lblTitle.Location = new System.Drawing.Point(20, 10);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(445, 38);
-            this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "BÁO CÁO CHẤM CÔNG";
-            // 
-            // lblSubTitle
-            // 
-            this.lblSubTitle.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblSubTitle.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lblSubTitle.Location = new System.Drawing.Point(22, 48);
-            this.lblSubTitle.Name = "lblSubTitle";
-            this.lblSubTitle.Size = new System.Drawing.Size(332, 23);
-            this.lblSubTitle.TabIndex = 1;
-            this.lblSubTitle.Text = "Thống kê phân tích theo tháng";
             // 
             // pnlControl
             // 
@@ -194,7 +194,7 @@
             // 
             // btnDiTreVeSom
             // 
-            this.btnDiTreVeSom.Location = new System.Drawing.Point(194, 28);
+            this.btnDiTreVeSom.Location = new System.Drawing.Point(194, 29);
             this.btnDiTreVeSom.Name = "btnDiTreVeSom";
             this.btnDiTreVeSom.Size = new System.Drawing.Size(160, 35);
             this.btnDiTreVeSom.TabIndex = 1;
