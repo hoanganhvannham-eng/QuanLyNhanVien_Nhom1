@@ -33,6 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.PDF = new System.Windows.Forms.Button();
             this.btnKhoiPhucNV = new System.Windows.Forms.Button();
             this.btnHienThiNVNghiViec = new System.Windows.Forms.Button();
             this.btnTimKiem = new System.Windows.Forms.Button();
@@ -110,6 +111,7 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.PDF);
             this.panel4.Controls.Add(this.btnKhoiPhucNV);
             this.panel4.Controls.Add(this.btnHienThiNVNghiViec);
             this.panel4.Controls.Add(this.btnTimKiem);
@@ -123,6 +125,19 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(533, 359);
             this.panel4.TabIndex = 1;
+            // 
+            // PDF
+            // 
+            this.PDF.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.PDF.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PDF.Location = new System.Drawing.Point(270, 261);
+            this.PDF.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.PDF.Name = "PDF";
+            this.PDF.Size = new System.Drawing.Size(114, 32);
+            this.PDF.TabIndex = 44;
+            this.PDF.Text = "Xuất PDF";
+            this.PDF.UseVisualStyleBackColor = true;
+            this.PDF.Click += new System.EventHandler(this.PDF_Click);
             // 
             // btnKhoiPhucNV
             // 
@@ -211,7 +226,6 @@
             this.checkshowpassword.TabIndex = 37;
             this.checkshowpassword.Text = "Hiển Thị Mật Khẩu";
             this.checkshowpassword.UseVisualStyleBackColor = true;
-            this.checkshowpassword.CheckedChanged += new System.EventHandler(this.checkshowpassword_CheckedChanged_1);
             // 
             // label5
             // 
@@ -390,6 +404,7 @@
             this.dgvHienThiChucVu.Size = new System.Drawing.Size(1111, 215);
             this.dgvHienThiChucVu.TabIndex = 121;
             this.dgvHienThiChucVu.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvHienThiChucVu_CellClick_1);
+            this.dgvHienThiChucVu.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvHienThiChucVu_RowPostPaint);
             // 
             // F_ChucVu
             // 
@@ -447,5 +462,6 @@
         private System.Windows.Forms.Button btnThoat;
         private System.Windows.Forms.ComboBox cbbMaPB;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button PDF;
     }
 }

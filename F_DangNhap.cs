@@ -47,15 +47,15 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
-                // ✅ SỬ DỤNG PARAMETERIZED QUERY ĐỂ TRÁNH SQL INJECTION
+                // ✅ THÊM RoleId_ThuanCD233318 VÀO QUERY
                 string query = @"SELECT tk.MaTK_KhangCD233181, tk.SoDienThoai_KhangCD233181, tk.Quyen_KhangCD233181, 
-                                        nv.HoTen_TuanhCD233018, r.TenRole_ThuanCD233318
-                                FROM tblTaiKhoan_KhangCD233181 tk
-                                INNER JOIN tblNhanVien_TuanhCD233018 nv ON tk.MaNV_TuanhCD233018 = nv.MaNV_TuanhCD233018
-                                LEFT JOIN tblRole_ThuanCD233318 r ON tk.RoleId_ThuanCD233318 = r.Id_ThuanCD233318
-                                WHERE tk.DeletedAt_KhangCD233181 = 0 
-                                  AND tk.SoDienThoai_KhangCD233181 = @Username 
-                                  AND tk.MatKhau_KhangCD233181 = @Password";
+                                nv.HoTen_TuanhCD233018, r.TenRole_ThuanCD233318, tk.RoleId_ThuanCD233318
+                        FROM tblTaiKhoan_KhangCD233181 tk
+                        INNER JOIN tblNhanVien_TuanhCD233018 nv ON tk.MaNV_TuanhCD233018 = nv.MaNV_TuanhCD233018
+                        LEFT JOIN tblRole_ThuanCD233318 r ON tk.RoleId_ThuanCD233318 = r.Id_ThuanCD233318
+                        WHERE tk.DeletedAt_KhangCD233181 = 0 
+                          AND tk.SoDienThoai_KhangCD233181 = @Username 
+                          AND tk.MatKhau_KhangCD233181 = @Password";
 
                 SqlCommand cmd = new SqlCommand(query, cn.conn);
                 cmd.Parameters.AddWithValue("@Username", username);
@@ -68,6 +68,14 @@ namespace QuanLyNhanVien3
                     // ✅ LƯU THÔNG TIN ĐĂNG NHẬP
                     F_FormMain.LoginInfo.CurrentUserName = reader["HoTen_TuanhCD233018"].ToString();
                     F_FormMain.LoginInfo.CurrentUserRole = reader["Quyen_KhangCD233181"].ToString();
+
+                    // ⚠️ LỖI Ở ĐÂY: BẠN GÁN STRING VÀO INT
+                    // SAI: F_FormMain.LoginInfo.CurrentRoleId = reader["RoleId_ThuanCD233318"].ToString();
+
+                    // ✅ ĐÚNG: CHUYỂN SANG INT
+                    F_FormMain.LoginInfo.CurrentRoleId = reader["RoleId_ThuanCD233318"] != DBNull.Value
+                        ? Convert.ToInt32(reader["RoleId_ThuanCD233318"])
+                        : 0;
 
                     reader.Close();
 
@@ -274,6 +282,7 @@ namespace QuanLyNhanVien3
         }
 
         // ===== Đăng nhập bằng mã QR =====
+
         private void DangNhapBangQR(string maNV)
         {
             try
@@ -281,13 +290,13 @@ namespace QuanLyNhanVien3
                 cn.connect();
 
                 string sql = @"SELECT tk.SoDienThoai_KhangCD233181, tk.Quyen_KhangCD233181, 
-                                      nv.HoTen_TuanhCD233018, r.TenRole_ThuanCD233318
-                               FROM tblTaiKhoan_KhangCD233181 tk
-                               INNER JOIN tblNhanVien_TuanhCD233018 nv ON tk.MaNV_TuanhCD233018 = nv.MaNV_TuanhCD233018
-                               LEFT JOIN tblRole_ThuanCD233318 r ON tk.RoleId_ThuanCD233318 = r.Id_ThuanCD233318
-                               WHERE tk.MaNV_TuanhCD233018 = @MaNV 
-                                 AND tk.DeletedAt_KhangCD233181 = 0
-                                 AND nv.DeletedAt_TuanhCD233018 = 0";
+                              nv.HoTen_TuanhCD233018, r.TenRole_ThuanCD233318, tk.RoleId_ThuanCD233318
+                       FROM tblTaiKhoan_KhangCD233181 tk
+                       INNER JOIN tblNhanVien_TuanhCD233018 nv ON tk.MaNV_TuanhCD233018 = nv.MaNV_TuanhCD233018
+                       LEFT JOIN tblRole_ThuanCD233318 r ON tk.RoleId_ThuanCD233318 = r.Id_ThuanCD233318
+                       WHERE tk.MaNV_TuanhCD233018 = @MaNV 
+                         AND tk.DeletedAt_KhangCD233181 = 0
+                         AND nv.DeletedAt_TuanhCD233018 = 0";
 
                 SqlCommand cmd = new SqlCommand(sql, cn.conn);
                 cmd.Parameters.AddWithValue("@MaNV", maNV);
@@ -299,6 +308,11 @@ namespace QuanLyNhanVien3
                     // ✅ LƯU THÔNG TIN ĐĂNG NHẬP
                     F_FormMain.LoginInfo.CurrentUserName = reader["HoTen_TuanhCD233018"].ToString();
                     F_FormMain.LoginInfo.CurrentUserRole = reader["Quyen_KhangCD233181"].ToString();
+
+                    // ✅ ĐÃ ĐÚNG
+                    F_FormMain.LoginInfo.CurrentRoleId = reader["RoleId_ThuanCD233318"] != DBNull.Value
+                        ? Convert.ToInt32(reader["RoleId_ThuanCD233318"])
+                        : 0;
 
                     reader.Close();
 

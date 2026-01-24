@@ -99,15 +99,17 @@
     <Reference Include="itext.styledxmlparser, Version=9.5.0.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>packages\itext.9.5.0\lib\net461\itext.styledxmlparser.dll</HintPath>
     </Reference>
-    <Reference Include="itext.svg, Version=9.5.0.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\itext.9.5.0\lib\net461\itext.svg.dll</HintPath>
-    </Reference>
-    <Reference Include="itext.typography, Version=5.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\itext.pdfcalligraph.5.0.5\lib\net461\itext.typography.dll</HintPath>
-    </Reference>
-    <Reference Include="itextsharp, Version=5.5.13.4, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>packages\iTextSharp.5.5.13.4\lib\net461\itextsharp.dll</HintPath>
-    </Reference>
+<Reference Include="itext.svg, Version=9.5.0.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+  <HintPath>packages\itext.9.5.0\lib\net461\itext.svg.dll</HintPath>
+</Reference>
+
+<Reference Include="itext.typography, Version=5.0.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+  <HintPath>packages\itext.pdfcalligraph.5.0.5\lib\net461\itext.typography.dll</HintPath>
+</Reference>
+
+<Reference Include="iTextSharp, Version=5.5.13.4, Culture=neutral, processorArchitecture=MSIL">
+  <HintPath>packages\iTextSharp.5.5.13.4\lib\net461\itextsharp.dll</HintPath>
+</Reference>
     <Reference Include="J2N, Version=2.0.0.0, Culture=neutral, PublicKeyToken=f39447d697a969af, processorArchitecture=MSIL">
       <HintPath>packages\itext.pdfcalligraph.5.0.5\lib\net461\J2N.dll</HintPath>
     </Reference>

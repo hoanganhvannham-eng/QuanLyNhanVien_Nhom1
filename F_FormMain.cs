@@ -37,43 +37,74 @@ namespace QuanLyNhanVien3
         {
             public static string CurrentUserRole = "";
             public static string CurrentUserName = "";
+            public static int CurrentRoleId = 0;            // ← THÊM DÒNG NÀY
         }
 
         private void ApplyRole()
         {
-            string role = LoginInfo.CurrentUserRole.ToLower();
+            int roleId = LoginInfo.CurrentRoleId;
 
-            if (role == "Admin")
+            // RoleId = 1: Admin (Full quyền)
+            if (roleId == 1)
             {
-                // Admin full quyền – không cần làm gì
-                return;
-            }
-
-            if (role == "nhan vien") //Admin
-            {
-                // 1. Ẩn tất cả menu quản lý
+                // Admin có tất cả quyền
                 phongBanToolStripMenuItem.Enabled = true;
                 chucVuToolStripMenuItem.Enabled = true;
                 nhanVienToolStripMenuItem.Enabled = true;
                 luongToolStripMenuItem.Enabled = true;
                 HopDongToolStripMenuItem.Enabled = true;
-                TaiKoanToolStripMenuItem.Enabled = false;
+                TaiKoanToolStripMenuItem.Enabled = true;
                 ThongTinDuAnToolStripMenuItem1.Enabled = true;
                 chiTietDuAnToolStripMenuItem1.Enabled = true;
-
-                // 2. Cho phép sử dụng CHẤM CÔNG
                 chamConngToolStripMenuItem.Enabled = true;
 
-                // 3. Các form báo cáo: chỉ đọc → bật nếu muốn
-                BaoCaoNhanVienToolStripMenuItem.Enabled = false;         // ✔ đúng — menu item mới có Enabled
+                BaoCaoNhanVienToolStripMenuItem.Enabled = true;
+                báoCáoLươngToolStripMenuItem.Enabled = true;
+                báoCáoDựÁnToolStripMenuItem.Enabled = true;
+                báoCáoChấmCôngToolStripMenuItem.Enabled = true;
+                tổngHợpToolStripMenuItem.Enabled = true;
+            }
+            // RoleId = 2: Manager (Một số quyền)
+            else if (roleId == 2)
+            {
+                phongBanToolStripMenuItem.Enabled = true;
+                chucVuToolStripMenuItem.Enabled = true;
+                nhanVienToolStripMenuItem.Enabled = true;
+                luongToolStripMenuItem.Enabled = true;
+                HopDongToolStripMenuItem.Enabled = true;
+                TaiKoanToolStripMenuItem.Enabled = false;       // Manager không quản lý tài khoản
+                ThongTinDuAnToolStripMenuItem1.Enabled = true;
+                chiTietDuAnToolStripMenuItem1.Enabled = true;
+                chamConngToolStripMenuItem.Enabled = true;
+
+                BaoCaoNhanVienToolStripMenuItem.Enabled = true;
+                báoCáoLươngToolStripMenuItem.Enabled = true;
+                báoCáoDựÁnToolStripMenuItem.Enabled = true;
+                báoCáoChấmCôngToolStripMenuItem.Enabled = true;
+                tổngHợpToolStripMenuItem.Enabled = true;
+            }
+            // Các Role khác - Không có quyền
+            else
+            {
+                phongBanToolStripMenuItem.Enabled = false;
+                chucVuToolStripMenuItem.Enabled = false;
+                nhanVienToolStripMenuItem.Enabled = false;
+                luongToolStripMenuItem.Enabled = false;
+                HopDongToolStripMenuItem.Enabled = false;
+                TaiKoanToolStripMenuItem.Enabled = false;
+                ThongTinDuAnToolStripMenuItem1.Enabled = false;
+                chiTietDuAnToolStripMenuItem1.Enabled = false;
+                //chamConngToolStripMenuItem.Enabled = true;
+                chamConngchitietToolStripMenuItem.Enabled = false;
+
+
+                BaoCaoNhanVienToolStripMenuItem.Enabled = false;
                 báoCáoLươngToolStripMenuItem.Enabled = false;
                 báoCáoDựÁnToolStripMenuItem.Enabled = false;
                 báoCáoChấmCôngToolStripMenuItem.Enabled = false;
                 tổngHợpToolStripMenuItem.Enabled = false;
             }
         }
-
-
         private void ThongTinDuAnToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             OpenChildForm(new F_DuAnChung());
@@ -200,7 +231,7 @@ namespace QuanLyNhanVien3
 
         private void thongTinDuAnToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            OpenChildForm(new F_DuAnChung());
         }
 
         private void label1_Click(object sender, EventArgs e)

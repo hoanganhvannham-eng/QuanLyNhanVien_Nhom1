@@ -48,6 +48,7 @@
             this.panelGrid = new System.Windows.Forms.Panel();
             this.gbGrid = new System.Windows.Forms.GroupBox();
             this.dataGridViewTaiKhoan = new System.Windows.Forms.DataGridView();
+            this.btnXuatPDF = new System.Windows.Forms.Button();
             this.panelHeader.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.gbMiddle.SuspendLayout();
@@ -188,6 +189,7 @@
             // 
             // gbRight
             // 
+            this.gbRight.Controls.Add(this.btnXuatPDF);
             this.gbRight.Controls.Add(this.labelAdminMK);
             this.gbRight.Controls.Add(this.tbMKkhoiphuc);
             this.gbRight.Controls.Add(this.checkshowpassword);
@@ -381,6 +383,15 @@
             this.dataGridViewTaiKhoan.TabIndex = 0;
             this.dataGridViewTaiKhoan.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTaiKhoan_CellClick_1);
             // 
+            // btnXuatPDF
+            // 
+            this.btnXuatPDF.Location = new System.Drawing.Point(286, 205);
+            this.btnXuatPDF.Name = "btnXuatPDF";
+            this.btnXuatPDF.Size = new System.Drawing.Size(122, 32);
+            this.btnXuatPDF.TabIndex = 7;
+            this.btnXuatPDF.Text = "Xuất PDF";
+            this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
+            // 
             // F_TaiKhoan
             // 
             this.ClientSize = new System.Drawing.Size(1280, 800);
@@ -427,5 +438,6 @@
         private System.Windows.Forms.Button btnThem, btnXoa, btnSua, btnTimKiem;
         private System.Windows.Forms.Button btnHienThiPhongBanCu, btnKhoiPhucPhongBan;
         private System.Windows.Forms.Button btnrestar, btnxuatExcel;
+        private System.Windows.Forms.Button btnXuatPDF;
     }
 }
