@@ -1,4 +1,6 @@
-﻿namespace QuanLyNhanVien3
+﻿using System;
+
+namespace QuanLyNhanVien3
 {
     partial class F_NhanVien
     {
@@ -392,7 +394,7 @@
             this.cbBoxMaPB.Name = "cbBoxMaPB";
             this.cbBoxMaPB.Size = new System.Drawing.Size(283, 27);
             this.cbBoxMaPB.TabIndex = 188;
-            this.cbBoxMaPB.SelectedIndexChanged += new System.EventHandler(this.cbBoxMaPB_SelectedIndexChanged);
+            this.cbBoxMaPB.SelectedIndexChanged += new System.EventHandler(this.cbBoxMaPB_SelectedIndexChanged_1);
             // 
             // btnXoa
             // 
@@ -544,6 +546,7 @@
             this.ResumeLayout(false);
 
         }
+
 
         #endregion
         private System.Windows.Forms.Panel panel1;
