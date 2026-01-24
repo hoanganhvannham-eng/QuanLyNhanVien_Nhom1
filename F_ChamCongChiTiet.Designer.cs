@@ -108,10 +108,10 @@
             // lblGioVao
             // 
             this.lblGioVao.AutoSize = true;
-            this.lblGioVao.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblGioVao.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblGioVao.Location = new System.Drawing.Point(20, 30);
             this.lblGioVao.Name = "lblGioVao";
-            this.lblGioVao.Size = new System.Drawing.Size(68, 23);
+            this.lblGioVao.Size = new System.Drawing.Size(71, 23);
             this.lblGioVao.TabIndex = 0;
             this.lblGioVao.Text = "Giờ vào";
             // 
@@ -126,10 +126,10 @@
             // lblGioVe
             // 
             this.lblGioVe.AutoSize = true;
-            this.lblGioVe.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblGioVe.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblGioVe.Location = new System.Drawing.Point(20, 70);
             this.lblGioVe.Name = "lblGioVe";
-            this.lblGioVe.Size = new System.Drawing.Size(58, 23);
+            this.lblGioVe.Size = new System.Drawing.Size(61, 23);
             this.lblGioVe.TabIndex = 2;
             this.lblGioVe.Text = "Giờ về";
             // 
@@ -144,10 +144,10 @@
             // lblGhiChu
             // 
             this.lblGhiChu.AutoSize = true;
-            this.lblGhiChu.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblGhiChu.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblGhiChu.Location = new System.Drawing.Point(20, 110);
             this.lblGhiChu.Name = "lblGhiChu";
-            this.lblGhiChu.Size = new System.Drawing.Size(69, 23);
+            this.lblGhiChu.Size = new System.Drawing.Size(70, 23);
             this.lblGhiChu.TabIndex = 4;
             this.lblGhiChu.Text = "Ghi chú";
             // 
@@ -183,16 +183,16 @@
             // lblMaPB
             // 
             this.lblMaPB.AutoSize = true;
-            this.lblMaPB.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblMaPB.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblMaPB.Location = new System.Drawing.Point(10, 18);
             this.lblMaPB.Name = "lblMaPB";
-            this.lblMaPB.Size = new System.Drawing.Size(123, 23);
+            this.lblMaPB.Size = new System.Drawing.Size(127, 23);
             this.lblMaPB.TabIndex = 0;
             this.lblMaPB.Text = "Mã phòng ban";
             // 
             // cbBoxMaPB
             // 
-            this.cbBoxMaPB.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.cbBoxMaPB.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.cbBoxMaPB.Location = new System.Drawing.Point(150, 14);
             this.cbBoxMaPB.Name = "cbBoxMaPB";
             this.cbBoxMaPB.Size = new System.Drawing.Size(480, 31);
@@ -202,16 +202,16 @@
             // lblChucVu
             // 
             this.lblChucVu.AutoSize = true;
-            this.lblChucVu.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblChucVu.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblChucVu.Location = new System.Drawing.Point(10, 56);
             this.lblChucVu.Name = "lblChucVu";
-            this.lblChucVu.Size = new System.Drawing.Size(72, 23);
+            this.lblChucVu.Size = new System.Drawing.Size(74, 23);
             this.lblChucVu.TabIndex = 2;
             this.lblChucVu.Text = "Chức vụ";
             // 
             // cbBoxChucVu
             // 
-            this.cbBoxChucVu.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.cbBoxChucVu.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.cbBoxChucVu.Location = new System.Drawing.Point(150, 52);
             this.cbBoxChucVu.Name = "cbBoxChucVu";
             this.cbBoxChucVu.Size = new System.Drawing.Size(480, 31);
@@ -221,16 +221,16 @@
             // lblMaChamCong
             // 
             this.lblMaChamCong.AutoSize = true;
-            this.lblMaChamCong.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblMaChamCong.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblMaChamCong.Location = new System.Drawing.Point(10, 94);
             this.lblMaChamCong.Name = "lblMaChamCong";
-            this.lblMaChamCong.Size = new System.Drawing.Size(124, 23);
+            this.lblMaChamCong.Size = new System.Drawing.Size(127, 23);
             this.lblMaChamCong.TabIndex = 4;
             this.lblMaChamCong.Text = "Mã chấm công";
             // 
             // tbMaChamCong
             // 
-            this.tbMaChamCong.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.tbMaChamCong.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.tbMaChamCong.Location = new System.Drawing.Point(150, 90);
             this.tbMaChamCong.Name = "tbMaChamCong";
             this.tbMaChamCong.Size = new System.Drawing.Size(480, 30);
@@ -240,16 +240,16 @@
             // lblMaNV
             // 
             this.lblMaNV.AutoSize = true;
-            this.lblMaNV.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblMaNV.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblMaNV.Location = new System.Drawing.Point(10, 132);
             this.lblMaNV.Name = "lblMaNV";
-            this.lblMaNV.Size = new System.Drawing.Size(63, 23);
+            this.lblMaNV.Size = new System.Drawing.Size(64, 23);
             this.lblMaNV.TabIndex = 6;
             this.lblMaNV.Text = "Mã NV";
             // 
             // tbmanhanvien
             // 
-            this.tbmanhanvien.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.tbmanhanvien.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.tbmanhanvien.Location = new System.Drawing.Point(150, 128);
             this.tbmanhanvien.Name = "tbmanhanvien";
             this.tbmanhanvien.Size = new System.Drawing.Size(480, 30);
@@ -259,17 +259,17 @@
             // lblTenNV
             // 
             this.lblTenNV.AutoSize = true;
-            this.lblTenNV.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblTenNV.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblTenNV.Location = new System.Drawing.Point(10, 170);
             this.lblTenNV.Name = "lblTenNV";
-            this.lblTenNV.Size = new System.Drawing.Size(116, 23);
+            this.lblTenNV.Size = new System.Drawing.Size(119, 23);
             this.lblTenNV.TabIndex = 8;
             this.lblTenNV.Text = "Tên nhân viên";
             this.lblTenNV.Click += new System.EventHandler(this.label8_Click);
             // 
             // tbtennhanvien
             // 
-            this.tbtennhanvien.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.tbtennhanvien.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.tbtennhanvien.Location = new System.Drawing.Point(150, 166);
             this.tbtennhanvien.Name = "tbtennhanvien";
             this.tbtennhanvien.Size = new System.Drawing.Size(480, 30);
@@ -279,16 +279,16 @@
             // lblNgay
             // 
             this.lblNgay.AutoSize = true;
-            this.lblNgay.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblNgay.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblNgay.Location = new System.Drawing.Point(10, 208);
             this.lblNgay.Name = "lblNgay";
-            this.lblNgay.Size = new System.Drawing.Size(50, 23);
+            this.lblNgay.Size = new System.Drawing.Size(52, 23);
             this.lblNgay.TabIndex = 10;
             this.lblNgay.Text = "Ngày";
             // 
             // dateTimeNgayChamCong
             // 
-            this.dateTimeNgayChamCong.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.dateTimeNgayChamCong.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.dateTimeNgayChamCong.Location = new System.Drawing.Point(150, 204);
             this.dateTimeNgayChamCong.Name = "dateTimeNgayChamCong";
             this.dateTimeNgayChamCong.Size = new System.Drawing.Size(480, 30);
