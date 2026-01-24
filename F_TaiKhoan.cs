@@ -5,6 +5,9 @@ using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
 
 namespace QuanLyNhanVien3
 {
@@ -717,6 +720,85 @@ namespace QuanLyNhanVien3
                 MessageBox.Show("Lỗi xuất Excel: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnXuatPDF_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewTaiKhoan.Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu để xuất.", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "PDF file|*.pdf";
+                sfd.FileName = "DanhSachTaiKhoan_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf";
+
+                if (sfd.ShowDialog() != DialogResult.OK) return;
+
+                // FONT HỆ THỐNG – KHÔNG FILE FONT
+                BaseFont bf = BaseFont.CreateFont(
+                    @"C:\Windows\Fonts\arial.ttf",
+                    BaseFont.IDENTITY_H,
+                    BaseFont.NOT_EMBEDDED
+                );
+
+                var fontNormal = new iTextSharp.text.Font(bf, 11);
+                var fontBold = new iTextSharp.text.Font(bf, 11, iTextSharp.text.Font.BOLD);
+                var fontTitle = new iTextSharp.text.Font(bf, 16, iTextSharp.text.Font.BOLD);
+
+                Document doc = new Document(PageSize.A4.Rotate(), 30, 30, 30, 30);
+                PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
+                doc.Open();
+
+                // ===== TITLE =====
+                Paragraph p = new Paragraph("DANH SÁCH TÀI KHOẢN", fontTitle);
+                p.Alignment = Element.ALIGN_CENTER;
+                doc.Add(p);
+
+                p = new Paragraph("Ngày xuất: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm"), fontNormal);
+                p.Alignment = Element.ALIGN_RIGHT;
+                doc.Add(p);
+
+                doc.Add(new Paragraph("\n"));
+
+                // ===== TABLE =====
+                int colCount = dataGridViewTaiKhoan.Columns.Count;
+                PdfPTable table = new PdfPTable(colCount);
+                table.WidthPercentage = 100;
+
+                // Header
+                foreach (DataGridViewColumn col in dataGridViewTaiKhoan.Columns)
+                {
+                    PdfPCell cell = new PdfPCell(new Phrase(col.HeaderText, fontBold));
+                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    cell.BackgroundColor = BaseColor.LIGHT_GRAY;
+                    table.AddCell(cell);
+                }
+
+                // Data
+                foreach (DataGridViewRow row in dataGridViewTaiKhoan.Rows)
+                {
+                    if (row.IsNewRow) continue;
+
+                    for (int i = 0; i < colCount; i++)
+                    {
+                        PdfPCell cell = new PdfPCell(
+                            new Phrase(row.Cells[i].Value?.ToString() ?? "", fontNormal)
+                        );
+                        cell.HorizontalAlignment = Element.ALIGN_LEFT;
+                        table.AddCell(cell);
+                    }
+                }
+
+                doc.Add(table);
+                doc.Close();
+            }
+
+            MessageBox.Show("Xuất PDF thành công.", "Thông báo",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
