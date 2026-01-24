@@ -36,20 +36,57 @@ namespace QuanLyNhanVien3
                 int thang = dateTimePicker1.Value.Month;
                 int nam = dateTimePicker1.Value.Year;
 
-                // Sửa lại query theo đúng cấu trúc CSDL
-                string sql = @"SELECT l.MaLuong_ChienCD232928 AS N'Mã Lương', 
+                // Sửa query theo công thức mới
+                string sql = @"SELECT 
+                                      l.MaLuong_ChienCD232928 AS N'Mã Lương', 
                                       nv.MaNV_TuanhCD233018 AS N'Mã Nhân Viên', 
                                       nv.HoTen_TuanhCD233018 AS N'Họ Tên', 
+                                      pb.TenPB_ThuanCD233318 AS N'Phòng Ban',
+                                      cv.TenCV_KhangCD233181 AS N'Chức Vụ',
                                       l.Thang_ChienCD232928 AS N'Tháng', 
                                       l.Nam_ChienCD232928 AS N'Năm', 
                                       l.LuongCoBan_ChienCD232928 AS N'Lương Cơ Bản', 
                                       l.SoNgayCongChuan_ChienCD232928 AS N'Ngày Công Chuẩn',
+                                      
+                                      -- Tính số ngày đi làm thực tế: giờ vào từ 8h và giờ về từ 17h
+                                      (
+                                          SELECT COUNT(*)
+                                          FROM tblChamCong_TuanhCD233018 cc
+                                          WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                            AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                            AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                            AND cc.DeletedAt_TuanhCD233018 = 0
+                                            AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                            AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                      ) AS N'Số ngày đi làm',
+                                      
                                       l.PhuCap_ChienCD232928 AS N'Phụ Cấp',
                                       l.KhauTru_ChienCD232928 AS N'Khấu Trừ',
-                                      (l.LuongCoBan_ChienCD232928 + l.PhuCap_ChienCD232928 - l.KhauTru_ChienCD232928) AS N'Tổng Lương'
+                                      
+                                      -- Tính Tổng lương theo công thức mới: (Lương cơ bản / Ngày công chuẩn) * Số ngày đi làm + Phụ cấp - Khấu trừ
+                                      ROUND(
+                                          (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
+                                          (
+                                              SELECT COUNT(*)
+                                              FROM tblChamCong_TuanhCD233018 cc
+                                              WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                                AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                                AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                                AND cc.DeletedAt_TuanhCD233018 = 0
+                                                AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                                AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                          ) + 
+                                          ISNULL(l.PhuCap_ChienCD232928, 0) - 
+                                          ISNULL(l.KhauTru_ChienCD232928, 0), 
+                                          2
+                                      ) AS N'Tổng Lương',
+                                      
+                                      l.Ghichu_ChienCD232928 AS N'Ghi chú'
                                FROM tblLuong_ChienCD232928 l
                                JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
                                JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                               JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+                               JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
                                WHERE l.DeletedAt_ChienCD232928 = 0 
                                AND l.Thang_ChienCD232928 = @Thang 
                                AND l.Nam_ChienCD232928 = @Nam
@@ -65,6 +102,9 @@ namespace QuanLyNhanVien3
                     adapter.Fill(dt);
 
                     dtGridViewBCLuong.DataSource = dt;
+
+                    // Định dạng các cột tiền
+                    FormatCurrencyColumns();
                 }
 
                 cn.disconnect();
@@ -83,13 +123,34 @@ namespace QuanLyNhanVien3
                 int thang = dateTimePicker1.Value.Month;
                 int nam = dateTimePicker1.Value.Year;
 
-                string sql = @"SELECT TOP 1 WITH TIES 
+                string sql = @"SELECT TOP 5 
                                       nv.HoTen_TuanhCD233018 AS N'Họ Tên', 
                                       nv.MaNV_TuanhCD233018 AS N'Mã Nhân Viên',
-                                      (l.LuongCoBan_ChienCD232928 + l.PhuCap_ChienCD232928 - l.KhauTru_ChienCD232928) AS N'Tổng Lương Cao Nhất'
+                                      pb.TenPB_ThuanCD233318 AS N'Phòng Ban',
+                                      cv.TenCV_KhangCD233181 AS N'Chức Vụ',
+                                      
+                                      -- Tính Tổng lương theo công thức mới
+                                      ROUND(
+                                          (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
+                                          (
+                                              SELECT COUNT(*)
+                                              FROM tblChamCong_TuanhCD233018 cc
+                                              WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                                AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                                AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                                AND cc.DeletedAt_TuanhCD233018 = 0
+                                                AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                                AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                          ) + 
+                                          ISNULL(l.PhuCap_ChienCD232928, 0) - 
+                                          ISNULL(l.KhauTru_ChienCD232928, 0), 
+                                          2
+                                      ) AS N'Tổng Lương Cao Nhất'
                                FROM tblLuong_ChienCD232928 l
                                JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
                                JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                               JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+                               JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
                                WHERE l.DeletedAt_ChienCD232928 = 0 
                                AND l.Thang_ChienCD232928 = @Thang 
                                AND l.Nam_ChienCD232928 = @Nam
@@ -104,6 +165,13 @@ namespace QuanLyNhanVien3
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
                     dtGridViewBCLuong.DataSource = dt;
+
+                    // Định dạng cột tổng lương
+                    if (dtGridViewBCLuong.Columns.Contains("Tổng Lương Cao Nhất"))
+                    {
+                        dtGridViewBCLuong.Columns["Tổng Lương Cao Nhất"].DefaultCellStyle.Format = "N0";
+                        dtGridViewBCLuong.Columns["Tổng Lương Cao Nhất"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    }
                 }
                 cn.disconnect();
             }
@@ -122,9 +190,57 @@ namespace QuanLyNhanVien3
                 int nam = dateTimePicker1.Value.Year;
 
                 string sql = @"SELECT 
-                                      'Toàn Công Ty' AS N'Phòng Ban', 
-                                      COUNT(DISTINCT nv.Id_TuanhCD233018) AS N'Số Nhân Viên Đã Nhận Lương',
-                                      SUM(l.LuongCoBan_ChienCD232928 + l.PhuCap_ChienCD232928 - l.KhauTru_ChienCD232928) AS N'Tổng Quỹ Lương'
+                                      pb.TenPB_ThuanCD233318 AS N'Phòng Ban', 
+                                      COUNT(DISTINCT nv.Id_TuanhCD233018) AS N'Số Nhân Viên',
+                                      SUM(
+                                          ROUND(
+                                              (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
+                                              (
+                                                  SELECT COUNT(*)
+                                                  FROM tblChamCong_TuanhCD233018 cc
+                                                  WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                                    AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                                    AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                                    AND cc.DeletedAt_TuanhCD233018 = 0
+                                                    AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                                    AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                              ) + 
+                                              ISNULL(l.PhuCap_ChienCD232928, 0) - 
+                                              ISNULL(l.KhauTru_ChienCD232928, 0), 
+                                              2
+                                          )
+                                      ) AS N'Tổng Quỹ Lương Phòng'
+                               FROM tblLuong_ChienCD232928 l
+                               JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
+                               JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                               JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+                               JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+                               WHERE l.DeletedAt_ChienCD232928 = 0 
+                               AND l.Thang_ChienCD232928 = @Thang 
+                               AND l.Nam_ChienCD232928 = @Nam
+                               GROUP BY pb.TenPB_ThuanCD233318
+                               UNION ALL
+                               SELECT 
+                                      'TOÀN CÔNG TY' AS N'Phòng Ban', 
+                                      COUNT(DISTINCT nv.Id_TuanhCD233018) AS N'Số Nhân Viên',
+                                      SUM(
+                                          ROUND(
+                                              (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
+                                              (
+                                                  SELECT COUNT(*)
+                                                  FROM tblChamCong_TuanhCD233018 cc
+                                                  WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                                    AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                                    AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                                    AND cc.DeletedAt_TuanhCD233018 = 0
+                                                    AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                                    AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                              ) + 
+                                              ISNULL(l.PhuCap_ChienCD232928, 0) - 
+                                              ISNULL(l.KhauTru_ChienCD232928, 0), 
+                                              2
+                                          )
+                                      ) AS N'Tổng Quỹ Lương Phòng'
                                FROM tblLuong_ChienCD232928 l
                                JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
                                JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
@@ -141,12 +257,45 @@ namespace QuanLyNhanVien3
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
                     dtGridViewBCLuong.DataSource = dt;
+
+                    // Định dạng cột tổng quỹ lương
+                    if (dtGridViewBCLuong.Columns.Contains("Tổng Quỹ Lương Phòng"))
+                    {
+                        dtGridViewBCLuong.Columns["Tổng Quỹ Lương Phòng"].DefaultCellStyle.Format = "N0";
+                        dtGridViewBCLuong.Columns["Tổng Quỹ Lương Phòng"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    }
                 }
                 cn.disconnect();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi: " + ex.Message);
+            }
+        }
+
+        // Thêm phương thức định dạng cột tiền
+        private void FormatCurrencyColumns()
+        {
+            string[] currencyColumns = { "Lương Cơ Bản", "Phụ Cấp", "Khấu Trừ", "Tổng Lương", "Tổng Quỹ Lương Phòng" };
+
+            foreach (string colName in currencyColumns)
+            {
+                if (dtGridViewBCLuong.Columns.Contains(colName))
+                {
+                    dtGridViewBCLuong.Columns[colName].DefaultCellStyle.Format = "N0";
+                    dtGridViewBCLuong.Columns[colName].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                }
+            }
+
+            // Căn giữa cho các cột số
+            string[] centerColumns = { "Tháng", "Năm", "Ngày Công Chuẩn", "Số ngày đi làm", "Số Nhân Viên" };
+
+            foreach (string colName in centerColumns)
+            {
+                if (dtGridViewBCLuong.Columns.Contains(colName))
+                {
+                    dtGridViewBCLuong.Columns[colName].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                }
             }
         }
 
@@ -273,6 +422,14 @@ namespace QuanLyNhanVien3
                                 ws.Range(currentRow, 1, currentRow, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                                 currentRow++;
 
+                                /* ================= THÁNG/NĂM BÁO CÁO ================= */
+                                int thang = dateTimePicker1.Value.Month;
+                                int nam = dateTimePicker1.Value.Year;
+                                ws.Cell(currentRow, 1).Value = $"Tháng/Năm: {thang}/{nam}";
+                                ws.Range(currentRow, 1, currentRow, colCount).Merge();
+                                ws.Range(currentRow, 1, currentRow, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                                currentRow++;
+
                                 /* ================= THÔNG TIN NGƯỜI XUẤT ================= */
                                 if (nguoiXuat != null)
                                 {
@@ -314,8 +471,9 @@ namespace QuanLyNhanVien3
                                             dtGridViewBCLuong.Columns[j].HeaderText.Contains("Khấu Trừ") ||
                                             dtGridViewBCLuong.Columns[j].HeaderText.Contains("Tổng"))
                                         {
-                                            if (value != null && decimal.TryParse(value.ToString(), out decimal money))
+                                            if (value != null && decimal.TryParse(value.ToString().Replace(",", ""), out decimal money))
                                             {
+                                                ws.Cell(currentRow, j + 1).Value = money;
                                                 ws.Cell(currentRow, j + 1).Style.NumberFormat.Format = "#,##0";
                                             }
                                         }
@@ -338,7 +496,10 @@ namespace QuanLyNhanVien3
                                         headerText.Contains("Phụ Cấp") ||
                                         headerText.Contains("Khấu Trừ") ||
                                         headerText.Contains("Tổng Lương") ||
-                                        headerText.Contains("Ngày Công Chuẩn"))
+                                        headerText.Contains("Ngày Công Chuẩn") ||
+                                        headerText.Contains("Số ngày đi làm") ||
+                                        headerText.Contains("Số Nhân Viên") ||
+                                        headerText.Contains("Tổng Quỹ Lương Phòng"))
                                     {
                                         // Tìm cột index trong DataGridView
                                         int colIndex = -1;
@@ -358,20 +519,24 @@ namespace QuanLyNhanVien3
                                             for (int i = 0; i < dtGridViewBCLuong.Rows.Count; i++)
                                             {
                                                 var value = dtGridViewBCLuong.Rows[i].Cells[colIndex].Value;
-                                                if (value != null && decimal.TryParse(value.ToString(), out decimal cellValue))
+                                                if (value != null)
                                                 {
-                                                    tong += cellValue;
+                                                    string strValue = value.ToString().Replace(",", "");
+                                                    if (decimal.TryParse(strValue, out decimal cellValue))
+                                                    {
+                                                        tong += cellValue;
+                                                    }
                                                 }
                                             }
 
                                             ws.Cell(currentRow, j + 1).Value = tong;
-                                            ws.Cell(currentRow, j + 1).Style.NumberFormat.Format = "#,##0";
                                             ws.Cell(currentRow, j + 1).Style.Font.Bold = true;
 
                                             if (headerText.Contains("Lương") ||
                                                 headerText.Contains("Phụ Cấp") ||
                                                 headerText.Contains("Khấu Trừ") ||
-                                                headerText.Contains("Tổng"))
+                                                headerText.Contains("Tổng") ||
+                                                headerText.Contains("Quỹ"))
                                             {
                                                 ws.Cell(currentRow, j + 1).Style.NumberFormat.Format = "#,##0";
                                             }
@@ -382,16 +547,9 @@ namespace QuanLyNhanVien3
                                 currentRow++;
 
                                 /* ================= THỐNG KÊ TỔNG HỢP ================= */
-                                ws.Cell(currentRow, 1).Value = "THỐNG KÊ TỔNG HỢP";
-                                ws.Range(currentRow, 1, currentRow, colCount).Merge();
-                                ws.Range(currentRow, 1, currentRow, colCount).Style.Font.Bold = true;
-                                ws.Range(currentRow, 1, currentRow, colCount).Style.Font.FontSize = 12;
-                                ws.Range(currentRow, 1, currentRow, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                                ws.Range(currentRow, 1, currentRow, colCount).Style.Fill.BackgroundColor = XLColor.LightBlue;
-                                currentRow++;
-
                                 // Tìm các cột cần thống kê
-                                int colLuongCoBan = -1, colNgayCongChuan = -1, colPhuCap = -1, colKhauTru = -1, colTongLuong = -1;
+                                int colLuongCoBan = -1, colNgayCongChuan = -1, colSoNgayDiLam = -1,
+                                    colPhuCap = -1, colKhauTru = -1, colTongLuong = -1, colSoNhanVien = -1;
 
                                 for (int j = 0; j < colCount; j++)
                                 {
@@ -399,31 +557,79 @@ namespace QuanLyNhanVien3
 
                                     if (headerText.Contains("Lương Cơ Bản")) colLuongCoBan = j;
                                     else if (headerText.Contains("Ngày Công Chuẩn")) colNgayCongChuan = j;
+                                    else if (headerText.Contains("Số ngày đi làm")) colSoNgayDiLam = j;
                                     else if (headerText.Contains("Phụ Cấp")) colPhuCap = j;
                                     else if (headerText.Contains("Khấu Trừ")) colKhauTru = j;
                                     else if (headerText.Contains("Tổng Lương")) colTongLuong = j;
+                                    else if (headerText.Contains("Số Nhân Viên")) colSoNhanVien = j;
                                 }
 
-                                // Tổng số nhân viên
-                                ws.Cell(currentRow, 1).Value = "Tổng số nhân viên:";
-                                ws.Cell(currentRow, 1).Style.Font.Bold = true;
-                                ws.Cell(currentRow, 2).Value = dtGridViewBCLuong.Rows.Count;
-                                ws.Cell(currentRow, 2).Style.Font.Bold = true;
+                                // Tính tổng từ DataGridView
+                                decimal tongLuongCoBan = 0, tongNgayCongChuan = 0, tongSoNgayDiLam = 0,
+                                        tongPhuCap = 0, tongKhauTru = 0, tongTongLuong = 0;
+                                int tongSoNhanVien = 0;
+
+                                foreach (DataGridViewRow row in dtGridViewBCLuong.Rows)
+                                {
+                                    if (colLuongCoBan >= 0 && row.Cells[colLuongCoBan].Value != null)
+                                    {
+                                        if (decimal.TryParse(row.Cells[colLuongCoBan].Value.ToString().Replace(",", ""), out decimal luongCB))
+                                            tongLuongCoBan += luongCB;
+                                    }
+                                    if (colNgayCongChuan >= 0 && row.Cells[colNgayCongChuan].Value != null)
+                                    {
+                                        if (decimal.TryParse(row.Cells[colNgayCongChuan].Value.ToString().Replace(",", ""), out decimal ngayCong))
+                                            tongNgayCongChuan += ngayCong;
+                                    }
+                                    if (colSoNgayDiLam >= 0 && row.Cells[colSoNgayDiLam].Value != null)
+                                    {
+                                        if (decimal.TryParse(row.Cells[colSoNgayDiLam].Value.ToString().Replace(",", ""), out decimal ngayDiLam))
+                                            tongSoNgayDiLam += ngayDiLam;
+                                    }
+                                    if (colPhuCap >= 0 && row.Cells[colPhuCap].Value != null)
+                                    {
+                                        if (decimal.TryParse(row.Cells[colPhuCap].Value.ToString().Replace(",", ""), out decimal phuCap))
+                                            tongPhuCap += phuCap;
+                                    }
+                                    if (colKhauTru >= 0 && row.Cells[colKhauTru].Value != null)
+                                    {
+                                        if (decimal.TryParse(row.Cells[colKhauTru].Value.ToString().Replace(",", ""), out decimal khauTru))
+                                            tongKhauTru += khauTru;
+                                    }
+                                    if (colTongLuong >= 0 && row.Cells[colTongLuong].Value != null)
+                                    {
+                                        if (decimal.TryParse(row.Cells[colTongLuong].Value.ToString().Replace(",", ""), out decimal tong))
+                                            tongTongLuong += tong;
+                                    }
+                                    if (colSoNhanVien >= 0 && row.Cells[colSoNhanVien].Value != null)
+                                    {
+                                        if (int.TryParse(row.Cells[colSoNhanVien].Value.ToString(), out int soNV))
+                                            tongSoNhanVien += soNV;
+                                    }
+                                }
+
+                                // Hiển thị thống kê
+                                ws.Cell(currentRow, 1).Value = "THỐNG KÊ TỔNG HỢP";
+                                ws.Range(currentRow, 1, currentRow, 4).Merge();
+                                ws.Range(currentRow, 1, currentRow, 4).Style.Font.Bold = true;
+                                ws.Range(currentRow, 1, currentRow, 4).Style.Font.FontSize = 12;
+                                ws.Range(currentRow, 1, currentRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                                ws.Range(currentRow, 1, currentRow, 4).Style.Fill.BackgroundColor = XLColor.LightBlue;
                                 currentRow++;
+
+                                // Tổng số nhân viên
+                                if (colSoNhanVien >= 0)
+                                {
+                                    ws.Cell(currentRow, 1).Value = "Tổng số nhân viên:";
+                                    ws.Cell(currentRow, 1).Style.Font.Bold = true;
+                                    ws.Cell(currentRow, 2).Value = tongSoNhanVien > 0 ? tongSoNhanVien : dtGridViewBCLuong.Rows.Count;
+                                    ws.Cell(currentRow, 2).Style.Font.Bold = true;
+                                    currentRow++;
+                                }
 
                                 // Tổng lương cơ bản
                                 if (colLuongCoBan >= 0)
                                 {
-                                    decimal tongLuongCoBan = 0;
-                                    for (int i = 0; i < dtGridViewBCLuong.Rows.Count; i++)
-                                    {
-                                        var value = dtGridViewBCLuong.Rows[i].Cells[colLuongCoBan].Value;
-                                        if (value != null && decimal.TryParse(value.ToString(), out decimal cellValue))
-                                        {
-                                            tongLuongCoBan += cellValue;
-                                        }
-                                    }
-
                                     ws.Cell(currentRow, 1).Value = "Tổng lương cơ bản:";
                                     ws.Cell(currentRow, 1).Style.Font.Bold = true;
                                     ws.Cell(currentRow, 2).Value = tongLuongCoBan;
@@ -435,19 +641,20 @@ namespace QuanLyNhanVien3
                                 // Tổng ngày công chuẩn
                                 if (colNgayCongChuan >= 0)
                                 {
-                                    decimal tongNgayCong = 0;
-                                    for (int i = 0; i < dtGridViewBCLuong.Rows.Count; i++)
-                                    {
-                                        var value = dtGridViewBCLuong.Rows[i].Cells[colNgayCongChuan].Value;
-                                        if (value != null && decimal.TryParse(value.ToString(), out decimal cellValue))
-                                        {
-                                            tongNgayCong += cellValue;
-                                        }
-                                    }
-
                                     ws.Cell(currentRow, 1).Value = "Tổng ngày công chuẩn:";
                                     ws.Cell(currentRow, 1).Style.Font.Bold = true;
-                                    ws.Cell(currentRow, 2).Value = tongNgayCong;
+                                    ws.Cell(currentRow, 2).Value = tongNgayCongChuan;
+                                    ws.Cell(currentRow, 2).Style.NumberFormat.Format = "#,##0";
+                                    ws.Cell(currentRow, 2).Style.Font.Bold = true;
+                                    currentRow++;
+                                }
+
+                                // Tổng số ngày đi làm thực tế
+                                if (colSoNgayDiLam >= 0)
+                                {
+                                    ws.Cell(currentRow, 1).Value = "Tổng số ngày đi làm thực tế:";
+                                    ws.Cell(currentRow, 1).Style.Font.Bold = true;
+                                    ws.Cell(currentRow, 2).Value = tongSoNgayDiLam;
                                     ws.Cell(currentRow, 2).Style.NumberFormat.Format = "#,##0";
                                     ws.Cell(currentRow, 2).Style.Font.Bold = true;
                                     currentRow++;
@@ -456,16 +663,6 @@ namespace QuanLyNhanVien3
                                 // Tổng phụ cấp
                                 if (colPhuCap >= 0)
                                 {
-                                    decimal tongPhuCap = 0;
-                                    for (int i = 0; i < dtGridViewBCLuong.Rows.Count; i++)
-                                    {
-                                        var value = dtGridViewBCLuong.Rows[i].Cells[colPhuCap].Value;
-                                        if (value != null && decimal.TryParse(value.ToString(), out decimal cellValue))
-                                        {
-                                            tongPhuCap += cellValue;
-                                        }
-                                    }
-
                                     ws.Cell(currentRow, 1).Value = "Tổng phụ cấp:";
                                     ws.Cell(currentRow, 1).Style.Font.Bold = true;
                                     ws.Cell(currentRow, 2).Value = tongPhuCap;
@@ -477,16 +674,6 @@ namespace QuanLyNhanVien3
                                 // Tổng khấu trừ
                                 if (colKhauTru >= 0)
                                 {
-                                    decimal tongKhauTru = 0;
-                                    for (int i = 0; i < dtGridViewBCLuong.Rows.Count; i++)
-                                    {
-                                        var value = dtGridViewBCLuong.Rows[i].Cells[colKhauTru].Value;
-                                        if (value != null && decimal.TryParse(value.ToString(), out decimal cellValue))
-                                        {
-                                            tongKhauTru += cellValue;
-                                        }
-                                    }
-
                                     ws.Cell(currentRow, 1).Value = "Tổng khấu trừ:";
                                     ws.Cell(currentRow, 1).Style.Font.Bold = true;
                                     ws.Cell(currentRow, 2).Value = tongKhauTru;
@@ -498,19 +685,9 @@ namespace QuanLyNhanVien3
                                 // Tổng lương thực nhận
                                 if (colTongLuong >= 0)
                                 {
-                                    decimal tongThucNhan = 0;
-                                    for (int i = 0; i < dtGridViewBCLuong.Rows.Count; i++)
-                                    {
-                                        var value = dtGridViewBCLuong.Rows[i].Cells[colTongLuong].Value;
-                                        if (value != null && decimal.TryParse(value.ToString(), out decimal cellValue))
-                                        {
-                                            tongThucNhan += cellValue;
-                                        }
-                                    }
-
                                     ws.Cell(currentRow, 1).Value = "Tổng lương thực nhận:";
                                     ws.Cell(currentRow, 1).Style.Font.Bold = true;
-                                    ws.Cell(currentRow, 2).Value = tongThucNhan;
+                                    ws.Cell(currentRow, 2).Value = tongTongLuong;
                                     ws.Cell(currentRow, 2).Style.NumberFormat.Format = "#,##0";
                                     ws.Cell(currentRow, 2).Style.Font.Bold = true;
                                     ws.Cell(currentRow, 2).Style.Font.FontColor = XLColor.Red;
@@ -520,17 +697,7 @@ namespace QuanLyNhanVien3
                                 // Tính lương trung bình
                                 if (colTongLuong >= 0 && dtGridViewBCLuong.Rows.Count > 0)
                                 {
-                                    decimal tongThucNhan = 0;
-                                    for (int i = 0; i < dtGridViewBCLuong.Rows.Count; i++)
-                                    {
-                                        var value = dtGridViewBCLuong.Rows[i].Cells[colTongLuong].Value;
-                                        if (value != null && decimal.TryParse(value.ToString(), out decimal cellValue))
-                                        {
-                                            tongThucNhan += cellValue;
-                                        }
-                                    }
-
-                                    decimal luongTrungBinh = tongThucNhan / dtGridViewBCLuong.Rows.Count;
+                                    decimal luongTrungBinh = tongTongLuong / dtGridViewBCLuong.Rows.Count;
 
                                     ws.Cell(currentRow, 1).Value = "Lương trung bình:";
                                     ws.Cell(currentRow, 1).Style.Font.Bold = true;
@@ -585,7 +752,8 @@ namespace QuanLyNhanVien3
                                     if (headerText.Contains("Lương") ||
                                         headerText.Contains("Phụ Cấp") ||
                                         headerText.Contains("Khấu Trừ") ||
-                                        headerText.Contains("Tổng"))
+                                        headerText.Contains("Tổng") ||
+                                        headerText.Contains("Quỹ"))
                                     {
                                         ws.Column(j + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
                                     }
@@ -686,8 +854,16 @@ namespace QuanLyNhanVien3
                             /* ================= NGÀY LẬP BÁO CÁO ================= */
                             Paragraph date = new Paragraph($"Ngày lập báo cáo: {DateTime.Now:dd/MM/yyyy}", fontNormal);
                             date.Alignment = Element.ALIGN_CENTER;
-                            date.SpacingAfter = 10;
+                            date.SpacingBefore = 10;
                             document.Add(date);
+
+                            /* ================= THÁNG/NĂM BÁO CÁO ================= */
+                            int thang = dateTimePicker1.Value.Month;
+                            int nam = dateTimePicker1.Value.Year;
+                            Paragraph monthYear = new Paragraph($"Tháng/Năm: {thang}/{nam}", fontNormal);
+                            monthYear.Alignment = Element.ALIGN_CENTER;
+                            monthYear.SpacingAfter = 10;
+                            document.Add(monthYear);
 
                             /* ================= THÔNG TIN NGƯỜI XUẤT ================= */
                             if (nguoiXuat != null)
@@ -720,6 +896,32 @@ namespace QuanLyNhanVien3
                             }
                             table.SetWidths(columnWidths);
 
+                            // Tìm các cột cần tính tổng
+                            int colLuongCoBan = -1, colNgayCongChuan = -1, colSoNgayDiLam = -1,
+                                colPhuCap = -1, colKhauTru = -1, colTongLuong = -1, colSoNhanVien = -1;
+
+                            for (int j = 0; j < colCount; j++)
+                            {
+                                string headerText = dtGridViewBCLuong.Columns[j].HeaderText;
+
+                                if (headerText.Contains("Lương Cơ Bản")) colLuongCoBan = j;
+                                else if (headerText.Contains("Ngày Công Chuẩn")) colNgayCongChuan = j;
+                                else if (headerText.Contains("Số ngày đi làm")) colSoNgayDiLam = j;
+                                else if (headerText.Contains("Phụ Cấp")) colPhuCap = j;
+                                else if (headerText.Contains("Khấu Trừ")) colKhauTru = j;
+                                else if (headerText.Contains("Tổng Lương")) colTongLuong = j;
+                                else if (headerText.Contains("Số Nhân Viên")) colSoNhanVien = j;
+                            }
+
+                            // Biến để tính tổng
+                            decimal tongLuongCoBan = 0;
+                            decimal tongNgayCongChuan = 0;
+                            decimal tongSoNgayDiLam = 0;
+                            decimal tongPhuCap = 0;
+                            decimal tongKhauTru = 0;
+                            decimal tongTongLuong = 0;
+                            int tongSoNhanVien = 0;
+
                             // Header
                             for (int i = 0; i < colCount; i++)
                             {
@@ -730,27 +932,6 @@ namespace QuanLyNhanVien3
                                 headerCell.Padding = 5;
                                 table.AddCell(headerCell);
                             }
-
-                            // Tìm các cột cần tính tổng
-                            int colLuongCoBan = -1, colNgayCongChuan = -1, colPhuCap = -1, colKhauTru = -1, colTongLuong = -1;
-
-                            for (int j = 0; j < colCount; j++)
-                            {
-                                string headerText = dtGridViewBCLuong.Columns[j].HeaderText;
-
-                                if (headerText.Contains("Lương Cơ Bản")) colLuongCoBan = j;
-                                else if (headerText.Contains("Ngày Công Chuẩn")) colNgayCongChuan = j;
-                                else if (headerText.Contains("Phụ Cấp")) colPhuCap = j;
-                                else if (headerText.Contains("Khấu Trừ")) colKhauTru = j;
-                                else if (headerText.Contains("Tổng Lương")) colTongLuong = j;
-                            }
-
-                            // Biến để tính tổng
-                            decimal tongLuongCoBan = 0;
-                            decimal tongNgayCongChuan = 0;
-                            decimal tongPhuCap = 0;
-                            decimal tongKhauTru = 0;
-                            decimal tongTongLuong = 0;
 
                             // Dữ liệu
                             for (int i = 0; i < dtGridViewBCLuong.Rows.Count; i++)
@@ -766,24 +947,30 @@ namespace QuanLyNhanVien3
                                         dtGridViewBCLuong.Columns[j].HeaderText.Contains("Khấu Trừ") ||
                                         dtGridViewBCLuong.Columns[j].HeaderText.Contains("Tổng"))
                                     {
-                                        if (decimal.TryParse(cellValue, out decimal money))
+                                        if (decimal.TryParse(cellValue.Replace(",", ""), out decimal money))
                                         {
                                             cellValue = money.ToString("#,##0");
 
                                             // Tính tổng
                                             if (j == colLuongCoBan) tongLuongCoBan += money;
                                             else if (j == colNgayCongChuan) tongNgayCongChuan += money;
+                                            else if (j == colSoNgayDiLam) tongSoNgayDiLam += money;
                                             else if (j == colPhuCap) tongPhuCap += money;
                                             else if (j == colKhauTru) tongKhauTru += money;
                                             else if (j == colTongLuong) tongTongLuong += money;
                                         }
+                                    }
+                                    else if (j == colSoNhanVien)
+                                    {
+                                        if (int.TryParse(cellValue, out int soNV))
+                                            tongSoNhanVien += soNV;
                                     }
 
                                     PdfPCell dataCell = new PdfPCell(new Phrase(cellValue, fontNormal));
                                     dataCell.VerticalAlignment = Element.ALIGN_MIDDLE;
                                     dataCell.Padding = 3;
 
-                                    // Căn phải cho các cột số tiền
+                                    // Căn phải cho các cột số tiền, căn giữa cho các cột số khác
                                     if (dtGridViewBCLuong.Columns[j].HeaderText.Contains("Lương") ||
                                         dtGridViewBCLuong.Columns[j].HeaderText.Contains("Phụ Cấp") ||
                                         dtGridViewBCLuong.Columns[j].HeaderText.Contains("Khấu Trừ") ||
@@ -791,9 +978,17 @@ namespace QuanLyNhanVien3
                                     {
                                         dataCell.HorizontalAlignment = Element.ALIGN_RIGHT;
                                     }
-                                    else
+                                    else if (dtGridViewBCLuong.Columns[j].HeaderText.Contains("Tháng") ||
+                                             dtGridViewBCLuong.Columns[j].HeaderText.Contains("Năm") ||
+                                             dtGridViewBCLuong.Columns[j].HeaderText.Contains("Ngày Công Chuẩn") ||
+                                             dtGridViewBCLuong.Columns[j].HeaderText.Contains("Số ngày đi làm") ||
+                                             dtGridViewBCLuong.Columns[j].HeaderText.Contains("Số Nhân Viên"))
                                     {
                                         dataCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                                    }
+                                    else
+                                    {
+                                        dataCell.HorizontalAlignment = Element.ALIGN_LEFT;
                                     }
 
                                     table.AddCell(dataCell);
@@ -801,36 +996,45 @@ namespace QuanLyNhanVien3
                             }
 
                             /* ================= DÒNG TỔNG CỘNG ================= */
-                            // Dòng tổng cộng
                             for (int j = 0; j < colCount; j++)
                             {
                                 PdfPCell tongCell = new PdfPCell();
                                 string headerText = dtGridViewBCLuong.Columns[j].HeaderText;
 
-                                if (headerText.Contains("Lương Cơ Bản"))
+                                if (j == colLuongCoBan)
                                 {
                                     tongCell = new PdfPCell(new Phrase(tongLuongCoBan.ToString("#,##0"), fontBold));
                                     tongCell.HorizontalAlignment = Element.ALIGN_RIGHT;
                                 }
-                                else if (headerText.Contains("Ngày Công Chuẩn"))
+                                else if (j == colNgayCongChuan)
                                 {
                                     tongCell = new PdfPCell(new Phrase(tongNgayCongChuan.ToString("#,##0"), fontBold));
                                     tongCell.HorizontalAlignment = Element.ALIGN_RIGHT;
                                 }
-                                else if (headerText.Contains("Phụ Cấp"))
+                                else if (j == colSoNgayDiLam)
+                                {
+                                    tongCell = new PdfPCell(new Phrase(tongSoNgayDiLam.ToString("#,##0"), fontBold));
+                                    tongCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                                }
+                                else if (j == colPhuCap)
                                 {
                                     tongCell = new PdfPCell(new Phrase(tongPhuCap.ToString("#,##0"), fontBold));
                                     tongCell.HorizontalAlignment = Element.ALIGN_RIGHT;
                                 }
-                                else if (headerText.Contains("Khấu Trừ"))
+                                else if (j == colKhauTru)
                                 {
                                     tongCell = new PdfPCell(new Phrase(tongKhauTru.ToString("#,##0"), fontBold));
                                     tongCell.HorizontalAlignment = Element.ALIGN_RIGHT;
                                 }
-                                else if (headerText.Contains("Tổng Lương"))
+                                else if (j == colTongLuong)
                                 {
                                     tongCell = new PdfPCell(new Phrase(tongTongLuong.ToString("#,##0"), fontBold));
                                     tongCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                                }
+                                else if (j == colSoNhanVien)
+                                {
+                                    tongCell = new PdfPCell(new Phrase(tongSoNhanVien.ToString(), fontBold));
+                                    tongCell.HorizontalAlignment = Element.ALIGN_CENTER;
                                 }
                                 else if (j == 0) // Cột đầu tiên hiển thị "Tổng Cộng"
                                 {
@@ -844,7 +1048,7 @@ namespace QuanLyNhanVien3
 
                                 tongCell.VerticalAlignment = Element.ALIGN_MIDDLE;
                                 tongCell.Padding = 3;
-                                tongCell.BackgroundColor = new BaseColor(240, 240, 240); // Màu nền xám nhạt
+                                tongCell.BackgroundColor = new BaseColor(240, 240, 240);
                                 table.AddCell(tongCell);
                             }
 
@@ -873,7 +1077,8 @@ namespace QuanLyNhanVien3
                             cellLabel1.Padding = 3;
                             tableThongKe.AddCell(cellLabel1);
 
-                            PdfPCell cellValue1 = new PdfPCell(new Phrase(dtGridViewBCLuong.Rows.Count.ToString(), fontBold));
+                            int totalNV = tongSoNhanVien > 0 ? tongSoNhanVien : dtGridViewBCLuong.Rows.Count;
+                            PdfPCell cellValue1 = new PdfPCell(new Phrase(totalNV.ToString(), fontBold));
                             cellValue1.Border = NO_BORDER;
                             cellValue1.Padding = 3;
                             cellValue1.HorizontalAlignment = Element.ALIGN_RIGHT;
@@ -903,54 +1108,69 @@ namespace QuanLyNhanVien3
                             cellValue3.HorizontalAlignment = Element.ALIGN_RIGHT;
                             tableThongKe.AddCell(cellValue3);
 
+                            // Tổng số ngày đi làm thực tế
+                            if (colSoNgayDiLam >= 0)
+                            {
+                                PdfPCell cellLabel4 = new PdfPCell(new Phrase("Tổng số ngày đi làm thực tế:", fontBold));
+                                cellLabel4.Border = NO_BORDER;
+                                cellLabel4.Padding = 3;
+                                tableThongKe.AddCell(cellLabel4);
+
+                                PdfPCell cellValue4 = new PdfPCell(new Phrase(tongSoNgayDiLam.ToString("#,##0"), fontBold));
+                                cellValue4.Border = NO_BORDER;
+                                cellValue4.Padding = 3;
+                                cellValue4.HorizontalAlignment = Element.ALIGN_RIGHT;
+                                tableThongKe.AddCell(cellValue4);
+                            }
+
                             // Tổng phụ cấp
-                            PdfPCell cellLabel4 = new PdfPCell(new Phrase("Tổng phụ cấp:", fontBold));
-                            cellLabel4.Border = NO_BORDER;
-                            cellLabel4.Padding = 3;
-                            tableThongKe.AddCell(cellLabel4);
-
-                            PdfPCell cellValue4 = new PdfPCell(new Phrase(tongPhuCap.ToString("#,##0"), fontBold));
-                            cellValue4.Border = NO_BORDER;
-                            cellValue4.Padding = 3;
-                            cellValue4.HorizontalAlignment = Element.ALIGN_RIGHT;
-                            tableThongKe.AddCell(cellValue4);
-
-                            // Tổng khấu trừ
-                            PdfPCell cellLabel5 = new PdfPCell(new Phrase("Tổng khấu trừ:", fontBold));
+                            PdfPCell cellLabel5 = new PdfPCell(new Phrase("Tổng phụ cấp:", fontBold));
                             cellLabel5.Border = NO_BORDER;
                             cellLabel5.Padding = 3;
                             tableThongKe.AddCell(cellLabel5);
 
-                            PdfPCell cellValue5 = new PdfPCell(new Phrase(tongKhauTru.ToString("#,##0"), fontBold));
+                            PdfPCell cellValue5 = new PdfPCell(new Phrase(tongPhuCap.ToString("#,##0"), fontBold));
                             cellValue5.Border = NO_BORDER;
                             cellValue5.Padding = 3;
                             cellValue5.HorizontalAlignment = Element.ALIGN_RIGHT;
                             tableThongKe.AddCell(cellValue5);
 
-                            // Tổng lương thực nhận
-                            PdfPCell cellLabel6 = new PdfPCell(new Phrase("Tổng lương thực nhận:", fontBold));
+                            // Tổng khấu trừ
+                            PdfPCell cellLabel6 = new PdfPCell(new Phrase("Tổng khấu trừ:", fontBold));
                             cellLabel6.Border = NO_BORDER;
                             cellLabel6.Padding = 3;
                             tableThongKe.AddCell(cellLabel6);
 
-                            PdfPCell cellValue6 = new PdfPCell(new Phrase(tongTongLuong.ToString("#,##0"), fontRed));
+                            PdfPCell cellValue6 = new PdfPCell(new Phrase(tongKhauTru.ToString("#,##0"), fontBold));
                             cellValue6.Border = NO_BORDER;
                             cellValue6.Padding = 3;
                             cellValue6.HorizontalAlignment = Element.ALIGN_RIGHT;
                             tableThongKe.AddCell(cellValue6);
 
-                            // Lương trung bình
-                            PdfPCell cellLabel7 = new PdfPCell(new Phrase("Lương trung bình:", fontBold));
+                            // Tổng lương thực nhận
+                            PdfPCell cellLabel7 = new PdfPCell(new Phrase("Tổng lương thực nhận:", fontBold));
                             cellLabel7.Border = NO_BORDER;
                             cellLabel7.Padding = 3;
                             tableThongKe.AddCell(cellLabel7);
 
-                            decimal luongTrungBinh = dtGridViewBCLuong.Rows.Count > 0 ? tongTongLuong / dtGridViewBCLuong.Rows.Count : 0;
-                            PdfPCell cellValue7 = new PdfPCell(new Phrase(luongTrungBinh.ToString("#,##0"), fontBold));
+                            PdfPCell cellValue7 = new PdfPCell(new Phrase(tongTongLuong.ToString("#,##0"), fontRed));
                             cellValue7.Border = NO_BORDER;
                             cellValue7.Padding = 3;
                             cellValue7.HorizontalAlignment = Element.ALIGN_RIGHT;
                             tableThongKe.AddCell(cellValue7);
+
+                            // Lương trung bình
+                            PdfPCell cellLabel8 = new PdfPCell(new Phrase("Lương trung bình:", fontBold));
+                            cellLabel8.Border = NO_BORDER;
+                            cellLabel8.Padding = 3;
+                            tableThongKe.AddCell(cellLabel8);
+
+                            decimal luongTrungBinh = dtGridViewBCLuong.Rows.Count > 0 ? tongTongLuong / dtGridViewBCLuong.Rows.Count : 0;
+                            PdfPCell cellValue8 = new PdfPCell(new Phrase(luongTrungBinh.ToString("#,##0"), fontBold));
+                            cellValue8.Border = NO_BORDER;
+                            cellValue8.Padding = 3;
+                            cellValue8.HorizontalAlignment = Element.ALIGN_RIGHT;
+                            tableThongKe.AddCell(cellValue8);
 
                             document.Add(tableThongKe);
 
@@ -1012,6 +1232,8 @@ namespace QuanLyNhanVien3
 
         private void F_BaoCaoLuong_Load(object sender, EventArgs e)
         {
+            // Tự động load dữ liệu khi form load
+            btnLuongHangThang_Click(sender, e);
         }
     }
 }
