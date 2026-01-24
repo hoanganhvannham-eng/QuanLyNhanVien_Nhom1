@@ -60,22 +60,22 @@
             // cbBoxChucVu
             // 
             this.cbBoxChucVu.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.cbBoxChucVu.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBoxChucVu.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.cbBoxChucVu.FormattingEnabled = true;
             this.cbBoxChucVu.Location = new System.Drawing.Point(821, 54);
             this.cbBoxChucVu.Name = "cbBoxChucVu";
-            this.cbBoxChucVu.Size = new System.Drawing.Size(307, 27);
+            this.cbBoxChucVu.Size = new System.Drawing.Size(307, 31);
             this.cbBoxChucVu.TabIndex = 197;
             this.cbBoxChucVu.SelectedIndexChanged += new System.EventHandler(this.cbBoxChucVu_SelectedIndexChanged);
             // 
             // cbBoxMaPB
             // 
             this.cbBoxMaPB.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.cbBoxMaPB.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBoxMaPB.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbBoxMaPB.FormattingEnabled = true;
             this.cbBoxMaPB.Location = new System.Drawing.Point(821, 16);
             this.cbBoxMaPB.Name = "cbBoxMaPB";
-            this.cbBoxMaPB.Size = new System.Drawing.Size(307, 27);
+            this.cbBoxMaPB.Size = new System.Drawing.Size(307, 28);
             this.cbBoxMaPB.TabIndex = 196;
             this.cbBoxMaPB.SelectedIndexChanged += new System.EventHandler(this.cbBoxMaPB_SelectedIndexChanged);
             // 
@@ -83,10 +83,10 @@
             // 
             this.label11.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.Location = new System.Drawing.Point(685, 21);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(108, 19);
+            this.label11.Size = new System.Drawing.Size(131, 20);
             this.label11.TabIndex = 194;
             this.label11.Text = "Mã Phòng Ban";
             // 
@@ -94,10 +94,10 @@
             // 
             this.label10.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.label10.Location = new System.Drawing.Point(685, 60);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(68, 19);
+            this.label10.Size = new System.Drawing.Size(76, 23);
             this.label10.TabIndex = 195;
             this.label10.Text = "Chức Vụ";
             // 
@@ -137,6 +137,7 @@
             this.pnlControl.Padding = new System.Windows.Forms.Padding(15);
             this.pnlControl.Size = new System.Drawing.Size(1821, 223);
             this.pnlControl.TabIndex = 1;
+            this.pnlControl.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlControl_Paint);
             // 
             // grpTime
             // 

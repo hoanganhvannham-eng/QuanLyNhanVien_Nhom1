@@ -1196,5 +1196,10 @@ WHERE cc.DeletedAt_TuanhCD233018 = 0
                 cn.disconnect();
             }
         }
+
+        private void pnlControl_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
