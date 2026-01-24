@@ -55,6 +55,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.toolStripLabelUser = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.chiTiếtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chấmCôngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.toolStripLabelUser.SuspendLayout();
@@ -156,6 +158,9 @@
             // 
             // chamConngToolStripMenuItem
             // 
+            this.chamConngToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.chấmCôngToolStripMenuItem,
+            this.chiTiếtToolStripMenuItem});
             this.chamConngToolStripMenuItem.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chamConngToolStripMenuItem.Name = "chamConngToolStripMenuItem";
             this.chamConngToolStripMenuItem.Size = new System.Drawing.Size(147, 29);
@@ -299,17 +304,31 @@
             this.toolStripLabelUser.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStripLabelUser.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1});
-            this.toolStripLabelUser.Location = new System.Drawing.Point(0, 550);
+            this.toolStripLabelUser.Location = new System.Drawing.Point(0, 556);
             this.toolStripLabelUser.Name = "toolStripLabelUser";
-            this.toolStripLabelUser.Size = new System.Drawing.Size(1324, 31);
+            this.toolStripLabelUser.Size = new System.Drawing.Size(1324, 25);
             this.toolStripLabelUser.TabIndex = 6;
             this.toolStripLabelUser.Text = "toolStrip1";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(111, 28);
+            this.toolStripLabel1.Size = new System.Drawing.Size(111, 22);
             this.toolStripLabel1.Text = "toolStripLabel1";
+            // 
+            // chiTiếtToolStripMenuItem
+            // 
+            this.chiTiếtToolStripMenuItem.Name = "chiTiếtToolStripMenuItem";
+            this.chiTiếtToolStripMenuItem.Size = new System.Drawing.Size(286, 30);
+            this.chiTiếtToolStripMenuItem.Text = "Chi tiết/ Chỉnh sửa";
+            this.chiTiếtToolStripMenuItem.Click += new System.EventHandler(this.chiTiếtToolStripMenuItem_Click);
+            // 
+            // chấmCôngToolStripMenuItem
+            // 
+            this.chấmCôngToolStripMenuItem.Name = "chấmCôngToolStripMenuItem";
+            this.chấmCôngToolStripMenuItem.Size = new System.Drawing.Size(286, 30);
+            this.chấmCôngToolStripMenuItem.Text = "Chấm công";
+            this.chấmCôngToolStripMenuItem.Click += new System.EventHandler(this.chấmCôngToolStripMenuItem_Click);
             // 
             // F_FormMain
             // 
@@ -368,5 +387,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStrip toolStripLabelUser;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripMenuItem chiTiếtToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem chấmCôngToolStripMenuItem;
     }
 }

@@ -59,11 +59,14 @@ namespace QuanLyNhanVien3
                     adapter.Fill(dt);
                     dgvDA.DataSource = dt;
                 }
-                cn.disconnect();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi tải dữ liệu Dự Án: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.disconnect();
             }
         }
 
@@ -91,11 +94,14 @@ namespace QuanLyNhanVien3
                     adapter.Fill(dt);
                     dgvChiTietDA.DataSource = dt;
                 }
-                cn.disconnect();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi tải dữ liệu Chi Tiết Dự Án: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.disconnect();
             }
         }
 
@@ -107,7 +113,8 @@ namespace QuanLyNhanVien3
                 string sql = @"
                     SELECT MaNV_TuanhCD233018, HoTen_TuanhCD233018
                     FROM tblNhanVien_TuanhCD233018 
-                    WHERE DeletedAt_TuanhCD233018 = 0";
+                    WHERE DeletedAt_TuanhCD233018 = 0
+                    ORDER BY MaNV_TuanhCD233018";
                 using (SqlDataAdapter da = new SqlDataAdapter(sql, cn.conn))
                 {
                     DataTable dt = new DataTable();
@@ -117,15 +124,15 @@ namespace QuanLyNhanVien3
                     cbMaNV.DisplayMember = "MaNV_TuanhCD233018";
                     cbMaNV.ValueMember = "MaNV_TuanhCD233018";
                     cbMaNV.SelectedIndex = -1;
-
-                    // Load tên nhân viên
-                    tbTenNhanVien.DataBindings.Clear();
                 }
-                cn.disconnect();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi tải dữ liệu mã NV: " + ex.Message);
+            }
+            finally
+            {
+                cn.disconnect();
             }
         }
 
@@ -137,7 +144,8 @@ namespace QuanLyNhanVien3
                 string sql = @"
                     SELECT MaDA_KienCD233824, TenDA_KienCD233824
                     FROM tblDuAn_KienCD233824 
-                    WHERE DeletedAt_KienCD233824 = 0";
+                    WHERE DeletedAt_KienCD233824 = 0
+                    ORDER BY MaDA_KienCD233824";
                 using (SqlDataAdapter da = new SqlDataAdapter(sql, cn.conn))
                 {
                     DataTable dt = new DataTable();
@@ -148,14 +156,37 @@ namespace QuanLyNhanVien3
                     cbMaDuAn.ValueMember = "MaDA_KienCD233824";
                     cbMaDuAn.SelectedIndex = -1;
                 }
-                cn.disconnect();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi tải dữ liệu mã DA: " + ex.Message);
             }
+            finally
+            {
+                cn.disconnect();
+            }
         }
 
+        // ===== THÊM METHOD MỚI: Load tên nhân viên khi chọn mã =====
+        private void cbMaNV_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbMaNV.SelectedIndex != -1)
+            {
+                try
+                {
+                    DataRowView drv = (DataRowView)cbMaNV.SelectedItem;
+                    tbTenNhanVien.Text = drv["HoTen_TuanhCD233018"].ToString();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi: " + ex.Message);
+                }
+            }
+            else
+            {
+                tbTenNhanVien.Clear();
+            }
+        }
 
         private void btnThemDA_Click(object sender, EventArgs e)
         {
@@ -170,7 +201,6 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
-                // Kiểm tra ngày bắt đầu và ngày kết thúc
                 if (DatePickerNgayBatDau.Value > DatePickerNgayKetThuc.Value)
                 {
                     MessageBox.Show("Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc!", "Cảnh báo",
@@ -180,7 +210,6 @@ namespace QuanLyNhanVien3
 
                 cn.connect();
 
-                // Kiểm tra mã dự án đã tồn tại
                 string checkMaDA = @"
                     SELECT COUNT(*) 
                     FROM tblDuAn_KienCD233824  
@@ -195,7 +224,6 @@ namespace QuanLyNhanVien3
                     {
                         MessageBox.Show("Mã dự án đã tồn tại trong hệ thống!", "Thông báo",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        cn.disconnect();
                         return;
                     }
                 }
@@ -222,7 +250,6 @@ namespace QuanLyNhanVien3
                     {
                         MessageBox.Show("Thêm dự án thành công!", "Thông báo",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        cn.disconnect();
                         LoadDataDuAn();
                         LoadComboBoxMaDA();
                         ClearAllInputs(groupBox2);
@@ -233,6 +260,10 @@ namespace QuanLyNhanVien3
             {
                 MessageBox.Show("Lỗi: " + ex.Message, "Lỗi hệ thống",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.disconnect();
             }
         }
 
@@ -278,7 +309,8 @@ namespace QuanLyNhanVien3
                             NgayBatDau_KienCD233824 = @NgayBatDau, 
                             NgayKetThuc_KienCD233824 = @NgayKetThuc, 
                             GhiChu_KienCD233824 = @GhiChu
-                        WHERE MaDA_KienCD233824 = @MaDA";
+                        WHERE MaDA_KienCD233824 = @MaDA
+                          AND DeletedAt_KienCD233824 = 0";
 
                     using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                     {
@@ -294,10 +326,14 @@ namespace QuanLyNhanVien3
                         {
                             MessageBox.Show("Cập nhật dự án thành công!", "Thông báo",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            cn.disconnect();
                             LoadDataDuAn();
                             LoadComboBoxMaDA();
                             ClearAllInputs(groupBox2);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy dự án để cập nhật!", "Thông báo",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                     }
                 }
@@ -306,6 +342,10 @@ namespace QuanLyNhanVien3
             {
                 MessageBox.Show("Lỗi: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.disconnect();
             }
         }
 
@@ -343,7 +383,6 @@ namespace QuanLyNhanVien3
                         {
                             MessageBox.Show("Xóa dự án thành công!", "Thông báo",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            cn.disconnect();
                             LoadDataDuAn();
                             LoadComboBoxMaDA();
                             ClearAllInputs(groupBox2);
@@ -352,7 +391,6 @@ namespace QuanLyNhanVien3
                         {
                             MessageBox.Show("Không tìm thấy dự án để xóa!", "Thông báo",
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            cn.disconnect();
                         }
                     }
                 }
@@ -362,6 +400,10 @@ namespace QuanLyNhanVien3
                 MessageBox.Show("Lỗi: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                cn.disconnect();
+            }
         }
 
         private void dgvDA_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -369,14 +411,56 @@ namespace QuanLyNhanVien3
             int i = e.RowIndex;
             if (i >= 0)
             {
+                string maDA = dgvDA.Rows[e.RowIndex].Cells[0].Value.ToString();
                 tbmaDA.Text = dgvDA.Rows[i].Cells[0].Value.ToString();
                 tbTenDA.Text = dgvDA.Rows[i].Cells[1].Value.ToString();
                 tbMota.Text = dgvDA.Rows[i].Cells[2].Value.ToString();
                 DatePickerNgayBatDau.Value = Convert.ToDateTime(dgvDA.Rows[i].Cells[3].Value);
                 DatePickerNgayKetThuc.Value = Convert.ToDateTime(dgvDA.Rows[i].Cells[4].Value);
-                tbGhiChuDA.Text = dgvDA.Rows[i].Cells[5].Value.ToString();
+                tbGhiChuDA.Text = dgvDA.Rows[i].Cells[5].Value?.ToString() ?? "";
+                LoadDataChiTietDuAnTheoMaDA(maDA);
             }
         }
+        private void LoadDataChiTietDuAnTheoMaDA(string maDA)
+        {
+            try
+            {
+                cn.connect();
+
+                string sql = @"
+            SELECT 
+                ct.MaNV_TuanhCD233018 AS 'Mã nhân viên',
+                nv.HoTen_TuanhCD233018 AS 'Tên nhân viên',
+                ct.MaDA_KienCD233824 AS 'Mã dự án',
+                ct.VaiTro_KienCD233824 AS 'Vai trò',
+                ct.Ghichu_KienCD233824 AS 'Ghi chú'
+            FROM tblChiTietDuAn_KienCD233824 ct
+            LEFT JOIN tblNhanVien_TuanhCD233018 nv 
+                ON ct.MaNV_TuanhCD233018 = nv.MaNV_TuanhCD233018
+            WHERE ct.DeletedAt_KienCD233824 = 0
+              AND ct.MaDA_KienCD233824 = @MaDA";
+
+                using (SqlDataAdapter da = new SqlDataAdapter(sql, cn.conn))
+                {
+                    da.SelectCommand.Parameters.AddWithValue("@MaDA", maDA);
+
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    dgvChiTietDA.DataSource = dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi load chi tiết dự án: " + ex.Message);
+            }
+            finally
+            {
+                cn.disconnect();
+            }
+        }
+
+
+        // ===== ĐÃ XÓA method LoadChiTietDuAnCellclick() vì không cần thiết =====
 
         private void btnThemCTDA_Click(object sender, EventArgs e)
         {
@@ -393,7 +477,6 @@ namespace QuanLyNhanVien3
 
                 cn.connect();
 
-                // Kiểm tra xem nhân viên đã tham gia dự án này chưa
                 string checkExist = @"
                     SELECT COUNT(*) 
                     FROM tblChiTietDuAn_KienCD233824 
@@ -411,7 +494,6 @@ namespace QuanLyNhanVien3
                     {
                         MessageBox.Show("Nhân viên này đã tham gia dự án!", "Thông báo",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        cn.disconnect();
                         return;
                     }
                 }
@@ -435,7 +517,6 @@ namespace QuanLyNhanVien3
                     {
                         MessageBox.Show("Thêm chi tiết dự án thành công!", "Thông báo",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        cn.disconnect();
                         LoadDataChiTietDuAn();
                         ClearAllInputs(groupBox1);
                     }
@@ -445,6 +526,10 @@ namespace QuanLyNhanVien3
             {
                 MessageBox.Show("Lỗi: " + ex.Message, "Lỗi hệ thống",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.disconnect();
             }
         }
 
@@ -470,12 +555,13 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
+                    // ===== ĐÃ SỬA: Thêm điều kiện MaDA vào WHERE =====
                     string sql = @"
                         UPDATE tblChiTietDuAn_KienCD233824 
-                        SET MaDA_KienCD233824 = @MaDA,
-                            VaiTro_KienCD233824 = @VaiTro,
+                        SET VaiTro_KienCD233824 = @VaiTro,
                             GhiChu_KienCD233824 = @GhiChu
                         WHERE MaNV_TuanhCD233018 = @MaNV 
+                          AND MaDA_KienCD233824 = @MaDA
                           AND DeletedAt_KienCD233824 = 0";
 
                     using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
@@ -490,7 +576,6 @@ namespace QuanLyNhanVien3
                         {
                             MessageBox.Show("Cập nhật chi tiết dự án thành công!", "Thông báo",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            cn.disconnect();
                             LoadDataChiTietDuAn();
                             ClearAllInputs(groupBox1);
                         }
@@ -498,7 +583,6 @@ namespace QuanLyNhanVien3
                         {
                             MessageBox.Show("Không tìm thấy chi tiết dự án để sửa!", "Thông báo",
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            cn.disconnect();
                         }
                     }
                 }
@@ -508,13 +592,17 @@ namespace QuanLyNhanVien3
                 MessageBox.Show("Lỗi: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                cn.disconnect();
+            }
         }
 
         private void btnXoaCTDA_Click(object sender, EventArgs e)
         {
             try
             {
-                if (cbMaNV.SelectedIndex == -1)
+                if (cbMaNV.SelectedIndex == -1 || cbMaDuAn.SelectedIndex == -1)
                 {
                     MessageBox.Show("Vui lòng chọn chi tiết dự án cần xóa!", "Thông báo",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -546,7 +634,6 @@ namespace QuanLyNhanVien3
                         {
                             MessageBox.Show("Xóa chi tiết dự án thành công!", "Thông báo",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            cn.disconnect();
                             LoadDataChiTietDuAn();
                             ClearAllInputs(groupBox1);
                         }
@@ -554,7 +641,6 @@ namespace QuanLyNhanVien3
                         {
                             MessageBox.Show("Không tìm thấy chi tiết dự án để xóa!", "Thông báo",
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            cn.disconnect();
                         }
                     }
                 }
@@ -564,12 +650,15 @@ namespace QuanLyNhanVien3
                 MessageBox.Show("Lỗi: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                cn.disconnect();
+            }
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             LoadDataDuAn();
-            LoadDataChiTietDuAn();
             LoadComboBoxMaNV();
             LoadComboBoxMaDA();
             ClearAllInputs(this);
@@ -577,12 +666,12 @@ namespace QuanLyNhanVien3
 
         private void btnXuatExcel_Click(object sender, EventArgs e)
         {
-
+            // TODO: Implement Excel export
         }
 
         private void btnXuatPDF_Click(object sender, EventArgs e)
         {
-
+            // TODO: Implement PDF export
         }
 
         private void dgvChiTietDA_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -590,22 +679,51 @@ namespace QuanLyNhanVien3
             int i = e.RowIndex;
             if (i >= 0)
             {
-                cbMaNV.SelectedValue = dgvChiTietDA.Rows[i].Cells[0].Value.ToString();
-                tbTenNhanVien.Text = dgvChiTietDA.Rows[i].Cells[1].Value.ToString();
-                cbMaDuAn.SelectedValue = dgvChiTietDA.Rows[i].Cells[2].Value.ToString();
-                tbVaiTro.Text = dgvChiTietDA.Rows[i].Cells[3].Value.ToString();
-                tbGhiChuCTDA.Text = dgvChiTietDA.Rows[i].Cells[4].Value.ToString();
+                cbMaNV.SelectedValue = dgvChiTietDA.Rows[i].Cells[0].Value?.ToString();
+                tbTenNhanVien.Text = dgvChiTietDA.Rows[i].Cells[1].Value?.ToString() ?? "";
+                cbMaDuAn.SelectedValue = dgvChiTietDA.Rows[i].Cells[2].Value?.ToString();
+                tbVaiTro.Text = dgvChiTietDA.Rows[i].Cells[3].Value?.ToString() ?? "";
+                tbGhiChuCTDA.Text = dgvChiTietDA.Rows[i].Cells[4].Value?.ToString() ?? "";
             }
         }
-
-        
 
         private void F_DuAnChung_Load(object sender, EventArgs e)
         {
             LoadDataDuAn();
-            LoadDataChiTietDuAn();
             LoadComboBoxMaNV();
             LoadComboBoxMaDA();
+        }
+
+        private void cbMaNV_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (cbMaNV.SelectedValue == null) return;
+
+            try
+            {
+                cn.connect();
+
+                string sql = @"
+            SELECT HoTen_TuanhCD233018
+            FROM tblNhanVien_TuanhCD233018
+            WHERE MaNV_TuanhCD233018 = @MaNV
+              AND DeletedAt_TuanhCD233018 = 0";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaNV", cbMaNV.SelectedValue.ToString());
+
+                    object result = cmd.ExecuteScalar();
+                    tbTenNhanVien.Text = result != null ? result.ToString() : "";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi load tên NV: " + ex.Message);
+            }
+            finally
+            {
+                cn.disconnect();
+            }
         }
     }
 }

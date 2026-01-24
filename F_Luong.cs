@@ -1,9 +1,11 @@
 ﻿using ClosedXML.Excel;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Windows.Forms;
-using static QuanLyNhanVien3.F_FormMain;
 
 namespace QuanLyNhanVien3
 {
@@ -27,13 +29,6 @@ namespace QuanLyNhanVien3
             LoadComboBoxChucVu();
             LoadComboBoxNhanVien();
             LoadLuongTheoThangNam();
-
-            if (LoginInfo.CurrentUserRole.ToLower() == "user")
-            {
-                btnThem.Enabled = false;
-                btnSua.Enabled = false;
-                btnXoa.Enabled = false;
-            }
 
             txtLuongCoBan.ReadOnly = true;
             txtLuongCoBan.BackColor = System.Drawing.SystemColors.Control;
@@ -620,42 +615,6 @@ namespace QuanLyNhanVien3
 
         #endregion
 
-        #region CLEAR, GENERATE MÃ
-
-        private void ClearAllInputs()
-        {
-            // Clear textboxes
-            txtPhuCap.Text = "";
-            txtSoNgayCong.Text = "";
-            txtKhauTru.Text = "";
-            txtGhiChu.Text = "";
-            txtTimKiem.Text = "";
-            txtLuongCoBan.Text = "";
-            cbMaLuong.Text = "";
-
-            // Reset comboboxes
-            isLoadingComboBox = true;
-
-            cbPB.SelectedIndex = 0;
-            LoadComboBoxChucVu();
-            LoadComboBoxNhanVien();
-
-            cbThang.SelectedItem = DateTime.Now.Month;
-            numNam.Value = DateTime.Now.Year;
-
-            isLoadingComboBox = false;
-
-            // Reset variables
-            currentMaPB = "";
-            currentMaCV = "";
-            currentMaNV = "";
-
-            // Load lại dữ liệu
-            LoadLuongTheoThangNam();
-        }
-
-        #endregion
-
         #region THÊM - SỬA - XÓA - REFRESH
 
         private void btnThem_Click_1(object sender, EventArgs e)
@@ -969,6 +928,42 @@ namespace QuanLyNhanVien3
 
         #endregion
 
+        #region CLEAR, GENERATE MÃ
+
+        private void ClearAllInputs()
+        {
+            // Clear textboxes
+            txtPhuCap.Text = "";
+            txtSoNgayCong.Text = "";
+            txtKhauTru.Text = "";
+            txtGhiChu.Text = "";
+            txtTimKiem.Text = "";
+            txtLuongCoBan.Text = "";
+            cbMaLuong.Text = "";
+
+            // Reset comboboxes
+            isLoadingComboBox = true;
+
+            cbPB.SelectedIndex = 0;
+            LoadComboBoxChucVu();
+            LoadComboBoxNhanVien();
+
+            cbThang.SelectedItem = DateTime.Now.Month;
+            numNam.Value = DateTime.Now.Year;
+
+            isLoadingComboBox = false;
+
+            // Reset variables
+            currentMaPB = "";
+            currentMaCV = "";
+            currentMaNV = "";
+
+            // Load lại dữ liệu
+            LoadLuongTheoThangNam();
+        }
+
+        #endregion
+
         #region DATAGRIDVIEW EVENTS
 
         private void dgvLuong_CellClick_1(object sender, DataGridViewCellEventArgs e)
@@ -1020,7 +1015,7 @@ namespace QuanLyNhanVien3
 
         #endregion
 
-        #region TÌM KIẾM - XUẤT EXCEL
+        #region TÌM KIẾM
 
         private void btnTimKiem_Click_1(object sender, EventArgs e)
         {
@@ -1124,6 +1119,10 @@ namespace QuanLyNhanVien3
             }
         }
 
+        #endregion
+
+        #region XUẤT EXCEL
+
         private void btnXuatExcel_Click_1(object sender, EventArgs e)
         {
             if (dgvLuong.Rows.Count > 0)
@@ -1145,37 +1144,51 @@ namespace QuanLyNhanVien3
                                 var ws = wb.Worksheets.Add("Luong");
 
                                 int colCount = dgvLuong.Columns.Count;
+                                int rowCount = dgvLuong.Rows.Count;
 
-                                /* ========== TIÊU ĐỀ ========= */
-                                ws.Cell(1, 1).Value = "BẢNG LƯƠNG NHÂN VIÊN";
+                                /* ========== TIÊU ĐỀ CÔNG TY ========= */
+                                ws.Cell(1, 1).Value = "CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM";
                                 ws.Range(1, 1, 1, colCount).Merge();
                                 ws.Range(1, 1, 1, colCount).Style.Font.Bold = true;
-                                ws.Range(1, 1, 1, colCount).Style.Font.FontSize = 18;
+                                ws.Range(1, 1, 1, colCount).Style.Font.FontSize = 14;
                                 ws.Range(1, 1, 1, colCount).Style.Alignment.Horizontal =
                                     XLAlignmentHorizontalValues.Center;
 
-                                /* ========== NGÀY XUẤT ========= */
-                                ws.Cell(2, 1).Value = $"Ngày xuất: {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
+                                /* ========== TIÊU ĐỀ BÁO CÁO ========= */
+                                ws.Cell(2, 1).Value = "BÁO CÁO LƯỢNG NHÂN VIÊN";
                                 ws.Range(2, 1, 2, colCount).Merge();
+                                ws.Range(2, 1, 2, colCount).Style.Font.Bold = true;
+                                ws.Range(2, 1, 2, colCount).Style.Font.FontSize = 12;
                                 ws.Range(2, 1, 2, colCount).Style.Alignment.Horizontal =
                                     XLAlignmentHorizontalValues.Center;
-                                ws.Range(2, 1, 2, colCount).Style.Font.Italic = true;
 
-                                /* ========== THÁNG/NĂM ========= */
-                                ws.Cell(3, 1).Value = $"Tháng: {cbThang.SelectedItem}, Năm: {numNam.Value}";
+                                /* ========== NGÀY LẬP BÁO CÁO ========= */
+                                ws.Cell(3, 1).Value = $"Ngày lập báo cáo: {DateTime.Now:dd/MM/yyyy}";
                                 ws.Range(3, 1, 3, colCount).Merge();
                                 ws.Range(3, 1, 3, colCount).Style.Alignment.Horizontal =
                                     XLAlignmentHorizontalValues.Center;
 
-                                /* ========== HEADER ========= */
+                                /* ========== THÔNG TIN NGƯỜI XUẤT ========= */
+                                // Lấy thông tin người xuất từ bảng tài khoản
+                                var userInfo = GetCurrentUserInfoFromDatabase();
+                                if (userInfo != null)
+                                {
+                                    ws.Cell(4, 1).Value = "Phòng Ban";
+                                    ws.Cell(4, 2).Value = userInfo["PhongBan"]?.ToString() ?? "";
+                                    ws.Cell(5, 1).Value = "Chức vụ";
+                                    ws.Cell(5, 2).Value = userInfo["ChucVu"]?.ToString() ?? "";
+                                }
+
+                                /* ========== HEADER TABLE ========= */
+                                int startRow = 7;
                                 for (int i = 0; i < colCount; i++)
                                 {
                                     string headerText = dgvLuong.Columns[i].HeaderText;
-                                    ws.Cell(5, i + 1).Value = headerText;
-                                    ws.Cell(5, i + 1).Style.Font.Bold = true;
-                                    ws.Cell(5, i + 1).Style.Alignment.Horizontal =
+                                    ws.Cell(startRow, i + 1).Value = headerText;
+                                    ws.Cell(startRow, i + 1).Style.Font.Bold = true;
+                                    ws.Cell(startRow, i + 1).Style.Alignment.Horizontal =
                                         XLAlignmentHorizontalValues.Center;
-                                    ws.Cell(5, i + 1).Style.Fill.BackgroundColor = XLColor.LightGray;
+                                    ws.Cell(startRow, i + 1).Style.Fill.BackgroundColor = XLColor.LightGray;
                                 }
 
                                 /* ========== DỮ LIỆU ========= */
@@ -1184,20 +1197,137 @@ namespace QuanLyNhanVien3
                                     for (int j = 0; j < colCount; j++)
                                     {
                                         var value = dgvLuong.Rows[i].Cells[j].Value;
-                                        ws.Cell(i + 6, j + 1).Value =
+                                        ws.Cell(i + startRow + 1, j + 1).Value =
                                             value != null ? value.ToString() : "";
                                     }
                                 }
 
+                                /* ========== TÍNH TỔNG CỘNG ========= */
+                                decimal tongLuongCoBan = 0;
+                                decimal tongPhuCap = 0;
+                                decimal tongKhauTru = 0;
+                                int tongSoNgayCong = 0;
+
+                                foreach (DataGridViewRow row in dgvLuong.Rows)
+                                {
+                                    if (row.Cells["Lương cơ bản"].Value != null)
+                                    {
+                                        decimal luongCB;
+                                        if (decimal.TryParse(row.Cells["Lương cơ bản"].Value.ToString().Replace(",", ""), out luongCB))
+                                            tongLuongCoBan += luongCB;
+                                    }
+
+                                    if (row.Cells["Phụ cấp"].Value != null)
+                                    {
+                                        decimal phuCap;
+                                        if (decimal.TryParse(row.Cells["Phụ cấp"].Value.ToString().Replace(",", ""), out phuCap))
+                                            tongPhuCap += phuCap;
+                                    }
+
+                                    if (row.Cells["Khấu trừ"].Value != null)
+                                    {
+                                        decimal khauTru;
+                                        if (decimal.TryParse(row.Cells["Khấu trừ"].Value.ToString().Replace(",", ""), out khauTru))
+                                            tongKhauTru += khauTru;
+                                    }
+
+                                    if (row.Cells["Số ngày công"].Value != null)
+                                    {
+                                        int soNgayCong;
+                                        if (int.TryParse(row.Cells["Số ngày công"].Value.ToString(), out soNgayCong))
+                                            tongSoNgayCong += soNgayCong;
+                                    }
+                                }
+
+                                /* ========== HIỂN THỊ TỔNG CỘNG ========= */
+                                int totalRow = startRow + rowCount + 1;
+
+                                // Dòng tổng cộng
+                                ws.Cell(totalRow, 1).Value = "Tổng Cộng";
+                                ws.Range(totalRow, 1, totalRow, 4).Merge();
+
+                                // Tổng lương cơ bản
+                                int luongCol = GetColumnIndex(dgvLuong, "Lương cơ bản");
+                                if (luongCol >= 0)
+                                    ws.Cell(totalRow, luongCol + 1).Value = tongLuongCoBan;
+
+                                // Tổng số ngày công
+                                int ngayCongCol = GetColumnIndex(dgvLuong, "Số ngày công");
+                                if (ngayCongCol >= 0)
+                                    ws.Cell(totalRow, ngayCongCol + 1).Value = tongSoNgayCong;
+
+                                // Tổng phụ cấp
+                                int phuCapCol = GetColumnIndex(dgvLuong, "Phụ cấp");
+                                if (phuCapCol >= 0)
+                                    ws.Cell(totalRow, phuCapCol + 1).Value = tongPhuCap;
+
+                                // Tổng khấu trừ
+                                int khauTruCol = GetColumnIndex(dgvLuong, "Khấu trừ");
+                                if (khauTruCol >= 0)
+                                    ws.Cell(totalRow, khauTruCol + 1).Value = tongKhauTru;
+
+                                // Ghi chú (trống)
+                                int ghiChuCol = GetColumnIndex(dgvLuong, "Ghi chú");
+                                if (ghiChuCol >= 0)
+                                    ws.Cell(totalRow, ghiChuCol + 1).Value = "";
+
+                                // Định dạng dòng tổng cộng
+                                ws.Range(totalRow, 1, totalRow, colCount).Style.Font.Bold = true;
+                                ws.Range(totalRow, 1, totalRow, 4).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                                /* ========== CHỮ KÝ (CĂN PHẢI) - 3 DÒNG RIÊNG BIỆT ========= */
+                                int signatureRow = totalRow + 2;
+
+                                // Dòng 1: "Hà Nội, ngày..." (căn phải)
+                                string dateStr = $"Hà Nội, ngày {DateTime.Now:dd} tháng {DateTime.Now:MM} năm {DateTime.Now:yyyy}";
+                                ws.Cell(signatureRow, colCount - 1).Value = dateStr;
+                                ws.Range(signatureRow, colCount - 1, signatureRow, colCount).Merge();
+                                ws.Range(signatureRow, colCount - 1, signatureRow, colCount).Style.Font.Italic = true;
+                                ws.Range(signatureRow, colCount - 1, signatureRow, colCount).Style.Alignment.Horizontal =
+                                    XLAlignmentHorizontalValues.Right;
+
+                                // Dòng 2: "Người xuất" (căn phải)
+                                ws.Cell(signatureRow + 1, colCount - 1).Value = "Người xuất";
+                                ws.Range(signatureRow + 1, colCount - 1, signatureRow + 1, colCount).Merge();
+                                ws.Range(signatureRow + 1, colCount - 1, signatureRow + 1, colCount).Style.Font.Bold = true;
+                                ws.Range(signatureRow + 1, colCount - 1, signatureRow + 1, colCount).Style.Alignment.Horizontal =
+                                    XLAlignmentHorizontalValues.Right;
+
+                                // Dòng 3: Tên người xuất (căn phải)
+                                if (userInfo != null)
+                                {
+                                    ws.Cell(signatureRow + 2, colCount - 1).Value = userInfo["HoTen"]?.ToString() ?? "";
+                                    ws.Range(signatureRow + 2, colCount - 1, signatureRow + 2, colCount).Merge();
+                                    ws.Range(signatureRow + 2, colCount - 1, signatureRow + 2, colCount).Style.Font.Bold = true;
+                                    ws.Range(signatureRow + 2, colCount - 1, signatureRow + 2, colCount).Style.Alignment.Horizontal =
+                                        XLAlignmentHorizontalValues.Right;
+                                }
+
                                 /* ========== BORDER ========= */
                                 var range = ws.Range(
-                                    5, 1,
-                                    dgvLuong.Rows.Count + 5,
+                                    startRow, 1,
+                                    totalRow,
                                     colCount
                                 );
 
                                 range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                                 range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                                /* ========== FORMAT SỐ TIỀN ========= */
+                                if (luongCol >= 0)
+                                    ws.Column(luongCol + 1).Style.NumberFormat.Format = "#,##0";
+                                if (phuCapCol >= 0)
+                                    ws.Column(phuCapCol + 1).Style.NumberFormat.Format = "#,##0";
+                                if (khauTruCol >= 0)
+                                    ws.Column(khauTruCol + 1).Style.NumberFormat.Format = "#,##0";
+
+                                // Định dạng tổng cộng
+                                if (luongCol >= 0)
+                                    ws.Cell(totalRow, luongCol + 1).Style.NumberFormat.Format = "#,##0";
+                                if (phuCapCol >= 0)
+                                    ws.Cell(totalRow, phuCapCol + 1).Style.NumberFormat.Format = "#,##0";
+                                if (khauTruCol >= 0)
+                                    ws.Cell(totalRow, khauTruCol + 1).Style.NumberFormat.Format = "#,##0";
 
                                 /* ========== AUTO SIZE ========= */
                                 ws.Columns().AdjustToContents();
@@ -1212,7 +1342,336 @@ namespace QuanLyNhanVien3
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Lỗi xuất file: " + ex.Message,
+                            MessageBox.Show("Lỗi xuất file Excel: " + ex.Message,
+                                "Lỗi",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Không có dữ liệu để xuất!",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
+        // Lấy chỉ số cột từ DataGridView
+        private int GetColumnIndex(DataGridView dgv, string columnName)
+        {
+            for (int i = 0; i < dgv.Columns.Count; i++)
+            {
+                if (dgv.Columns[i].HeaderText == columnName)
+                    return i;
+            }
+            return -1;
+        }
+
+        // Lấy thông tin người dùng hiện tại từ database
+        private DataRow GetCurrentUserInfoFromDatabase()
+        {
+            try
+            {
+                cn.connect();
+
+                // Thay bằng cách lấy mã NV thực tế từ hệ thống của bạn
+                string maNVHienTai = "NV001"; // Thay bằng cách lấy thực tế
+
+                string sql = @"
+                    SELECT 
+                        nv.MaNV_TuanhCD233018 AS [MaNV],
+                        nv.HoTen_TuanhCD233018 AS [HoTen],
+                        cv.TenCV_KhangCD233181 AS [ChucVu],
+                        pb.TenPB_ThuanCD233318 AS [PhongBan]
+                    FROM tblNhanVien_TuanhCD233018 nv
+                    INNER JOIN tblChucVu_KhangCD233181 cv 
+                        ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+                    INNER JOIN tblPhongBan_ThuanCD233318 pb 
+                        ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+                    WHERE nv.MaNV_TuanhCD233018 = @MaNV
+                      AND nv.DeletedAt_TuanhCD233018 = 0
+                      AND cv.DeletedAt_KhangCD233181 = 0
+                      AND pb.DeletedAt_ThuanCD233318 = 0";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaNV", maNVHienTai);
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        if (dt.Rows.Count > 0)
+                            return dt.Rows[0];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi lấy thông tin người dùng: " + ex.Message,
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.disconnect();
+            }
+            return null;
+        }
+
+        #endregion
+
+        #region XUẤT PDF
+
+        private void btnXuatPDF_Click(object sender, EventArgs e)
+        {
+            if (dgvLuong.Rows.Count > 0)
+            {
+                string fileName = $"BangLuong_{DateTime.Now:ddMMyyyy_HHmmss}.pdf";
+
+                using (SaveFileDialog sfd = new SaveFileDialog()
+                {
+                    Filter = "PDF Files|*.pdf",
+                    FileName = fileName
+                })
+                {
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            // Lấy thông tin người xuất
+                            var userInfo = GetCurrentUserInfoFromDatabase();
+
+                            // Tạo tài liệu PDF
+                            Document doc = new Document(PageSize.A4.Rotate(), 20f, 20f, 30f, 30f);
+                            PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
+                            doc.Open();
+
+                            // Font chữ
+                            BaseFont bf = BaseFont.CreateFont("c:/windows/fonts/times.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                            iTextSharp.text.Font fontTitle = new iTextSharp.text.Font(bf, 14, iTextSharp.text.Font.BOLD);
+                            iTextSharp.text.Font fontHeader = new iTextSharp.text.Font(bf, 12, iTextSharp.text.Font.BOLD);
+                            iTextSharp.text.Font fontSubTitle = new iTextSharp.text.Font(bf, 10, iTextSharp.text.Font.BOLD);
+                            iTextSharp.text.Font fontNormal = new iTextSharp.text.Font(bf, 9, iTextSharp.text.Font.NORMAL);
+                            iTextSharp.text.Font fontSmall = new iTextSharp.text.Font(bf, 8, iTextSharp.text.Font.NORMAL);
+                            iTextSharp.text.Font fontBold = new iTextSharp.text.Font(bf, 8, iTextSharp.text.Font.BOLD);
+
+                            /* ========== TIÊU ĐỀ ========= */
+                            Paragraph title1 = new Paragraph("CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM", fontTitle);
+                            title1.Alignment = Element.ALIGN_CENTER;
+                            title1.SpacingAfter = 5f;
+                            doc.Add(title1);
+
+                            Paragraph title2 = new Paragraph("BÁO CÁO LƯỢNG NHÂN VIÊN", fontHeader);
+                            title2.Alignment = Element.ALIGN_CENTER;
+                            title2.SpacingAfter = 10f;
+                            doc.Add(title2);
+
+                            Paragraph reportDate = new Paragraph($"Ngày lập báo cáo: {DateTime.Now:dd/MM/yyyy}", fontNormal);
+                            reportDate.Alignment = Element.ALIGN_CENTER;
+                            reportDate.SpacingAfter = 15f;
+                            doc.Add(reportDate);
+
+                            /* ========== THÔNG TIN NGƯỜI XUẤT ========= */
+                            if (userInfo != null)
+                            {
+                                Paragraph phongBan = new Paragraph($"Phòng Ban: {userInfo["PhongBan"]}", fontNormal);
+                                phongBan.SpacingAfter = 5f;
+                                doc.Add(phongBan);
+
+                                Paragraph chucVu = new Paragraph($"Chức vụ: {userInfo["ChucVu"]}", fontNormal);
+                                chucVu.SpacingAfter = 10f;
+                                doc.Add(chucVu);
+                            }
+
+                            /* ========== TÍNH TỔNG CỘNG ========= */
+                            decimal tongLuongCoBan = 0;
+                            decimal tongPhuCap = 0;
+                            decimal tongKhauTru = 0;
+                            int tongSoNgayCong = 0;
+
+                            foreach (DataGridViewRow row in dgvLuong.Rows)
+                            {
+                                if (row.Cells["Lương cơ bản"].Value != null)
+                                {
+                                    decimal luongCB;
+                                    if (decimal.TryParse(row.Cells["Lương cơ bản"].Value.ToString().Replace(",", ""), out luongCB))
+                                        tongLuongCoBan += luongCB;
+                                }
+
+                                if (row.Cells["Phụ cấp"].Value != null)
+                                {
+                                    decimal phuCap;
+                                    if (decimal.TryParse(row.Cells["Phụ cấp"].Value.ToString().Replace(",", ""), out phuCap))
+                                        tongPhuCap += phuCap;
+                                }
+
+                                if (row.Cells["Khấu trừ"].Value != null)
+                                {
+                                    decimal khauTru;
+                                    if (decimal.TryParse(row.Cells["Khấu trừ"].Value.ToString().Replace(",", ""), out khauTru))
+                                        tongKhauTru += khauTru;
+                                }
+
+                                if (row.Cells["Số ngày công"].Value != null)
+                                {
+                                    int soNgayCong;
+                                    if (int.TryParse(row.Cells["Số ngày công"].Value.ToString(), out soNgayCong))
+                                        tongSoNgayCong += soNgayCong;
+                                }
+                            }
+
+                            /* ========== TẠO BẢNG ========= */
+                            int colCount = dgvLuong.Columns.Count;
+                            PdfPTable table = new PdfPTable(colCount);
+                            table.WidthPercentage = 100;
+                            table.HorizontalAlignment = Element.ALIGN_CENTER;
+
+                            // Header
+                            foreach (DataGridViewColumn column in dgvLuong.Columns)
+                            {
+                                PdfPCell cell = new PdfPCell(new Phrase(column.HeaderText, fontSmall));
+                                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                                cell.BackgroundColor = new BaseColor(240, 240, 240);
+                                cell.Padding = 5f;
+                                table.AddCell(cell);
+                            }
+
+                            // Data
+                            foreach (DataGridViewRow row in dgvLuong.Rows)
+                            {
+                                foreach (DataGridViewCell cell in row.Cells)
+                                {
+                                    if (cell.Value != null)
+                                    {
+                                        string value = cell.Value.ToString();
+
+                                        // Format số tiền
+                                        if (cell.OwningColumn.HeaderText.Contains("Lương") ||
+                                            cell.OwningColumn.HeaderText.Contains("Phụ cấp") ||
+                                            cell.OwningColumn.HeaderText.Contains("Khấu trừ"))
+                                        {
+                                            if (decimal.TryParse(value, out decimal number))
+                                            {
+                                                value = number.ToString("N0");
+                                            }
+                                        }
+
+                                        PdfPCell pdfCell = new PdfPCell(new Phrase(value, fontSmall));
+
+                                        // Căn phải cho cột số tiền
+                                        if (cell.OwningColumn.HeaderText.Contains("Lương") ||
+                                            cell.OwningColumn.HeaderText.Contains("Phụ cấp") ||
+                                            cell.OwningColumn.HeaderText.Contains("Khấu trừ"))
+                                        {
+                                            pdfCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                                        }
+                                        else if (cell.OwningColumn.HeaderText.Contains("Tháng") ||
+                                                 cell.OwningColumn.HeaderText.Contains("Năm") ||
+                                                 cell.OwningColumn.HeaderText.Contains("Số ngày công"))
+                                        {
+                                            pdfCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                                        }
+                                        else
+                                        {
+                                            pdfCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                                        }
+
+                                        pdfCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                                        pdfCell.Padding = 5f;
+                                        table.AddCell(pdfCell);
+                                    }
+                                    else
+                                    {
+                                        PdfPCell pdfCell = new PdfPCell(new Phrase("", fontSmall));
+                                        pdfCell.Padding = 5f;
+                                        table.AddCell(pdfCell);
+                                    }
+                                }
+                            }
+
+                            /* ========== DÒNG TỔNG CỘNG ========= */
+                            // Tổng Cộng text
+                            PdfPCell totalLabelCell = new PdfPCell(new Phrase("Tổng Cộng", fontBold));
+                            totalLabelCell.Colspan = 4;
+                            totalLabelCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                            totalLabelCell.Padding = 5f;
+                            table.AddCell(totalLabelCell);
+
+                            // Tổng lương cơ bản
+                            PdfPCell totalLuongCell = new PdfPCell(new Phrase(tongLuongCoBan.ToString("N0"), fontBold));
+                            totalLuongCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                            totalLuongCell.Padding = 5f;
+                            table.AddCell(totalLuongCell);
+
+                            // Tổng số ngày công
+                            PdfPCell totalNgayCongCell = new PdfPCell(new Phrase(tongSoNgayCong.ToString(), fontBold));
+                            totalNgayCongCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                            totalNgayCongCell.Padding = 5f;
+                            table.AddCell(totalNgayCongCell);
+
+                            // Tổng phụ cấp
+                            PdfPCell totalPhuCapCell = new PdfPCell(new Phrase(tongPhuCap.ToString("N0"), fontBold));
+                            totalPhuCapCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                            totalPhuCapCell.Padding = 5f;
+                            table.AddCell(totalPhuCapCell);
+
+                            // Tổng khấu trừ
+                            PdfPCell totalKhauTruCell = new PdfPCell(new Phrase(tongKhauTru.ToString("N0"), fontBold));
+                            totalKhauTruCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                            totalKhauTruCell.Padding = 5f;
+                            table.AddCell(totalKhauTruCell);
+
+                            // Ghi chú (empty)
+                            PdfPCell totalGhiChuCell = new PdfPCell(new Phrase("", fontBold));
+                            totalGhiChuCell.Padding = 5f;
+                            table.AddCell(totalGhiChuCell);
+
+                            doc.Add(table);
+                            doc.Add(new Paragraph("\n"));
+
+                            /* ========== CHỮ KÝ (CĂN PHẢI) ========= */
+                            doc.Add(new Paragraph("\n"));
+
+                            // Tạo bảng 1 cột cho chữ ký (căn phải)
+                            PdfPTable signatureTable = new PdfPTable(1);
+                            signatureTable.WidthPercentage = 100;
+                            signatureTable.HorizontalAlignment = Element.ALIGN_RIGHT;
+
+                            // Ngày tháng năm
+                            string dateStr = $"Hà Nội, ngày {DateTime.Now:dd} tháng {DateTime.Now:MM} năm {DateTime.Now:yyyy}";
+                            PdfPCell dateCell = new PdfPCell(new Phrase(dateStr, fontNormal));
+                            dateCell.Border = Rectangle.NO_BORDER;
+                            dateCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                            dateCell.Padding = 5f;
+                            signatureTable.AddCell(dateCell);
+
+                            // Người xuất
+                            if (userInfo != null)
+                            {
+                                PdfPCell signatureCell = new PdfPCell(new Phrase("Người xuất\n\n" + userInfo["HoTen"], fontSubTitle));
+                                signatureCell.Border = Rectangle.NO_BORDER;
+                                signatureCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                                signatureCell.Padding = 5f;
+                                signatureTable.AddCell(signatureCell);
+                            }
+
+                            doc.Add(signatureTable);
+
+                            doc.Close();
+                            writer.Close();
+
+                            MessageBox.Show("Xuất PDF bảng Lương thành công!",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Lỗi xuất file PDF: " + ex.Message,
                                 "Lỗi",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);

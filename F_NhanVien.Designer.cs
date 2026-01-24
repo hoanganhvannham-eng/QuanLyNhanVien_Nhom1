@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblTongNhanVien = new System.Windows.Forms.Label();
             this.btnThoat = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -63,10 +64,11 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.dtGridViewNhanVien = new System.Windows.Forms.DataGridView();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.lblTongNhanVien = new System.Windows.Forms.Label();
+            this.xuatexcel = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGridViewNhanVien)).BeginInit();
@@ -84,6 +86,18 @@
             this.panel1.Size = new System.Drawing.Size(1598, 160);
             this.panel1.TabIndex = 120;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // lblTongNhanVien
+            // 
+            this.lblTongNhanVien.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
+            this.lblTongNhanVien.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lblTongNhanVien.AutoSize = true;
+            this.lblTongNhanVien.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTongNhanVien.Location = new System.Drawing.Point(690, 108);
+            this.lblTongNhanVien.Name = "lblTongNhanVien";
+            this.lblTongNhanVien.Size = new System.Drawing.Size(130, 22);
+            this.lblTongNhanVien.TabIndex = 170;
+            this.lblTongNhanVien.Text = "Tổng nhân viên";
             // 
             // btnThoat
             // 
@@ -286,6 +300,7 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.Transparent;
+            this.panel5.Controls.Add(this.xuatexcel);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel5.Location = new System.Drawing.Point(1131, 0);
             this.panel5.Name = "panel5";
@@ -472,18 +487,20 @@
             this.dtGridViewNhanVien.Size = new System.Drawing.Size(1598, 230);
             this.dtGridViewNhanVien.TabIndex = 120;
             this.dtGridViewNhanVien.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewNhanVien_CellClick_2);
+            this.dtGridViewNhanVien.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dtGridViewNhanVien_RowPostPaint);
             // 
-            // lblTongNhanVien
+            // xuatexcel
             // 
-            this.lblTongNhanVien.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
-            this.lblTongNhanVien.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lblTongNhanVien.AutoSize = true;
-            this.lblTongNhanVien.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTongNhanVien.Location = new System.Drawing.Point(690, 108);
-            this.lblTongNhanVien.Name = "lblTongNhanVien";
-            this.lblTongNhanVien.Size = new System.Drawing.Size(130, 22);
-            this.lblTongNhanVien.TabIndex = 170;
-            this.lblTongNhanVien.Text = "Tổng nhân viên";
+            this.xuatexcel.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.xuatexcel.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.xuatexcel.Location = new System.Drawing.Point(161, 202);
+            this.xuatexcel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.xuatexcel.Name = "xuatexcel";
+            this.xuatexcel.Size = new System.Drawing.Size(145, 47);
+            this.xuatexcel.TabIndex = 189;
+            this.xuatexcel.Text = "excel";
+            this.xuatexcel.UseVisualStyleBackColor = true;
+            this.xuatexcel.Click += new System.EventHandler(this.xuatexcel_Click);
             // 
             // F_NhanVien
             // 
@@ -504,6 +521,7 @@
             this.panel2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            this.panel5.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel6.ResumeLayout(false);
@@ -549,5 +567,6 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Button btnrestar;
         private System.Windows.Forms.Label lblTongNhanVien;
+        private System.Windows.Forms.Button xuatexcel;
     }
 }

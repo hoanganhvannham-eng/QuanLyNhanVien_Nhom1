@@ -14,6 +14,9 @@ namespace QuanLyNhanVien3
         private string strCon = @"Data Source=.;Initial Catalog=QuanLyNhanVien_Nhom14;Integrated Security=True;";
 
 
+        //private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom14;Integrated Security=True;";
+        
+
         // Mở kết nối
         public void connect()
         {

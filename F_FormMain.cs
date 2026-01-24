@@ -124,8 +124,7 @@ namespace QuanLyNhanVien3
 
         private void chamConngToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //OpenChildForm(new F_ChamCong());
-            OpenChildForm(new F_ChamCongChiTiet());
+            //OpenChildForm(new F_ChamCongChiTiet());
             //ChamCong CC = new ChamCong();
             //CC.MdiParent = this;
             //CC.Show();
@@ -206,6 +205,17 @@ namespace QuanLyNhanVien3
 
         private void label1_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void chiTiếtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new F_ChamCongChiTiet());
+        }
+
+        private void chấmCôngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new F_ChamCong());
 
         }
     }

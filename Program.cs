@@ -16,8 +16,8 @@ namespace QuanLyNhanVien3
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new F_DangNhap());
-            Application.Run(new F_FormMain());
+            Application.Run(new F_DangNhap());
+            //Application.Run(new F_FormMain());
         }
     }
 }
