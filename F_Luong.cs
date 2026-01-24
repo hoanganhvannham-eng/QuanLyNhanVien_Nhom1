@@ -346,8 +346,40 @@ namespace QuanLyNhanVien3
                         l.Nam_ChienCD232928         AS N'Năm',
                         l.LuongCoBan_ChienCD232928  AS N'Lương cơ bản',
                         l.SoNgayCongChuan_ChienCD232928 AS N'Số ngày công',
+                        
+                        -- Tính số ngày đi làm thực tế: giờ vào từ 8h và giờ về từ 17h
+                        (
+                            SELECT COUNT(*)
+                            FROM tblChamCong_TuanhCD233018 cc
+                            WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                              AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                              AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                              AND cc.DeletedAt_TuanhCD233018 = 0
+                              AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                              AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                        ) AS N'Số ngày đi làm',
+                        
                         l.PhuCap_ChienCD232928      AS N'Phụ cấp',
                         l.KhauTru_ChienCD232928     AS N'Khấu trừ',
+                        
+                        -- Tính Tổng lương = (Lương cơ bản / Số ngày công chuẩn) * Số ngày đi làm + Phụ cấp - Khấu trừ
+                        ROUND(
+                            (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
+                            (
+                                SELECT COUNT(*)
+                                FROM tblChamCong_TuanhCD233018 cc
+                                WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                  AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                  AND cc.DeletedAt_TuanhCD233018 = 0
+                                  AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                  AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                            ) + 
+                            ISNULL(l.PhuCap_ChienCD232928, 0) - 
+                            ISNULL(l.KhauTru_ChienCD232928, 0), 
+                            2
+                        ) AS N'Tổng lương',
+                        
                         l.Ghichu_ChienCD232928      AS N'Ghi chú'
                     FROM tblLuong_ChienCD232928 l
                     INNER JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
@@ -434,8 +466,40 @@ namespace QuanLyNhanVien3
                         l.Nam_ChienCD232928         AS N'Năm',
                         l.LuongCoBan_ChienCD232928  AS N'Lương cơ bản',
                         l.SoNgayCongChuan_ChienCD232928 AS N'Số ngày công',
+                        
+                        -- Tính số ngày đi làm thực tế: giờ vào từ 8h và giờ về từ 17h
+                        (
+                            SELECT COUNT(*)
+                            FROM tblChamCong_TuanhCD233018 cc
+                            WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                              AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                              AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                              AND cc.DeletedAt_TuanhCD233018 = 0
+                              AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                              AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                        ) AS N'Số ngày đi làm',
+                        
                         l.PhuCap_ChienCD232928      AS N'Phụ cấp',
                         l.KhauTru_ChienCD232928     AS N'Khấu trừ',
+                        
+                        -- Tính Tổng lương = (Lương cơ bản / Số ngày công chuẩn) * Số ngày đi làm + Phụ cấp - Khấu trừ
+                        ROUND(
+                            (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
+                            (
+                                SELECT COUNT(*)
+                                FROM tblChamCong_TuanhCD233018 cc
+                                WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                  AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                  AND cc.DeletedAt_TuanhCD233018 = 0
+                                  AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                  AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                            ) + 
+                            ISNULL(l.PhuCap_ChienCD232928, 0) - 
+                            ISNULL(l.KhauTru_ChienCD232928, 0), 
+                            2
+                        ) AS N'Tổng lương',
+                        
                         l.Ghichu_ChienCD232928      AS N'Ghi chú'
                     FROM tblLuong_ChienCD232928 l
                     INNER JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
@@ -585,33 +649,28 @@ namespace QuanLyNhanVien3
         // Định dạng cột tiền trong DataGridView
         private void FormatCurrencyColumns()
         {
-            if (dgvLuong.Columns.Contains("Lương cơ bản"))
+            // Định dạng các cột tiền
+            string[] currencyColumns = { "Lương cơ bản", "Phụ cấp", "Khấu trừ", "Tổng lương" };
+
+            foreach (string colName in currencyColumns)
             {
-                dgvLuong.Columns["Lương cơ bản"].DefaultCellStyle.Format = "N0";
-                dgvLuong.Columns["Lương cơ bản"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                if (dgvLuong.Columns.Contains(colName))
+                {
+                    dgvLuong.Columns[colName].DefaultCellStyle.Format = "N0";
+                    dgvLuong.Columns[colName].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                }
             }
 
-            if (dgvLuong.Columns.Contains("Phụ cấp"))
+            // Căn giữa cho các cột số khác
+            string[] centerColumns = { "Tháng", "Năm", "Số ngày công", "Số ngày đi làm" };
+
+            foreach (string colName in centerColumns)
             {
-                dgvLuong.Columns["Phụ cấp"].DefaultCellStyle.Format = "N0";
-                dgvLuong.Columns["Phụ cấp"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                if (dgvLuong.Columns.Contains(colName))
+                {
+                    dgvLuong.Columns[colName].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                }
             }
-
-            if (dgvLuong.Columns.Contains("Khấu trừ"))
-            {
-                dgvLuong.Columns["Khấu trừ"].DefaultCellStyle.Format = "N0";
-                dgvLuong.Columns["Khấu trừ"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            }
-
-            // Căn giữa cho các cột số
-            if (dgvLuong.Columns.Contains("Tháng"))
-                dgvLuong.Columns["Tháng"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            if (dgvLuong.Columns.Contains("Năm"))
-                dgvLuong.Columns["Năm"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            if (dgvLuong.Columns.Contains("Số ngày công"))
-                dgvLuong.Columns["Số ngày công"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
 
         #endregion
@@ -1004,12 +1063,16 @@ namespace QuanLyNhanVien3
             if (row.Cells["Số ngày công"].Value != null)
                 txtSoNgayCong.Text = row.Cells["Số ngày công"].Value.ToString();
 
+            if (row.Cells["Số ngày đi làm"].Value != null)
+                txtSoNgayCong.Text = row.Cells["Số ngày đi làm"].Value.ToString();
+
             if (row.Cells["Phụ cấp"].Value != null)
                 txtPhuCap.Text = Convert.ToDecimal(row.Cells["Phụ cấp"].Value).ToString("N0");
 
             if (row.Cells["Khấu trừ"].Value != null)
                 txtKhauTru.Text = Convert.ToDecimal(row.Cells["Khấu trừ"].Value).ToString("N0");
 
+            // KHÔNG hiển thị tổng lương trong textbox nữa, chỉ hiển thị trong DataGridView
             if (row.Cells["Ghi chú"].Value != null)
                 txtGhiChu.Text = row.Cells["Ghi chú"].Value.ToString();
         }
@@ -1035,8 +1098,40 @@ namespace QuanLyNhanVien3
                         l.Nam_ChienCD232928         AS N'Năm',
                         l.LuongCoBan_ChienCD232928  AS N'Lương cơ bản',
                         l.SoNgayCongChuan_ChienCD232928 AS N'Số ngày công',
+                        
+                        -- Tính số ngày đi làm thực tế
+                        (
+                            SELECT COUNT(*)
+                            FROM tblChamCong_TuanhCD233018 cc
+                            WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                              AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                              AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                              AND cc.DeletedAt_TuanhCD233018 = 0
+                              AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                              AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                        ) AS N'Số ngày đi làm',
+                        
                         l.PhuCap_ChienCD232928      AS N'Phụ cấp',
                         l.KhauTru_ChienCD232928     AS N'Khấu trừ',
+                        
+                        -- Tính Tổng lương
+                        ROUND(
+                            (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
+                            (
+                                SELECT COUNT(*)
+                                FROM tblChamCong_TuanhCD233018 cc
+                                WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                  AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                  AND cc.DeletedAt_TuanhCD233018 = 0
+                                  AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                  AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                            ) + 
+                            ISNULL(l.PhuCap_ChienCD232928, 0) - 
+                            ISNULL(l.KhauTru_ChienCD232928, 0), 
+                            2
+                        ) AS N'Tổng lương',
+                        
                         l.Ghichu_ChienCD232928      AS N'Ghi chú'
                     FROM tblLuong_ChienCD232928 l
                     INNER JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
@@ -1207,7 +1302,9 @@ namespace QuanLyNhanVien3
                                 decimal tongLuongCoBan = 0;
                                 decimal tongPhuCap = 0;
                                 decimal tongKhauTru = 0;
+                                decimal tongLuong = 0;
                                 int tongSoNgayCong = 0;
+                                int tongSoNgayDiLam = 0;
 
                                 foreach (DataGridViewRow row in dgvLuong.Rows)
                                 {
@@ -1232,11 +1329,25 @@ namespace QuanLyNhanVien3
                                             tongKhauTru += khauTru;
                                     }
 
+                                    if (row.Cells["Tổng lương"].Value != null)
+                                    {
+                                        decimal tongLuongNV;
+                                        if (decimal.TryParse(row.Cells["Tổng lương"].Value.ToString().Replace(",", ""), out tongLuongNV))
+                                            tongLuong += tongLuongNV;
+                                    }
+
                                     if (row.Cells["Số ngày công"].Value != null)
                                     {
                                         int soNgayCong;
                                         if (int.TryParse(row.Cells["Số ngày công"].Value.ToString(), out soNgayCong))
                                             tongSoNgayCong += soNgayCong;
+                                    }
+
+                                    if (row.Cells["Số ngày đi làm"].Value != null)
+                                    {
+                                        int soNgayDiLam;
+                                        if (int.TryParse(row.Cells["Số ngày đi làm"].Value.ToString(), out soNgayDiLam))
+                                            tongSoNgayDiLam += soNgayDiLam;
                                     }
                                 }
 
@@ -1257,6 +1368,11 @@ namespace QuanLyNhanVien3
                                 if (ngayCongCol >= 0)
                                     ws.Cell(totalRow, ngayCongCol + 1).Value = tongSoNgayCong;
 
+                                // Tổng số ngày đi làm
+                                int ngayDiLamCol = GetColumnIndex(dgvLuong, "Số ngày đi làm");
+                                if (ngayDiLamCol >= 0)
+                                    ws.Cell(totalRow, ngayDiLamCol + 1).Value = tongSoNgayDiLam;
+
                                 // Tổng phụ cấp
                                 int phuCapCol = GetColumnIndex(dgvLuong, "Phụ cấp");
                                 if (phuCapCol >= 0)
@@ -1266,6 +1382,11 @@ namespace QuanLyNhanVien3
                                 int khauTruCol = GetColumnIndex(dgvLuong, "Khấu trừ");
                                 if (khauTruCol >= 0)
                                     ws.Cell(totalRow, khauTruCol + 1).Value = tongKhauTru;
+
+                                // Tổng lương
+                                int tongLuongCol = GetColumnIndex(dgvLuong, "Tổng lương");
+                                if (tongLuongCol >= 0)
+                                    ws.Cell(totalRow, tongLuongCol + 1).Value = tongLuong;
 
                                 // Ghi chú (trống)
                                 int ghiChuCol = GetColumnIndex(dgvLuong, "Ghi chú");
@@ -1297,8 +1418,7 @@ namespace QuanLyNhanVien3
                                 // Dòng 3: Tên người xuất (căn phải)
                                 if (userInfo != null)
                                 {
-                                    //ws.Cell(signatureRow + 2, colCount - 1).Value = userInfo["HoTen"]?.ToString() ?? "";
-                                    ws.Cell(signatureRow + 2, colCount - 1).Value =nguoiDangNhap;
+                                    ws.Cell(signatureRow + 2, colCount - 1).Value = nguoiDangNhap;
                                     ws.Range(signatureRow + 2, colCount - 1, signatureRow + 2, colCount).Merge();
                                     ws.Range(signatureRow + 2, colCount - 1, signatureRow + 2, colCount).Style.Font.Bold = true;
                                     ws.Range(signatureRow + 2, colCount - 1, signatureRow + 2, colCount).Style.Alignment.Horizontal =
@@ -1322,6 +1442,8 @@ namespace QuanLyNhanVien3
                                     ws.Column(phuCapCol + 1).Style.NumberFormat.Format = "#,##0";
                                 if (khauTruCol >= 0)
                                     ws.Column(khauTruCol + 1).Style.NumberFormat.Format = "#,##0";
+                                if (tongLuongCol >= 0)
+                                    ws.Column(tongLuongCol + 1).Style.NumberFormat.Format = "#,##0";
 
                                 // Định dạng tổng cộng
                                 if (luongCol >= 0)
@@ -1330,6 +1452,8 @@ namespace QuanLyNhanVien3
                                     ws.Cell(totalRow, phuCapCol + 1).Style.NumberFormat.Format = "#,##0";
                                 if (khauTruCol >= 0)
                                     ws.Cell(totalRow, khauTruCol + 1).Style.NumberFormat.Format = "#,##0";
+                                if (tongLuongCol >= 0)
+                                    ws.Cell(totalRow, tongLuongCol + 1).Style.NumberFormat.Format = "#,##0";
 
                                 /* ========== AUTO SIZE ========= */
                                 ws.Columns().AdjustToContents();
@@ -1492,7 +1616,9 @@ namespace QuanLyNhanVien3
                             decimal tongLuongCoBan = 0;
                             decimal tongPhuCap = 0;
                             decimal tongKhauTru = 0;
+                            decimal tongLuong = 0;
                             int tongSoNgayCong = 0;
+                            int tongSoNgayDiLam = 0;
 
                             foreach (DataGridViewRow row in dgvLuong.Rows)
                             {
@@ -1517,11 +1643,25 @@ namespace QuanLyNhanVien3
                                         tongKhauTru += khauTru;
                                 }
 
+                                if (row.Cells["Tổng lương"].Value != null)
+                                {
+                                    decimal tongLuongNV;
+                                    if (decimal.TryParse(row.Cells["Tổng lương"].Value.ToString().Replace(",", ""), out tongLuongNV))
+                                        tongLuong += tongLuongNV;
+                                }
+
                                 if (row.Cells["Số ngày công"].Value != null)
                                 {
                                     int soNgayCong;
                                     if (int.TryParse(row.Cells["Số ngày công"].Value.ToString(), out soNgayCong))
                                         tongSoNgayCong += soNgayCong;
+                                }
+
+                                if (row.Cells["Số ngày đi làm"].Value != null)
+                                {
+                                    int soNgayDiLam;
+                                    if (int.TryParse(row.Cells["Số ngày đi làm"].Value.ToString(), out soNgayDiLam))
+                                        tongSoNgayDiLam += soNgayDiLam;
                                 }
                             }
 
@@ -1554,7 +1694,8 @@ namespace QuanLyNhanVien3
                                         // Format số tiền
                                         if (cell.OwningColumn.HeaderText.Contains("Lương") ||
                                             cell.OwningColumn.HeaderText.Contains("Phụ cấp") ||
-                                            cell.OwningColumn.HeaderText.Contains("Khấu trừ"))
+                                            cell.OwningColumn.HeaderText.Contains("Khấu trừ") ||
+                                            cell.OwningColumn.HeaderText.Contains("Tổng lương"))
                                         {
                                             if (decimal.TryParse(value, out decimal number))
                                             {
@@ -1567,13 +1708,15 @@ namespace QuanLyNhanVien3
                                         // Căn phải cho cột số tiền
                                         if (cell.OwningColumn.HeaderText.Contains("Lương") ||
                                             cell.OwningColumn.HeaderText.Contains("Phụ cấp") ||
-                                            cell.OwningColumn.HeaderText.Contains("Khấu trừ"))
+                                            cell.OwningColumn.HeaderText.Contains("Khấu trừ") ||
+                                            cell.OwningColumn.HeaderText.Contains("Tổng lương"))
                                         {
                                             pdfCell.HorizontalAlignment = Element.ALIGN_RIGHT;
                                         }
                                         else if (cell.OwningColumn.HeaderText.Contains("Tháng") ||
                                                  cell.OwningColumn.HeaderText.Contains("Năm") ||
-                                                 cell.OwningColumn.HeaderText.Contains("Số ngày công"))
+                                                 cell.OwningColumn.HeaderText.Contains("Số ngày công") ||
+                                                 cell.OwningColumn.HeaderText.Contains("Số ngày đi làm"))
                                         {
                                             pdfCell.HorizontalAlignment = Element.ALIGN_CENTER;
                                         }
@@ -1615,6 +1758,12 @@ namespace QuanLyNhanVien3
                             totalNgayCongCell.Padding = 5f;
                             table.AddCell(totalNgayCongCell);
 
+                            // Tổng số ngày đi làm
+                            PdfPCell totalNgayDiLamCell = new PdfPCell(new Phrase(tongSoNgayDiLam.ToString(), fontBold));
+                            totalNgayDiLamCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                            totalNgayDiLamCell.Padding = 5f;
+                            table.AddCell(totalNgayDiLamCell);
+
                             // Tổng phụ cấp
                             PdfPCell totalPhuCapCell = new PdfPCell(new Phrase(tongPhuCap.ToString("N0"), fontBold));
                             totalPhuCapCell.HorizontalAlignment = Element.ALIGN_RIGHT;
@@ -1626,6 +1775,12 @@ namespace QuanLyNhanVien3
                             totalKhauTruCell.HorizontalAlignment = Element.ALIGN_RIGHT;
                             totalKhauTruCell.Padding = 5f;
                             table.AddCell(totalKhauTruCell);
+
+                            // Tổng lương
+                            PdfPCell totalTongLuongCell = new PdfPCell(new Phrase(tongLuong.ToString("N0"), fontBold));
+                            totalTongLuongCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                            totalTongLuongCell.Padding = 5f;
+                            table.AddCell(totalTongLuongCell);
 
                             // Ghi chú (empty)
                             PdfPCell totalGhiChuCell = new PdfPCell(new Phrase("", fontBold));
@@ -1688,6 +1843,65 @@ namespace QuanLyNhanVien3
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
             }
+        }
+
+        #endregion
+
+        #region HELPER METHODS
+
+        // Phương thức helper để tính lương theo công thức
+        private decimal TinhTongLuong(decimal luongCoBan, int soNgayCongChuan, int soNgayDiLam, decimal phuCap, decimal khauTru)
+        {
+            if (soNgayCongChuan == 0) return 0;
+
+            decimal luongTheoNgay = (luongCoBan / soNgayCongChuan) * soNgayDiLam;
+            decimal tongLuong = luongTheoNgay + phuCap - khauTru;
+
+            return Math.Round(tongLuong, 2);
+        }
+
+        // Phương thức để lấy số ngày đi làm thực tế của nhân viên
+        private int GetSoNgayDiLamThucTe(string maNV, int thang, int nam)
+        {
+            int soNgayDiLam = 0;
+            try
+            {
+                cn.connect();
+
+                string sql = @"
+                    SELECT COUNT(*)
+                    FROM tblChamCong_TuanhCD233018 cc
+                    INNER JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                    WHERE nv.MaNV_TuanhCD233018 = @MaNV
+                      AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                      AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                      AND cc.DeletedAt_TuanhCD233018 = 0
+                      AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                      AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaNV", maNV);
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+                    cmd.Parameters.AddWithValue("@Nam", nam);
+
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        soNgayDiLam = Convert.ToInt32(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi lấy số ngày đi làm: " + ex.Message);
+            }
+            finally
+            {
+                cn.disconnect();
+            }
+
+            return soNgayDiLam;
         }
 
         #endregion
