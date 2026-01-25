@@ -160,6 +160,10 @@ namespace QuanLyNhanVien3
                     cbMaDuAn.DisplayMember = "MaDA_KienCD233824";
                     cbMaDuAn.ValueMember = "MaDA_KienCD233824";
                     cbMaDuAn.SelectedIndex = -1;
+                    cbTimDA.DataSource = dt;
+                    cbTimDA.DisplayMember = "MaDA_KienCD233824";
+                    cbTimDA.ValueMember = "MaDA_KienCD233824";
+                    cbTimDA.SelectedIndex = -1;
                 }
             }
             catch (Exception ex)
@@ -196,8 +200,15 @@ namespace QuanLyNhanVien3
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(tbmaDA.Text) ||
-                    string.IsNullOrWhiteSpace(tbTenDA.Text) ||
+                // KIỂM TRA - Sử dụng SelectedIndex == -1
+                if (cbTimDA.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Vui lòng chọn mã dự án!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(tbTenDA.Text) ||
                     string.IsNullOrWhiteSpace(tbMota.Text))
                 {
                     MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thông báo",
@@ -215,13 +226,14 @@ namespace QuanLyNhanVien3
                 cn.connect();
 
                 string checkMaDA = @"
-                    SELECT COUNT(*) 
-                    FROM tblDuAn_KienCD233824  
-                    WHERE MaDA_KienCD233824 = @MaDA  
-                      AND DeletedAt_KienCD233824 = 0";
+            SELECT COUNT(*) 
+            FROM tblDuAn_KienCD233824  
+            WHERE MaDA_KienCD233824 = @MaDA  
+              AND DeletedAt_KienCD233824 = 0";
                 using (SqlCommand cmd = new SqlCommand(checkMaDA, cn.conn))
                 {
-                    cmd.Parameters.AddWithValue("@MaDA", tbmaDA.Text.Trim());
+                    // LẤY GIÁ TRỊ - Sử dụng SelectedValue (KHÔNG dùng SelectedIndex == -1)
+                    cmd.Parameters.AddWithValue("@MaDA", cbTimDA.SelectedValue);
                     int count = (int)cmd.ExecuteScalar();
 
                     if (count > 0)
@@ -233,16 +245,17 @@ namespace QuanLyNhanVien3
                 }
 
                 string sqlInsert = @"
-                    INSERT INTO tblDuAn_KienCD233824 
-                        (MaDA_KienCD233824, TenDA_KienCD233824, MoTa_KienCD233824, 
-                         NgayBatDau_KienCD233824, NgayKetThuc_KienCD233824, 
-                         Ghichu_KienCD233824, DeletedAt_KienCD233824)
-                    VALUES 
-                        (@MaDA, @TenDA, @MoTa, @NgayBatDau, @NgayKetThuc, @GhiChu, 0)";
+            INSERT INTO tblDuAn_KienCD233824 
+                (MaDA_KienCD233824, TenDA_KienCD233824, MoTa_KienCD233824, 
+                 NgayBatDau_KienCD233824, NgayKetThuc_KienCD233824, 
+                 Ghichu_KienCD233824, DeletedAt_KienCD233824)
+            VALUES 
+                (@MaDA, @TenDA, @MoTa, @NgayBatDau, @NgayKetThuc, @GhiChu, 0)";
 
                 using (SqlCommand cmd = new SqlCommand(sqlInsert, cn.conn))
                 {
-                    cmd.Parameters.AddWithValue("@MaDA", tbmaDA.Text.Trim());
+                    // LẤY GIÁ TRỊ - Sử dụng SelectedValue
+                    cmd.Parameters.AddWithValue("@MaDA", cbTimDA.SelectedValue);
                     cmd.Parameters.AddWithValue("@TenDA", tbTenDA.Text.Trim());
                     cmd.Parameters.AddWithValue("@MoTa", tbMota.Text.Trim());
                     cmd.Parameters.AddWithValue("@NgayBatDau", DatePickerNgayBatDau.Value);
@@ -275,7 +288,8 @@ namespace QuanLyNhanVien3
         {
             try
             {
-                if (string.IsNullOrEmpty(tbmaDA.Text))
+                // KIỂM TRA - Đúng cách
+                if (cbMaDuAn.SelectedIndex == -1)
                 {
                     MessageBox.Show("Vui lòng chọn dự án cần sửa!", "Thông báo",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -307,18 +321,19 @@ namespace QuanLyNhanVien3
                 {
                     cn.connect();
                     string sql = @"
-                        UPDATE tblDuAn_KienCD233824 
-                        SET TenDA_KienCD233824 = @TenDA, 
-                            MoTa_KienCD233824 = @MoTa, 
-                            NgayBatDau_KienCD233824 = @NgayBatDau, 
-                            NgayKetThuc_KienCD233824 = @NgayKetThuc, 
-                            GhiChu_KienCD233824 = @GhiChu
-                        WHERE MaDA_KienCD233824 = @MaDA
-                          AND DeletedAt_KienCD233824 = 0";
+                UPDATE tblDuAn_KienCD233824 
+                SET TenDA_KienCD233824 = @TenDA, 
+                    MoTa_KienCD233824 = @MoTa, 
+                    NgayBatDau_KienCD233824 = @NgayBatDau, 
+                    NgayKetThuc_KienCD233824 = @NgayKetThuc, 
+                    Ghichu_KienCD233824 = @GhiChu
+                WHERE MaDA_KienCD233824 = @MaDA
+                  AND DeletedAt_KienCD233824 = 0";
 
                     using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                     {
-                        cmd.Parameters.AddWithValue("@MaDA", tbmaDA.Text.Trim());
+                        // LẤY GIÁ TRỊ - Sử dụng SelectedValue
+                        cmd.Parameters.AddWithValue("@MaDA", cbMaDuAn.SelectedValue);
                         cmd.Parameters.AddWithValue("@TenDA", tbTenDA.Text.Trim());
                         cmd.Parameters.AddWithValue("@MoTa", tbMota.Text.Trim());
                         cmd.Parameters.AddWithValue("@NgayBatDau", DatePickerNgayBatDau.Value);
@@ -357,7 +372,8 @@ namespace QuanLyNhanVien3
         {
             try
             {
-                if (string.IsNullOrEmpty(tbmaDA.Text))
+                // KIỂM TRA - Đúng cách
+                if (cbMaDuAn.SelectedIndex == -1)
                 {
                     MessageBox.Show("Vui lòng chọn dự án cần xóa!", "Thông báo",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -374,13 +390,14 @@ namespace QuanLyNhanVien3
                 {
                     cn.connect();
                     string query = @"
-                        UPDATE tblDuAn_KienCD233824 
-                        SET DeletedAt_KienCD233824 = 1 
-                        WHERE MaDA_KienCD233824 = @MaDA";
+                UPDATE tblDuAn_KienCD233824 
+                SET DeletedAt_KienCD233824 = 1 
+                WHERE MaDA_KienCD233824 = @MaDA";
 
                     using (SqlCommand cmd = new SqlCommand(query, cn.conn))
                     {
-                        cmd.Parameters.AddWithValue("@MaDA", tbmaDA.Text.Trim());
+                        // LẤY GIÁ TRỊ - Sử dụng SelectedValue
+                        cmd.Parameters.AddWithValue("@MaDA", cbMaDuAn.SelectedValue);
                         int rowsAffected = cmd.ExecuteNonQuery();
 
                         if (rowsAffected > 0)
@@ -409,15 +426,12 @@ namespace QuanLyNhanVien3
                 cn.disconnect();
             }
         }
-
         private void dgvDA_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int i = e.RowIndex;
             if (i >= 0)
             {
-                string maDA = dgvDA.Rows[e.RowIndex].Cells[0].Value.ToString();
-                tbmaDA.Text = dgvDA.Rows[i].Cells[0].Value.ToString();
-                tbTenDA.Text = dgvDA.Rows[i].Cells[1].Value.ToString();
+                string maDA = dgvDA.Rows[i].Cells[0].Value.ToString(); cbTimDA.SelectedValue = dgvDA.Rows[i].Cells[0].Value.ToString();tbTenDA.Text = dgvDA.Rows[i].Cells[1].Value.ToString();
                 tbMota.Text = dgvDA.Rows[i].Cells[2].Value.ToString();
                 DatePickerNgayBatDau.Value = Convert.ToDateTime(dgvDA.Rows[i].Cells[3].Value);
                 DatePickerNgayKetThuc.Value = Convert.ToDateTime(dgvDA.Rows[i].Cells[4].Value);
@@ -1221,6 +1235,44 @@ namespace QuanLyNhanVien3
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi load tên NV: " + ex.Message);
+            }
+            finally
+            {
+                cn.disconnect();
+            }
+        }
+
+        private void cbTimDA_SelectedValueChanged(object sender, EventArgs e)
+        {
+            // Kiểm tra xem có item nào được chọn không
+            if (cbTimDA.SelectedIndex == -1 || cbTimDA.SelectedValue == null)
+            {
+                tbTenDA.Clear();
+                return;
+            }
+
+            try
+            {
+                cn.connect();
+
+                string sql = @"
+            SELECT TenDA_KienCD233824
+            FROM tblDuAn_KienCD233824
+            WHERE MaDA_KienCD233824 = @MaDA
+              AND DeletedAt_KienCD233824 = 0";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaDA", cbTimDA.SelectedValue.ToString());
+
+                    object result = cmd.ExecuteScalar();
+                    tbTenDA.Text = result != null ? result.ToString() : "";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi load tên dự án: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
