@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.IO;
+using static QuanLyNhanVien3.F_FormMain;
 
 
 namespace QuanLyNhanVien3
@@ -24,6 +25,7 @@ namespace QuanLyNhanVien3
 		{
 			InitializeComponent();
 		}
+		string nguoiDangNhap = F_FormMain.LoginInfo.CurrentUserName;
 
 		// ============== FORM LOAD ==============
 		private void F_BaoCaoDuAn_Load(object sender, EventArgs e)
@@ -492,7 +494,7 @@ namespace QuanLyNhanVien3
 
 						// TÊN NGƯỜI ĐĂNG NHẬP (Lấy từ Program.HoTenNguoiDung)
 						// Sử dụng SpacingBefore = 30 để tạo khoảng trống ký tên thay vì \n\n\n
-						string tenHienThi = "Cao Nhân Thuận";
+						string tenHienThi = nguoiDangNhap;
 
 						rightCell.AddElement(new Paragraph(tenHienThi, fontBold10)
 						{ Alignment = Element.ALIGN_CENTER, SpacingBefore = 40 });
