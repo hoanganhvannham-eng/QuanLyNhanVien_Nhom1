@@ -221,7 +221,7 @@
             // tbmaDA
             // 
             this.tbmaDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbmaDA.Location = new System.Drawing.Point(243, 41);
+            this.tbmaDA.Location = new System.Drawing.Point(245, 40);
             this.tbmaDA.Name = "tbmaDA";
             this.tbmaDA.Size = new System.Drawing.Size(328, 27);
             this.tbmaDA.TabIndex = 45;

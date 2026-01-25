@@ -955,7 +955,224 @@ namespace QuanLyNhanVien3
         }
         private void btnXuatPDF_Click(object sender, EventArgs e)
         {
-           
+            if (dgvDA.Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog sfd = new SaveFileDialog()
+            {
+                Filter = "PDF Files|*.pdf",
+                FileName = "DanhSachDuAn_" + DateTime.Now.ToString("ddMMyyyy") + ".pdf"
+            })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        // Tạo document PDF
+                        iTextPdf.Document doc = new iTextPdf.Document(iTextPdf.PageSize.A4, 25, 25, 30, 30);
+                        PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
+                        doc.Open();
+
+                        // Load font hỗ trợ tiếng Việt
+                        string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                        BaseFont bf = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+                        iTextPdf.Font fontTitle = new iTextPdf.Font(bf, 14, iTextPdf.Font.BOLD);
+                        iTextPdf.Font fontHeader = new iTextPdf.Font(bf, 16, iTextPdf.Font.BOLD);
+                        iTextPdf.Font fontNormal = new iTextPdf.Font(bf, 11, iTextPdf.Font.NORMAL);
+                        iTextPdf.Font fontBold = new iTextPdf.Font(bf, 11, iTextPdf.Font.BOLD);
+                        iTextPdf.Font fontItalic = new iTextPdf.Font(bf, 11, iTextPdf.Font.ITALIC);
+                        iTextPdf.Font fontTableHeader = new iTextPdf.Font(bf, 10, iTextPdf.Font.BOLD);
+                        iTextPdf.Font fontTableData = new iTextPdf.Font(bf, 10, iTextPdf.Font.NORMAL);
+
+                        // ===== TIÊU ĐỀ CÔNG TY =====
+                        iTextPdf.Paragraph companyTitle = new iTextPdf.Paragraph("CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM", fontTitle);
+                        companyTitle.Alignment = iTextPdf.Element.ALIGN_CENTER;
+                        companyTitle.SpacingAfter = 10f;
+                        doc.Add(companyTitle);
+                       
+
+
+                        // ===== TIÊU ĐỀ CHÍNH =====
+                        iTextPdf.Paragraph mainTitle = new iTextPdf.Paragraph("DANH SÁCH DỰ ÁN", fontHeader);
+                        mainTitle.Alignment = iTextPdf.Element.ALIGN_CENTER;
+                        mainTitle.SpacingAfter = 10f;
+                        doc.Add(mainTitle);
+
+                        // ===== NGÀY LẬP BÁO CÁO =====
+                        iTextPdf.Paragraph dateReport = new iTextPdf.Paragraph("Ngày lập báo cáo: " + DateTime.Now.ToString("dd/MM/yyyy"), fontItalic);
+                        dateReport.SpacingAfter = 15f;
+                        doc.Add(dateReport);
+
+                        // ===== BẢNG DỰ ÁN =====
+                        PdfPTable tableDuAn = new PdfPTable(dgvDA.Columns.Count);
+                        tableDuAn.WidthPercentage = 100;
+                        tableDuAn.SpacingBefore = 10f;
+                        tableDuAn.SpacingAfter = 10f;
+
+                        // Đặt độ rộng cột
+                        float[] columnWidths = new float[] { 15f, 25f, 30f, 15f, 15f, 20f };
+                        tableDuAn.SetWidths(columnWidths);
+
+                        // Header bảng dự án
+                        foreach (DataGridViewColumn column in dgvDA.Columns)
+                        {
+                            PdfPCell headerCell = new PdfPCell(new iTextPdf.Phrase(column.HeaderText, fontTableHeader));
+                            headerCell.BackgroundColor = new iTextPdf.BaseColor(240, 240, 240);
+                            headerCell.HorizontalAlignment = iTextPdf.Element.ALIGN_CENTER;
+                            headerCell.VerticalAlignment = iTextPdf.Element.ALIGN_MIDDLE;
+                            headerCell.Padding = 8;
+                            headerCell.BorderWidth = 1.5f;
+                            tableDuAn.AddCell(headerCell);
+                        }
+
+                        // Dữ liệu bảng dự án
+                        foreach (DataGridViewRow row in dgvDA.Rows)
+                        {
+                            if (row.IsNewRow) continue;
+
+                            for (int i = 0; i < dgvDA.Columns.Count; i++)
+                            {
+                                string cellValue = "";
+                                if (row.Cells[i].Value != null)
+                                {
+                                    if (row.Cells[i].Value is DateTime)
+                                    {
+                                        cellValue = ((DateTime)row.Cells[i].Value).ToString("dd/MM/yyyy");
+                                    }
+                                    else
+                                    {
+                                        cellValue = row.Cells[i].Value.ToString();
+                                    }
+                                }
+
+                                PdfPCell dataCell = new PdfPCell(new iTextPdf.Phrase(cellValue, fontTableData));
+                                dataCell.HorizontalAlignment = iTextPdf.Element.ALIGN_LEFT;
+                                dataCell.VerticalAlignment = iTextPdf.Element.ALIGN_MIDDLE;
+                                dataCell.Padding = 5;
+                                tableDuAn.AddCell(dataCell);
+                            }
+                        }
+
+                        // Dòng tổng số dự án
+                        PdfPCell totalLabelCell = new PdfPCell(new iTextPdf.Phrase("Tổng số dự án:", fontBold));
+                        totalLabelCell.Padding = 5;
+                        totalLabelCell.BorderWidth = 1.5f;
+                        tableDuAn.AddCell(totalLabelCell);
+
+                        PdfPCell totalValueCell = new PdfPCell(new iTextPdf.Phrase(dgvDA.Rows.Count.ToString(), fontBold));
+                        totalValueCell.Colspan = dgvDA.Columns.Count - 1;
+                        totalValueCell.Padding = 5;
+                        totalValueCell.BorderWidth = 1.5f;
+                        tableDuAn.AddCell(totalValueCell);
+
+                        doc.Add(tableDuAn);
+
+                        // ===== TIÊU ĐỀ BẢNG CHI TIẾT =====
+                        iTextPdf.Paragraph chiTietTitle = new iTextPdf.Paragraph("DANH SÁCH NHÂN VIÊN HOẠT ĐỘNG TRONG DỰ ÁN", fontTitle);
+                        chiTietTitle.Alignment = iTextPdf.Element.ALIGN_CENTER;
+                        chiTietTitle.SpacingBefore = 20f;
+                        chiTietTitle.SpacingAfter = 15f;
+                        doc.Add(chiTietTitle);
+
+                        // ===== BẢNG CHI TIẾT NHÂN VIÊN =====
+                        PdfPTable tableChiTiet = new PdfPTable(dgvChiTietDA.Columns.Count);
+                        tableChiTiet.WidthPercentage = 100;
+                        tableChiTiet.SpacingBefore = 10f;
+                        tableChiTiet.SpacingAfter = 10f;
+
+                        // Đặt độ rộng cột cho bảng chi tiết
+                        float[] chiTietColumnWidths = new float[] { 18f, 25f, 15f, 20f, 30f };
+                        tableChiTiet.SetWidths(chiTietColumnWidths);
+
+                        // Header bảng chi tiết
+                        foreach (DataGridViewColumn column in dgvChiTietDA.Columns)
+                        {
+                            PdfPCell headerCell = new PdfPCell(new iTextPdf.Phrase(column.HeaderText, fontTableHeader));
+                            headerCell.BackgroundColor = new iTextPdf.BaseColor(240, 240, 240);
+                            headerCell.HorizontalAlignment = iTextPdf.Element.ALIGN_CENTER;
+                            headerCell.VerticalAlignment = iTextPdf.Element.ALIGN_MIDDLE;
+                            headerCell.Padding = 8;
+                            headerCell.BorderWidth = 1.5f;
+                            tableChiTiet.AddCell(headerCell);
+                        }
+
+                        // Dữ liệu bảng chi tiết
+                        if (dgvChiTietDA.Rows.Count > 0)
+                        {
+                            foreach (DataGridViewRow row in dgvChiTietDA.Rows)
+                            {
+                                if (row.IsNewRow) continue;
+
+                                for (int i = 0; i < dgvChiTietDA.Columns.Count; i++)
+                                {
+                                    string cellValue = row.Cells[i].Value?.ToString() ?? "";
+                                    PdfPCell dataCell = new PdfPCell(new iTextPdf.Phrase(cellValue, fontTableData));
+                                    dataCell.HorizontalAlignment = iTextPdf.Element.ALIGN_LEFT;
+                                    dataCell.VerticalAlignment = iTextPdf.Element.ALIGN_MIDDLE;
+                                    dataCell.Padding = 5;
+                                    tableChiTiet.AddCell(dataCell);
+                                }
+                            }
+
+                            // Dòng tổng số nhân viên
+                            PdfPCell nvTotalLabelCell = new PdfPCell(new iTextPdf.Phrase("Tổng số nhân viên tham gia:", fontBold));
+                            nvTotalLabelCell.Padding = 5;
+                            nvTotalLabelCell.BorderWidth = 1.5f;
+                            tableChiTiet.AddCell(nvTotalLabelCell);
+
+                            PdfPCell nvTotalValueCell = new PdfPCell(new iTextPdf.Phrase(dgvChiTietDA.Rows.Count.ToString(), fontBold));
+                            nvTotalValueCell.Colspan = dgvChiTietDA.Columns.Count - 1;
+                            nvTotalValueCell.Padding = 5;
+                            nvTotalValueCell.BorderWidth = 1.5f;
+                            tableChiTiet.AddCell(nvTotalValueCell);
+                        }
+                        else
+                        {
+                            PdfPCell noDataCell = new PdfPCell(new iTextPdf.Phrase("Chưa có nhân viên tham gia dự án", fontItalic));
+                            noDataCell.Colspan = dgvChiTietDA.Columns.Count;
+                            noDataCell.HorizontalAlignment = iTextPdf.Element.ALIGN_CENTER;
+                            noDataCell.Padding = 10;
+                            tableChiTiet.AddCell(noDataCell);
+                        }
+
+                        doc.Add(tableChiTiet);
+
+                        // ===== CHỮ KÝ =====
+                        iTextPdf.Paragraph signature = new iTextPdf.Paragraph();
+                        signature.SpacingBefore = 30f;
+                        signature.Alignment = iTextPdf.Element.ALIGN_RIGHT;
+
+                        signature.Add(new iTextPdf.Chunk("Hà Nội, ngày " + DateTime.Now.Day + " tháng " + DateTime.Now.Month + " năm " + DateTime.Now.Year + "\n", fontItalic));
+                        signature.Add(new iTextPdf.Chunk("Người lập báo cáo\n\n\n\n", fontBold));
+                        signature.Add(new iTextPdf.Chunk(nguoiDangNhap, fontBold));
+
+                        doc.Add(signature);
+
+                        // Đóng document
+                        doc.Close();
+
+                        MessageBox.Show("Xuất PDF thành công!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        DialogResult openFile = MessageBox.Show("Bạn có muốn mở file vừa xuất không?",
+                            "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (openFile == DialogResult.Yes)
+                        {
+                            System.Diagnostics.Process.Start(sfd.FileName);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi xuất PDF: " + ex.Message + "\n\nChi tiết: " + ex.StackTrace,
+                            "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
 
         private void dgvChiTietDA_CellClick(object sender, DataGridViewCellEventArgs e)
