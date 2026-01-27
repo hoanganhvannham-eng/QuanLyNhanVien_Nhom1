@@ -176,25 +176,6 @@ namespace QuanLyNhanVien3
             }
         }
 
-        private void cbMaNV_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cbMaNV.SelectedIndex != -1)
-            {
-                try
-                {
-                    DataRowView drv = (DataRowView)cbMaNV.SelectedItem;
-                    tbTenNhanVien.Text = drv["HoTen_TuanhCD233018"].ToString();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi: " + ex.Message);
-                }
-            }
-            else
-            {
-                tbTenNhanVien.Clear();
-            }
-        }
 
         private void btnThemDA_Click(object sender, EventArgs e)
         {
