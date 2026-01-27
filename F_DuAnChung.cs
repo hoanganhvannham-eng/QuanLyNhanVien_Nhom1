@@ -969,7 +969,7 @@ namespace QuanLyNhanVien3
         }
         private void btnXuatPDF_Click(object sender, EventArgs e)
         {
-            if (dgvDA.Rows.Count == 0)
+             if (dgvDA.Rows.Count == 0)
             {
                 MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);

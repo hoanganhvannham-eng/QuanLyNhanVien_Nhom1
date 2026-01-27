@@ -34,7 +34,7 @@ namespace QuanLyNhanVien3
             LoadDataChucVu();
             tbMaChuVu.ReadOnly = true;
             tbMaChuVu.Text = TaoMaChucVuTuDong();
-            dgvHienThiChucVu.RowPostPaint += dgvHienThiChucVu_RowPostPaint;
+            //dgvHienThiChucVu.RowPostPaint += dgvHienThiChucVu_RowPostPaint;
             if (LoginInfo.CurrentUserRole.ToLower() == "user")
             {
                 btnThem.Enabled = false;
@@ -255,25 +255,6 @@ namespace QuanLyNhanVien3
 
         private void dgvHienThiChucVu_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
-
-            isEditingChucVu = true;
-            isLoadingChucVu = true;
-
-            int i = dgvHienThiChucVu.CurrentRow.Index;
-            tbMaChuVu.Text = dgvHienThiChucVu.Rows[i].Cells[1].Value?.ToString() ?? "";
-            txtTenChucVu.Text = dgvHienThiChucVu.Rows[i].Cells[2].Value?.ToString() ?? "";
-            txtGhiChu.Text = dgvHienThiChucVu.Rows[i].Cells[3].Value?.ToString() ?? "";
-
-            // Tự động chọn phòng ban tương ứng
-            string maPB = dgvHienThiChucVu.Rows[i].Cells[3].Value?.ToString() ?? "";
-            if (!string.IsNullOrEmpty(maPB))
-            {
-                cbbMaPB.SelectedValue = maPB;
-            }
-
-            isLoadingChucVu = false;
-            tbMaChuVu.ReadOnly = true;
         }
 
         private void btnThem_Click_1(object sender, EventArgs e)
@@ -767,7 +748,7 @@ namespace QuanLyNhanVien3
                             // Đặt chiều rộng cho cột STT (cột đầu tiên)
                             if (dgvHienThiChucVu.Columns.Count > 0 && dgvHienThiChucVu.Columns[0].Name == "STT")
                             {
-                                ws.Column(1).Width = 6; // Cột STT chỉ cần rộng 6
+                                ws.Column(1).Width = 12; // Cột STT chỉ cần rộng 6
                             }
 
                             // Đặt chiều rộng tối thiểu cho các cột còn lại
@@ -1004,21 +985,44 @@ namespace QuanLyNhanVien3
                 }
             }
         }
-        private void dgvHienThiChucVu_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+
+        private void dgvHienThiChucVu_CellClick_2(object sender, DataGridViewCellEventArgs e)
         {
-            // Vẽ số thứ tự ở đầu mỗi row
-            var grid = sender as DataGridView;
-            var rowIdx = (e.RowIndex + 1).ToString();
+            if (e.RowIndex < 0) return;
 
-            var centerFormat = new StringFormat()
+            isEditingChucVu = true;
+            isLoadingChucVu = true;
+
+            int i = dgvHienThiChucVu.CurrentRow.Index;
+            tbMaChuVu.Text = dgvHienThiChucVu.Rows[i].Cells[1].Value?.ToString() ?? "";
+            txtTenChucVu.Text = dgvHienThiChucVu.Rows[i].Cells[2].Value?.ToString() ?? "";
+            txtGhiChu.Text = dgvHienThiChucVu.Rows[i].Cells[3].Value?.ToString() ?? "";
+
+            // Tự động chọn phòng ban tương ứng
+            string maPB = dgvHienThiChucVu.Rows[i].Cells[3].Value?.ToString() ?? "";
+            if (!string.IsNullOrEmpty(maPB))
             {
-                Alignment = StringAlignment.Center,
-                LineAlignment = StringAlignment.Center
-            };
+                cbbMaPB.SelectedValue = maPB;
+            }
 
-            var headerBounds = new System.Drawing.Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
-
-            e.Graphics.DrawString(rowIdx, grid.Font, SystemBrushes.ControlText, headerBounds, centerFormat);
+            isLoadingChucVu = false;
+            tbMaChuVu.ReadOnly = true;
         }
+        //private void dgvHienThiChucVu_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        //{
+        //    // Vẽ số thứ tự ở đầu mỗi row
+        //    var grid = sender as DataGridView;
+        //    var rowIdx = (e.RowIndex + 1).ToString();
+
+        //    var centerFormat = new StringFormat()
+        //    {
+        //        Alignment = StringAlignment.Center,
+        //        LineAlignment = StringAlignment.Center
+        //    };
+
+        //    var headerBounds = new System.Drawing.Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
+
+        //    e.Graphics.DrawString(rowIdx, grid.Font, SystemBrushes.ControlText, headerBounds, centerFormat);
+        //}
     }
 }

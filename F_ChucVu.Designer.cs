@@ -148,7 +148,7 @@
             this.btnKhoiPhucNV.Name = "btnKhoiPhucNV";
             this.btnKhoiPhucNV.Size = new System.Drawing.Size(352, 32);
             this.btnKhoiPhucNV.TabIndex = 43;
-            this.btnKhoiPhucNV.Text = "Khôi phục nhân viên đã nghỉ việc ";
+            this.btnKhoiPhucNV.Text = "Khôi phục";
             this.btnKhoiPhucNV.UseVisualStyleBackColor = true;
             this.btnKhoiPhucNV.Click += new System.EventHandler(this.btnKhoiPhucNV_Click_1);
             // 
@@ -161,7 +161,7 @@
             this.btnHienThiNVNghiViec.Name = "btnHienThiNVNghiViec";
             this.btnHienThiNVNghiViec.Size = new System.Drawing.Size(352, 32);
             this.btnHienThiNVNghiViec.TabIndex = 42;
-            this.btnHienThiNVNghiViec.Text = "Hiển thị nhân viên đã nghỉ việc";
+            this.btnHienThiNVNghiViec.Text = "Chức vụ đã xóa";
             this.btnHienThiNVNghiViec.UseVisualStyleBackColor = true;
             this.btnHienThiNVNghiViec.Click += new System.EventHandler(this.btnHienThiNVNghiViec_Click_1);
             // 
@@ -402,9 +402,8 @@
             this.dgvHienThiChucVu.RowHeadersWidth = 51;
             this.dgvHienThiChucVu.RowTemplate.Height = 24;
             this.dgvHienThiChucVu.Size = new System.Drawing.Size(1111, 215);
-            this.dgvHienThiChucVu.TabIndex = 121;
-            this.dgvHienThiChucVu.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvHienThiChucVu_CellClick_1);
-            this.dgvHienThiChucVu.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvHienThiChucVu_RowPostPaint);
+            this.dgvHienThiChucVu.TabIndex = 171;
+            this.dgvHienThiChucVu.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvHienThiChucVu_CellClick_2);
             // 
             // F_ChucVu
             // 
@@ -457,11 +456,11 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.DataGridView dgvHienThiChucVu;
         private System.Windows.Forms.TextBox tbMaChuVu;
         private System.Windows.Forms.Button btnThoat;
         private System.Windows.Forms.ComboBox cbbMaPB;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button PDF;
+        private System.Windows.Forms.DataGridView dgvHienThiChucVu;
     }
 }
