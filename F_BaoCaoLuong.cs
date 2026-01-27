@@ -36,7 +36,7 @@ namespace QuanLyNhanVien3
                 int thang = dateTimePicker1.Value.Month;
                 int nam = dateTimePicker1.Value.Year;
 
-                // Sửa query theo công thức mới
+                // SỬA QUERY: Giới hạn số ngày đi làm không vượt quá số ngày công chuẩn
                 string sql = @"SELECT 
                                       l.MaLuong_ChienCD232928 AS N'Mã Lương', 
                                       nv.MaNV_TuanhCD233018 AS N'Mã Nhân Viên', 
@@ -48,40 +48,93 @@ namespace QuanLyNhanVien3
                                       l.LuongCoBan_ChienCD232928 AS N'Lương Cơ Bản', 
                                       l.SoNgayCongChuan_ChienCD232928 AS N'Ngày Công Chuẩn',
                                       
-                                      -- Tính số ngày đi làm thực tế: giờ vào từ 8h và giờ về từ 17h
-                                      (
-                                          SELECT COUNT(*)
-                                          FROM tblChamCong_TuanhCD233018 cc
-                                          WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                                            AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-                                            AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                                            AND cc.DeletedAt_TuanhCD233018 = 0
-                                            AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
-                                            AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
-                                      ) AS N'Số ngày đi làm',
+                                      -- SỬA: Số ngày đi làm thực tế - giới hạn không vượt quá số ngày công chuẩn
+                                      CASE
+                                        WHEN (
+                                            SELECT COUNT(DISTINCT CAST(cc.Ngay_TuanhCD233018 AS DATE))
+                                            FROM tblChamCong_TuanhCD233018 cc
+                                            WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                              AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                              AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                              AND cc.DeletedAt_TuanhCD233018 = 0
+                                              AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                              AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                        ) > l.SoNgayCongChuan_ChienCD232928
+                                        THEN l.SoNgayCongChuan_ChienCD232928
+                                        ELSE (
+                                            SELECT COUNT(DISTINCT CAST(cc.Ngay_TuanhCD233018 AS DATE))
+                                            FROM tblChamCong_TuanhCD233018 cc
+                                            WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                              AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                              AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                              AND cc.DeletedAt_TuanhCD233018 = 0
+                                              AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                              AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                        )
+                                      END AS N'Số ngày đi làm',
                                       
                                       l.PhuCap_ChienCD232928 AS N'Phụ Cấp',
                                       l.KhauTru_ChienCD232928 AS N'Khấu Trừ',
                                       
-                                      -- Tính Tổng lương theo công thức mới: (Lương cơ bản / Ngày công chuẩn) * Số ngày đi làm + Phụ cấp - Khấu trừ
+                                      -- SỬA: Tính Tổng lương theo số ngày đi làm (đã được giới hạn)
                                       ROUND(
                                           (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
-                                          (
-                                              SELECT COUNT(*)
-                                              FROM tblChamCong_TuanhCD233018 cc
-                                              WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                                                AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-                                                AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                                                AND cc.DeletedAt_TuanhCD233018 = 0
-                                                AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
-                                                AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
-                                          ) + 
+                                          CASE
+                                            WHEN (
+                                                SELECT COUNT(DISTINCT CAST(cc.Ngay_TuanhCD233018 AS DATE))
+                                                FROM tblChamCong_TuanhCD233018 cc
+                                                WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                                  AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                                  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                                  AND cc.DeletedAt_TuanhCD233018 = 0
+                                                  AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                                  AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                            ) > l.SoNgayCongChuan_ChienCD232928
+                                            THEN l.SoNgayCongChuan_ChienCD232928
+                                            ELSE (
+                                                SELECT COUNT(DISTINCT CAST(cc.Ngay_TuanhCD233018 AS DATE))
+                                                FROM tblChamCong_TuanhCD233018 cc
+                                                WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                                  AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                                  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                                  AND cc.DeletedAt_TuanhCD233018 = 0
+                                                  AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                                  AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                            )
+                                          END + 
                                           ISNULL(l.PhuCap_ChienCD232928, 0) - 
                                           ISNULL(l.KhauTru_ChienCD232928, 0), 
                                           2
                                       ) AS N'Tổng Lương',
                                       
-                                      l.Ghichu_ChienCD232928 AS N'Ghi chú'
+                                      -- SỬA: Ghi chú hiển thị đúng số ngày đi làm
+                                      N'Số ngày công thực tế: ' + 
+                                      CAST(
+                                          CASE
+                                            WHEN (
+                                                SELECT COUNT(DISTINCT CAST(cc.Ngay_TuanhCD233018 AS DATE))
+                                                FROM tblChamCong_TuanhCD233018 cc
+                                                WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                                  AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                                  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                                  AND cc.DeletedAt_TuanhCD233018 = 0
+                                                  AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                                  AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                            ) > l.SoNgayCongChuan_ChienCD232928
+                                            THEN l.SoNgayCongChuan_ChienCD232928
+                                            ELSE (
+                                                SELECT COUNT(DISTINCT CAST(cc.Ngay_TuanhCD233018 AS DATE))
+                                                FROM tblChamCong_TuanhCD233018 cc
+                                                WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                                  AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                                  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                                  AND cc.DeletedAt_TuanhCD233018 = 0
+                                                  AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                                  AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                            )
+                                          END AS NVARCHAR
+                                      ) + N'/' + 
+                                      CAST(l.SoNgayCongChuan_ChienCD232928 AS NVARCHAR) AS N'Ghi chú'
                                FROM tblLuong_ChienCD232928 l
                                JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
                                JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
@@ -123,25 +176,39 @@ namespace QuanLyNhanVien3
                 int thang = dateTimePicker1.Value.Month;
                 int nam = dateTimePicker1.Value.Year;
 
+                // SỬA QUERY: Cập nhật theo logic mới
                 string sql = @"SELECT TOP 5 
                                       nv.HoTen_TuanhCD233018 AS N'Họ Tên', 
                                       nv.MaNV_TuanhCD233018 AS N'Mã Nhân Viên',
                                       pb.TenPB_ThuanCD233318 AS N'Phòng Ban',
                                       cv.TenCV_KhangCD233181 AS N'Chức Vụ',
                                       
-                                      -- Tính Tổng lương theo công thức mới
+                                      -- Tính Tổng lương theo công thức mới (số ngày đi làm đã giới hạn)
                                       ROUND(
                                           (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
-                                          (
-                                              SELECT COUNT(*)
-                                              FROM tblChamCong_TuanhCD233018 cc
-                                              WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                                                AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-                                                AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                                                AND cc.DeletedAt_TuanhCD233018 = 0
-                                                AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
-                                                AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
-                                          ) + 
+                                          CASE
+                                            WHEN (
+                                                SELECT COUNT(DISTINCT CAST(cc.Ngay_TuanhCD233018 AS DATE))
+                                                FROM tblChamCong_TuanhCD233018 cc
+                                                WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                                  AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                                  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                                  AND cc.DeletedAt_TuanhCD233018 = 0
+                                                  AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                                  AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                            ) > l.SoNgayCongChuan_ChienCD232928
+                                            THEN l.SoNgayCongChuan_ChienCD232928
+                                            ELSE (
+                                                SELECT COUNT(DISTINCT CAST(cc.Ngay_TuanhCD233018 AS DATE))
+                                                FROM tblChamCong_TuanhCD233018 cc
+                                                WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                                  AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                                  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                                  AND cc.DeletedAt_TuanhCD233018 = 0
+                                                  AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                                  AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                                            )
+                                          END + 
                                           ISNULL(l.PhuCap_ChienCD232928, 0) - 
                                           ISNULL(l.KhauTru_ChienCD232928, 0), 
                                           2
@@ -189,64 +256,74 @@ namespace QuanLyNhanVien3
                 int thang = dateTimePicker1.Value.Month;
                 int nam = dateTimePicker1.Value.Year;
 
-                string sql = @"SELECT 
-                                      pb.TenPB_ThuanCD233318 AS N'Phòng Ban', 
-                                      COUNT(DISTINCT nv.Id_TuanhCD233018) AS N'Số Nhân Viên',
-                                      SUM(
-                                          ROUND(
-                                              (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
-                                              (
-                                                  SELECT COUNT(*)
-                                                  FROM tblChamCong_TuanhCD233018 cc
-                                                  WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                                                    AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-                                                    AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                                                    AND cc.DeletedAt_TuanhCD233018 = 0
-                                                    AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
-                                                    AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
-                                              ) + 
-                                              ISNULL(l.PhuCap_ChienCD232928, 0) - 
-                                              ISNULL(l.KhauTru_ChienCD232928, 0), 
-                                              2
-                                          )
-                                      ) AS N'Tổng Quỹ Lương Phòng'
-                               FROM tblLuong_ChienCD232928 l
-                               JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
-                               JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                               JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
-                               JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
-                               WHERE l.DeletedAt_ChienCD232928 = 0 
-                               AND l.Thang_ChienCD232928 = @Thang 
-                               AND l.Nam_ChienCD232928 = @Nam
-                               GROUP BY pb.TenPB_ThuanCD233318
-                               UNION ALL
-                               SELECT 
-                                      'TOÀN CÔNG TY' AS N'Phòng Ban', 
-                                      COUNT(DISTINCT nv.Id_TuanhCD233018) AS N'Số Nhân Viên',
-                                      SUM(
-                                          ROUND(
-                                              (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
-                                              (
-                                                  SELECT COUNT(*)
-                                                  FROM tblChamCong_TuanhCD233018 cc
-                                                  WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                                                    AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-                                                    AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                                                    AND cc.DeletedAt_TuanhCD233018 = 0
-                                                    AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
-                                                    AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
-                                              ) + 
-                                              ISNULL(l.PhuCap_ChienCD232928, 0) - 
-                                              ISNULL(l.KhauTru_ChienCD232928, 0), 
-                                              2
-                                          )
-                                      ) AS N'Tổng Quỹ Lương Phòng'
-                               FROM tblLuong_ChienCD232928 l
-                               JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
-                               JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                               WHERE l.DeletedAt_ChienCD232928 = 0 
-                               AND l.Thang_ChienCD232928 = @Thang 
-                               AND l.Nam_ChienCD232928 = @Nam";
+                // SỬA QUERY: Cập nhật logic tính số ngày đi làm
+                string sql = @"
+            WITH LuongTungNV AS (
+                SELECT 
+                    nv.Id_TuanhCD233018,
+                    pb.TenPB_ThuanCD233318,
+                    l.LuongCoBan_ChienCD232928,
+                    l.SoNgayCongChuan_ChienCD232928,
+                    l.PhuCap_ChienCD232928,
+                    l.KhauTru_ChienCD232928,
+                    -- SỬA: Số ngày đi làm đã giới hạn
+                    CASE
+                        WHEN (
+                            SELECT COUNT(DISTINCT CAST(cc.Ngay_TuanhCD233018 AS DATE))
+                            FROM tblChamCong_TuanhCD233018 cc
+                            WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                AND cc.DeletedAt_TuanhCD233018 = 0
+                                AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                        ) > l.SoNgayCongChuan_ChienCD232928
+                        THEN l.SoNgayCongChuan_ChienCD232928
+                        ELSE (
+                            SELECT COUNT(DISTINCT CAST(cc.Ngay_TuanhCD233018 AS DATE))
+                            FROM tblChamCong_TuanhCD233018 cc
+                            WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                                AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
+                                AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
+                                AND cc.DeletedAt_TuanhCD233018 = 0
+                                AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
+                                AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
+                        )
+                    END AS SoNgayDiLam
+                FROM tblLuong_ChienCD232928 l
+                JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
+                JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+                JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+                WHERE l.DeletedAt_ChienCD232928 = 0 
+                    AND l.Thang_ChienCD232928 = @Thang 
+                    AND l.Nam_ChienCD232928 = @Nam
+            ),
+            TinhLuongNV AS (
+                SELECT 
+                    TenPB_ThuanCD233318,
+                    Id_TuanhCD233018,
+                    ROUND(
+                        (LuongCoBan_ChienCD232928 / NULLIF(SoNgayCongChuan_ChienCD232928, 0)) * 
+                        ISNULL(SoNgayDiLam, 0) + 
+                        ISNULL(PhuCap_ChienCD232928, 0) - 
+                        ISNULL(KhauTru_ChienCD232928, 0), 
+                        2
+                    ) AS TongLuong
+                FROM LuongTungNV
+            )
+            SELECT 
+                TenPB_ThuanCD233318 AS N'Phòng Ban', 
+                COUNT(DISTINCT Id_TuanhCD233018) AS N'Số Nhân Viên',
+                SUM(TongLuong) AS N'Tổng Quỹ Lương Phòng'
+            FROM TinhLuongNV
+            GROUP BY TenPB_ThuanCD233318
+            UNION ALL
+            SELECT 
+                'TOÀN CÔNG TY' AS N'Phòng Ban', 
+                COUNT(DISTINCT Id_TuanhCD233018) AS N'Số Nhân Viên',
+                SUM(TongLuong) AS N'Tổng Quỹ Lương Phòng'
+            FROM TinhLuongNV";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {

@@ -323,9 +323,9 @@ namespace QuanLyNhanVien3
 
         #endregion
 
-        #region LOAD LƯƠNG VÀ FILTER
+        #region LOAD LƯƠNG VÀ FILTER (ĐÃ SỬA)
 
-        // Phương thức load lương với bộ lọc
+        // Phương thức load lương với bộ lọc (ĐÃ SỬA)
         private void LoadLuongFilter(string maPB = "", string maCV = "", string maNV = "")
         {
             try
@@ -347,45 +347,52 @@ namespace QuanLyNhanVien3
                         l.LuongCoBan_ChienCD232928  AS N'Lương cơ bản',
                         l.SoNgayCongChuan_ChienCD232928 AS N'Số ngày công',
                         
-                        -- Tính số ngày đi làm thực tế: giờ vào từ 8h và giờ về từ 17h
-                        (
-                            SELECT COUNT(*)
-                            FROM tblChamCong_TuanhCD233018 cc
-                            WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                              AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-                              AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                              AND cc.DeletedAt_TuanhCD233018 = 0
-                              AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
-                              AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
-                        ) AS N'Số ngày đi làm',
+                        -- Số ngày đi làm: MIN(số ngày chấm công, số ngày công chuẩn)
+                        CASE
+                            WHEN so_ngay_cham_cong.so_ngay > l.SoNgayCongChuan_ChienCD232928
+                            THEN l.SoNgayCongChuan_ChienCD232928
+                            ELSE so_ngay_cham_cong.so_ngay
+                        END AS N'Số ngày đi làm',
                         
                         l.PhuCap_ChienCD232928      AS N'Phụ cấp',
                         l.KhauTru_ChienCD232928     AS N'Khấu trừ',
                         
-                        -- Tính Tổng lương = (Lương cơ bản / Số ngày công chuẩn) * Số ngày đi làm + Phụ cấp - Khấu trừ
+                        -- Tính tổng lương
                         ROUND(
                             (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
-                            (
-                                SELECT COUNT(*)
-                                FROM tblChamCong_TuanhCD233018 cc
-                                WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                                  AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-                                  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                                  AND cc.DeletedAt_TuanhCD233018 = 0
-                                  AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
-                                  AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
-                            ) + 
+                            CASE
+                                WHEN so_ngay_cham_cong.so_ngay > l.SoNgayCongChuan_ChienCD232928
+                                THEN l.SoNgayCongChuan_ChienCD232928
+                                ELSE so_ngay_cham_cong.so_ngay
+                            END + 
                             ISNULL(l.PhuCap_ChienCD232928, 0) - 
                             ISNULL(l.KhauTru_ChienCD232928, 0), 
                             2
                         ) AS N'Tổng lương',
                         
-                        l.Ghichu_ChienCD232928      AS N'Ghi chú'
+                        -- Ghi chú hiển thị số ngày đi làm ĐÚNG
+                        N'Số ngày công thực tế: ' + 
+                        CAST(
+                            CASE
+                                WHEN so_ngay_cham_cong.so_ngay > l.SoNgayCongChuan_ChienCD232928
+                                THEN l.SoNgayCongChuan_ChienCD232928
+                                ELSE so_ngay_cham_cong.so_ngay
+                            END AS NVARCHAR
+                        ) + N'/' + 
+                        CAST(l.SoNgayCongChuan_ChienCD232928 AS NVARCHAR) AS N'Ghi chú'
                     FROM tblLuong_ChienCD232928 l
                     INNER JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
                     INNER JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
                     INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
                     INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+                    CROSS APPLY (
+                        SELECT COUNT(DISTINCT CAST(cc2.Ngay_TuanhCD233018 AS DATE)) as so_ngay
+                        FROM tblChamCong_TuanhCD233018 cc2
+                        WHERE cc2.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                          AND MONTH(cc2.Ngay_TuanhCD233018) = @Thang
+                          AND YEAR(cc2.Ngay_TuanhCD233018) = @Nam
+                          AND cc2.DeletedAt_TuanhCD233018 = 0
+                    ) so_ngay_cham_cong
                     WHERE l.DeletedAt_ChienCD232928 = 0
                       AND l.Thang_ChienCD232928 = @Thang
                       AND l.Nam_ChienCD232928 = @Nam";
@@ -448,94 +455,8 @@ namespace QuanLyNhanVien3
 
         private void LoadLuongTheoThangNam()
         {
-            try
-            {
-                cn.connect();
-
-                int thang = Convert.ToInt32(cbThang.SelectedItem);
-                int nam = (int)numNam.Value;
-
-                string sql = @"
-                    SELECT 
-                        l.Maluong_ChienCD232928     AS N'Mã Lương',
-                        nv.MaNV_TuanhCD233018       AS N'Mã NV',
-                        nv.HoTen_TuanhCD233018      AS N'Tên nhân viên',
-                        cv.TenCV_KhangCD233181      AS N'Chức Vụ',
-                        pb.TenPB_ThuanCD233318      AS N'Phòng Ban',
-                        l.Thang_ChienCD232928       AS N'Tháng',
-                        l.Nam_ChienCD232928         AS N'Năm',
-                        l.LuongCoBan_ChienCD232928  AS N'Lương cơ bản',
-                        l.SoNgayCongChuan_ChienCD232928 AS N'Số ngày công',
-                        
-                        -- Tính số ngày đi làm thực tế: giờ vào từ 8h và giờ về từ 17h
-                        (
-                            SELECT COUNT(*)
-                            FROM tblChamCong_TuanhCD233018 cc
-                            WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                              AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-                              AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                              AND cc.DeletedAt_TuanhCD233018 = 0
-                              AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
-                              AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
-                        ) AS N'Số ngày đi làm',
-                        
-                        l.PhuCap_ChienCD232928      AS N'Phụ cấp',
-                        l.KhauTru_ChienCD232928     AS N'Khấu trừ',
-                        
-                        -- Tính Tổng lương = (Lương cơ bản / Số ngày công chuẩn) * Số ngày đi làm + Phụ cấp - Khấu trừ
-                        ROUND(
-                            (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
-                            (
-                                SELECT COUNT(*)
-                                FROM tblChamCong_TuanhCD233018 cc
-                                WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                                  AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-                                  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                                  AND cc.DeletedAt_TuanhCD233018 = 0
-                                  AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
-                                  AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
-                            ) + 
-                            ISNULL(l.PhuCap_ChienCD232928, 0) - 
-                            ISNULL(l.KhauTru_ChienCD232928, 0), 
-                            2
-                        ) AS N'Tổng lương',
-                        
-                        l.Ghichu_ChienCD232928      AS N'Ghi chú'
-                    FROM tblLuong_ChienCD232928 l
-                    INNER JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
-                    INNER JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                    INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
-                    INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
-                    WHERE l.DeletedAt_ChienCD232928 = 0
-                      AND l.Thang_ChienCD232928 = @Thang
-                      AND l.Nam_ChienCD232928 = @Nam
-                    ORDER BY nv.HoTen_TuanhCD233018, l.Maluong_ChienCD232928";
-
-                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
-                {
-                    cmd.Parameters.AddWithValue("@Thang", thang);
-                    cmd.Parameters.AddWithValue("@Nam", nam);
-
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dgvLuong.DataSource = dt;
-
-                    // Định dạng số cho các cột tiền
-                    FormatCurrencyColumns();
-
-                    // Điều chỉnh độ rộng cột tự động
-                    dgvLuong.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi load lương: " + ex.Message);
-            }
-            finally
-            {
-                cn.disconnect();
-            }
+            // Gọi phương thức LoadLuongFilter không có bộ lọc
+            LoadLuongFilter();
         }
 
         private void InitThangNam()
@@ -1099,45 +1020,52 @@ namespace QuanLyNhanVien3
                         l.LuongCoBan_ChienCD232928  AS N'Lương cơ bản',
                         l.SoNgayCongChuan_ChienCD232928 AS N'Số ngày công',
                         
-                        -- Tính số ngày đi làm thực tế
-                        (
-                            SELECT COUNT(*)
-                            FROM tblChamCong_TuanhCD233018 cc
-                            WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                              AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-                              AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                              AND cc.DeletedAt_TuanhCD233018 = 0
-                              AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
-                              AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
-                        ) AS N'Số ngày đi làm',
+                        -- Số ngày đi làm: MIN(số ngày chấm công, số ngày công chuẩn)
+                        CASE
+                            WHEN so_ngay_cham_cong.so_ngay > l.SoNgayCongChuan_ChienCD232928
+                            THEN l.SoNgayCongChuan_ChienCD232928
+                            ELSE so_ngay_cham_cong.so_ngay
+                        END AS N'Số ngày đi làm',
                         
                         l.PhuCap_ChienCD232928      AS N'Phụ cấp',
                         l.KhauTru_ChienCD232928     AS N'Khấu trừ',
                         
-                        -- Tính Tổng lương
+                        -- Tính tổng lương
                         ROUND(
                             (l.LuongCoBan_ChienCD232928 / NULLIF(l.SoNgayCongChuan_ChienCD232928, 0)) * 
-                            (
-                                SELECT COUNT(*)
-                                FROM tblChamCong_TuanhCD233018 cc
-                                WHERE cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                                  AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-                                  AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                                  AND cc.DeletedAt_TuanhCD233018 = 0
-                                  AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
-                                  AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'
-                            ) + 
+                            CASE
+                                WHEN so_ngay_cham_cong.so_ngay > l.SoNgayCongChuan_ChienCD232928
+                                THEN l.SoNgayCongChuan_ChienCD232928
+                                ELSE so_ngay_cham_cong.so_ngay
+                            END + 
                             ISNULL(l.PhuCap_ChienCD232928, 0) - 
                             ISNULL(l.KhauTru_ChienCD232928, 0), 
                             2
                         ) AS N'Tổng lương',
                         
-                        l.Ghichu_ChienCD232928      AS N'Ghi chú'
+                        -- Ghi chú hiển thị số ngày đi làm ĐÚNG
+                        N'Số ngày công thực tế: ' + 
+                        CAST(
+                            CASE
+                                WHEN so_ngay_cham_cong.so_ngay > l.SoNgayCongChuan_ChienCD232928
+                                THEN l.SoNgayCongChuan_ChienCD232928
+                                ELSE so_ngay_cham_cong.so_ngay
+                            END AS NVARCHAR
+                        ) + N'/' + 
+                        CAST(l.SoNgayCongChuan_ChienCD232928 AS NVARCHAR) AS N'Ghi chú'
                     FROM tblLuong_ChienCD232928 l
                     INNER JOIN tblChamCong_TuanhCD233018 cc ON l.ChamCongId_TuanhCD233018 = cc.Id_TuanhCD233018
                     INNER JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
                     INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
                     INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+                    CROSS APPLY (
+                        SELECT COUNT(DISTINCT CAST(cc2.Ngay_TuanhCD233018 AS DATE)) as so_ngay
+                        FROM tblChamCong_TuanhCD233018 cc2
+                        WHERE cc2.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+                          AND MONTH(cc2.Ngay_TuanhCD233018) = @Thang
+                          AND YEAR(cc2.Ngay_TuanhCD233018) = @Nam
+                          AND cc2.DeletedAt_TuanhCD233018 = 0
+                    ) so_ngay_cham_cong
                     WHERE l.DeletedAt_ChienCD232928 = 0
                       AND l.Thang_ChienCD232928 = @Thang
                       AND l.Nam_ChienCD232928 = @Nam";
@@ -1869,15 +1797,13 @@ namespace QuanLyNhanVien3
                 cn.connect();
 
                 string sql = @"
-                    SELECT COUNT(*)
+                    SELECT COUNT(DISTINCT CAST(cc.Ngay_TuanhCD233018 AS DATE))
                     FROM tblChamCong_TuanhCD233018 cc
                     INNER JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
                     WHERE nv.MaNV_TuanhCD233018 = @MaNV
                       AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
                       AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                      AND cc.DeletedAt_TuanhCD233018 = 0
-                      AND CAST(cc.GioVao_TuanhCD233018 AS TIME) >= '08:00:00'
-                      AND CAST(cc.GioVe_TuanhCD233018 AS TIME) >= '17:00:00'";
+                      AND cc.DeletedAt_TuanhCD233018 = 0";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
