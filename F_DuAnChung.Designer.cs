@@ -122,6 +122,7 @@
             this.cbTimDA.Size = new System.Drawing.Size(329, 27);
             this.cbTimDA.TabIndex = 88;
             this.cbTimDA.SelectedValueChanged += new System.EventHandler(this.cbTimDA_SelectedValueChanged);
+            this.cbTimDA.TextChanged += new System.EventHandler(this.cbTimDA_TextChanged);
             // 
             // dgvDA
             // 
