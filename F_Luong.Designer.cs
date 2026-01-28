@@ -33,6 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.btnXuatPDF = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.txtGhiChu = new System.Windows.Forms.TextBox();
             this.btnXuatExcel = new System.Windows.Forms.Button();
@@ -66,7 +67,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
             this.dgvLuong = new System.Windows.Forms.DataGridView();
-            this.btnXuatPDF = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -148,12 +148,24 @@
             this.panel4.Size = new System.Drawing.Size(701, 555);
             this.panel4.TabIndex = 1;
             // 
+            // btnXuatPDF
+            // 
+            this.btnXuatPDF.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnXuatPDF.Location = new System.Drawing.Point(417, 371);
+            this.btnXuatPDF.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnXuatPDF.Name = "btnXuatPDF";
+            this.btnXuatPDF.Size = new System.Drawing.Size(153, 32);
+            this.btnXuatPDF.TabIndex = 13;
+            this.btnXuatPDF.Text = "Xuất PDF";
+            this.btnXuatPDF.UseVisualStyleBackColor = true;
+            this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
+            // 
             // label6
             // 
             this.label6.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.label6.Location = new System.Drawing.Point(18, 281);
+            this.label6.Location = new System.Drawing.Point(67, 231);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(81, 23);
             this.label6.TabIndex = 6;
@@ -163,7 +175,7 @@
             // 
             this.txtGhiChu.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.txtGhiChu.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.txtGhiChu.Location = new System.Drawing.Point(161, 271);
+            this.txtGhiChu.Location = new System.Drawing.Point(161, 220);
             this.txtGhiChu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtGhiChu.Name = "txtGhiChu";
             this.txtGhiChu.Size = new System.Drawing.Size(271, 31);
@@ -172,7 +184,7 @@
             // btnXuatExcel
             // 
             this.btnXuatExcel.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnXuatExcel.Location = new System.Drawing.Point(245, 404);
+            this.btnXuatExcel.Location = new System.Drawing.Point(213, 371);
             this.btnXuatExcel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnXuatExcel.Name = "btnXuatExcel";
             this.btnXuatExcel.Size = new System.Drawing.Size(153, 32);
@@ -184,7 +196,7 @@
             // btnRefresh
             // 
             this.btnRefresh.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnRefresh.Location = new System.Drawing.Point(48, 404);
+            this.btnRefresh.Location = new System.Drawing.Point(22, 371);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(145, 32);
@@ -197,7 +209,7 @@
             // 
             this.btnTimKiem.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnTimKiem.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.btnTimKiem.Location = new System.Drawing.Point(320, 325);
+            this.btnTimKiem.Location = new System.Drawing.Point(320, 271);
             this.btnTimKiem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnTimKiem.Name = "btnTimKiem";
             this.btnTimKiem.Size = new System.Drawing.Size(112, 36);
@@ -210,7 +222,7 @@
             // 
             this.txtTimKiem.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.txtTimKiem.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.txtTimKiem.Location = new System.Drawing.Point(161, 324);
+            this.txtTimKiem.Location = new System.Drawing.Point(161, 268);
             this.txtTimKiem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtTimKiem.Name = "txtTimKiem";
             this.txtTimKiem.Size = new System.Drawing.Size(152, 31);
@@ -221,7 +233,7 @@
             this.label11.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.label11.Location = new System.Drawing.Point(18, 336);
+            this.label11.Location = new System.Drawing.Point(29, 279);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(119, 23);
             this.label11.TabIndex = 8;
@@ -232,7 +244,7 @@
             this.label5.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.label5.Location = new System.Drawing.Point(56, 105);
+            this.label5.Location = new System.Drawing.Point(67, 91);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(81, 23);
             this.label5.TabIndex = 0;
@@ -243,7 +255,7 @@
             this.label10.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.label10.Location = new System.Drawing.Point(18, 229);
+            this.label10.Location = new System.Drawing.Point(59, 177);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(89, 23);
             this.label10.TabIndex = 4;
@@ -254,7 +266,7 @@
             this.label9.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.label9.Location = new System.Drawing.Point(18, 169);
+            this.label9.Location = new System.Drawing.Point(18, 136);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(130, 23);
             this.label9.TabIndex = 2;
@@ -264,7 +276,7 @@
             // 
             this.txtKhauTru.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.txtKhauTru.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.txtKhauTru.Location = new System.Drawing.Point(161, 221);
+            this.txtKhauTru.Location = new System.Drawing.Point(161, 169);
             this.txtKhauTru.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtKhauTru.Name = "txtKhauTru";
             this.txtKhauTru.Size = new System.Drawing.Size(271, 31);
@@ -274,7 +286,7 @@
             // 
             this.txtSoNgayCong.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.txtSoNgayCong.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.txtSoNgayCong.Location = new System.Drawing.Point(161, 169);
+            this.txtSoNgayCong.Location = new System.Drawing.Point(161, 128);
             this.txtSoNgayCong.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtSoNgayCong.Name = "txtSoNgayCong";
             this.txtSoNgayCong.Size = new System.Drawing.Size(271, 31);
@@ -284,7 +296,7 @@
             // 
             this.txtPhuCap.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.txtPhuCap.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.txtPhuCap.Location = new System.Drawing.Point(171, 97);
+            this.txtPhuCap.Location = new System.Drawing.Point(161, 83);
             this.txtPhuCap.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtPhuCap.Name = "txtPhuCap";
             this.txtPhuCap.Size = new System.Drawing.Size(249, 31);
@@ -402,7 +414,7 @@
             // 
             this.btnXoa.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnXoa.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.btnXoa.Location = new System.Drawing.Point(579, 404);
+            this.btnXoa.Location = new System.Drawing.Point(573, 371);
             this.btnXoa.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(122, 32);
@@ -427,7 +439,7 @@
             // 
             this.btnSua.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnSua.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.btnSua.Location = new System.Drawing.Point(436, 404);
+            this.btnSua.Location = new System.Drawing.Point(432, 371);
             this.btnSua.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(104, 32);
@@ -440,7 +452,7 @@
             // 
             this.btnThem.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnThem.Font = new System.Drawing.Font("Times New Roman", 10.2F);
-            this.btnThem.Location = new System.Drawing.Point(276, 404);
+            this.btnThem.Location = new System.Drawing.Point(266, 371);
             this.btnThem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(124, 32);
@@ -539,18 +551,6 @@
             this.dgvLuong.Size = new System.Drawing.Size(1402, 329);
             this.dgvLuong.TabIndex = 0;
             this.dgvLuong.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvLuong_CellClick_1);
-            // 
-            // btnXuatPDF
-            // 
-            this.btnXuatPDF.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnXuatPDF.Location = new System.Drawing.Point(431, 404);
-            this.btnXuatPDF.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnXuatPDF.Name = "btnXuatPDF";
-            this.btnXuatPDF.Size = new System.Drawing.Size(153, 32);
-            this.btnXuatPDF.TabIndex = 13;
-            this.btnXuatPDF.Text = "Xuất PDF";
-            this.btnXuatPDF.UseVisualStyleBackColor = true;
-            this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
             // 
             // F_Luong
             // 
