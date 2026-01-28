@@ -36,6 +36,7 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.btnXuatPDF = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.tbLoaiHD = new System.Windows.Forms.TextBox();
             this.checkHienMK = new System.Windows.Forms.CheckBox();
@@ -61,7 +62,8 @@
             this.DatePickerNgayBatDau = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.btnXuatPDF = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.tbTenNV = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dtGridViewHD)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -153,6 +155,8 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.Transparent;
+            this.panel5.Controls.Add(this.tbTenNV);
+            this.panel5.Controls.Add(this.label10);
             this.panel5.Controls.Add(this.btnXuatPDF);
             this.panel5.Controls.Add(this.label9);
             this.panel5.Controls.Add(this.tbLoaiHD);
@@ -185,6 +189,19 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(1352, 451);
             this.panel5.TabIndex = 94;
+            // 
+            // btnXuatPDF
+            // 
+            this.btnXuatPDF.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnXuatPDF.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnXuatPDF.Location = new System.Drawing.Point(587, 311);
+            this.btnXuatPDF.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnXuatPDF.Name = "btnXuatPDF";
+            this.btnXuatPDF.Size = new System.Drawing.Size(141, 41);
+            this.btnXuatPDF.TabIndex = 164;
+            this.btnXuatPDF.Text = "Xuất PDF";
+            this.btnXuatPDF.UseVisualStyleBackColor = true;
+            this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
             // 
             // label9
             // 
@@ -437,7 +454,7 @@
             this.DatePickerNgayKetThuc.CustomFormat = "dd/MM/yyyy";
             this.DatePickerNgayKetThuc.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DatePickerNgayKetThuc.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.DatePickerNgayKetThuc.Location = new System.Drawing.Point(246, 244);
+            this.DatePickerNgayKetThuc.Location = new System.Drawing.Point(247, 258);
             this.DatePickerNgayKetThuc.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.DatePickerNgayKetThuc.Name = "DatePickerNgayKetThuc";
             this.DatePickerNgayKetThuc.Size = new System.Drawing.Size(316, 31);
@@ -449,7 +466,7 @@
             this.DatePickerNgayBatDau.CustomFormat = "dd/MM/yyyy";
             this.DatePickerNgayBatDau.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DatePickerNgayBatDau.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.DatePickerNgayBatDau.Location = new System.Drawing.Point(245, 179);
+            this.DatePickerNgayBatDau.Location = new System.Drawing.Point(247, 219);
             this.DatePickerNgayBatDau.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.DatePickerNgayBatDau.Name = "DatePickerNgayBatDau";
             this.DatePickerNgayBatDau.Size = new System.Drawing.Size(317, 31);
@@ -460,7 +477,7 @@
             this.label5.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(102, 251);
+            this.label5.Location = new System.Drawing.Point(103, 265);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(135, 23);
             this.label5.TabIndex = 119;
@@ -471,24 +488,32 @@
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(102, 185);
+            this.label4.Location = new System.Drawing.Point(104, 225);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(127, 23);
             this.label4.TabIndex = 118;
             this.label4.Text = "Ngày Bắt Đầu";
             // 
-            // btnXuatPDF
+            // label10
             // 
-            this.btnXuatPDF.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnXuatPDF.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnXuatPDF.Location = new System.Drawing.Point(587, 311);
-            this.btnXuatPDF.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnXuatPDF.Name = "btnXuatPDF";
-            this.btnXuatPDF.Size = new System.Drawing.Size(141, 41);
-            this.btnXuatPDF.TabIndex = 164;
-            this.btnXuatPDF.Text = "Xuất PDF";
-            this.btnXuatPDF.UseVisualStyleBackColor = true;
-            this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
+            this.label10.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(102, 166);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(134, 23);
+            this.label10.TabIndex = 165;
+            this.label10.Text = "Tên Nhân Viên";
+            // 
+            // tbTenNV
+            // 
+            this.tbTenNV.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.tbTenNV.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbTenNV.Location = new System.Drawing.Point(244, 166);
+            this.tbTenNV.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tbTenNV.Name = "tbTenNV";
+            this.tbTenNV.Size = new System.Drawing.Size(316, 31);
+            this.tbTenNV.TabIndex = 166;
             // 
             // F_HopDong
             // 
@@ -549,5 +574,7 @@
         private System.Windows.Forms.TextBox tbLuongCoBan;
         private System.Windows.Forms.Button btnThoat;
         private System.Windows.Forms.Button btnXuatPDF;
+        private System.Windows.Forms.TextBox tbTenNV;
+        private System.Windows.Forms.Label label10;
     }
 }
