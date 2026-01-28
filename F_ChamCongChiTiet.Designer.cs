@@ -49,6 +49,11 @@
             this.btnThoat = new System.Windows.Forms.Button();
             this.panelGrid = new System.Windows.Forms.Panel();
             this.dtGridViewChamCong = new System.Windows.Forms.DataGridView();
+            this.buttonhienthidaxoa = new System.Windows.Forms.Button();
+            this.buttonkhoiphuc = new System.Windows.Forms.Button();
+            this.txtMKKhoiPhuc = new System.Windows.Forms.TextBox();
+            this.checkshowpassword = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.panelHeader.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -66,7 +71,7 @@
             this.panelHeader.Location = new System.Drawing.Point(0, 0);
             this.panelHeader.Name = "panelHeader";
             this.panelHeader.Padding = new System.Windows.Forms.Padding(18, 10, 18, 10);
-            this.panelHeader.Size = new System.Drawing.Size(1300, 78);
+            this.panelHeader.Size = new System.Drawing.Size(1632, 78);
             this.panelHeader.TabIndex = 0;
             // 
             // lblTitle
@@ -88,11 +93,16 @@
             this.panelTop.Location = new System.Drawing.Point(0, 78);
             this.panelTop.Name = "panelTop";
             this.panelTop.Padding = new System.Windows.Forms.Padding(12);
-            this.panelTop.Size = new System.Drawing.Size(1300, 285);
+            this.panelTop.Size = new System.Drawing.Size(1632, 285);
             this.panelTop.TabIndex = 1;
             // 
             // panelRight
             // 
+            this.panelRight.Controls.Add(this.txtMKKhoiPhuc);
+            this.panelRight.Controls.Add(this.checkshowpassword);
+            this.panelRight.Controls.Add(this.label5);
+            this.panelRight.Controls.Add(this.buttonkhoiphuc);
+            this.panelRight.Controls.Add(this.buttonhienthidaxoa);
             this.panelRight.Controls.Add(this.lblGioVao);
             this.panelRight.Controls.Add(this.tbGioVao);
             this.panelRight.Controls.Add(this.lblGioVe);
@@ -100,9 +110,9 @@
             this.panelRight.Controls.Add(this.lblGhiChu);
             this.panelRight.Controls.Add(this.tbGhiChu);
             this.panelRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelRight.Location = new System.Drawing.Point(662, 12);
+            this.panelRight.Location = new System.Drawing.Point(743, 12);
             this.panelRight.Name = "panelRight";
-            this.panelRight.Size = new System.Drawing.Size(626, 261);
+            this.panelRight.Size = new System.Drawing.Size(877, 261);
             this.panelRight.TabIndex = 1;
             // 
             // lblGioVao
@@ -177,7 +187,7 @@
             this.panelLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelLeft.Location = new System.Drawing.Point(12, 12);
             this.panelLeft.Name = "panelLeft";
-            this.panelLeft.Size = new System.Drawing.Size(650, 261);
+            this.panelLeft.Size = new System.Drawing.Size(731, 261);
             this.panelLeft.TabIndex = 0;
             // 
             // lblMaPB
@@ -193,7 +203,7 @@
             // cbBoxMaPB
             // 
             this.cbBoxMaPB.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.cbBoxMaPB.Location = new System.Drawing.Point(150, 14);
+            this.cbBoxMaPB.Location = new System.Drawing.Point(160, 15);
             this.cbBoxMaPB.Name = "cbBoxMaPB";
             this.cbBoxMaPB.Size = new System.Drawing.Size(480, 31);
             this.cbBoxMaPB.TabIndex = 1;
@@ -212,7 +222,7 @@
             // cbBoxChucVu
             // 
             this.cbBoxChucVu.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.cbBoxChucVu.Location = new System.Drawing.Point(150, 52);
+            this.cbBoxChucVu.Location = new System.Drawing.Point(160, 53);
             this.cbBoxChucVu.Name = "cbBoxChucVu";
             this.cbBoxChucVu.Size = new System.Drawing.Size(480, 31);
             this.cbBoxChucVu.TabIndex = 3;
@@ -231,7 +241,7 @@
             // tbMaChamCong
             // 
             this.tbMaChamCong.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.tbMaChamCong.Location = new System.Drawing.Point(150, 90);
+            this.tbMaChamCong.Location = new System.Drawing.Point(160, 91);
             this.tbMaChamCong.Name = "tbMaChamCong";
             this.tbMaChamCong.Size = new System.Drawing.Size(480, 30);
             this.tbMaChamCong.TabIndex = 5;
@@ -250,7 +260,7 @@
             // tbmanhanvien
             // 
             this.tbmanhanvien.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.tbmanhanvien.Location = new System.Drawing.Point(150, 128);
+            this.tbmanhanvien.Location = new System.Drawing.Point(160, 129);
             this.tbmanhanvien.Name = "tbmanhanvien";
             this.tbmanhanvien.Size = new System.Drawing.Size(480, 30);
             this.tbmanhanvien.TabIndex = 7;
@@ -270,7 +280,7 @@
             // tbtennhanvien
             // 
             this.tbtennhanvien.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.tbtennhanvien.Location = new System.Drawing.Point(150, 166);
+            this.tbtennhanvien.Location = new System.Drawing.Point(160, 167);
             this.tbtennhanvien.Name = "tbtennhanvien";
             this.tbtennhanvien.Size = new System.Drawing.Size(480, 30);
             this.tbtennhanvien.TabIndex = 9;
@@ -289,7 +299,7 @@
             // dateTimeNgayChamCong
             // 
             this.dateTimeNgayChamCong.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.dateTimeNgayChamCong.Location = new System.Drawing.Point(150, 204);
+            this.dateTimeNgayChamCong.Location = new System.Drawing.Point(160, 205);
             this.dateTimeNgayChamCong.Name = "dateTimeNgayChamCong";
             this.dateTimeNgayChamCong.Size = new System.Drawing.Size(480, 30);
             this.dateTimeNgayChamCong.TabIndex = 11;
@@ -309,7 +319,7 @@
             this.panelAction.Location = new System.Drawing.Point(0, 363);
             this.panelAction.Name = "panelAction";
             this.panelAction.Padding = new System.Windows.Forms.Padding(12);
-            this.panelAction.Size = new System.Drawing.Size(1300, 60);
+            this.panelAction.Size = new System.Drawing.Size(1632, 60);
             this.panelAction.TabIndex = 2;
             // 
             // btnThem
@@ -412,7 +422,7 @@
             this.panelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelGrid.Location = new System.Drawing.Point(0, 423);
             this.panelGrid.Name = "panelGrid";
-            this.panelGrid.Size = new System.Drawing.Size(1300, 297);
+            this.panelGrid.Size = new System.Drawing.Size(1632, 297);
             this.panelGrid.TabIndex = 3;
             // 
             // dtGridViewChamCong
@@ -426,16 +436,77 @@
             this.dtGridViewChamCong.ReadOnly = true;
             this.dtGridViewChamCong.RowHeadersWidth = 51;
             this.dtGridViewChamCong.RowTemplate.Height = 24;
-            this.dtGridViewChamCong.Size = new System.Drawing.Size(1300, 297);
+            this.dtGridViewChamCong.Size = new System.Drawing.Size(1632, 297);
             this.dtGridViewChamCong.TabIndex = 0;
             this.dtGridViewChamCong.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewChamCong_CellClick);
+            // 
+            // buttonhienthidaxoa
+            // 
+            this.buttonhienthidaxoa.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.buttonhienthidaxoa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonhienthidaxoa.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.buttonhienthidaxoa.Location = new System.Drawing.Point(606, 170);
+            this.buttonhienthidaxoa.Name = "buttonhienthidaxoa";
+            this.buttonhienthidaxoa.Size = new System.Drawing.Size(120, 36);
+            this.buttonhienthidaxoa.TabIndex = 6;
+            this.buttonhienthidaxoa.Text = "Đã xóa";
+            this.buttonhienthidaxoa.UseVisualStyleBackColor = true;
+            this.buttonhienthidaxoa.Click += new System.EventHandler(this.buttonhienthidaxoa_Click);
+            // 
+            // buttonkhoiphuc
+            // 
+            this.buttonkhoiphuc.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.buttonkhoiphuc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonkhoiphuc.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.buttonkhoiphuc.Location = new System.Drawing.Point(744, 170);
+            this.buttonkhoiphuc.Name = "buttonkhoiphuc";
+            this.buttonkhoiphuc.Size = new System.Drawing.Size(120, 36);
+            this.buttonkhoiphuc.TabIndex = 7;
+            this.buttonkhoiphuc.Text = "Khôi phục";
+            this.buttonkhoiphuc.UseVisualStyleBackColor = true;
+            this.buttonkhoiphuc.Click += new System.EventHandler(this.buttonkhoiphuc_Click);
+            // 
+            // txtMKKhoiPhuc
+            // 
+            this.txtMKKhoiPhuc.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.txtMKKhoiPhuc.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMKKhoiPhuc.Location = new System.Drawing.Point(634, 91);
+            this.txtMKKhoiPhuc.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtMKKhoiPhuc.Name = "txtMKKhoiPhuc";
+            this.txtMKKhoiPhuc.Size = new System.Drawing.Size(210, 30);
+            this.txtMKKhoiPhuc.TabIndex = 41;
+            // 
+            // checkshowpassword
+            // 
+            this.checkshowpassword.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.checkshowpassword.AutoSize = true;
+            this.checkshowpassword.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkshowpassword.Location = new System.Drawing.Point(650, 132);
+            this.checkshowpassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkshowpassword.Name = "checkshowpassword";
+            this.checkshowpassword.Size = new System.Drawing.Size(184, 26);
+            this.checkshowpassword.TabIndex = 40;
+            this.checkshowpassword.Text = "Hiển Thị Mật Khẩu";
+            this.checkshowpassword.UseVisualStyleBackColor = true;
+            this.checkshowpassword.CheckedChanged += new System.EventHandler(this.checkshowpassword_CheckedChanged);
+            // 
+            // label5
+            // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(670, 62);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(128, 22);
+            this.label5.TabIndex = 39;
+            this.label5.Text = "MK Khôi Phục";
             // 
             // F_ChamCongChiTiet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(1300, 720);
+            this.ClientSize = new System.Drawing.Size(1632, 720);
             this.Controls.Add(this.panelGrid);
             this.Controls.Add(this.panelAction);
             this.Controls.Add(this.panelTop);
@@ -502,5 +573,10 @@
 
         private System.Windows.Forms.Panel panelGrid;
         private System.Windows.Forms.DataGridView dtGridViewChamCong;
+        private System.Windows.Forms.Button buttonkhoiphuc;
+        private System.Windows.Forms.Button buttonhienthidaxoa;
+        private System.Windows.Forms.TextBox txtMKKhoiPhuc;
+        private System.Windows.Forms.CheckBox checkshowpassword;
+        private System.Windows.Forms.Label label5;
     }
 }
