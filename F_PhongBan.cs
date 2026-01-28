@@ -252,7 +252,7 @@ namespace QuanLyNhanVien3
                 if (confirm == DialogResult.Yes)
                 {
                     cn.connect();
-                    string sql = @"UPDATE tblPhongBan_ThuanCD233318 SET TenPB = @TenPB_ThuanCD233318, DiaChi = @DiaChi_ThuanCD233318, SoDienThoai = @SoDienThoai_ThuanCD233318, GhiChu= @GhiChu_ThuanCD233318, DeletedAt_ThuanCD233318 = 0 WHERE MaPB = @MaPB_ThuanCD233318";
+                    string sql = @"UPDATE tblPhongBan_ThuanCD233318 SET TenPB_ThuanCD233318 = @TenPB_ThuanCD233318, DiaChi_ThuanCD233318 = @DiaChi_ThuanCD233318, SoDienThoai_ThuanCD233318 = @SoDienThoai_ThuanCD233318, GhiChu_ThuanCD233318 = @GhiChu_ThuanCD233318, DeletedAt_ThuanCD233318 = 0 WHERE MaPB_ThuanCD233318 = @MaPB_ThuanCD233318";
                     using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text.Trim());
@@ -321,114 +321,170 @@ namespace QuanLyNhanVien3
             LoadDataPhongBan();
         }
 
-        private void btnxuatExcel_Click_1(object sender, EventArgs e)
-        {
-            if (dataGridViewPhongBan.Rows.Count > 0)
-            {
-                string fileName = $"BaoCaoPhongBan_{DateTime.Now:ddMMyyyy_HHmmss}.xlsx";
+		private void btnxuatExcel_Click_1(object sender, EventArgs e)
+		{
+			// 1. Kiểm tra dữ liệu
+			if (dataGridViewPhongBan.Rows.Count == 0)
+			{
+				MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
+					MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				return;
+			}
 
-                using (SaveFileDialog sfd = new SaveFileDialog()
-                {
-                    Filter = "Excel Workbook|*.xlsx",
-                    FileName = fileName
-                })
-                {
-                    if (sfd.ShowDialog() == DialogResult.OK)
-                    {
-                        try
-                        {
-                            using (XLWorkbook wb = new XLWorkbook())
-                            {
-                                var ws = wb.Worksheets.Add("PhongBan");
+			// Lấy tên người đăng nhập (để ký tên)
+			string nguoiDangNhap = F_FormMain.LoginInfo.CurrentUserName;
 
-                                int colCount = dataGridViewPhongBan.Columns.Count;
+			string fileName = $"BaoCaoPhongBan_{DateTime.Now:ddMMyyyy_HHmmss}.xlsx";
 
-                                /* ========== TIÊU ĐỀ ========= */
-                                ws.Cell(1, 1).Value = "BÁO CÁO DANH SÁCH PHÒNG BAN";
-                                ws.Range(1, 1, 1, colCount).Merge();
-                                ws.Range(1, 1, 1, colCount).Style.Font.Bold = true;
-                                ws.Range(1, 1, 1, colCount).Style.Font.FontSize = 18;
-                                ws.Range(1, 1, 1, colCount).Style.Alignment.Horizontal =
-                                    XLAlignmentHorizontalValues.Center;
+			using (SaveFileDialog sfd = new SaveFileDialog()
+			{
+				Filter = "Excel Workbook|*.xlsx",
+				FileName = fileName
+			})
+			{
+				if (sfd.ShowDialog() == DialogResult.OK)
+				{
+					try
+					{
+						using (XLWorkbook wb = new XLWorkbook())
+						{
+							var ws = wb.Worksheets.Add("PhongBan");
+							int colCount = dataGridViewPhongBan.Columns.Count;
 
-                                /* ========== NGÀY XUẤT ========= */
-                                ws.Cell(2, 1).Value = $"Ngày xuất: {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
-                                ws.Range(2, 1, 2, colCount).Merge();
-                                ws.Range(2, 1, 2, colCount).Style.Alignment.Horizontal =
-                                    XLAlignmentHorizontalValues.Center;
-                                ws.Range(2, 1, 2, colCount).Style.Font.Italic = true;
+							// ===== ĐỊNH DẠNG FONT CHUNG =====
+							ws.Style.Font.FontName = "Times New Roman";
+							ws.Style.Font.FontSize = 12;
 
-                                /* ========== HEADER ========= */
-                                for (int i = 0; i < colCount; i++)
-                                {
-                                    ws.Cell(4, i + 1).Value =
-                                        dataGridViewPhongBan.Columns[i].HeaderText;
+							// ===== 1. TÊN CÔNG TY (Dòng 1) =====
+							ws.Cell(1, 1).Value = "CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM";
+							ws.Range(1, 1, 1, colCount).Merge();
+							ws.Range(1, 1, 1, colCount).Style.Font.Bold = true;
+							ws.Range(1, 1, 1, colCount).Style.Font.FontSize = 15; // Cỡ chữ 15 vừa vặn
+							ws.Range(1, 1, 1, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+							ws.Range(1, 1, 1, colCount).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+							ws.Row(1).Height = 30;
 
-                                    ws.Cell(4, i + 1).Style.Font.Bold = true;
-                                    ws.Cell(4, i + 1).Style.Alignment.Horizontal =
-                                        XLAlignmentHorizontalValues.Center;
-                                    ws.Cell(4, i + 1).Style.Fill.BackgroundColor =
-                                        XLColor.LightGray;
-                                }
+							// ===== 2. TIÊU ĐỀ BÁO CÁO (Dòng 2) =====
+							ws.Cell(2, 1).Value = "BÁO CÁO DANH SÁCH PHÒNG BAN";
+							ws.Range(2, 1, 2, colCount).Merge();
+							ws.Range(2, 1, 2, colCount).Style.Font.Bold = true;
+							ws.Range(2, 1, 2, colCount).Style.Font.FontSize = 13; // Nhỏ hơn tên công ty xíu
+							ws.Range(2, 1, 2, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+							ws.Range(2, 1, 2, colCount).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+							ws.Row(2).Height = 25;
 
-                                /* ========== DỮ LIỆU ========= */
-                                for (int i = 0; i < dataGridViewPhongBan.Rows.Count; i++)
-                                {
-                                    for (int j = 0; j < colCount; j++)
-                                    {
-                                        var value = dataGridViewPhongBan.Rows[i].Cells[j].Value;
-                                        ws.Cell(i + 5, j + 1).Value =
-                                            value != null ? value.ToString() : "";
-                                    }
-                                }
+							// ===== 3. NGÀY XUẤT (Dòng 3) =====
+							ws.Cell(3, 1).Value = $"Ngày xuất: {DateTime.Now:dd/MM/yyyy HH:mm:ss}";
+							ws.Range(3, 1, 3, colCount).Merge();
+							ws.Range(3, 1, 3, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+							ws.Range(3, 1, 3, colCount).Style.Font.Italic = true;
+							ws.Row(3).Height = 20;
 
-                                /* ========== BORDER ========= */
-                                var range = ws.Range(
-                                    4, 1,
-                                    dataGridViewPhongBan.Rows.Count + 4,
-                                    colCount
-                                );
+							// ===== 4. HEADER BẢNG (Dòng 5) =====
+							int headerRow = 5;
+							for (int i = 0; i < colCount; i++)
+							{
+								ws.Cell(headerRow, i + 1).Value = dataGridViewPhongBan.Columns[i].HeaderText;
+							}
 
-                                range.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                                range.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+							var headerRange = ws.Range(headerRow, 1, headerRow, colCount);
+							headerRange.Style.Font.Bold = true;
+							headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+							headerRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+							headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
+							headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+							headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+							ws.Row(headerRow).Height = 25;
 
-                                /* ========== AUTO SIZE ========= */
-                                ws.Columns().AdjustToContents();
+							// ===== 5. DỮ LIỆU (Bắt đầu từ dòng 6) =====
+							int dataStartRow = headerRow + 1;
+							for (int i = 0; i < dataGridViewPhongBan.Rows.Count; i++)
+							{
+								for (int j = 0; j < colCount; j++)
+								{
+									var value = dataGridViewPhongBan.Rows[i].Cells[j].Value;
+									if (value is DateTime)
+										ws.Cell(dataStartRow + i, j + 1).Value = ((DateTime)value).ToString("dd/MM/yyyy");
+									else
+										ws.Cell(dataStartRow + i, j + 1).Value = value != null ? value.ToString() : "";
+								}
+								// Tăng chiều cao dòng cho thoáng
+								ws.Row(dataStartRow + i).Height = 25;
+							}
 
-                                wb.SaveAs(sfd.FileName);
-                            }
+							// Kẻ khung & Canh giữa toàn bộ dữ liệu
+							var dataRange = ws.Range(headerRow, 1, dataStartRow + dataGridViewPhongBan.Rows.Count - 1, colCount);
+							dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+							dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+							dataRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+							dataRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
-                            MessageBox.Show("Xuất Excel phòng ban thành công!",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Lỗi xuất file: " + ex.Message,
-                                "Lỗi",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Không có dữ liệu để xuất!",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-            }
-        }
+							// ===== 6. PHẦN CHỮ KÝ (Lệch phải) =====
+							int lastRow = dataStartRow + dataGridViewPhongBan.Rows.Count;
+							int signatureRow = lastRow + 2;
 
-        private void btnHienThiPhongBanCu_Click_1(object sender, EventArgs e)
+							// Logic chọn cột để ký (Lấy 2 cột cuối để ép sang phải)
+							int signColStart = colCount > 3 ? colCount - 1 : (colCount > 1 ? colCount - 1 : 1);
+
+							// a. Ngày tháng
+							var cellDate = ws.Cell(signatureRow, signColStart);
+							cellDate.Value = $"Hà Nội, ngày {DateTime.Now.Day} tháng {DateTime.Now.Month} năm {DateTime.Now.Year}";
+							ws.Range(signatureRow, signColStart, signatureRow, colCount).Merge();
+							ws.Range(signatureRow, signColStart, signatureRow, colCount).Style.Font.Italic = true;
+							ws.Range(signatureRow, signColStart, signatureRow, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+							// b. Người lập báo cáo
+							var cellTitle = ws.Cell(signatureRow + 1, signColStart);
+							cellTitle.Value = "Người lập báo cáo";
+							ws.Range(signatureRow + 1, signColStart, signatureRow + 1, colCount).Merge();
+							ws.Range(signatureRow + 1, signColStart, signatureRow + 1, colCount).Style.Font.Bold = true;
+							ws.Range(signatureRow + 1, signColStart, signatureRow + 1, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+							// c. Tên người đăng nhập
+							var cellName = ws.Cell(signatureRow + 4, signColStart);
+							cellName.Value = nguoiDangNhap;
+							ws.Range(signatureRow + 4, signColStart, signatureRow + 4, colCount).Merge();
+							ws.Range(signatureRow + 4, signColStart, signatureRow + 4, colCount).Style.Font.Bold = true;
+							ws.Range(signatureRow + 4, signColStart, signatureRow + 4, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+							// ===== 7. TỰ ĐỘNG GIÃN CỘT + THÊM RỘNG =====
+							ws.Columns().AdjustToContents();
+							for (int i = 1; i <= colCount; i++)
+							{
+								ws.Column(i).Width = ws.Column(i).Width + 8;
+							}
+
+							wb.SaveAs(sfd.FileName);
+						}
+
+						MessageBox.Show("Xuất Excel phòng ban thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+						// Mở file ngay sau khi bấm OK
+						System.Diagnostics.Process.Start(sfd.FileName);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show("Lỗi xuất file: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+			}
+		}
+
+		private void btnHienThiPhongBanCu_Click_1(object sender, EventArgs e)
         {
             try
             {
                 cn.connect();
-                string query = @" SELECT MaPB_ThuanCD233318, TenPB_ThuanCD233318, DiaChi_ThuanCD233318, SoDienThoai_ThuanCD233318, Ghichu_ThuanCD233318 FROM tblPhongBan_ThuanCD233318 WHERE DeletedAt_ThuanCD233318 =1 ORDER BY MaPB_ThuanCD233318";
-                using (SqlDataAdapter da = new SqlDataAdapter(query, cn.conn))
+				string query = @" SELECT 
+                                    MaPB_ThuanCD233318 AS [Mã Phòng Ban],
+                                    TenPB_ThuanCD233318 AS [Tên Phòng Ban],
+                                    DiaChi_ThuanCD233318 AS [Địa Chỉ],
+                                    SoDienThoai_ThuanCD233318 AS [Số Điện Thoại],
+                                    GhiChu_ThuanCD233318 AS [Ghi Chú]
+                                  FROM tblPhongBan_ThuanCD233318 
+                                  WHERE DeletedAt_ThuanCD233318 = 1 
+                                  ORDER BY MaPB_ThuanCD233318";
+				using (SqlDataAdapter da = new SqlDataAdapter(query, cn.conn))
                 {
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -442,99 +498,136 @@ namespace QuanLyNhanVien3
             }
         }
 
-        private void btnKhoiPhucPhongBan_Click_1(object sender, EventArgs e)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(tbmaPB.Text))
-                {
-                    MessageBox.Show("Vui lòng chọn hoặc nhập mã Phong Ban cần khôi phục!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+		private void btnKhoiPhucPhongBan_Click_1(object sender, EventArgs e)
+		{
+			try
+			{
+				// 1. Kiểm tra mã phòng ban đầu vào
+				if (string.IsNullOrEmpty(tbmaPB.Text))
+				{
+					MessageBox.Show("Vui lòng chọn hoặc nhập mã Phòng Ban cần khôi phục!", "Thông báo",
+						MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					return;
+				}
 
-                cn.connect();
-                string query = "SELECT COUNT(*) FROM tblPhongBan_ThuanCD233318 WHERE MaPB = @MaPB_ThuanCD233318 AND DeletedAt_ThuanCD233318 = 1";
-                using (SqlCommand cmdcheckPB = new SqlCommand(query, cn.conn))
-                {
-                    cmdcheckPB.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text.Trim());
-                    int emailCount = (int)cmdcheckPB.ExecuteScalar();
+				// 2. Yêu cầu nhập mật khẩu xác nhận
+				if (string.IsNullOrEmpty(tbMKkhoiphuc.Text))
+				{
+					MessageBox.Show("Vui lòng nhập mật khẩu để xác nhận khôi phục!", "Thông báo",
+						MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					return;
+				}
 
-                    if (emailCount == 0)
-                    {
-                        MessageBox.Show("Ma PB này đã tồn tại trong hệ thống!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        cn.disconnect();
-                        return;
-                    }
-                }
+				string matKhauNhap = tbMKkhoiphuc.Text.Trim();
 
-                //
-                if (tbMKkhoiphuc.Text == "")
-                {
-                    MessageBox.Show("Vui lòng mật khẩu để khoi phuc", "Thông báo", MessageBoxButtons.OK,
-                    MessageBoxIcon.Question);
-                    return;
-                }
+				cn.connect();
 
-                string sqMKkhoiphuc = "SELECT * FROM tblTaiKhoan_KhangCD233181 WHERE Quyen = @Quyen AND MatKhau = @MatKhau_KhangCD233181";
-                SqlCommand cmdkhoiphuc = new SqlCommand(sqMKkhoiphuc, cn.conn);
-                cmdkhoiphuc.Parameters.AddWithValue("@Quyen", "Admin");
-                cmdkhoiphuc.Parameters.AddWithValue("@MatKhau", tbMKkhoiphuc.Text);
-                SqlDataReader reader = cmdkhoiphuc.ExecuteReader();
+				// 3. Kiểm tra mật khẩu và quyền Admin (RoleId = 1)
+				string sqlCheckPassword = @"
+            SELECT COUNT(*) 
+            FROM tblTaiKhoan_KhangCD233181 
+            WHERE RTRIM(MatKhau_KhangCD233181) = @MatKhau 
+              AND RoleId_ThuanCD233318 = 1
+              AND DeletedAt_KhangCD233181 = 0";
 
-                if (reader.Read() == false)
-                {
-                    MessageBox.Show("mật khẩu không đúng? Vui lòng nhập lại mật khẩu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Question);
-                    tbMKkhoiphuc.Text = "";
-                    reader.Close();
-                    cn.disconnect();
-                    return;
-                }
-                reader.Close();
+				bool isValidAdmin = false;
 
+				using (SqlCommand cmdCheck = new SqlCommand(sqlCheckPassword, cn.conn))
+				{
+					cmdCheck.Parameters.AddWithValue("@MatKhau", matKhauNhap);
+					int count = (int)cmdCheck.ExecuteScalar();
 
-                DialogResult confirm = MessageBox.Show(
-                    "Bạn có chắc chắn muốn khôi phục nhân viên này không?",
-                    "Xác nhận khôi phục",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
-                );
+					if (count > 0)
+					{
+						isValidAdmin = true;
+					}
+				}
 
+				if (!isValidAdmin)
+				{
+					MessageBox.Show("Mật khẩu không đúng hoặc bạn không có quyền Admin để khôi phục!",
+						"Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					cn.disconnect();
+					tbMKkhoiphuc.Clear(); // Xóa mật khẩu sai đi
+					return;
+				}
 
-                if (confirm == DialogResult.Yes)
-                {
-                    tbMKkhoiphuc.Text = "";
-                    string querytblPhongBan = "UPDATE tblPhongBan_ThuanCD233318 SET DeletedAt_ThuanCD233318 = 0 WHERE MaPB = @MaPB_ThuanCD233318";
-                    using (SqlCommand cmd = new SqlCommand(querytblPhongBan, cn.conn))
-                    {
-                        // DELETE FROM tblNhanVien WHERE MaNV = @MaNV / UPDATE tblNhanVien SET DeletedAt = 1 WHERE MaNV = @MaNV
-                        cmd.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text);
-                        int rowsAffected = cmd.ExecuteNonQuery();
-                        if (rowsAffected > 0)
-                        {
-                            MessageBox.Show("khôi phục phong ban thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            cn.disconnect();
-                            ClearAllInputs(this);
-                            LoadDataPhongBan();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Không tìm thấy nhân viên để khôi phục!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            cn.disconnect();
-                        }
-                    }
-                    //cn.disconnect();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("loi " + ex.Message);
-                //MessageBox.Show("Chi tiết lỗi: " + ex.ToString(), "Lỗi hệ thống",
-                //    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+				// 4. Hộp thoại xác nhận
+				DialogResult confirm = MessageBox.Show(
+					"Bạn có chắc chắn muốn khôi phục Phòng Ban này không?",
+					"Xác nhận khôi phục",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Question
+				);
 
-        private void checkshowpassword_CheckedChanged_1(object sender, EventArgs e)
+				if (confirm == DialogResult.Yes)
+				{
+					// 5. Kiểm tra xem Phòng Ban có tồn tại trong danh sách đã xóa không (DeletedAt = 1)
+					string checkDeletedSql = @"
+                SELECT COUNT(*) 
+                FROM tblPhongBan_ThuanCD233318 
+                WHERE MaPB_ThuanCD233318 = @MaPB_ThuanCD233318 
+                  AND DeletedAt_ThuanCD233318 = 1";
+
+					using (SqlCommand cmdCheckDeleted = new SqlCommand(checkDeletedSql, cn.conn))
+					{
+						cmdCheckDeleted.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text.Trim());
+						int deletedCount = (int)cmdCheckDeleted.ExecuteScalar();
+
+						if (deletedCount == 0)
+						{
+							MessageBox.Show("Mã PB này không tìm thấy trong danh sách đã xóa (hoặc chưa bị xóa)!",
+								"Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+							cn.disconnect();
+							return;
+						}
+					}
+
+					// 6. Thực hiện Khôi phục: Cập nhật DeletedAt = 0
+					string query = @"
+                UPDATE tblPhongBan_ThuanCD233318 
+                SET DeletedAt_ThuanCD233318 = 0 
+                WHERE MaPB_ThuanCD233318 = @MaPB_ThuanCD233318 
+                  AND DeletedAt_ThuanCD233318 = 1";
+
+					using (SqlCommand cmd = new SqlCommand(query, cn.conn))
+					{
+						cmd.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text.Trim());
+						int rowsAffected = cmd.ExecuteNonQuery();
+
+						if (rowsAffected > 0)
+						{
+							MessageBox.Show("Khôi phục Phòng Ban thành công!", "Thông báo",
+								MessageBoxButtons.OK, MessageBoxIcon.Information);
+							cn.disconnect();
+
+							LoadDataPhongBan(); // Load lại danh sách phòng ban
+							ClearAllInputs(this); // Xóa trắng các ô nhập
+							tbMKkhoiphuc.Clear();
+						}
+						else
+						{
+							MessageBox.Show("Không thể khôi phục Phòng Ban!", "Thông báo",
+								MessageBoxButtons.OK, MessageBoxIcon.Warning);
+							cn.disconnect();
+						}
+					}
+				}
+				else
+				{
+					cn.disconnect(); // Ngắt kết nối nếu chọn No
+				}
+			}
+			catch (Exception ex)
+			{
+				// Đảm bảo ngắt kết nối nếu có lỗi bất ngờ
+				try { cn.disconnect(); } catch { }
+				MessageBox.Show("Lỗi khi khôi phục phòng ban: " + ex.Message, "Lỗi",
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+
+		private void checkshowpassword_CheckedChanged_1(object sender, EventArgs e)
         {
             if (checkshowpassword.Checked)
             {

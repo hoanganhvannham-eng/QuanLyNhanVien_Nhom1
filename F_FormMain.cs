@@ -249,5 +249,10 @@ namespace QuanLyNhanVien3
             OpenChildForm(new F_ChamCong());
 
         }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

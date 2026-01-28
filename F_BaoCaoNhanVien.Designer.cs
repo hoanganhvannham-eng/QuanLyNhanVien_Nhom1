@@ -31,6 +31,7 @@
             this.gbContent = new System.Windows.Forms.GroupBox();
             this.dtGridViewBCNhanVien = new System.Windows.Forms.DataGridView();
             this.lblGridTitle = new System.Windows.Forms.Label();
+            this.btnXuatPDF = new System.Windows.Forms.Button();
             this.panelHeader.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.gbSearch.SuspendLayout();
@@ -136,6 +137,7 @@
             // 
             // gbReportType
             // 
+            this.gbReportType.Controls.Add(this.btnXuatPDF);
             this.gbReportType.Controls.Add(this.btnThongKeNhanVien);
             this.gbReportType.Controls.Add(this.btnsoluongtheogioitinh);
             this.gbReportType.Controls.Add(this.btnXuatEXL);
@@ -218,6 +220,17 @@
             this.lblGridTitle.TabIndex = 1;
             this.lblGridTitle.Text = "Chi tiết danh sách nhân viên";
             // 
+            // btnXuatPDF
+            // 
+            this.btnXuatPDF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXuatPDF.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnXuatPDF.Location = new System.Drawing.Point(941, 32);
+            this.btnXuatPDF.Name = "btnXuatPDF";
+            this.btnXuatPDF.Size = new System.Drawing.Size(220, 44);
+            this.btnXuatPDF.TabIndex = 3;
+            this.btnXuatPDF.Text = "Xuất PDF";
+            this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
+            // 
             // F_BaoCaoNhanVien
             // 
             this.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -262,5 +275,6 @@
         private System.Windows.Forms.GroupBox gbContent;
         private System.Windows.Forms.Label lblGridTitle;
         private System.Windows.Forms.DataGridView dtGridViewBCNhanVien;
+        private System.Windows.Forms.Button btnXuatPDF;
     }
 }

@@ -30,6 +30,7 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cbTimDA = new System.Windows.Forms.ComboBox();
             this.dgvDA = new System.Windows.Forms.DataGridView();
             this.btnSuaDA = new System.Windows.Forms.Button();
             this.btnXoaDA = new System.Windows.Forms.Button();
@@ -40,7 +41,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.DatePickerNgayKetThuc = new System.Windows.Forms.DateTimePicker();
             this.DatePickerNgayBatDau = new System.Windows.Forms.DateTimePicker();
-            this.tbmaDA = new System.Windows.Forms.TextBox();
             this.tbTenDA = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -88,6 +88,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.cbTimDA);
             this.groupBox2.Controls.Add(this.dgvDA);
             this.groupBox2.Controls.Add(this.btnSuaDA);
             this.groupBox2.Controls.Add(this.btnXoaDA);
@@ -98,7 +99,6 @@
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.DatePickerNgayKetThuc);
             this.groupBox2.Controls.Add(this.DatePickerNgayBatDau);
-            this.groupBox2.Controls.Add(this.tbmaDA);
             this.groupBox2.Controls.Add(this.tbTenDA);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.label4);
@@ -112,6 +112,17 @@
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Tìm Dự án";
+            // 
+            // cbTimDA
+            // 
+            this.cbTimDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbTimDA.FormattingEnabled = true;
+            this.cbTimDA.Location = new System.Drawing.Point(244, 37);
+            this.cbTimDA.Name = "cbTimDA";
+            this.cbTimDA.Size = new System.Drawing.Size(329, 27);
+            this.cbTimDA.TabIndex = 88;
+            this.cbTimDA.SelectedValueChanged += new System.EventHandler(this.cbTimDA_SelectedValueChanged);
+            this.cbTimDA.TextChanged += new System.EventHandler(this.cbTimDA_TextChanged);
             // 
             // dgvDA
             // 
@@ -217,14 +228,6 @@
             this.DatePickerNgayBatDau.Name = "DatePickerNgayBatDau";
             this.DatePickerNgayBatDau.Size = new System.Drawing.Size(328, 27);
             this.DatePickerNgayBatDau.TabIndex = 46;
-            // 
-            // tbmaDA
-            // 
-            this.tbmaDA.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbmaDA.Location = new System.Drawing.Point(243, 41);
-            this.tbmaDA.Name = "tbmaDA";
-            this.tbmaDA.Size = new System.Drawing.Size(328, 27);
-            this.tbmaDA.TabIndex = 45;
             // 
             // tbTenDA
             // 
@@ -533,7 +536,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DateTimePicker DatePickerNgayKetThuc;
         private System.Windows.Forms.DateTimePicker DatePickerNgayBatDau;
-        private System.Windows.Forms.TextBox tbmaDA;
         private System.Windows.Forms.TextBox tbTenDA;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
@@ -564,5 +566,6 @@
         private System.Windows.Forms.DataGridView dgvChiTietDA;
         private System.Windows.Forms.TextBox tbTenNhanVien;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ComboBox cbTimDA;
     }
 }

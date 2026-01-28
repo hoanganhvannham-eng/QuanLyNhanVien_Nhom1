@@ -1,4 +1,6 @@
-﻿namespace QuanLyNhanVien3
+﻿using System;
+
+namespace QuanLyNhanVien3
 {
     partial class F_NhanVien
     {
@@ -104,7 +106,7 @@
             // 
             this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThoat.Location = new System.Drawing.Point(1398, 36);
+            this.btnThoat.Location = new System.Drawing.Point(1082, 45);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(163, 50);
             this.btnThoat.TabIndex = 169;
@@ -392,7 +394,7 @@
             this.cbBoxMaPB.Name = "cbBoxMaPB";
             this.cbBoxMaPB.Size = new System.Drawing.Size(283, 27);
             this.cbBoxMaPB.TabIndex = 188;
-            this.cbBoxMaPB.SelectedIndexChanged += new System.EventHandler(this.cbBoxMaPB_SelectedIndexChanged);
+            this.cbBoxMaPB.SelectedIndexChanged += new System.EventHandler(this.cbBoxMaPB_SelectedIndexChanged_1);
             // 
             // btnXoa
             // 
@@ -544,6 +546,7 @@
             this.ResumeLayout(false);
 
         }
+
 
         #endregion
         private System.Windows.Forms.Panel panel1;

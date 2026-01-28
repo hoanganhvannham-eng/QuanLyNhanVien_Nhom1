@@ -137,59 +137,103 @@ namespace QuanLyNhanVien3
 
         private void LoadcomboBox()
         {
+            // ===== LOAD PHÒNG BAN =====
             try
             {
                 cn.connect();
-                string sqlLoadcomboBoxtblPhongBan = "SELECT * FROM tblPhongBan_ThuanCD233318 WHERE DeletedAt_ThuanCD233318 = 0";
-                using (SqlDataAdapter da = new SqlDataAdapter(sqlLoadcomboBoxtblPhongBan, cn.conn))
-                {
-                    DataSet ds = new DataSet();
-                    da.Fill(ds);
 
-                    cbBoxMaPB.DataSource = ds.Tables[0];
-                    cbBoxMaPB.DisplayMember = "TenPB_ThuanCD233318";// hien thi
-                    cbBoxMaPB.ValueMember = "MaPB_ThuanCD233318"; // cot gia tri
+                string sqlPB = "SELECT MaPB_ThuanCD233318, TenPB_ThuanCD233318 FROM tblPhongBan_ThuanCD233318 WHERE DeletedAt_ThuanCD233318 = 0";
+
+                DataTable dtPB = new DataTable();
+                using (SqlDataAdapter da = new SqlDataAdapter(sqlPB, cn.conn))
+                {
+                    da.Fill(dtPB);
                 }
+
+                // ⭐ THÊM DÒNG "Tất cả"
+                DataRow rowAll = dtPB.NewRow();
+                rowAll["MaPB_ThuanCD233318"] = "";
+                rowAll["TenPB_ThuanCD233318"] = "-- Tất cả phòng ban --";
+                dtPB.Rows.InsertAt(rowAll, 0);
+
+                cbBoxMaPB.DataSource = dtPB;
+                cbBoxMaPB.DisplayMember = "TenPB_ThuanCD233318";
+                cbBoxMaPB.ValueMember = "MaPB_ThuanCD233318";
+
                 cn.disconnect();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi load ma PB: " + ex.Message);
+                cn.disconnect();
+                MessageBox.Show("Lỗi load phòng ban: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            // load chuc vu combobox
+
+            // ===== LOAD CHỨC VỤ =====
             try
             {
                 cn.connect();
-                string sqsqlLoadcomboBoxttblChucVu = "SELECT * FROM tblChucVu_KhangCD233181 WHERE DeletedAt_KhangCD233181 = 0";
-                using (SqlDataAdapter da = new SqlDataAdapter(sqsqlLoadcomboBoxttblChucVu, cn.conn))
-                {
-                    DataSet ds = new DataSet();
-                    da.Fill(ds);
 
-                    cbBoxChucVu.DataSource = ds.Tables[0];
-                    cbBoxChucVu.DisplayMember = "TenCV_KhangCD233181"; // cot hien thi
-                    cbBoxChucVu.ValueMember = "MaCV_KhangCD233181"; // cot gia tri
+                string sqlCV = "SELECT MaCV_KhangCD233181, TenCV_KhangCD233181 FROM tblChucVu_KhangCD233181 WHERE DeletedAt_KhangCD233181 = 0";
+
+                DataTable dtCV = new DataTable();
+                using (SqlDataAdapter da = new SqlDataAdapter(sqlCV, cn.conn))
+                {
+                    da.Fill(dtCV);
                 }
+
+                // ⭐ THÊM DÒNG "Tất cả"
+                DataRow rowAll = dtCV.NewRow();
+                rowAll["MaCV_KhangCD233181"] = "";
+                rowAll["TenCV_KhangCD233181"] = "-- Tất cả chức vụ --";
+                dtCV.Rows.InsertAt(rowAll, 0);
+
+                cbBoxChucVu.DataSource = dtCV;
+                cbBoxChucVu.DisplayMember = "TenCV_KhangCD233181";
+                cbBoxChucVu.ValueMember = "MaCV_KhangCD233181";
+
+                cn.disconnect();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi load ma CV: " + ex.Message);
+                cn.disconnect();
+                MessageBox.Show("Lỗi load chức vụ: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void NhanVien_Load(object sender, EventArgs e)
         {
-            LoadcomboBox();
-            loadcbbCV();
-            LoadNhanVienTheoDieuKien();
-            LoadTongSoNhanVien();
+            // ⭐ TẮT SỰ KIỆN TẠM THỜI
+            cbBoxMaPB.SelectedIndexChanged -= cbBoxMaPB_SelectedIndexChanged_1;
+            cbBoxChucVu.SelectedIndexChanged -= cbBoxChucVu_SelectedIndexChanged;
+
+            LoadcomboBox(); // Load phòng ban và chức vụ
+
+            // ⭐ CHỌN MẶC ĐỊNH "Tất cả phòng ban"
+            if (cbBoxMaPB.Items.Count > 0)
+            {
+                cbBoxMaPB.SelectedIndex = 0; // Chọn "-- Tất cả phòng ban --"
+            }
+
+            // ⭐ CHỌN MẶC ĐỊNH "Tất cả chức vụ"
+            if (cbBoxChucVu.Items.Count > 0)
+            {
+                cbBoxChucVu.SelectedIndex = 0; // Chọn "-- Tất cả chức vụ --"
+            }
+
+            // ⭐ BẬT LẠI SỰ KIỆN
+            cbBoxMaPB.SelectedIndexChanged += cbBoxMaPB_SelectedIndexChanged_1;
+            cbBoxChucVu.SelectedIndexChanged += cbBoxChucVu_SelectedIndexChanged;
+
             dtGridViewNhanVien.RowPostPaint += dtGridViewNhanVien_RowPostPaint;
+
             if (LoginInfo.CurrentUserRole.ToLower() == "user")
             {
                 btnThem.Enabled = false;
                 btnSua.Enabled = false;
                 btnXoa.Enabled = false;
             }
+
         }
         //tong nhan vien 
         private void LoadTongSoNhanVien()
@@ -232,22 +276,67 @@ namespace QuanLyNhanVien3
                 isLoadingNhanVien = true;
                 isEditingNhanVien = true;
 
-                // LƯU Ý: Cột 0 là STT, dữ liệu bắt đầu từ cột 1
-                tbmaNV.Text = dtGridViewNhanVien.Rows[i].Cells[1].Value.ToString();
-                tbHoTen.Text = dtGridViewNhanVien.Rows[i].Cells[2].Value.ToString();
-                dateTimePickerNgaySinh.Value = Convert.ToDateTime(dtGridViewNhanVien.Rows[i].Cells[3].Value);
-                cbBoxGioiTinh.Text = dtGridViewNhanVien.Rows[i].Cells[4].Value.ToString();
-                tbDiaChi.Text = dtGridViewNhanVien.Rows[i].Cells[5].Value.ToString();
-                tbSoDienThoai.Text = dtGridViewNhanVien.Rows[i].Cells[6].Value.ToString();
-                tbEmail.Text = dtGridViewNhanVien.Rows[i].Cells[7].Value.ToString();
-                cbBoxMaPB.SelectedValue = dtGridViewNhanVien.Rows[i].Cells[8].Value.ToString();
-                cbBoxChucVu.SelectedValue = dtGridViewNhanVien.Rows[i].Cells[9].Value.ToString();
-                tbGhiChu.Text = dtGridViewNhanVien.Rows[i].Cells[10].Value.ToString();
+                try
+                {
+                    // ✅ KIỂM TRA CỘT "Mã phòng ban" CÓ TỒN TẠI KHÔNG (tức là đang ở chế độ tìm kiếm)
+                    bool isSearchMode = dtGridViewNhanVien.Columns.Contains("Mã phòng ban");
 
-                isLoadingNhanVien = false;
+                    if (isSearchMode)
+                    {
+                        // ===== CHẾ ĐỘ TÌM KIẾM (có cột "Mã phòng ban", "Mã chức vụ") =====
+                        tbmaNV.Text = dtGridViewNhanVien.Rows[i].Cells["Mã nhân viên"].Value.ToString();
+                        tbHoTen.Text = dtGridViewNhanVien.Rows[i].Cells["Họ tên"].Value.ToString();
+                        dateTimePickerNgaySinh.Value = Convert.ToDateTime(dtGridViewNhanVien.Rows[i].Cells["Ngày sinh"].Value);
+                        cbBoxGioiTinh.Text = dtGridViewNhanVien.Rows[i].Cells["Giới tính"].Value.ToString();
+                        tbDiaChi.Text = dtGridViewNhanVien.Rows[i].Cells["Địa chỉ"].Value.ToString();
+                        tbSoDienThoai.Text = dtGridViewNhanVien.Rows[i].Cells["Điện thoại"].Value.ToString();
+                        tbEmail.Text = dtGridViewNhanVien.Rows[i].Cells["Email"].Value.ToString();
+
+                        // ✅ LẤY MÃ TỪ CỘT "Mã phòng ban"
+                        string maPB = dtGridViewNhanVien.Rows[i].Cells["Mã phòng ban"].Value.ToString();
+                        cbBoxMaPB.SelectedValue = maPB;
+
+                        // ✅ Load lại chức vụ theo phòng ban
+                        loadcbbCV();
+
+                        string maCV = dtGridViewNhanVien.Rows[i].Cells["Mã chức vụ"].Value.ToString();
+                        cbBoxChucVu.SelectedValue = maCV;
+
+                        tbGhiChu.Text = dtGridViewNhanVien.Rows[i].Cells["Ghi chú"].Value.ToString();
+                    }
+                    else
+                    {
+                        // ===== CHẾ ĐỘ BÌNH THƯỜNG (cột 0 là STT, dữ liệu từ cột 1) =====
+                        tbmaNV.Text = dtGridViewNhanVien.Rows[i].Cells[1].Value.ToString();
+                        tbHoTen.Text = dtGridViewNhanVien.Rows[i].Cells[2].Value.ToString();
+                        dateTimePickerNgaySinh.Value = Convert.ToDateTime(dtGridViewNhanVien.Rows[i].Cells[3].Value);
+                        cbBoxGioiTinh.Text = dtGridViewNhanVien.Rows[i].Cells[4].Value.ToString();
+                        tbDiaChi.Text = dtGridViewNhanVien.Rows[i].Cells[5].Value.ToString();
+                        tbSoDienThoai.Text = dtGridViewNhanVien.Rows[i].Cells[6].Value.ToString();
+                        tbEmail.Text = dtGridViewNhanVien.Rows[i].Cells[7].Value.ToString();
+
+                        string maPB = dtGridViewNhanVien.Rows[i].Cells[8].Value.ToString();
+                        cbBoxMaPB.SelectedValue = maPB;
+
+                        loadcbbCV();
+
+                        string maCV = dtGridViewNhanVien.Rows[i].Cells[9].Value.ToString();
+                        cbBoxChucVu.SelectedValue = maCV;
+
+                        tbGhiChu.Text = dtGridViewNhanVien.Rows[i].Cells[10].Value.ToString();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi load dữ liệu: " + ex.Message, "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    isLoadingNhanVien = false;
+                }
             }
         }
-
         private void btnThem_Click_1(object sender, EventArgs e)
         {
             try
@@ -735,49 +824,49 @@ namespace QuanLyNhanVien3
             {
                 cn.connect();
 
-                int thang = dateTimePickerNgaySinh.Value.Month;
-                int nam = dateTimePickerNgaySinh.Value.Year;
-
-                // ⭐ LẤY KEYWORD TỪ TEXTBOX MÃ NV VÀ HỌ TÊN
+                // ⭐ LẤY KEYWORD
                 string maNV = tbmaNV.Text.Trim();
                 string hoTen = tbHoTen.Text.Trim();
 
-                // ⭐ KIỂM TRA PHẢI NHẬP ÍT NHẤT 1 TRƯỜNG
+                // ⭐ KIỂM TRA NHẬP ÍT NHẤT 1 TRƯỜNG
                 if (string.IsNullOrWhiteSpace(maNV) && string.IsNullOrWhiteSpace(hoTen))
                 {
                     MessageBox.Show("Vui lòng nhập Mã NV hoặc Tên nhân viên để tìm kiếm!",
                         "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cn.disconnect();
                     return;
                 }
 
+                // ⭐ CÂU TRUY VẤN - HIỂN THỊ CẢ MÃ VÀ TÊN
                 string sql = @"
-                            SELECT 
-                                ROW_NUMBER() OVER (ORDER BY nv.MaNV_TuanhCD233018) AS [STT],
-                                nv.MaNV_TuanhCD233018 AS [Mã NV],
-                                nv.HoTen_TuanhCD233018 AS [Họ tên],
-                                pb.TenPB_ThuanCD233318 AS [Phòng ban],
-                                cv.TenCV_KhangCD233181 AS [Chức vụ],
-                                cc.Ngay_TuanhCD233018 AS [Ngày],
-                                cc.GioVao_TuanhCD233018 AS [Giờ vào],
-                                cc.GioVe_TuanhCD233018 AS [Giờ về]
-                            FROM tblNhanVien_TuanhCD233018 nv
-                            JOIN tblChucVu_KhangCD233181 cv 
-                                ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
-                            JOIN tblPhongBan_ThuanCD233318 pb 
-                                ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
-                            LEFT JOIN tblChamCong_TuanhCD233018 cc 
-                                ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-                                AND cc.DeletedAt_TuanhCD233018 = 0
-                                AND MONTH(cc.Ngay_TuanhCD233018) = @Thang
-                                AND YEAR(cc.Ngay_TuanhCD233018) = @Nam
-                            WHERE nv.DeletedAt_TuanhCD233018 = 0
-                            ";
-                SqlCommand cmd = new SqlCommand(sql, cn.conn);
-                cmd.Parameters.AddWithValue("@Thang", thang);
-                cmd.Parameters.AddWithValue("@Nam", nam);
+        SELECT 
+            ROW_NUMBER() OVER (ORDER BY nv.MaNV_TuanhCD233018) AS [STT],
+            nv.MaNV_TuanhCD233018 AS [Mã nhân viên],
+            nv.HoTen_TuanhCD233018 AS [Họ tên],
+            nv.NgaySinh_TuanhCD233018 AS [Ngày sinh],
+            nv.GioiTinh_TuanhCD233018 AS [Giới tính],
+            nv.DiaChi_TuanhCD233018 AS [Địa chỉ],
+            nv.SoDienThoai_TuanhCD233018 AS [Điện thoại],
+            nv.Email_TuanhCD233018 AS [Email],
+            pb.MaPB_ThuanCD233318 AS [Mã phòng ban],        -- ✅ HIỂN THỊ MÃ PB
+            pb.TenPB_ThuanCD233318 AS [Tên phòng ban],      -- ✅ HIỂN THỊ TÊN PB
+            nv.MaCV_KhangCD233181 AS [Mã chức vụ],          -- ✅ HIỂN THỊ MÃ CV
+            cv.TenCV_KhangCD233181 AS [Tên chức vụ],        -- ✅ HIỂN THỊ TÊN CV
+            nv.Ghichu_TuanhCD233018 AS [Ghi chú]
+        FROM tblNhanVien_TuanhCD233018 nv
+        INNER JOIN tblChucVu_KhangCD233181 cv 
+            ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+        INNER JOIN tblPhongBan_ThuanCD233318 pb 
+            ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+        WHERE nv.DeletedAt_TuanhCD233018 = 0
+            AND cv.DeletedAt_KhangCD233181 = 0
+            AND pb.DeletedAt_ThuanCD233318 = 0
+        ";
 
-                // ⭐ TÌM KIẾM THEO MÃ NV HOẶC HỌ TÊN
+                SqlCommand cmd = new SqlCommand(sql, cn.conn);
                 List<string> conditions = new List<string>();
+
+                // ⭐ TÌM THEO MÃ NV / HỌ TÊN
                 if (!string.IsNullOrWhiteSpace(maNV))
                 {
                     conditions.Add("nv.MaNV_TuanhCD233018 LIKE @MaNV");
@@ -789,23 +878,38 @@ namespace QuanLyNhanVien3
                     conditions.Add("nv.HoTen_TuanhCD233018 COLLATE Vietnamese_CI_AI LIKE @HoTen");
                     cmd.Parameters.AddWithValue("@HoTen", "%" + hoTen + "%");
                 }
+
                 if (conditions.Count > 0)
                 {
                     sql += " AND (" + string.Join(" OR ", conditions) + ")";
                 }
 
-                if (!string.IsNullOrEmpty(cbBoxMaPB.SelectedValue?.ToString()))
+                // ⭐ LỌC PHÒNG BAN (NẾU KHÔNG PHẢI "Tất cả")
+                if (cbBoxMaPB.SelectedValue != null &&
+                    !(cbBoxMaPB.SelectedValue is DataRowView) &&
+                    !string.IsNullOrEmpty(cbBoxMaPB.SelectedValue.ToString()))
                 {
                     sql += " AND pb.MaPB_ThuanCD233318 = @MaPB";
                     cmd.Parameters.AddWithValue("@MaPB", cbBoxMaPB.SelectedValue.ToString());
                 }
 
-                if (!string.IsNullOrEmpty(cbBoxChucVu.SelectedValue?.ToString()))
+                // ⭐ LỌC CHỨC VỤ (NẾU KHÔNG PHẢI "Tất cả")
+                if (cbBoxChucVu.SelectedValue != null &&
+                    !(cbBoxChucVu.SelectedValue is DataRowView) &&
+                    !string.IsNullOrEmpty(cbBoxChucVu.SelectedValue.ToString()))
                 {
                     sql += " AND cv.MaCV_KhangCD233181 = @MaCV";
                     cmd.Parameters.AddWithValue("@MaCV", cbBoxChucVu.SelectedValue.ToString());
                 }
-                sql += " ORDER BY nv.MaNV_TuanhCD233018, cc.Ngay_TuanhCD233018";
+
+                // ⭐ LỌC GIỚI TÍNH
+                if (cbBoxGioiTinh.SelectedIndex != -1)
+                {
+                    sql += " AND nv.GioiTinh_TuanhCD233018 = @GioiTinh";
+                    cmd.Parameters.AddWithValue("@GioiTinh", cbBoxGioiTinh.Text);
+                }
+
+                sql += " ORDER BY nv.MaNV_TuanhCD233018";
                 cmd.CommandText = sql;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -822,22 +926,40 @@ namespace QuanLyNhanVien3
                     dtGridViewNhanVien.Columns["STT"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 }
 
+                // ⭐ TÙY CHỈNH ĐỘ RỘNG CỘT (TÙY CHỌN)
+                if (dtGridViewNhanVien.Columns["Mã phòng ban"] != null)
+                    dtGridViewNhanVien.Columns["Mã phòng ban"].Width = 80;
+
+                if (dtGridViewNhanVien.Columns["Tên phòng ban"] != null)
+                    dtGridViewNhanVien.Columns["Tên phòng ban"].Width = 150;
+
+                if (dtGridViewNhanVien.Columns["Mã chức vụ"] != null)
+                    dtGridViewNhanVien.Columns["Mã chức vụ"].Width = 80;
+
+                if (dtGridViewNhanVien.Columns["Tên chức vụ"] != null)
+                    dtGridViewNhanVien.Columns["Tên chức vụ"].Width = 150;
+
                 if (dt.Rows.Count == 0)
                 {
                     MessageBox.Show("Không tìm thấy dữ liệu phù hợp!",
                         "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                else
+                {
+                    MessageBox.Show($"Tìm thấy {dt.Rows.Count} nhân viên!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tìm kiếm: " + ex.Message);
+                MessageBox.Show("Lỗi tìm kiếm: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 cn.disconnect();
             }
         }
-
         private void btnTaoQR_Click(object sender, EventArgs e)
         {
             try
@@ -922,29 +1044,30 @@ namespace QuanLyNhanVien3
 
             cn.connect();
             string sql = @"
-                    SELECT 
-                        nv.MaNV_TuanhCD233018 AS [Mã nhân viên],
-                        nv.HoTen_TuanhCD233018 AS [Họ tên],
-                        nv.NgaySinh_TuanhCD233018 AS [Ngày sinh],
-                        nv.GioiTinh_TuanhCD233018 AS [Giới tính],
-                        nv.DiaChi_TuanhCD233018 AS [Địa chỉ],
-                        nv.SoDienThoai_TuanhCD233018 AS [Điện thoại],
-                        nv.Email_TuanhCD233018 AS [Email],
-                        pb.MaPB_ThuanCD233318 AS [Mã PB],
-                        nv.MaCV_KhangCD233181 AS [Mã CV],
-                        nv.Ghichu_TuanhCD233018 AS [Ghi chú]
-                    FROM tblNhanVien_TuanhCD233018 nv
-                    INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
-                    INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
-                    WHERE pb.MaPB_ThuanCD233318 = @MaPB
-                    AND nv.DeletedAt_TuanhCD233018 = 0
-                    AND cv.DeletedAt_KhangCD233181 = 0
-                    AND pb.DeletedAt_ThuanCD233318 = 0
-                    ";
+            SELECT 
+                nv.MaNV_TuanhCD233018 AS [Mã nhân viên],
+                nv.HoTen_TuanhCD233018 AS [Họ tên],
+                nv.NgaySinh_TuanhCD233018 AS [Ngày sinh],
+                nv.GioiTinh_TuanhCD233018 AS [Giới tính],
+                nv.DiaChi_TuanhCD233018 AS [Địa chỉ],
+                nv.SoDienThoai_TuanhCD233018 AS [Điện thoại],
+                nv.Email_TuanhCD233018 AS [Email],
+                pb.MaPB_ThuanCD233318 AS [Mã PB],
+                nv.MaCV_KhangCD233181 AS [Mã CV],
+                nv.Ghichu_TuanhCD233018 AS [Ghi chú]
+            FROM tblNhanVien_TuanhCD233018 nv
+            INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+            INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+            WHERE pb.MaPB_ThuanCD233318 = @MaPB
+            AND nv.DeletedAt_TuanhCD233018 = 0
+            AND cv.DeletedAt_KhangCD233181 = 0
+            AND pb.DeletedAt_ThuanCD233318 = 0
+            ";
 
-            // 🔹 LỌC CHỨC VỤ
+            // 🔹 LỌC CHỨC VỤ (CHỈ KHI KHÔNG PHẢI "Tất cả")
             if (cbBoxChucVu.SelectedValue != null &&
-                !(cbBoxChucVu.SelectedValue is DataRowView))
+                !(cbBoxChucVu.SelectedValue is DataRowView) &&
+                !string.IsNullOrEmpty(cbBoxChucVu.SelectedValue.ToString()))
             {
                 sql += " AND nv.MaCV_KhangCD233181 = @MaCV";
             }
@@ -953,7 +1076,8 @@ namespace QuanLyNhanVien3
             cmd.Parameters.AddWithValue("@MaPB", cbBoxMaPB.SelectedValue);
 
             if (cbBoxChucVu.SelectedValue != null &&
-                !(cbBoxChucVu.SelectedValue is DataRowView))
+                !(cbBoxChucVu.SelectedValue is DataRowView) &&
+                !string.IsNullOrEmpty(cbBoxChucVu.SelectedValue.ToString()))
             {
                 cmd.Parameters.AddWithValue("@MaCV", cbBoxChucVu.SelectedValue);
             }
@@ -989,7 +1113,6 @@ namespace QuanLyNhanVien3
 
             cn.disconnect();
         }
-
         //
 
         // ===== 3. SỬA PHẦN LoadNhanVienTheoDieuKiengioitinh - THÊM CỘT STT =====
@@ -1001,29 +1124,30 @@ namespace QuanLyNhanVien3
 
             cn.connect();
             string sql = @"
-                    SELECT 
-                        nv.MaNV_TuanhCD233018 AS [Mã nhân viên],
-                        nv.HoTen_TuanhCD233018 AS [Họ tên],
-                        nv.NgaySinh_TuanhCD233018 AS [Ngày sinh],
-                        nv.GioiTinh_TuanhCD233018 AS [Giới tính],
-                        nv.DiaChi_TuanhCD233018 AS [Địa chỉ],
-                        nv.SoDienThoai_TuanhCD233018 AS [Điện thoại],
-                        nv.Email_TuanhCD233018 AS [Email],
-                        pb.MaPB_ThuanCD233318 AS [Mã PB],
-                        nv.MaCV_KhangCD233181 AS [Mã CV],
-                        nv.Ghichu_TuanhCD233018 AS [Ghi chú]
-                    FROM tblNhanVien_TuanhCD233018 nv
-                    INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
-                    INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
-                    WHERE pb.MaPB_ThuanCD233318 = @MaPB
-                    AND nv.DeletedAt_TuanhCD233018 = 0
-                    AND cv.DeletedAt_KhangCD233181 = 0
-                    AND pb.DeletedAt_ThuanCD233318 = 0
-                    ";
+            SELECT 
+                nv.MaNV_TuanhCD233018 AS [Mã nhân viên],
+                nv.HoTen_TuanhCD233018 AS [Họ tên],
+                nv.NgaySinh_TuanhCD233018 AS [Ngày sinh],
+                nv.GioiTinh_TuanhCD233018 AS [Giới tính],
+                nv.DiaChi_TuanhCD233018 AS [Địa chỉ],
+                nv.SoDienThoai_TuanhCD233018 AS [Điện thoại],
+                nv.Email_TuanhCD233018 AS [Email],
+                pb.MaPB_ThuanCD233318 AS [Mã PB],
+                nv.MaCV_KhangCD233181 AS [Mã CV],
+                nv.Ghichu_TuanhCD233018 AS [Ghi chú]
+            FROM tblNhanVien_TuanhCD233018 nv
+            INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+            INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+            WHERE pb.MaPB_ThuanCD233318 = @MaPB
+            AND nv.DeletedAt_TuanhCD233018 = 0
+            AND cv.DeletedAt_KhangCD233181 = 0
+            AND pb.DeletedAt_ThuanCD233318 = 0
+            ";
 
-            // 🔹 LỌC CHỨC VỤ
+            // 🔹 LỌC CHỨC VỤ (CHỈ KHI KHÔNG PHẢI "Tất cả")
             if (cbBoxChucVu.SelectedValue != null &&
-                !(cbBoxChucVu.SelectedValue is DataRowView))
+                !(cbBoxChucVu.SelectedValue is DataRowView) &&
+                !string.IsNullOrEmpty(cbBoxChucVu.SelectedValue.ToString()))
             {
                 sql += " AND nv.MaCV_KhangCD233181 = @MaCV";
             }
@@ -1038,7 +1162,8 @@ namespace QuanLyNhanVien3
             cmd.Parameters.AddWithValue("@MaPB", cbBoxMaPB.SelectedValue);
 
             if (cbBoxChucVu.SelectedValue != null &&
-                !(cbBoxChucVu.SelectedValue is DataRowView))
+                !(cbBoxChucVu.SelectedValue is DataRowView) &&
+                !string.IsNullOrEmpty(cbBoxChucVu.SelectedValue.ToString()))
             {
                 cmd.Parameters.AddWithValue("@MaCV", cbBoxChucVu.SelectedValue);
             }
@@ -1074,46 +1199,83 @@ namespace QuanLyNhanVien3
 
             cn.disconnect();
         }
-
         void loadcbbCV()
         {
-
             if (cbBoxMaPB.SelectedValue == null) return;
             if (cbBoxMaPB.SelectedValue is DataRowView) return;
 
-            string maPB = cbBoxMaPB.SelectedValue.ToString();
-            cn.connect();
+            try
+            {
+                cn.connect();
 
-            string sql = @"SELECT cv.MaCV_KhangCD233181, cv.TenCV_KhangCD233181
-                            FROM     tblPhongBan_ThuanCD233318 pb INNER JOIN
-                                     tblChucVu_KhangCD233181 cv ON pb.MaPB_ThuanCD233318 = cv.MaPB_ThuanCD233318
-                            WHERE  (pb.MaPB_ThuanCD233318 = @MaPB) AND (cv.DeletedAt_KhangCD233181 = 0) AND (pb.DeletedAt_ThuanCD233318 = 0)";
+                string maPB = cbBoxMaPB.SelectedValue.ToString();
 
-            SqlCommand cmd = new SqlCommand(sql, cn.conn);
-            cmd.Parameters.AddWithValue("@MaPB", maPB);
+                // ⭐ NẾU CHỌN "Tất cả phòng ban" (chuỗi rỗng)
+                if (string.IsNullOrEmpty(maPB))
+                {
+                    string sqlAllCV = "SELECT MaCV_KhangCD233181, TenCV_KhangCD233181 FROM tblChucVu_KhangCD233181 WHERE DeletedAt_KhangCD233181 = 0";
 
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            cbBoxChucVu.DataSource = null;
-            cbBoxChucVu.DataSource = dt;
-            cbBoxChucVu.SelectedIndex = -1;
-            cbBoxChucVu.ValueMember = "MaCV_KhangCD233181";
-            cbBoxChucVu.DisplayMember = "TenCV_KhangCD233181";
+                    DataTable dt = new DataTable();
+                    using (SqlDataAdapter da = new SqlDataAdapter(sqlAllCV, cn.conn))
+                    {
+                        da.Fill(dt);
+                    }
 
-            cn.disconnect();
+                    // Thêm "Tất cả"
+                    DataRow newRow = dt.NewRow();
+                    newRow["MaCV_KhangCD233181"] = "";  // ✅ QUAN TRỌNG: chuỗi rỗng, không phải DBNull
+                    newRow["TenCV_KhangCD233181"] = "-- Tất cả chức vụ --";
+                    dt.Rows.InsertAt(newRow, 0);
+
+                    cbBoxChucVu.DataSource = null; // ⭐ QUAN TRỌNG: Reset trước
+                    cbBoxChucVu.DataSource = dt;
+                    cbBoxChucVu.ValueMember = "MaCV_KhangCD233181";
+                    cbBoxChucVu.DisplayMember = "TenCV_KhangCD233181";
+                    cbBoxChucVu.SelectedIndex = 0; // ⭐ Chọn "Tất cả"
+
+                    cn.disconnect();
+                    return;
+                }
+
+                // ⭐ NẾU CHỌN PHÒNG BAN CỤ THỂ
+                string sql = @"SELECT cv.MaCV_KhangCD233181, cv.TenCV_KhangCD233181
+               FROM tblPhongBan_ThuanCD233318 pb 
+               INNER JOIN tblChucVu_KhangCD233181 cv 
+                   ON pb.MaPB_ThuanCD233318 = cv.MaPB_ThuanCD233318
+               WHERE pb.MaPB_ThuanCD233318 = @MaPB 
+                   AND cv.DeletedAt_KhangCD233181 = 0 
+                   AND pb.DeletedAt_ThuanCD233318 = 0";
+
+                SqlCommand cmd = new SqlCommand(sql, cn.conn);
+                cmd.Parameters.AddWithValue("@MaPB", maPB);
+
+                DataTable dtCV = new DataTable();
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    da.Fill(dtCV);
+                }
+
+                // Thêm "Tất cả"
+                DataRow rowAll = dtCV.NewRow();
+                rowAll["MaCV_KhangCD233181"] = "";  // ✅ QUAN TRỌNG: chuỗi rỗng
+                rowAll["TenCV_KhangCD233181"] = "-- Tất cả chức vụ --";
+                dtCV.Rows.InsertAt(rowAll, 0);
+
+                cbBoxChucVu.DataSource = null; // ⭐ QUAN TRỌNG: Reset trước
+                cbBoxChucVu.DataSource = dtCV;
+                cbBoxChucVu.ValueMember = "MaCV_KhangCD233181";
+                cbBoxChucVu.DisplayMember = "TenCV_KhangCD233181";
+                cbBoxChucVu.SelectedIndex = 0; // ⭐ Chọn "Tất cả"
+
+                cn.disconnect();
+            }
+            catch (Exception ex)
+            {
+                cn.disconnect();
+                MessageBox.Show("Lỗi load chức vụ: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-        private void cbBoxMaPB_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            loadcbbCV();
-            if (isLoadingNhanVien) return; // ❗ CHỐNG LOAD NGƯỢC
-            if (isEditingNhanVien) return; // 🔥 CHẶN LỌC KHI ĐANG SỬA
-            if (cbBoxMaPB.SelectedValue == null) return;
-            if (cbBoxMaPB.SelectedValue is DataRowView) return;
-            // 🔥 LOAD NHÂN VIÊN THEO PHÒNG BAN
-            LoadNhanVienTheoDieuKien();
-        }
-
         private void cbBoxChucVu_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (isLoadingNhanVien) return;
@@ -1455,6 +1617,26 @@ namespace QuanLyNhanVien3
                     MessageBox.Show($"Lỗi xuất PDF: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void cbBoxMaPB_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (isLoadingNhanVien) return;
+            if (isEditingNhanVien) return;
+            if (cbBoxMaPB.SelectedValue == null) return;
+            if (cbBoxMaPB.SelectedValue is DataRowView) return;
+
+            // ⭐ TẮT SỰ KIỆN CHỨC VỤ TẠM THỜI
+            cbBoxChucVu.SelectedIndexChanged -= cbBoxChucVu_SelectedIndexChanged;
+
+            // ⭐ LOAD LẠI CHỨC VỤ THEO PHÒNG BAN
+            loadcbbCV();
+
+            // ⭐ BẬT LẠI SỰ KIỆN CHỨC VỤ
+            cbBoxChucVu.SelectedIndexChanged += cbBoxChucVu_SelectedIndexChanged;
+
+            // ⭐ LOAD LẠI NHÂN VIÊN
+            LoadNhanVienTheoDieuKien();
         }
     }
 }

@@ -7,8 +7,17 @@ namespace QuanLyNhanVien3
     class connectData
     {
         public SqlConnection conn;
+<<<<<<< HEAD
         //private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom14;Integrated Security=True;";
         private string strCon = @"Data Source=.;Initial Catalog=QuanLyNhanVien_Nhom14;Integrated Security=True;";
+=======
+       //private string strCon = @"Data Source=.;Initial Catalog=QuanLyNhanVien_Nhom14;Integrated Security=True;";
+        //private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom14;Integrated Security=True;";
+        //private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom15;Integrated Security=True;";
+       // private string strCon = @"Data Source=.;Initial Catalog=QuanLyNhanVien_Nhom14;Integrated Security=True;";
+        private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom14;Integrated Security=True;";
+      //  private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom15;Integrated Security=True;";
+>>>>>>> 97991bab66e4487f823d316ec24b82ecd9d5b7cf
 
         // Mở kết nối
         public void connect()

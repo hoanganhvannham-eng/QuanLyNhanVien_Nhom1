@@ -928,7 +928,7 @@ WHERE cc.DeletedAt_TuanhCD233018 = 0
 
                     // ===== THÁNG / NĂM =====
                     Paragraph time = new Paragraph(
-                        $"Tháng/Năm: {dtpThoiGian.Value:MM/yyyy}\n" +
+                        //$"Tháng/Năm: {dtpThoiGian.Value:MM/yyyy}\n" +
                         $"Phòng ban: {cbBoxMaPB.Text}\n" +
                         $"Chức vụ: {cbBoxChucVu.Text}\n\n",
                         fCell);
@@ -1195,6 +1195,16 @@ WHERE cc.DeletedAt_TuanhCD233018 = 0
             {
                 cn.disconnect();
             }
+        }
+
+        private void pnlControl_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.IO;
+using static QuanLyNhanVien3.F_FormMain;
 
 
 namespace QuanLyNhanVien3
@@ -24,6 +25,7 @@ namespace QuanLyNhanVien3
 		{
 			InitializeComponent();
 		}
+		string nguoiDangNhap = F_FormMain.LoginInfo.CurrentUserName;
 
 		// ============== FORM LOAD ==============
 		private void F_BaoCaoDuAn_Load(object sender, EventArgs e)
@@ -253,6 +255,7 @@ namespace QuanLyNhanVien3
 		// ============== NÚT XUẤT EXCEL ==============
 		private void btnXuatExcel_Click(object sender, EventArgs e)
 		{
+			// 1. Kiểm tra dữ liệu
 			if (dtGridViewBCDuAn.Rows.Count == 0)
 			{
 				MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
@@ -277,53 +280,117 @@ namespace QuanLyNhanVien3
 							var ws = wb.Worksheets.Add("BaoCaoDuAn");
 							int colCount = dtGridViewBCDuAn.Columns.Count;
 
-							// TIÊU ĐỀ
-							ws.Cell(1, 1).Value = "BÁO CÁO DỰ ÁN";
+							// ===== ĐỊNH DẠNG FONT CHUNG =====
+							ws.Style.Font.FontName = "Times New Roman";
+							ws.Style.Font.FontSize = 12; // Cỡ chữ nội dung bình thường
+
+							// ===== 1. TÊN CÔNG TY (Dòng 1) =====
+							ws.Cell(1, 1).Value = "CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM";
 							ws.Range(1, 1, 1, colCount).Merge();
 							ws.Range(1, 1, 1, colCount).Style.Font.Bold = true;
-							ws.Range(1, 1, 1, colCount).Style.Font.FontSize = 18;
+							// [SỬA LẠI]: Giảm xuống 15 cho vừa vặn, không bị mất chữ
+							ws.Range(1, 1, 1, colCount).Style.Font.FontSize = 15;
 							ws.Range(1, 1, 1, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+							ws.Range(1, 1, 1, colCount).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+							ws.Range(1, 1, 1, colCount).Style.Alignment.WrapText = true; // Tự động xuống dòng nếu tên quá dài
+							ws.Row(1).Height = 30; // Chiều cao vừa phải
 
-							// NGÀY XUẤT
-							ws.Cell(2, 1).Value = "Ngày xuất: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+							// ===== 2. TIÊU ĐỀ BÁO CÁO (Dòng 2) =====
+							ws.Cell(2, 1).Value = "BÁO CÁO DỰ ÁN";
 							ws.Range(2, 1, 2, colCount).Merge();
-							ws.Range(2, 1, 2, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-							ws.Range(2, 1, 2, colCount).Style.Font.Italic = true;
+							ws.Range(2, 1, 2, colCount).Style.Font.Bold = true;
+							// [SỬA LẠI]: Giảm xuống 13 để nhỏ hơn tên công ty một chút
+							ws.Range(2, 1, 2, colCount).Style.Font.FontSize = 13;
+							ws.Range(2, 1, 2, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+							ws.Range(2, 1, 2, colCount).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+							ws.Row(2).Height = 25;
 
-							// HEADER
+							// ===== 3. NGÀY XUẤT (Dòng 3) =====
+							ws.Cell(3, 1).Value = "Ngày xuất: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+							ws.Range(3, 1, 3, colCount).Merge();
+							ws.Range(3, 1, 3, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+							ws.Range(3, 1, 3, colCount).Style.Font.Italic = true;
+							ws.Row(3).Height = 20;
+
+							// ===== 4. HEADER BẢNG (Dòng 5) =====
+							int headerRow = 5;
 							for (int i = 0; i < colCount; i++)
 							{
-								ws.Cell(4, i + 1).Value = dtGridViewBCDuAn.Columns[i].HeaderText;
+								ws.Cell(headerRow, i + 1).Value = dtGridViewBCDuAn.Columns[i].HeaderText;
 							}
 
-							var headerRange = ws.Range(4, 1, 4, colCount);
+							var headerRange = ws.Range(headerRow, 1, headerRow, colCount);
 							headerRange.Style.Font.Bold = true;
 							headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+							headerRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 							headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
 							headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 							headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+							ws.Row(headerRow).Height = 25; // Header cao vừa đủ
 
-							// DỮ LIỆU
+							// ===== 5. DỮ LIỆU =====
+							int dataStartRow = headerRow + 1;
 							for (int i = 0; i < dtGridViewBCDuAn.Rows.Count; i++)
 							{
 								for (int j = 0; j < colCount; j++)
 								{
 									var value = dtGridViewBCDuAn.Rows[i].Cells[j].Value;
-									ws.Cell(i + 5, j + 1).Value = value != null ? value.ToString() : "";
+									if (value is DateTime)
+										ws.Cell(dataStartRow + i, j + 1).Value = ((DateTime)value).ToString("dd/MM/yyyy");
+									else
+										ws.Cell(dataStartRow + i, j + 1).Value = value != null ? value.ToString() : "";
 								}
+								// Chiều cao dòng dữ liệu: 25 là đủ thoáng và đẹp (30 hơi to quá)
+								ws.Row(dataStartRow + i).Height = 25;
 							}
 
-							// BORDER
-							var dataRange = ws.Range(4, 1, dtGridViewBCDuAn.Rows.Count + 4, colCount);
+							// Kẻ khung & Canh giữa toàn bộ
+							var dataRange = ws.Range(headerRow, 1, dataStartRow + dtGridViewBCDuAn.Rows.Count - 1, colCount);
 							dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 							dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+							dataRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+							dataRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
+							// ===== 6. PHẦN CHỮ KÝ (Lệch phải) =====
+							int lastRow = dataStartRow + dtGridViewBCDuAn.Rows.Count;
+							int signatureRow = lastRow + 2;
+							int signColStart = colCount > 3 ? colCount - 1 : (colCount > 1 ? colCount - 1 : 1);
+
+							// a. Ngày tháng
+							var cellDate = ws.Cell(signatureRow, signColStart);
+							cellDate.Value = "Hà Nội, ngày " + DateTime.Now.Day + " tháng " + DateTime.Now.Month + " năm " + DateTime.Now.Year;
+							ws.Range(signatureRow, signColStart, signatureRow, colCount).Merge();
+							ws.Range(signatureRow, signColStart, signatureRow, colCount).Style.Font.Italic = true;
+							ws.Range(signatureRow, signColStart, signatureRow, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+							// b. Người lập báo cáo
+							var cellTitle = ws.Cell(signatureRow + 1, signColStart);
+							cellTitle.Value = "Người lập báo cáo";
+							ws.Range(signatureRow + 1, signColStart, signatureRow + 1, colCount).Merge();
+							ws.Range(signatureRow + 1, signColStart, signatureRow + 1, colCount).Style.Font.Bold = true;
+							ws.Range(signatureRow + 1, signColStart, signatureRow + 1, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+							// c. Tên người đăng nhập
+							var cellName = ws.Cell(signatureRow + 4, signColStart);
+							cellName.Value = nguoiDangNhap;
+							ws.Range(signatureRow + 4, signColStart, signatureRow + 4, colCount).Merge();
+							ws.Range(signatureRow + 4, signColStart, signatureRow + 4, colCount).Style.Font.Bold = true;
+							ws.Range(signatureRow + 4, signColStart, signatureRow + 4, colCount).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+							// ===== 7. TỰ ĐỘNG GIÃN CỘT =====
 							ws.Columns().AdjustToContents();
+
+							// Cộng thêm 8 đơn vị để cột rộng rãi, chữ không bị mất
+							for (int i = 1; i <= colCount; i++)
+							{
+								ws.Column(i).Width = ws.Column(i).Width + 8;
+							}
+
 							wb.SaveAs(sfd.FileName);
 						}
 
-						MessageBox.Show("Xuất Excel thành công!\nFile: " + sfd.FileName,
-							"Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+						MessageBox.Show("Xuất Excel thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+						System.Diagnostics.Process.Start(sfd.FileName);
 					}
 					catch (Exception ex)
 					{
@@ -376,171 +443,140 @@ namespace QuanLyNhanVien3
 
 		private void buttonpdf_Click(object sender, EventArgs e)
 		{
-			// Thay đổi tên DataGridView của bạn ở đây
-			if (dtGridViewBCDuAn.Rows.Count > 0)
-			{
-				using (SaveFileDialog sfd = new SaveFileDialog()
-				{
-					Filter = "PDF File|*.pdf",
-					FileName = "DanhSachSach_" + DateTime.Now.ToString("yyyyMMdd") + ".pdf"
-				})
-				{
-					if (sfd.ShowDialog() == DialogResult.OK)
-					{
-						try
-						{
-							// Tạo document PDF - LANDSCAPE (ngang) nếu cần nhiều cột
-							iTextSharp.text.Document doc = new iTextSharp.text.Document(PageSize.A4, 20, 20, 20, 20);
-							// Nếu muốn ngang: PageSize.A4.Rotate()
-							PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
-							doc.Open();
-
-							// ===== LOAD FONT TIẾNG VIỆT =====
-							string fontPath = @"C:\Windows\Fonts\arial.ttf";
-							string fontBoldPath = @"C:\Windows\Fonts\arialbd.ttf";
-							string fontItalicPath = @"C:\Windows\Fonts\ariali.ttf";
-
-							BaseFont baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-							BaseFont baseFontBold = BaseFont.CreateFont(fontBoldPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-							BaseFont baseFontItalic = BaseFont.CreateFont(fontItalicPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-
-							iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 10);
-							iTextSharp.text.Font fontBold = new iTextSharp.text.Font(baseFontBold, 13);
-							iTextSharp.text.Font fontBold15 = new iTextSharp.text.Font(baseFontBold, 15);
-							iTextSharp.text.Font fontBold10 = new iTextSharp.text.Font(baseFontBold, 10);
-							iTextSharp.text.Font fontBold8 = new iTextSharp.text.Font(baseFontBold, 8);
-							iTextSharp.text.Font fontItalic = new iTextSharp.text.Font(baseFontItalic, 10);
-							iTextSharp.text.Font fontSmall = new iTextSharp.text.Font(baseFont, 8f);
-
-							// ===== HEADER - TÊN TRƯỜNG =====
-							Paragraph header1 = new Paragraph("CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM", fontBold15);
-							header1.Alignment = Element.ALIGN_CENTER;
-							doc.Add(header1);
-
-
-							// ===== TIÊU ĐỀ CHÍNH =====
-							Paragraph title = new Paragraph("DANH SÁCH NHÂN VIÊN TRONG DỰ ÁN", fontBold);
-							title.Alignment = Element.ALIGN_CENTER;
-							title.SpacingBefore = 5;
-							title.SpacingAfter = 10;
-							doc.Add(title);
-
-							// ===== NGÀY IN - BÊN PHẢI =====
-							Paragraph dateReport = new Paragraph("Ngày in: " + DateTime.Now.ToString("dd/MM/yyyy"), fontItalic);
-							dateReport.Alignment = Element.ALIGN_RIGHT;
-							dateReport.SpacingAfter = 15;
-							doc.Add(dateReport);
-
-							// ===== BẢNG DỮ LIỆU =====
-							int columnCount = dtGridViewBCDuAn.Columns.Count;
-							PdfPTable table = new PdfPTable(columnCount);
-							table.WidthPercentage = 100;
-
-							// Tùy chỉnh độ rộng các cột (điều chỉnh theo nhu cầu)
-							// Ví dụ: TT, Mã sách, Tên sách, Nhà xuất bản, Thể loại, Tác giả, Năm xuất bản
-							// float[] columnWidths = { 0.5f, 1f, 2.5f, 1.5f, 1f, 1f, 1f };
-							// table.SetWidths(columnWidths);
-
-							// ===== HEADER BẢNG =====
-							for (int i = 0; i < columnCount; i++)
-							{
-								PdfPCell headerCell = new PdfPCell(new Phrase(dtGridViewBCDuAn.Columns[i].HeaderText, fontBold8));
-								headerCell.BackgroundColor = BaseColor.LIGHT_GRAY;
-								headerCell.HorizontalAlignment = Element.ALIGN_CENTER;
-								headerCell.VerticalAlignment = Element.ALIGN_MIDDLE;
-								headerCell.Padding = 5;
-								table.AddCell(headerCell);
-							}
-
-							// ===== GHI DỮ LIỆU =====
-							for (int i = 0; i < dtGridViewBCDuAn.Rows.Count; i++)
-							{
-								if (dtGridViewBCDuAn.Rows[i].IsNewRow) continue;
-
-								for (int j = 0; j < columnCount; j++)
-								{
-									var cellValue = dtGridViewBCDuAn.Rows[i].Cells[j].Value;
-									string displayValue = "";
-
-									if (cellValue is DateTime)
-									{
-										displayValue = ((DateTime)cellValue).ToString("dd/MM/yyyy");
-									}
-									else
-									{
-										displayValue = cellValue?.ToString() ?? "";
-									}
-
-									PdfPCell dataCell = new PdfPCell(new Phrase(displayValue, fontSmall));
-									dataCell.HorizontalAlignment = Element.ALIGN_LEFT;
-									dataCell.VerticalAlignment = Element.ALIGN_MIDDLE;
-									dataCell.Padding = 4;
-									table.AddCell(dataCell);
-								}
-							}
-
-							doc.Add(table);
-
-							// ===== PHẦN CHỮ KÝ =====
-							doc.Add(new Paragraph("\n"));
-
-							// Tạo bảng 2 cột cho chữ ký
-							PdfPTable signatureTable = new PdfPTable(2);
-							signatureTable.WidthPercentage = 100;
-							signatureTable.SpacingBefore = 20;
-
-							// Cột trái rỗng
-							PdfPCell leftCell = new PdfPCell(new Phrase(""));
-							leftCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
-							signatureTable.AddCell(leftCell);
-
-							// Cột phải - chữ ký
-							Paragraph dateSign = new Paragraph("Hà Nội, ngày " + DateTime.Now.Day + " tháng " + DateTime.Now.Month + " năm " + DateTime.Now.Year, fontItalic);
-							dateSign.Alignment = Element.ALIGN_CENTER;
-
-							Paragraph signTitle1 = new Paragraph("XÁC NHẬN", fontBold10);
-							signTitle1.Alignment = Element.ALIGN_CENTER;
-							signTitle1.SpacingBefore = 5;
-
-							Paragraph signTitle2 = new Paragraph("Người lập bảng", font);
-							signTitle2.Alignment = Element.ALIGN_CENTER;
-							signTitle2.SpacingBefore = 5;
-
-							// Khoảng trống cho chữ ký
-							Paragraph space = new Paragraph("\n\n\n", font);
-
-							// Tên người ký (nếu có)
-							// Paragraph signerName = new Paragraph("(Tên người ký)", fontItalic);
-							// signerName.Alignment = Element.ALIGN_CENTER;
-
-							PdfPCell rightCell = new PdfPCell();
-							rightCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
-							rightCell.AddElement(dateSign);
-							rightCell.AddElement(signTitle1);
-							rightCell.AddElement(signTitle2);
-							rightCell.AddElement(space);
-							// rightCell.AddElement(signerName); // Nếu cần
-							signatureTable.AddCell(rightCell);
-
-							doc.Add(signatureTable);
-
-							doc.Close();
-
-							MessageBox.Show("Xuất PDF thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-							// Tự động mở file PDF sau khi xuất (tùy chọn)
-							System.Diagnostics.Process.Start(sfd.FileName);
-						}
-						catch (Exception ex)
-						{
-							MessageBox.Show("Lỗi xuất PDF:\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						}
-					}
-				}
-			}
-			else
+			// 1. Kiểm tra dữ liệu
+			if (dtGridViewBCDuAn.Rows.Count == 0)
 			{
 				MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				return;
+			}
+
+			using (SaveFileDialog sfd = new SaveFileDialog()
+			{
+				Filter = "PDF File|*.pdf",
+				FileName = "DanhSachDuAn_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".pdf"
+			})
+			{
+				if (sfd.ShowDialog() == DialogResult.OK)
+				{
+					try
+					{
+						// 2. Khởi tạo tài liệu PDF
+						iTextSharp.text.Document doc = new iTextSharp.text.Document(PageSize.A4, 20, 20, 20, 20);
+						PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
+						doc.Open();
+
+						// 3. Load Font chữ (Giữ nguyên đường dẫn của bạn)
+						BaseFont baseFont = BaseFont.CreateFont(@"C:\Windows\Fonts\arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+						BaseFont baseFontBold = BaseFont.CreateFont(@"C:\Windows\Fonts\arialbd.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+						BaseFont baseFontItalic = BaseFont.CreateFont(@"C:\Windows\Fonts\ariali.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+						iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 10);
+						iTextSharp.text.Font fontBold = new iTextSharp.text.Font(baseFontBold, 13);
+						iTextSharp.text.Font fontBold15 = new iTextSharp.text.Font(baseFontBold, 15);
+						iTextSharp.text.Font fontBold10 = new iTextSharp.text.Font(baseFontBold, 10);
+						iTextSharp.text.Font fontBold8 = new iTextSharp.text.Font(baseFontBold, 8);
+						iTextSharp.text.Font fontItalic = new iTextSharp.text.Font(baseFontItalic, 10);
+						iTextSharp.text.Font fontSmall = new iTextSharp.text.Font(baseFont, 8f);
+
+						// 4. Header & Tiêu đề
+						Paragraph header1 = new Paragraph("CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM", fontBold15);
+						header1.Alignment = Element.ALIGN_CENTER;
+						doc.Add(header1);
+
+						Paragraph title = new Paragraph("DANH SÁCH NHÂN VIÊN TRONG DỰ ÁN", fontBold);
+						title.Alignment = Element.ALIGN_CENTER;
+						title.SpacingBefore = 5;
+						title.SpacingAfter = 10;
+						doc.Add(title);
+
+						Paragraph dateReport = new Paragraph("Ngày in: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm"), fontItalic);
+						dateReport.Alignment = Element.ALIGN_RIGHT;
+						dateReport.SpacingAfter = 15;
+						doc.Add(dateReport);
+
+						// 5. Tạo Bảng Dữ Liệu
+						int columnCount = dtGridViewBCDuAn.Columns.Count;
+						PdfPTable table = new PdfPTable(columnCount);
+						table.WidthPercentage = 100;
+
+						// --- Header Bảng ---
+						for (int i = 0; i < columnCount; i++)
+						{
+							PdfPCell headerCell = new PdfPCell(new Phrase(dtGridViewBCDuAn.Columns[i].HeaderText, fontBold8));
+							headerCell.BackgroundColor = BaseColor.LIGHT_GRAY;
+							headerCell.HorizontalAlignment = Element.ALIGN_CENTER;
+							headerCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+							headerCell.Padding = 5;
+							table.AddCell(headerCell);
+						}
+
+						// --- Dữ liệu Bảng ---
+						for (int i = 0; i < dtGridViewBCDuAn.Rows.Count; i++)
+						{
+							if (dtGridViewBCDuAn.Rows[i].IsNewRow) continue;
+
+							for (int j = 0; j < columnCount; j++)
+							{
+								var cellValue = dtGridViewBCDuAn.Rows[i].Cells[j].Value;
+								string displayValue = "";
+
+								if (cellValue is DateTime)
+									displayValue = ((DateTime)cellValue).ToString("dd/MM/yyyy");
+								else
+									displayValue = cellValue?.ToString() ?? "";
+
+								PdfPCell dataCell = new PdfPCell(new Phrase(displayValue, fontSmall));
+								dataCell.HorizontalAlignment = Element.ALIGN_LEFT;
+								dataCell.VerticalAlignment = Element.ALIGN_MIDDLE;
+								dataCell.Padding = 4;
+								table.AddCell(dataCell);
+							}
+						}
+						doc.Add(table);
+
+						// 6. PHẦN CHỮ KÝ (Đã cập nhật theo code mẫu bạn gửi)
+						doc.Add(new Paragraph("\n"));
+						PdfPTable signatureTable = new PdfPTable(2);
+						signatureTable.WidthPercentage = 100;
+						signatureTable.SpacingBefore = 20;
+
+						// Cột trái (để trống)
+						PdfPCell leftCell = new PdfPCell(new Phrase(""));
+						leftCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
+						signatureTable.AddCell(leftCell);
+
+						// Cột phải (Chữ ký & Tên người dùng)
+						PdfPCell rightCell = new PdfPCell();
+						rightCell.Border = iTextSharp.text.Rectangle.NO_BORDER;
+
+						// Ngày tháng
+						rightCell.AddElement(new Paragraph("Hà Nội, ngày " + DateTime.Now.Day + " tháng " + DateTime.Now.Month + " năm " + DateTime.Now.Year, fontItalic)
+						{ Alignment = Element.ALIGN_CENTER });
+
+						// Tiêu đề người lập
+						rightCell.AddElement(new Paragraph("Người lập báo cáo", fontBold10)
+						{ Alignment = Element.ALIGN_CENTER, SpacingBefore = 5 });
+
+						// TÊN NGƯỜI ĐĂNG NHẬP (Lấy từ Program.HoTenNguoiDung)
+						// Sử dụng SpacingBefore = 30 để tạo khoảng trống ký tên thay vì \n\n\n
+						string tenHienThi = nguoiDangNhap;
+
+						rightCell.AddElement(new Paragraph(tenHienThi, fontBold10)
+						{ Alignment = Element.ALIGN_CENTER, SpacingBefore = 40 });
+
+						signatureTable.AddCell(rightCell);
+						doc.Add(signatureTable);
+
+						// 7. Kết thúc
+						doc.Close();
+						MessageBox.Show("Xuất PDF thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+						System.Diagnostics.Process.Start(sfd.FileName);
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show("Lỗi xuất PDF:\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
 			}
 		}
 	}

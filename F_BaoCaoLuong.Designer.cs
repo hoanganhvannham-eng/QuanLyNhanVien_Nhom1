@@ -38,6 +38,7 @@
             this.btnLuongHangThang = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.dtGridViewBCLuong = new System.Windows.Forms.DataGridView();
+            this.btnXuatPDF = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -67,6 +68,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnXuatPDF);
             this.panel2.Controls.Add(this.btnXuatExcel);
             this.panel2.Controls.Add(this.dateTimePicker1);
             this.panel2.Controls.Add(this.btnTongLuongPhongBan);
@@ -161,6 +163,18 @@
             this.dtGridViewBCLuong.Size = new System.Drawing.Size(1570, 452);
             this.dtGridViewBCLuong.TabIndex = 122;
             // 
+            // btnXuatPDF
+            // 
+            this.btnXuatPDF.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnXuatPDF.Location = new System.Drawing.Point(868, 195);
+            this.btnXuatPDF.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnXuatPDF.Name = "btnXuatPDF";
+            this.btnXuatPDF.Size = new System.Drawing.Size(181, 52);
+            this.btnXuatPDF.TabIndex = 5;
+            this.btnXuatPDF.Text = "Xuất PDF";
+            this.btnXuatPDF.UseVisualStyleBackColor = true;
+            this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
+            // 
             // F_BaoCaoLuong
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -194,5 +208,6 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.DataGridView dtGridViewBCLuong;
         private System.Windows.Forms.Button btnXuatExcel;
+        private System.Windows.Forms.Button btnXuatPDF;
     }
 }
