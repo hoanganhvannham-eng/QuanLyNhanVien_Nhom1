@@ -1333,7 +1333,7 @@ namespace QuanLyNhanVien3
                 string matKhauNhap = ""; // Thay bằng txtMKKhoiPhuc.Text.Trim()
 
                 // Tạm thời comment phần này nếu chưa có textbox mật khẩu
-                /*
+
                 if (string.IsNullOrEmpty(txtMKKhoiPhuc.Text))
                 {
                     MessageBox.Show("Vui lòng nhập mật khẩu để xác nhận khôi phục!", "Thông báo",
@@ -1341,8 +1341,6 @@ namespace QuanLyNhanVien3
                     return;
                 }
                 matKhauNhap = txtMKKhoiPhuc.Text.Trim();
-                */
-
                 // Kiểm tra mật khẩu với RoleId = 1 (Admin)
                 cn.connect();
 
@@ -1449,6 +1447,11 @@ namespace QuanLyNhanVien3
                 MessageBox.Show("Lỗi khi khôi phục chấm công: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

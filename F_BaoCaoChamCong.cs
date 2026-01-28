@@ -1201,5 +1201,10 @@ WHERE cc.DeletedAt_TuanhCD233018 = 0
         {
 
         }
+
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
