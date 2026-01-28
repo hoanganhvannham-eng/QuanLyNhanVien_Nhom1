@@ -8,8 +8,8 @@ namespace QuanLyNhanVien3
     {
         public SqlConnection conn;
        // private string strCon = @"Data Source=.;Initial Catalog=QuanLyNhanVien_Nhom14;Integrated Security=True;";
-        //private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom14;Integrated Security=True;";
-        private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom15;Integrated Security=True;";
+        private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom14;Integrated Security=True;";
+      //  private string strCon = @"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyNhanVien_Nhom15;Integrated Security=True;";
         // Mở kết nối
         public void connect()
         {
