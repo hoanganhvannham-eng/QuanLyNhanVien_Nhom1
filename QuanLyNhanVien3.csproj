@@ -193,6 +193,12 @@
     <Compile Include="F_BaoCaoNhanVien.Designer.cs">
       <DependentUpon>F_BaoCaoNhanVien.cs</DependentUpon>
     </Compile>
+    <Compile Include="F_BaoCaoNhanVienChiTiet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="F_BaoCaoNhanVienChiTiet.Designer.cs">
+      <DependentUpon>F_BaoCaoNhanVienChiTiet.cs</DependentUpon>
+    </Compile>
     <Compile Include="F_BaoCaoTongHop.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -300,6 +306,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="F_BaoCaoNhanVien.resx">
       <DependentUpon>F_BaoCaoNhanVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="F_BaoCaoNhanVienChiTiet.resx">
+      <DependentUpon>F_BaoCaoNhanVienChiTiet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="F_BaoCaoTongHop.resx">
       <DependentUpon>F_BaoCaoTongHop.cs</DependentUpon>

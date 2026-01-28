@@ -26,6 +26,7 @@
             this.grpTime = new System.Windows.Forms.GroupBox();
             this.dtpThoiGian = new System.Windows.Forms.DateTimePicker();
             this.grpReport = new System.Windows.Forms.GroupBox();
+            this.btnGioravao = new System.Windows.Forms.Button();
             this.btnSoNgayLamViec = new System.Windows.Forms.Button();
             this.btnDiTreVeSom = new System.Windows.Forms.Button();
             this.grpSearch = new System.Windows.Forms.GroupBox();
@@ -36,7 +37,6 @@
             this.pnlResult = new System.Windows.Forms.Panel();
             this.dtGridViewBCChamCong = new System.Windows.Forms.DataGridView();
             this.lblResult = new System.Windows.Forms.Label();
-            this.btnGioravao = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
             this.pnlControl.SuspendLayout();
             this.grpTime.SuspendLayout();
@@ -171,6 +171,15 @@
             this.grpReport.TabStop = false;
             this.grpReport.Text = "Loại báo cáo";
             // 
+            // btnGioravao
+            // 
+            this.btnGioravao.Location = new System.Drawing.Point(371, 30);
+            this.btnGioravao.Name = "btnGioravao";
+            this.btnGioravao.Size = new System.Drawing.Size(160, 35);
+            this.btnGioravao.TabIndex = 2;
+            this.btnGioravao.Text = "Thời gian ra vào";
+            this.btnGioravao.Click += new System.EventHandler(this.btnGioravao_Click);
+            // 
             // btnSoNgayLamViec
             // 
             this.btnSoNgayLamViec.Location = new System.Drawing.Point(15, 30);
@@ -271,15 +280,6 @@
             this.lblResult.Size = new System.Drawing.Size(1542, 30);
             this.lblResult.TabIndex = 1;
             this.lblResult.Text = "KẾT QUẢ BÁO CÁO";
-            // 
-            // btnGioravao
-            // 
-            this.btnGioravao.Location = new System.Drawing.Point(371, 30);
-            this.btnGioravao.Name = "btnGioravao";
-            this.btnGioravao.Size = new System.Drawing.Size(160, 35);
-            this.btnGioravao.TabIndex = 2;
-            this.btnGioravao.Text = "Thời gian ra vào";
-            this.btnGioravao.Click += new System.EventHandler(this.btnGioravao_Click);
             // 
             // F_BaoCaoChamCong
             // 

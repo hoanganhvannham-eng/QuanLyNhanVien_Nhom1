@@ -26,8 +26,6 @@ namespace QuanLyNhanVien3
 
             btnLamMoi.Click += btnLamMoi_Click;
             btnDong.Click += (s, e) => this.Close();
-
-            dtGridViewBCTongHop.CellDoubleClick += dtGridViewBCTongHop_CellDoubleClick;
         }
 
         private void F_BaoCaoTongHop_Load(object sender, EventArgs e)

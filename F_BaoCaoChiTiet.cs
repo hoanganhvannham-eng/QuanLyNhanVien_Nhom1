@@ -15,13 +15,9 @@ namespace QuanLyNhanVien3
         DateTime denNgay;
 
         // ===============================
-        // CONSTRUCTOR DUY NHẤT
+        // CONSTRUCTOR
         // ===============================
-        public F_BaoCaoChiTiet(
-            string _loaiBaoCao,
-            string _giaTri,
-            DateTime _tuNgay,
-            DateTime _denNgay)
+        public F_BaoCaoChiTiet(string _loaiBaoCao, string _giaTri, DateTime _tuNgay, DateTime _denNgay)
         {
             InitializeComponent();
 
@@ -29,6 +25,8 @@ namespace QuanLyNhanVien3
             giaTri = _giaTri;
             tuNgay = _tuNgay;
             denNgay = _denNgay;
+
+            dgvChiTiet.RowPrePaint += dgvChiTiet_RowPrePaint;
         }
 
         // ===============================
@@ -36,27 +34,30 @@ namespace QuanLyNhanVien3
         // ===============================
         private void F_BaoCaoChiTiet_Load(object sender, EventArgs e)
         {
-            lblTitle.Text = "BÁO CÁO CHI TIẾT";
-            lblContext.Text = $"{giaTri} | {tuNgay:dd/MM/yyyy} - {denNgay:dd/MM/yyyy}";
-
             switch (loaiBaoCao)
             {
                 case "DUAN":
+                    lblTitle.Text = "BÁO CÁO CHI TIẾT THEO DỰ ÁN";
+                    lblContext.Text = $"Dự án: {giaTri}";
                     LoadTheoDuAn();
                     break;
 
                 case "PHONGBAN":
+                    lblTitle.Text = "BÁO CÁO CHI TIẾT THEO PHÒNG BAN";
+                    lblContext.Text = $"Phòng ban: {giaTri}";
                     LoadTheoPhongBan();
                     break;
 
                 case "CHUCVU":
+                    lblTitle.Text = "BÁO CÁO CHI TIẾT THEO CHỨC VỤ";
+                    lblContext.Text = $"Chức vụ: {giaTri}";
                     LoadTheoChucVu();
                     break;
             }
         }
 
         // ===============================
-        // 1. CHI TIẾT THEO DỰ ÁN
+        // LOAD THEO DỰ ÁN
         // ===============================
         void LoadTheoDuAn()
         {
@@ -65,15 +66,10 @@ namespace QuanLyNhanVien3
                 nv.MaNV_TuanhCD233018 AS MaNV,
                 nv.HoTen_TuanhCD233018 AS HoTen,
                 cv.TenCV_KhangCD233181 AS ChucVu,
+                da.TenDA_KienCD233824 AS DuAn,
                 ct.VaiTro_KienCD233824 AS VaiTroDuAn,
                 hd.NgayBatDau_ChienCD232928 AS NgayBatDauHD,
-                hd.NgayKetThuc_ChienCD232928 AS NgayKetThucHD,
-                CASE 
-                    WHEN hd.NgayKetThuc_ChienCD232928 IS NULL 
-                         OR hd.NgayKetThuc_ChienCD232928 >= GETDATE()
-                    THEN N'Còn hạn'
-                    ELSE N'Hết hạn'
-                END AS TrangThaiHopDong
+                hd.NgayKetThuc_ChienCD232928 AS NgayKetThucHD
             FROM tblChiTietDuAn_KienCD233824 ct
             JOIN tblNhanVien_TuanhCD233018 nv
                 ON ct.MaNV_TuanhCD233018 = nv.MaNV_TuanhCD233018
@@ -91,7 +87,7 @@ namespace QuanLyNhanVien3
         }
 
         // ===============================
-        // 2. CHI TIẾT THEO PHÒNG BAN
+        // LOAD THEO PHÒNG BAN
         // ===============================
         void LoadTheoPhongBan()
         {
@@ -117,7 +113,7 @@ namespace QuanLyNhanVien3
         }
 
         // ===============================
-        // 3. CHI TIẾT THEO CHỨC VỤ
+        // LOAD THEO CHỨC VỤ
         // ===============================
         void LoadTheoChucVu()
         {
@@ -158,52 +154,99 @@ namespace QuanLyNhanVien3
             dgvChiTiet.DataSource = dt;
             dgvChiTiet.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             ChuanHoaHeader(dgvChiTiet);
+            PhanTichDuLieu(dt);
 
             cn.disconnect();
         }
-        void ChuanHoaHeader(DataGridView dgv)
+
+        // ===============================
+        // PHÂN TÍCH HỢP ĐỒNG
+        // ===============================
+        void PhanTichDuLieu(DataTable dt)
         {
-            if (dgv.Columns.Contains("PhongBan"))
-                dgv.Columns["PhongBan"].HeaderText = "Phòng ban";
+            int tong = dt.Rows.Count;
+            int conHan = 0, sapHet = 0, hetHan = 0;
 
-            if (dgv.Columns.Contains("TongNhanVien"))
-                dgv.Columns["TongNhanVien"].HeaderText = "Tổng nhân viên";
+            foreach (DataRow r in dt.Rows)
+            {
+                if (r["NgayKetThucHD"] == DBNull.Value)
+                {
+                    conHan++;
+                    continue;
+                }
 
-            if (dgv.Columns.Contains("ChucVu"))
-                dgv.Columns["ChucVu"].HeaderText = "Chức vụ";
+                DateTime ngayKT = Convert.ToDateTime(r["NgayKetThucHD"]);
+                double days = (ngayKT - denNgay).TotalDays;
 
-            if (dgv.Columns.Contains("SoLuong"))
-                dgv.Columns["SoLuong"].HeaderText = "Số lượng";
+                if (days < 0)
+                    hetHan++;
+                else if (days <= 30)
+                    sapHet++;
+                else
+                    conHan++;
+            }
 
-            if (dgv.Columns.Contains("DuAn"))
-                dgv.Columns["DuAn"].HeaderText = "Dự án";
-
-            if (dgv.Columns.Contains("SoNhanVien"))
-                dgv.Columns["SoNhanVien"].HeaderText = "Số nhân viên";
-
-            if (dgv.Columns.Contains("MaNV"))
-                dgv.Columns["MaNV"].HeaderText = "Mã nhân viên";
-
-            if (dgv.Columns.Contains("HoTen"))
-                dgv.Columns["HoTen"].HeaderText = "Họ tên";
-
-            if (dgv.Columns.Contains("VaiTroDuAn"))
-                dgv.Columns["VaiTroDuAn"].HeaderText = "Vai trò dự án";
-
-            if (dgv.Columns.Contains("NgayBatDauHD"))
-                dgv.Columns["NgayBatDauHD"].HeaderText = "Ngày bắt đầu HĐ";
-
-            if (dgv.Columns.Contains("NgayKetThucHD"))
-                dgv.Columns["NgayKetThucHD"].HeaderText = "Ngày kết thúc HĐ";
-
-            if (dgv.Columns.Contains("TrangThaiHopDong"))
-                dgv.Columns["TrangThaiHopDong"].HeaderText = "Trạng thái hợp đồng";
+            lblTongNV.Text = $"Tổng NV: {tong}";
+            lblConHan.Text = $"Còn hạn: {conHan}";
+            lblSapHetHan.Text = $"Sắp hết hạn: {sapHet}";
+            lblHetHan.Text = $"Hết hạn: {hetHan}";
         }
 
+        // ===============================
+        // TÔ MÀU DÒNG
+        // ===============================
+        private void dgvChiTiet_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            var row = dgvChiTiet.Rows[e.RowIndex];
+
+            if (!dgvChiTiet.Columns.Contains("NgayKetThucHD")) return;
+            if (row.Cells["NgayKetThucHD"].Value == DBNull.Value) return;
+
+            DateTime ngayKT = Convert.ToDateTime(row.Cells["NgayKetThucHD"].Value);
+            double days = (ngayKT - denNgay).TotalDays;
+
+            if (days < 0)
+                row.DefaultCellStyle.BackColor = System.Drawing.Color.MistyRose;
+            else if (days <= 30)
+                row.DefaultCellStyle.BackColor = System.Drawing.Color.LemonChiffon;
+            else
+                row.DefaultCellStyle.BackColor = System.Drawing.Color.Honeydew;
+        }
+
+        // ===============================
+        // CHUẨN HÓA HEADER
+        // ===============================
+        void ChuanHoaHeader(DataGridView dgv)
+        {
+            if (dgv.Columns.Contains("MaNV")) dgv.Columns["MaNV"].HeaderText = "Mã nhân viên";
+            if (dgv.Columns.Contains("HoTen")) dgv.Columns["HoTen"].HeaderText = "Họ tên";
+            if (dgv.Columns.Contains("ChucVu")) dgv.Columns["ChucVu"].HeaderText = "Chức vụ";
+            if (dgv.Columns.Contains("PhongBan")) dgv.Columns["PhongBan"].HeaderText = "Phòng ban";
+            if (dgv.Columns.Contains("DuAn")) dgv.Columns["DuAn"].HeaderText = "Dự án";
+            if (dgv.Columns.Contains("VaiTroDuAn")) dgv.Columns["VaiTroDuAn"].HeaderText = "Vai trò dự án";
+            if (dgv.Columns.Contains("NgayBatDauHD")) dgv.Columns["NgayBatDauHD"].HeaderText = "Ngày bắt đầu HĐ";
+            if (dgv.Columns.Contains("NgayKetThucHD")) dgv.Columns["NgayKetThucHD"].HeaderText = "Ngày kết thúc HĐ";
+        }
 
         private void btnDong_Click(object sender, EventArgs e)
         {
-            Close();
+            this.DialogResult = DialogResult.OK;
+        }
+
+        private void dgvChiTiet_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            // Lấy MaNV từ cột MaNV
+            string maNV = dgvChiTiet.Rows[e.RowIndex]
+                                        .Cells["MaNV"]
+                                        .Value.ToString();
+
+            // Mở form chi tiết nhân viên
+            F_BaoCaoNhanVienChiTiet f =
+                new F_BaoCaoNhanVienChiTiet(maNV);
+
+            f.ShowDialog();
         }
     }
 }
