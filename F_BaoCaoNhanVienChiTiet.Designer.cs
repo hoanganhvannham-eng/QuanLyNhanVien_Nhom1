@@ -396,7 +396,7 @@
             this.MinimumSize = new System.Drawing.Size(1000, 640);
             this.Name = "F_BaoCaoNhanVienChiTiet";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Báo cáo chi tiết nhân viên";
+            this.Text = "git";
             this.Load += new System.EventHandler(this.F_BaoCaoNhanVienChiTiet_Load);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();

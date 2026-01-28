@@ -37,10 +37,9 @@
             this.pnlResult = new System.Windows.Forms.Panel();
             this.dtGridViewBCChamCong = new System.Windows.Forms.DataGridView();
             this.lblResult = new System.Windows.Forms.Label();
-<<<<<<< HEAD
-=======
+
             this.btnThoat = new System.Windows.Forms.Button();
->>>>>>> 97991bab66e4487f823d316ec24b82ecd9d5b7cf
+
             this.pnlHeader.SuspendLayout();
             this.pnlControl.SuspendLayout();
             this.grpTime.SuspendLayout();
@@ -290,8 +289,7 @@
             this.lblResult.TabIndex = 1;
             this.lblResult.Text = "KẾT QUẢ BÁO CÁO";
             // 
-<<<<<<< HEAD
-=======
+
             // btnThoat
             // 
             this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -304,7 +302,7 @@
             this.btnThoat.UseVisualStyleBackColor = true;
             this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
->>>>>>> 97991bab66e4487f823d316ec24b82ecd9d5b7cf
+
             // F_BaoCaoChamCong
             // 
             this.ClientSize = new System.Drawing.Size(1821, 670);
