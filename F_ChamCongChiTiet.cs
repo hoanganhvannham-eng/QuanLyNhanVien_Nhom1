@@ -40,6 +40,7 @@ namespace QuanLyNhanVien3
                 btnXoa.Enabled = true;
                 buttonhienthidaxoa.Enabled = true;
                 buttonkhoiphuc.Enabled = true;
+                buttonlamsach.Enabled = true;
 
                 // Hiển thị controls liên quan đến khôi phục
                 // Giả sử bạn có textbox tên txtMKKhoiPhuc và checkbox tên checkshowpassword
@@ -52,8 +53,9 @@ namespace QuanLyNhanVien3
                 btnThem.Enabled = true;
                 btnSua.Enabled = true;
                 btnXoa.Enabled = true;
-                buttonhienthidaxoa.Enabled = false;
+                buttonhienthidaxoa.Enabled = true;
                 buttonkhoiphuc.Enabled = false; // Manager không được khôi phục
+                buttonlamsach.Enabled = false;
 
                 // txtMKKhoiPhuc.Visible = false;
                 // checkshowpassword.Visible = false;
@@ -66,6 +68,7 @@ namespace QuanLyNhanVien3
                 btnXoa.Enabled = false;
                 buttonhienthidaxoa.Enabled = false;
                 buttonkhoiphuc.Enabled = false;
+                buttonlamsach.Enabled = false;
 
                 // txtMKKhoiPhuc.Visible = false;
                 // checkshowpassword.Visible = false;
@@ -1452,6 +1455,191 @@ namespace QuanLyNhanVien3
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void panelRight_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panelAction_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panelHeader_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtMKKhoiPhuc_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void buttonlamsach_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(tbMaChamCong.Text.Trim()))
+                {
+                    MessageBox.Show("Vui lòng chọn mã chấm công cần xóa hẳng!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Yêu cầu nhập mật khẩu xác nhận
+                if (string.IsNullOrEmpty(txtMKKhoiPhuc.Text))
+                {
+                    MessageBox.Show("Vui lòng nhập mật khẩu Admin để xác nhận xóa hẳn!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string matKhauNhap = txtMKKhoiPhuc.Text.Trim();
+                cn.connect();
+
+                // KIỂM TRA MẬT KHẨU ADMIN
+                string sqlCheckPassword = @"
+            SELECT COUNT(*) 
+            FROM tblTaiKhoan_KhangCD233181 
+            WHERE MatKhau_KhangCD233181 = @MatKhau 
+            AND RoleId_ThuanCD233318 = 1 
+            AND DeletedAt_KhangCD233181 = 0";
+
+                bool isValidAdmin = false;
+                using (SqlCommand cmdCheck = new SqlCommand(sqlCheckPassword, cn.conn))
+                {
+                    cmdCheck.Parameters.AddWithValue("@MatKhau", matKhauNhap);
+                    int count = (int)cmdCheck.ExecuteScalar();
+
+                    if (count > 0)
+                    {
+                        isValidAdmin = true;
+                    }
+                }
+
+                if (!isValidAdmin)
+                {
+                    MessageBox.Show("Mật khẩu không đúng hoặc bạn không có quyền Admin!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    cn.disconnect();
+                    txtMKKhoiPhuc.Clear();
+                    return;
+                }
+
+                // KIỂM TRA XEM CHẤM CÔNG CÓ TỒN TẠI TRONG DANH SÁCH ĐÃ XÓA KHÔNG
+                string checkDeletedSql = @"
+            SELECT COUNT(*) 
+            FROM tblChamCong_TuanhCD233018 
+            WHERE MaChamCong_TuanhCD233018 = @MaChamCong 
+            AND DeletedAt_TuanhCD233018 = 1";
+
+                using (SqlCommand cmdCheckDeleted = new SqlCommand(checkDeletedSql, cn.conn))
+                {
+                    cmdCheckDeleted.Parameters.AddWithValue("@MaChamCong", tbMaChamCong.Text.Trim());
+                    int deletedCount = (int)cmdCheckDeleted.ExecuteScalar();
+
+                    if (deletedCount == 0)
+                    {
+                        MessageBox.Show("Chấm công này không tồn tại trong danh sách đã xóa!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        cn.disconnect();
+                        return;
+                    }
+                }
+
+                // KIỂM TRA XEM CÓ ĐANG ĐƯỢC SỬ DỤNG TRONG BẢNG LƯƠNG KHÔNG
+                string checkLuongSql = @"
+            SELECT COUNT(*) 
+            FROM tblLuong_ChienCD232928 
+            WHERE ChamCongId_TuanhCD233018 = (
+                SELECT Id_TuanhCD233018 
+                FROM tblChamCong_TuanhCD233018 
+                WHERE MaChamCong_TuanhCD233018 = @MaChamCong
+            )";
+
+                using (SqlCommand cmdCheckLuong = new SqlCommand(checkLuongSql, cn.conn))
+                {
+                    cmdCheckLuong.Parameters.AddWithValue("@MaChamCong", tbMaChamCong.Text.Trim());
+                    int luongCount = (int)cmdCheckLuong.ExecuteScalar();
+
+                    if (luongCount > 0)
+                    {
+                        MessageBox.Show(
+                            $"Không thể xóa hẳn! Chấm công này đang được sử dụng trong {luongCount} bản ghi lương.\n\n" +
+                            "Vui lòng xóa hoặc cập nhật các bản ghi lương liên quan trước khi xóa hẳn chấm công.",
+                            "Thông báo",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                        );
+                        cn.disconnect();
+                        return;
+                    }
+                }
+
+                // XÁC NHẬN XÓA HẲNG
+                DialogResult confirm = MessageBox.Show(
+                    "⚠️ CẢNH BÁO: Bạn có chắc chắn muốn XÓA HẲNG bản ghi chấm công này?\n\n" +
+                    "Thao tác này sẽ xóa VĨNH VIỄN dữ liệu chấm công khỏi hệ thống.\n" +
+                    "Dữ liệu sẽ KHÔNG THỂ KHÔI PHỤC!\n\n" +
+                    $"Mã chấm công: {tbMaChamCong.Text}\n" +
+                    $"Nhân viên: {tbtennhanvien.Text} ({tbmanhanvien.Text})\n" +
+                    $"Ngày: {dateTimeNgayChamCong.Value:dd/MM/yyyy}",
+                    "⚠️ XÁC NHẬN XÓA HẲNG",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (confirm != DialogResult.Yes)
+                {
+                    cn.disconnect();
+                    return;
+                }
+
+                // XÓA HẲNG CHẤM CÔNG
+                string deleteQuery = @"
+            DELETE FROM tblChamCong_TuanhCD233018 
+            WHERE MaChamCong_TuanhCD233018 = @MaChamCong 
+            AND DeletedAt_TuanhCD233018 = 1";
+
+                using (SqlCommand cmd = new SqlCommand(deleteQuery, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaChamCong", tbMaChamCong.Text.Trim());
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Đã xóa hẳn bản ghi chấm công thành công!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        cn.disconnect();
+
+                        // Clear inputs và reset
+                        ClearInputs();
+                        txtMKKhoiPhuc.Clear();
+
+                        // Load lại dữ liệu (hiển thị chấm công đang hoạt động)
+                        LoadAllChamCong();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không thể xóa hẳn bản ghi chấm công!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        cn.disconnect();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                try { cn.disconnect(); } catch { }
+                MessageBox.Show("Lỗi khi xóa hẳn chấm công: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

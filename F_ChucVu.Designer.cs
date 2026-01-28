@@ -33,6 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.buttonlamsach = new System.Windows.Forms.Button();
             this.PDF = new System.Windows.Forms.Button();
             this.btnKhoiPhucNV = new System.Windows.Forms.Button();
             this.btnHienThiNVNghiViec = new System.Windows.Forms.Button();
@@ -74,6 +75,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1111, 128);
             this.panel1.TabIndex = 20;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // btnThoat
             // 
@@ -111,6 +113,7 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.buttonlamsach);
             this.panel4.Controls.Add(this.PDF);
             this.panel4.Controls.Add(this.btnKhoiPhucNV);
             this.panel4.Controls.Add(this.btnHienThiNVNghiViec);
@@ -125,6 +128,21 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(533, 359);
             this.panel4.TabIndex = 1;
+            this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
+            // 
+            // buttonlamsach
+            // 
+            this.buttonlamsach.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.buttonlamsach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonlamsach.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.buttonlamsach.Location = new System.Drawing.Point(317, 125);
+            this.buttonlamsach.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonlamsach.Name = "buttonlamsach";
+            this.buttonlamsach.Size = new System.Drawing.Size(120, 36);
+            this.buttonlamsach.TabIndex = 197;
+            this.buttonlamsach.Text = "Làm sạch";
+            this.buttonlamsach.UseVisualStyleBackColor = true;
+            this.buttonlamsach.Click += new System.EventHandler(this.buttonlamsach_Click);
             // 
             // PDF
             // 
@@ -143,10 +161,10 @@
             // 
             this.btnKhoiPhucNV.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnKhoiPhucNV.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnKhoiPhucNV.Location = new System.Drawing.Point(32, 173);
+            this.btnKhoiPhucNV.Location = new System.Drawing.Point(171, 125);
             this.btnKhoiPhucNV.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnKhoiPhucNV.Name = "btnKhoiPhucNV";
-            this.btnKhoiPhucNV.Size = new System.Drawing.Size(352, 32);
+            this.btnKhoiPhucNV.Size = new System.Drawing.Size(126, 36);
             this.btnKhoiPhucNV.TabIndex = 43;
             this.btnKhoiPhucNV.Text = "Khôi phục";
             this.btnKhoiPhucNV.UseVisualStyleBackColor = true;
@@ -156,12 +174,12 @@
             // 
             this.btnHienThiNVNghiViec.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnHienThiNVNghiViec.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnHienThiNVNghiViec.Location = new System.Drawing.Point(32, 129);
+            this.btnHienThiNVNghiViec.Location = new System.Drawing.Point(39, 125);
             this.btnHienThiNVNghiViec.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnHienThiNVNghiViec.Name = "btnHienThiNVNghiViec";
-            this.btnHienThiNVNghiViec.Size = new System.Drawing.Size(352, 32);
+            this.btnHienThiNVNghiViec.Size = new System.Drawing.Size(126, 36);
             this.btnHienThiNVNghiViec.TabIndex = 42;
-            this.btnHienThiNVNghiViec.Text = "Chức vụ đã xóa";
+            this.btnHienThiNVNghiViec.Text = "Đã xóa";
             this.btnHienThiNVNghiViec.UseVisualStyleBackColor = true;
             this.btnHienThiNVNghiViec.Click += new System.EventHandler(this.btnHienThiNVNghiViec_Click_1);
             // 
@@ -208,18 +226,19 @@
             // 
             this.txtMKKhoiPhuc.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.txtMKKhoiPhuc.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMKKhoiPhuc.Location = new System.Drawing.Point(174, 71);
+            this.txtMKKhoiPhuc.Location = new System.Drawing.Point(154, 43);
             this.txtMKKhoiPhuc.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtMKKhoiPhuc.Name = "txtMKKhoiPhuc";
             this.txtMKKhoiPhuc.Size = new System.Drawing.Size(210, 30);
             this.txtMKKhoiPhuc.TabIndex = 38;
+            this.txtMKKhoiPhuc.TextChanged += new System.EventHandler(this.txtMKKhoiPhuc_TextChanged);
             // 
             // checkshowpassword
             // 
             this.checkshowpassword.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.checkshowpassword.AutoSize = true;
             this.checkshowpassword.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkshowpassword.Location = new System.Drawing.Point(174, 104);
+            this.checkshowpassword.Location = new System.Drawing.Point(171, 82);
             this.checkshowpassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkshowpassword.Name = "checkshowpassword";
             this.checkshowpassword.Size = new System.Drawing.Size(184, 26);
@@ -233,7 +252,7 @@
             this.label5.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(27, 77);
+            this.label5.Location = new System.Drawing.Point(188, 19);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(128, 22);
             this.label5.TabIndex = 36;
@@ -463,5 +482,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button PDF;
         private System.Windows.Forms.DataGridView dgvHienThiChucVu;
+        private System.Windows.Forms.Button buttonlamsach;
     }
 }

@@ -42,6 +42,7 @@ namespace QuanLyNhanVien3
                 btnThem.Enabled = true;
                 btnSua.Enabled = true;
                 btnXoa.Enabled = true;
+                buttonlamsach.Enabled = true;
                 btnHienThiNVNghiViec.Enabled = true;
                 btnKhoiPhucNV.Enabled = true;
 
@@ -55,11 +56,11 @@ namespace QuanLyNhanVien3
                 btnThem.Enabled = true;
                 btnSua.Enabled = true;
                 btnXoa.Enabled = true;
-                btnHienThiNVNghiViec.Enabled = false;
+                btnHienThiNVNghiViec.Enabled = true;
                 btnKhoiPhucNV.Enabled = false; // Manager không được khôi phục
-
-                txtMKKhoiPhuc.Visible = false;
-                checkshowpassword.Visible = false;
+                buttonlamsach.Enabled = false;
+                txtMKKhoiPhuc.Enabled = false;
+                checkshowpassword.Enabled = false;
             }
             else // User hoặc role khác
             {
@@ -69,9 +70,10 @@ namespace QuanLyNhanVien3
                 btnXoa.Enabled = false;
                 btnHienThiNVNghiViec.Enabled = false;
                 btnKhoiPhucNV.Enabled = false;
+                buttonlamsach.Enabled = false;
 
-                txtMKKhoiPhuc.Visible = false;
-                checkshowpassword.Visible = false;
+                txtMKKhoiPhuc.Enabled = false;
+                checkshowpassword.Enabled = false;
             }
 
             txtMKKhoiPhuc.UseSystemPasswordChar = true;
@@ -1084,6 +1086,175 @@ namespace QuanLyNhanVien3
             {
                 txtMKKhoiPhuc.UseSystemPasswordChar = true;
             }
+        }
+
+        private void panel4_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void buttonlamsach_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(tbMaChuVu.Text.Trim()))
+                {
+                    MessageBox.Show("Vui lòng chọn mã chức vụ cần xóa hẳng!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(txtMKKhoiPhuc.Text))
+                {
+                    MessageBox.Show("Vui lòng nhập mật khẩu Admin để xác nhận xóa hẳn!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string matKhauNhap = txtMKKhoiPhuc.Text.Trim();
+                c.connect();
+
+                // KIỂM TRA MẬT KHẨU ADMIN
+                string sqlCheckPassword = @"
+            SELECT COUNT(*) 
+            FROM tblTaiKhoan_KhangCD233181 
+            WHERE MatKhau_KhangCD233181 = @MatKhau 
+            AND RoleId_ThuanCD233318 = 1 
+            AND DeletedAt_KhangCD233181 = 0";
+
+                bool isValidAdmin = false;
+                using (SqlCommand cmdCheck = new SqlCommand(sqlCheckPassword, c.conn))
+                {
+                    cmdCheck.Parameters.AddWithValue("@MatKhau", matKhauNhap);
+                    int count = (int)cmdCheck.ExecuteScalar();
+                    if (count > 0)
+                        isValidAdmin = true;
+                }
+
+                if (!isValidAdmin)
+                {
+                    MessageBox.Show("Mật khẩu không đúng hoặc bạn không có quyền Admin!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    c.disconnect();
+                    txtMKKhoiPhuc.Clear();
+                    return;
+                }
+
+                // KIỂM TRA XEM CHỨC VỤ CÓ TỒN TẠI TRONG DANH SÁCH ĐÃ XÓA KHÔNG
+                string checkDeletedSql = @"
+            SELECT COUNT(*) 
+            FROM tblChucVu_KhangCD233181 
+            WHERE MaCV_KhangCD233181 = @MaCV 
+            AND DeletedAt_KhangCD233181 = 1";
+
+                using (SqlCommand cmdCheckDeleted = new SqlCommand(checkDeletedSql, c.conn))
+                {
+                    cmdCheckDeleted.Parameters.AddWithValue("@MaCV", tbMaChuVu.Text.Trim());
+                    int deletedCount = (int)cmdCheckDeleted.ExecuteScalar();
+
+                    if (deletedCount == 0)
+                    {
+                        MessageBox.Show("Chức vụ này không tồn tại trong danh sách đã xóa!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        c.disconnect();
+                        return;
+                    }
+                }
+
+                // KIỂM TRA XEM CÓ NHÂN VIÊN NÀO ĐANG SỬ DỤNG CHỨC VỤ NÀY KHÔNG
+                string checkNhanVienSql = @"
+            SELECT COUNT(*) 
+            FROM tblNhanVien_TuanhCD233018 
+            WHERE MaCV_KhangCD233181 = @MaCV";
+
+                using (SqlCommand cmdCheckNV = new SqlCommand(checkNhanVienSql, c.conn))
+                {
+                    cmdCheckNV.Parameters.AddWithValue("@MaCV", tbMaChuVu.Text.Trim());
+                    int nvCount = (int)cmdCheckNV.ExecuteScalar();
+
+                    if (nvCount > 0)
+                    {
+                        MessageBox.Show(
+                            $"Không thể xóa hẳng! Vẫn còn {nvCount} nhân viên đang có chức vụ này.\n\n" +
+                            "Vui lòng xóa hoặc chuyển chức vụ cho các nhân viên trước khi xóa hẳn chức vụ.",
+                            "Thông báo",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                        );
+                        c.disconnect();
+                        return;
+                    }
+                }
+
+                // XÁC NHẬN XÓA HẲNG
+                DialogResult confirm = MessageBox.Show(
+                    "⚠️ CẢNH BÁO: Bạn có chắc chắn muốn XÓA HẲNG chức vụ này?\n\n" +
+                    "Thao tác này sẽ xóa VĨNH VIỄN dữ liệu chức vụ khỏi hệ thống.\n" +
+                    "Dữ liệu sẽ KHÔNG THỂ KHÔI PHỤC!\n\n" +
+                    $"Mã chức vụ: {tbMaChuVu.Text}\n" +
+                    $"Tên chức vụ: {txtTenChucVu.Text}",
+                    "⚠️ XÁC NHẬN XÓA HẲNG",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (confirm != DialogResult.Yes)
+                {
+                    c.disconnect();
+                    return;
+                }
+
+                // XÓA HẲNG CHỨC VỤ
+                string deleteQuery = @"
+            DELETE FROM tblChucVu_KhangCD233181 
+            WHERE MaCV_KhangCD233181 = @MaCV 
+            AND DeletedAt_KhangCD233181 = 1";
+
+                using (SqlCommand cmd = new SqlCommand(deleteQuery, c.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaCV", tbMaChuVu.Text.Trim());
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Đã xóa hẳn chức vụ thành công!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        c.disconnect();
+
+                        // Clear inputs và reset
+                        ClearAllInputs(this);
+                        tbMaChuVu.Text = TaoMaChucVuTuDong();
+                        txtMKKhoiPhuc.Clear();
+                        isEditingChucVu = false;
+
+                        // Load lại dữ liệu (hiển thị chức vụ đang hoạt động)
+                        LoadDataChucVu();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không thể xóa hẳn chức vụ!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        c.disconnect();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                try { c.disconnect(); } catch { }
+                MessageBox.Show("Lỗi khi xóa hẳn chức vụ: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void txtMKKhoiPhuc_TextChanged(object sender, EventArgs e)
+        {
+
         }
         //private void dgvHienThiChucVu_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         //{

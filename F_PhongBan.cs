@@ -655,14 +655,6 @@ namespace QuanLyNhanVien3
         private void F_PhongBan_Load(object sender, EventArgs e)
         {
             LoadDataPhongBan();
-            if (LoginInfo.CurrentUserRole.ToLower() == "user")
-            {
-                btnThem.Enabled = false;
-                btnSua.Enabled = false;
-                btnXoa.Enabled = false;
-                btnHienThiPhongBanCu.Enabled = false;
-                btnKhoiPhucPhongBan.Enabled = false;
-            }
 
             // Phân quyền dựa trên RoleId
             if (F_FormMain.LoginInfo.CurrentRoleId == 1) // Admin
@@ -672,6 +664,7 @@ namespace QuanLyNhanVien3
                 btnSua.Enabled = true;
                 btnXoa.Enabled = true;
                 btnHienThiPhongBanCu.Enabled = true;
+                buttonlamsach.Enabled = true;
                 btnKhoiPhucPhongBan.Enabled = true;
 
                 // Hiển thị controls liên quan đến khôi phục
@@ -685,8 +678,9 @@ namespace QuanLyNhanVien3
                 btnThem.Enabled = true;
                 btnSua.Enabled = true;
                 btnXoa.Enabled = true;
-                btnHienThiPhongBanCu.Enabled = false;
+                btnHienThiPhongBanCu.Enabled = true;
                 btnKhoiPhucPhongBan.Enabled = false; // Manager không được khôi phục
+                buttonlamsach.Enabled = false;
 
                 // txtMKKhoiPhuc.Visible = false;
                 // checkshowpassword.Visible = false;
@@ -698,6 +692,7 @@ namespace QuanLyNhanVien3
                 btnSua.Enabled = false;
                 btnXoa.Enabled = false;
                 btnHienThiPhongBanCu.Enabled = false;
+                buttonlamsach.Enabled = false;
                 btnKhoiPhucPhongBan.Enabled = false;
 
                 // txtMKKhoiPhuc.Visible = false;
@@ -765,6 +760,163 @@ namespace QuanLyNhanVien3
         private void btnThoat_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void buttonlamsach_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (string.IsNullOrEmpty(tbmaPB.Text.Trim()))
+                {
+                    MessageBox.Show("Vui lòng chọn mã phòng ban cần xóa hẳng!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Yêu cầu nhập mật khẩu xác nhận
+                if (string.IsNullOrEmpty(tbMKkhoiphuc.Text))
+                {
+                    MessageBox.Show("Vui lòng nhập mật khẩu Admin để xác nhận xóa hẳn!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string matKhauNhap = tbMKkhoiphuc.Text.Trim();
+                cn.connect();
+
+                // KIỂM TRA MẬT KHẨU ADMIN
+                string sqlCheckPassword = @"
+            SELECT COUNT(*) 
+            FROM tblTaiKhoan_KhangCD233181 
+            WHERE RTRIM(MatKhau_KhangCD233181) = @MatKhau 
+            AND RoleId_ThuanCD233318 = 1 
+            AND DeletedAt_KhangCD233181 = 0";
+
+                bool isValidAdmin = false;
+                using (SqlCommand cmdCheck = new SqlCommand(sqlCheckPassword, cn.conn))
+                {
+                    cmdCheck.Parameters.AddWithValue("@MatKhau", matKhauNhap);
+                    int count = (int)cmdCheck.ExecuteScalar();
+
+                    if (count > 0)
+                    {
+                        isValidAdmin = true;
+                    }
+                }
+
+                if (!isValidAdmin)
+                {
+                    MessageBox.Show("Mật khẩu không đúng hoặc bạn không có quyền Admin!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    cn.disconnect();
+                    tbMKkhoiphuc.Clear();
+                    return;
+                }
+
+                // KIỂM TRA XEM PHÒNG BAN CÓ TỒN TẠI TRONG DANH SÁCH ĐÃ XÓA KHÔNG
+                string checkDeletedSql = @"
+            SELECT COUNT(*) 
+            FROM tblPhongBan_ThuanCD233318 
+            WHERE MaPB_ThuanCD233318 = @MaPB_ThuanCD233318 
+            AND DeletedAt_ThuanCD233318 = 1";
+
+                using (SqlCommand cmdCheckDeleted = new SqlCommand(checkDeletedSql, cn.conn))
+                {
+                    cmdCheckDeleted.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text.Trim());
+                    int deletedCount = (int)cmdCheckDeleted.ExecuteScalar();
+
+                    if (deletedCount == 0)
+                    {
+                        MessageBox.Show("Phòng ban này không tồn tại trong danh sách đã xóa!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        cn.disconnect();
+                        return;
+                    }
+                }
+
+                // KIỂM TRA XEM CÓ CHỨC VỤ NÀO THUỘC PHÒNG BAN NÀY KHÔNG
+                string checkChucVuSql = @"
+            SELECT COUNT(*) 
+            FROM tblChucVu_KhangCD233181 
+            WHERE MaPB_ThuanCD233318 = @MaPB_ThuanCD233318";
+
+                using (SqlCommand cmdCheckCV = new SqlCommand(checkChucVuSql, cn.conn))
+                {
+                    cmdCheckCV.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text.Trim());
+                    int cvCount = (int)cmdCheckCV.ExecuteScalar();
+
+                    if (cvCount > 0)
+                    {
+                        MessageBox.Show(
+                            $"Không thể xóa hẳn! Vẫn còn {cvCount} chức vụ thuộc phòng ban này.\n\n" +
+                            "Vui lòng xóa hoặc chuyển các chức vụ sang phòng ban khác trước khi xóa hẳn phòng ban.",
+                            "Thông báo",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                        );
+                        cn.disconnect();
+                        return;
+                    }
+                }
+
+                // XÁC NHẬN XÓA HẲNG
+                DialogResult confirm = MessageBox.Show(
+                    "⚠️ CẢNH BÁO: Bạn có chắc chắn muốn XÓA HẲNG phòng ban này?\n\n" +
+                    "Thao tác này sẽ xóa VĨNH VIỄN dữ liệu phòng ban khỏi hệ thống.\n" +
+                    "Dữ liệu sẽ KHÔNG THỂ KHÔI PHỤC!\n\n" +
+                    $"Mã phòng ban: {tbmaPB.Text}\n" +
+                    $"Tên phòng ban: {tbTenPB.Text}",
+                    "⚠️ XÁC NHẬN XÓA HẲNG",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (confirm != DialogResult.Yes)
+                {
+                    cn.disconnect();
+                    return;
+                }
+
+                // XÓA HẲNG PHÒNG BAN
+                string deleteQuery = @"
+            DELETE FROM tblPhongBan_ThuanCD233318 
+            WHERE MaPB_ThuanCD233318 = @MaPB_ThuanCD233318 
+            AND DeletedAt_ThuanCD233318 = 1";
+
+                using (SqlCommand cmd = new SqlCommand(deleteQuery, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaPB_ThuanCD233318", tbmaPB.Text.Trim());
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Đã xóa hẳn phòng ban thành công!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        cn.disconnect();
+
+                        // Clear inputs và reset
+                        ClearAllInputs(this);
+                        tbMKkhoiphuc.Clear();
+
+                        // Load lại dữ liệu (hiển thị phòng ban đang hoạt động)
+                        LoadDataPhongBan();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không thể xóa hẳn phòng ban!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        cn.disconnect();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                try { cn.disconnect(); } catch { }
+                MessageBox.Show("Lỗi khi xóa hẳn phòng ban: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

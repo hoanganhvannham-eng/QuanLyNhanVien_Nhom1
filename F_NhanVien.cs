@@ -203,36 +203,59 @@ namespace QuanLyNhanVien3
         }
         private void NhanVien_Load(object sender, EventArgs e)
         {
-            // ⭐ TẮT SỰ KIỆN TẠM THỜI
+            // TẮT SỰ KIỆN TẠM THỜI
             cbBoxMaPB.SelectedIndexChanged -= cbBoxMaPB_SelectedIndexChanged_1;
             cbBoxChucVu.SelectedIndexChanged -= cbBoxChucVu_SelectedIndexChanged;
 
-            LoadcomboBox(); // Load phòng ban và chức vụ
+            LoadcomboBox();
 
-            // ⭐ CHỌN MẶC ĐỊNH "Tất cả phòng ban"
             if (cbBoxMaPB.Items.Count > 0)
-            {
-                cbBoxMaPB.SelectedIndex = 0; // Chọn "-- Tất cả phòng ban --"
-            }
+                cbBoxMaPB.SelectedIndex = 0;
 
-            // ⭐ CHỌN MẶC ĐỊNH "Tất cả chức vụ"
             if (cbBoxChucVu.Items.Count > 0)
-            {
-                cbBoxChucVu.SelectedIndex = 0; // Chọn "-- Tất cả chức vụ --"
-            }
+                cbBoxChucVu.SelectedIndex = 0;
 
-            // ⭐ BẬT LẠI SỰ KIỆN
+            // BẬT LẠI SỰ KIỆN
             cbBoxMaPB.SelectedIndexChanged += cbBoxMaPB_SelectedIndexChanged_1;
             cbBoxChucVu.SelectedIndexChanged += cbBoxChucVu_SelectedIndexChanged;
             dtGridViewNhanVien.RowPostPaint += dtGridViewNhanVien_RowPostPaint;
 
-            if (LoginInfo.CurrentUserRole.ToLower() == "user")
+            // ===== ⭐ THÊM PHÂN QUYỀN =====
+            if (F_FormMain.LoginInfo.CurrentRoleId == 1) // Admin
+            {
+                btnThem.Enabled = true;
+                btnSua.Enabled = true;
+                btnXoa.Enabled = true;
+                buttonhienthidaxoa.Enabled = true;
+                buttonkhoiphuc.Enabled = true;
+                buttonlamsach.Enabled = true;
+                txtMKKhoiPhuc.Visible = true;
+                checkshowpassword.Visible = true;
+            }
+            else if (F_FormMain.LoginInfo.CurrentRoleId == 2) // Manager
+            {
+                btnThem.Enabled = true;
+                btnSua.Enabled = true;
+                btnXoa.Enabled = true;
+                buttonhienthidaxoa.Enabled = true;
+                buttonkhoiphuc.Enabled = false;
+                buttonlamsach.Enabled = false;
+                txtMKKhoiPhuc.Enabled = false;
+                checkshowpassword.Enabled = false;
+            }
+            else // User
             {
                 btnThem.Enabled = false;
                 btnSua.Enabled = false;
                 btnXoa.Enabled = false;
+                buttonhienthidaxoa.Enabled = false;
+                buttonkhoiphuc.Enabled = false;
+                buttonlamsach.Enabled = false;
+                txtMKKhoiPhuc.Enabled = false;
+                checkshowpassword.Enabled = false;
             }
 
+            txtMKKhoiPhuc.UseSystemPasswordChar = true;
         }
         //tong nhan vien 
         private void LoadTongSoNhanVien()
@@ -429,64 +452,67 @@ namespace QuanLyNhanVien3
 
                 cn.connect();
 
-                // 1️⃣ KIỂM TRA BẢNG LƯƠNG CHƯA HOÀN THÀNH
-                string checkLuong = @"
-            SELECT COUNT(*) 
-            FROM tblLuong_ChienCD232928 
-            WHERE ChamCongId_TuanhCD233018 IN (
-                SELECT Id_TuanhCD233018 
-                FROM tblChamCong_TuanhCD233018 
-                WHERE NhanVienId_TuanhCD233018 = (
-                    SELECT Id_TuanhCD233018 
-                    FROM tblNhanVien_TuanhCD233018 
-                    WHERE MaNV_TuanhCD233018 = @MaNV
-                )
-            ) AND DeletedAt_ChienCD232928 = 0";
+                // KIỂM TRA BẢNG LƯƠNG
+            //    string checkLuong = @"
+            //SELECT COUNT(*) 
+            //FROM tblLuong_ChienCD232928 
+            //WHERE ChamCongId_TuanhCD233018 IN (
+            //    SELECT Id_TuanhCD233018 
+            //    FROM tblChamCong_TuanhCD233018 
+            //    WHERE NhanVienId_TuanhCD233018 = (
+            //        SELECT Id_TuanhCD233018 
+            //        FROM tblNhanVien_TuanhCD233018 
+            //        WHERE MaNV_TuanhCD233018 = @MaNV
+            //    )
+            //) AND DeletedAt_ChienCD232928 = 0";
 
-                using (SqlCommand cmdCheck = new SqlCommand(checkLuong, cn.conn))
+            //    using (SqlCommand cmdCheck = new SqlCommand(checkLuong, cn.conn))
+            //    {
+            //        cmdCheck.Parameters.AddWithValue("@MaNV", tbmaNV.Text.Trim());
+            //        int countLuong = (int)cmdCheck.ExecuteScalar();
+
+            //        if (countLuong > 0)
+            //        {
+            //            MessageBox.Show(
+            //                "Không thể xóa! Nhân viên này đang có bảng lương chưa hoàn thành.",
+            //                "Thông báo",
+            //                MessageBoxButtons.OK,
+            //                MessageBoxIcon.Warning
+            //            );
+            //            cn.disconnect();
+            //            return;
+            //        }
+            //    }
+
+                // XÓA MỀM (SOFT DELETE)
+                string sqlXoaMem = @"
+            UPDATE tblNhanVien_TuanhCD233018 
+            SET DeletedAt_TuanhCD233018 = 1
+            WHERE MaNV_TuanhCD233018 = @MaNV 
+            AND DeletedAt_TuanhCD233018 = 0";
+
+                using (SqlCommand cmd = new SqlCommand(sqlXoaMem, cn.conn))
                 {
-                    cmdCheck.Parameters.AddWithValue("@MaNV", tbmaNV.Text);
-                    int countLuong = (int)cmdCheck.ExecuteScalar();
+                    cmd.Parameters.AddWithValue("@MaNV", tbmaNV.Text.Trim());
+                    int rows = cmd.ExecuteNonQuery();
 
-                    if (countLuong > 0)
+                    if (rows > 0)
                     {
-                        MessageBox.Show(
-                            "Chưa hoàn thành bảng lương cho nhân viên, không thể xóa!",
-                            "Thông báo",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning
-                        );
+                        MessageBox.Show("Xóa nhân viên thành công!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                         cn.disconnect();
-                        return;
+                        ClearAllInputs(this);
+                        LoadNhanVienTheoDieuKien();
+                        isEditingNhanVien = false;
                     }
-                }
-
-                // 2️⃣ BẮT ĐẦU XÓA THEO THỨ TỰ
-                string[] deleteQueries =
-                {
-            "DELETE FROM tblChiTietDuAn_KienCD233824 WHERE MaNV_TuanhCD233018 = @MaNV",
-            "DELETE FROM tblLuong_ChienCD232928 WHERE ChamCongId_TuanhCD233018 IN (SELECT Id_TuanhCD233018 FROM tblChamCong_TuanhCD233018 WHERE NhanVienId_TuanhCD233018 = (SELECT Id_TuanhCD233018 FROM tblNhanVien_TuanhCD233018 WHERE MaNV_TuanhCD233018 = @MaNV))",
-            "DELETE FROM tblChamCong_TuanhCD233018 WHERE NhanVienId_TuanhCD233018 = (SELECT Id_TuanhCD233018 FROM tblNhanVien_TuanhCD233018 WHERE MaNV_TuanhCD233018 = @MaNV)",
-            "DELETE FROM tblHopDong_ChienCD232928 WHERE MaNV_TuanhCD233018 = @MaNV",
-            "DELETE FROM tblTaiKhoan_KhangCD233181 WHERE MaNV_TuanhCD233018 = @MaNV",
-            "DELETE FROM tblNhanVien_TuanhCD233018 WHERE MaNV_TuanhCD233018 = @MaNV"
-        };
-
-                foreach (string query in deleteQueries)
-                {
-                    using (SqlCommand cmd = new SqlCommand(query, cn.conn))
+                    else
                     {
-                        cmd.Parameters.AddWithValue("@MaNV", tbmaNV.Text);
-                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Không tìm thấy nhân viên để xóa!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        cn.disconnect();
                     }
                 }
-
-                MessageBox.Show("Xóa nhân viên thành công!",
-                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                cn.disconnect();
-                ClearAllInputs(this);
-                LoadNhanVienTheoDieuKien();
             }
             catch (Exception ex)
             {
@@ -1636,6 +1662,310 @@ namespace QuanLyNhanVien3
 
             // ⭐ LOAD LẠI NHÂN VIÊN
             LoadNhanVienTheoDieuKien();
+        }
+
+        private void checkshowpassword_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkshowpassword.Checked)
+            {
+                txtMKKhoiPhuc.UseSystemPasswordChar = false;
+            }
+            else
+            {
+                txtMKKhoiPhuc.UseSystemPasswordChar = true;
+            }
+        }
+
+        private void buttonhienthidaxoa_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                cn.connect();
+
+                string query = @"
+            SELECT 
+                ROW_NUMBER() OVER (ORDER BY nv.MaNV_TuanhCD233018) AS [STT],
+                nv.MaNV_TuanhCD233018 AS [Mã nhân viên],
+                nv.HoTen_TuanhCD233018 AS [Họ tên],
+                nv.NgaySinh_TuanhCD233018 AS [Ngày sinh],
+                nv.GioiTinh_TuanhCD233018 AS [Giới tính],
+                nv.DiaChi_TuanhCD233018 AS [Địa chỉ],
+                nv.SoDienThoai_TuanhCD233018 AS [Điện thoại],
+                nv.Email_TuanhCD233018 AS [Email],
+                pb.MaPB_ThuanCD233318 AS [Mã PB],
+                nv.MaCV_KhangCD233181 AS [Mã CV],
+                nv.Ghichu_TuanhCD233018 AS [Ghi chú]
+            FROM tblNhanVien_TuanhCD233018 nv
+            INNER JOIN tblChucVu_KhangCD233181 cv 
+                ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+            INNER JOIN tblPhongBan_ThuanCD233318 pb 
+                ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+            WHERE nv.DeletedAt_TuanhCD233018 = 1
+            ORDER BY nv.MaNV_TuanhCD233018";
+
+                using (SqlDataAdapter da = new SqlDataAdapter(query, cn.conn))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    dtGridViewNhanVien.DataSource = dt;
+
+                    if (dtGridViewNhanVien.Columns["STT"] != null)
+                    {
+                        dtGridViewNhanVien.Columns["STT"].Width = 50;
+                        dtGridViewNhanVien.Columns["STT"].DefaultCellStyle.Alignment =
+                            DataGridViewContentAlignment.MiddleCenter;
+                    }
+
+                    if (dt.Rows.Count == 0)
+                    {
+                        MessageBox.Show("Không có nhân viên đã xóa!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Tìm thấy {dt.Rows.Count} nhân viên đã xóa!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+
+                cn.disconnect();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi hiển thị nhân viên đã xóa: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cn.disconnect();
+            }
+        }
+
+        private void buttonkhoiphuc_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(tbmaNV.Text.Trim()))
+                {
+                    MessageBox.Show("Vui lòng chọn mã nhân viên cần khôi phục!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(txtMKKhoiPhuc.Text))
+                {
+                    MessageBox.Show("Vui lòng nhập mật khẩu để xác nhận khôi phục!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string matKhauNhap = txtMKKhoiPhuc.Text.Trim();
+                cn.connect();
+
+                // KIỂM TRA MẬT KHẨU ADMIN
+                string sqlCheckPassword = @"
+            SELECT COUNT(*) 
+            FROM tblTaiKhoan_KhangCD233181 
+            WHERE MatKhau_KhangCD233181 = @MatKhau 
+            AND RoleId_ThuanCD233318 = 1 
+            AND DeletedAt_KhangCD233181 = 0";
+
+                bool isValidAdmin = false;
+                using (SqlCommand cmdCheck = new SqlCommand(sqlCheckPassword, cn.conn))
+                {
+                    cmdCheck.Parameters.AddWithValue("@MatKhau", matKhauNhap);
+                    int count = (int)cmdCheck.ExecuteScalar();
+                    if (count > 0)
+                        isValidAdmin = true;
+                }
+
+                if (!isValidAdmin)
+                {
+                    MessageBox.Show("Mật khẩu không đúng hoặc bạn không có quyền Admin để khôi phục!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    cn.disconnect();
+                    txtMKKhoiPhuc.Clear();
+                    return;
+                }
+
+                // KIỂM TRA TỒN TẠI TRONG DANH SÁCH ĐÃ XÓA
+                string checkDeletedSql = @"
+            SELECT COUNT(*) 
+            FROM tblNhanVien_TuanhCD233018 
+            WHERE MaNV_TuanhCD233018 = @MaNV 
+            AND DeletedAt_TuanhCD233018 = 1";
+
+                using (SqlCommand cmdCheckDeleted = new SqlCommand(checkDeletedSql, cn.conn))
+                {
+                    cmdCheckDeleted.Parameters.AddWithValue("@MaNV", tbmaNV.Text.Trim());
+                    int deletedCount = (int)cmdCheckDeleted.ExecuteScalar();
+
+                    if (deletedCount == 0)
+                    {
+                        MessageBox.Show("Nhân viên này không tồn tại trong danh sách đã xóa!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        cn.disconnect();
+                        return;
+                    }
+                }
+
+                DialogResult confirm = MessageBox.Show(
+                    "Bạn có chắc chắn muốn khôi phục nhân viên này không?",
+                    "Xác nhận khôi phục",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (confirm == DialogResult.Yes)
+                {
+                    string query = @"
+                UPDATE tblNhanVien_TuanhCD233018 
+                SET DeletedAt_TuanhCD233018 = 0 
+                WHERE MaNV_TuanhCD233018 = @MaNV 
+                AND DeletedAt_TuanhCD233018 = 1";
+
+                    using (SqlCommand cmd = new SqlCommand(query, cn.conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaNV", tbmaNV.Text.Trim());
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Khôi phục nhân viên thành công!", "Thông báo",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            cn.disconnect();
+
+                            ClearAllInputs(this);
+                            txtMKKhoiPhuc.Clear();
+                            LoadNhanVienTheoDieuKien();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không thể khôi phục nhân viên!", "Thông báo",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            cn.disconnect();
+                        }
+                    }
+                }
+                else
+                {
+                    cn.disconnect();
+                }
+            }
+            catch (Exception ex)
+            {
+                try { cn.disconnect(); } catch { }
+                MessageBox.Show("Lỗi khi khôi phục nhân viên: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void panel5_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void buttonlamsach_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(tbmaNV.Text.Trim()))
+                {
+                    MessageBox.Show("Vui lòng chọn mã nhân viên cần xóa hẳng!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(txtMKKhoiPhuc.Text))
+                {
+                    MessageBox.Show("Vui lòng nhập mật khẩu Admin để xác nhận xóa hẳn!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string matKhauNhap = txtMKKhoiPhuc.Text.Trim();
+                cn.connect();
+
+                // KIỂM TRA MẬT KHẨU ADMIN
+                string sqlCheckPassword = @"
+            SELECT COUNT(*) 
+            FROM tblTaiKhoan_KhangCD233181 
+            WHERE MatKhau_KhangCD233181 = @MatKhau 
+            AND RoleId_ThuanCD233318 = 1 
+            AND DeletedAt_KhangCD233181 = 0";
+
+                bool isValidAdmin = false;
+                using (SqlCommand cmdCheck = new SqlCommand(sqlCheckPassword, cn.conn))
+                {
+                    cmdCheck.Parameters.AddWithValue("@MatKhau", matKhauNhap);
+                    int count = (int)cmdCheck.ExecuteScalar();
+                    if (count > 0)
+                        isValidAdmin = true;
+                }
+
+                if (!isValidAdmin)
+                {
+                    MessageBox.Show("Mật khẩu không đúng hoặc bạn không có quyền Admin!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    cn.disconnect();
+                    txtMKKhoiPhuc.Clear();
+                    return;
+                }
+
+                // XÁC NHẬN XÓA HẲNG
+                DialogResult confirm = MessageBox.Show(
+                    "⚠️ CẢNH BÁO: Bạn có chắc chắn muốn XÓA HẲNG nhân viên này?\n\n" +
+                    "Thao tác này sẽ xóa VĨNH VIỄN toàn bộ dữ liệu liên quan:\n" +
+                    "- Chi tiết dự án\n" +
+                    "- Lương\n" +
+                    "- Chấm công\n" +
+                    "- Hợp đồng (kể cả còn hiệu lực)\n" +
+                    "- Tài khoản\n" +
+                    "- Thông tin nhân viên\n\n" +
+                    "Dữ liệu sẽ KHÔNG THỂ KHÔI PHỤC!",
+                    "⚠️ XÁC NHẬN XÓA HẲNG",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (confirm != DialogResult.Yes)
+                {
+                    cn.disconnect();
+                    return;
+                }
+
+                // XÓA THEO THỨ TỰ (KHÔNG KIỂM TRA RÀNG BUỘC)
+                string[] deleteQueries =
+                {
+            "DELETE FROM tblChiTietDuAn_KienCD233824 WHERE MaNV_TuanhCD233018 = @MaNV",
+            "DELETE FROM tblLuong_ChienCD232928 WHERE ChamCongId_TuanhCD233018 IN (SELECT Id_TuanhCD233018 FROM tblChamCong_TuanhCD233018 WHERE NhanVienId_TuanhCD233018 = (SELECT Id_TuanhCD233018 FROM tblNhanVien_TuanhCD233018 WHERE MaNV_TuanhCD233018 = @MaNV))",
+            "DELETE FROM tblChamCong_TuanhCD233018 WHERE NhanVienId_TuanhCD233018 = (SELECT Id_TuanhCD233018 FROM tblNhanVien_TuanhCD233018 WHERE MaNV_TuanhCD233018 = @MaNV)",
+            "DELETE FROM tblHopDong_ChienCD232928 WHERE MaNV_TuanhCD233018 = @MaNV",
+            "DELETE FROM tblTaiKhoan_KhangCD233181 WHERE MaNV_TuanhCD233018 = @MaNV",
+            "DELETE FROM tblNhanVien_TuanhCD233018 WHERE MaNV_TuanhCD233018 = @MaNV"
+        };
+
+                foreach (string query in deleteQueries)
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, cn.conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaNV", tbmaNV.Text.Trim());
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                MessageBox.Show("Đã xóa hẳn nhân viên và toàn bộ dữ liệu liên quan!",
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                cn.disconnect();
+                ClearAllInputs(this);
+                txtMKKhoiPhuc.Clear();
+                LoadNhanVienTheoDieuKien();
+            }
+            catch (Exception ex)
+            {
+                try { cn.disconnect(); } catch { }
+                MessageBox.Show("Lỗi khi xóa hẳn: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

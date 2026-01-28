@@ -68,6 +68,12 @@ namespace QuanLyNhanVien3
             this.panel6 = new System.Windows.Forms.Panel();
             this.dtGridViewNhanVien = new System.Windows.Forms.DataGridView();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.txtMKKhoiPhuc = new System.Windows.Forms.TextBox();
+            this.checkshowpassword = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.buttonkhoiphuc = new System.Windows.Forms.Button();
+            this.buttonhienthidaxoa = new System.Windows.Forms.Button();
+            this.buttonlamsach = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -233,7 +239,7 @@ namespace QuanLyNhanVien3
             // 
             this.tbGhiChu.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbGhiChu.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbGhiChu.Location = new System.Drawing.Point(159, 261);
+            this.tbGhiChu.Location = new System.Drawing.Point(159, 269);
             this.tbGhiChu.Name = "tbGhiChu";
             this.tbGhiChu.Size = new System.Drawing.Size(283, 27);
             this.tbGhiChu.TabIndex = 185;
@@ -261,7 +267,7 @@ namespace QuanLyNhanVien3
             this.label9.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(16, 264);
+            this.label9.Location = new System.Drawing.Point(16, 272);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(65, 19);
             this.label9.TabIndex = 182;
@@ -303,6 +309,12 @@ namespace QuanLyNhanVien3
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.Transparent;
+            this.panel5.Controls.Add(this.buttonlamsach);
+            this.panel5.Controls.Add(this.txtMKKhoiPhuc);
+            this.panel5.Controls.Add(this.checkshowpassword);
+            this.panel5.Controls.Add(this.label8);
+            this.panel5.Controls.Add(this.buttonkhoiphuc);
+            this.panel5.Controls.Add(this.buttonhienthidaxoa);
             this.panel5.Controls.Add(this.xuatpdf);
             this.panel5.Controls.Add(this.xuatexcel);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
@@ -310,17 +322,18 @@ namespace QuanLyNhanVien3
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(467, 450);
             this.panel5.TabIndex = 160;
+            this.panel5.Paint += new System.Windows.Forms.PaintEventHandler(this.panel5_Paint);
             // 
             // xuatpdf
             // 
             this.xuatpdf.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.xuatpdf.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.xuatpdf.Location = new System.Drawing.Point(22, 325);
+            this.xuatpdf.Location = new System.Drawing.Point(245, 308);
             this.xuatpdf.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xuatpdf.Name = "xuatpdf";
             this.xuatpdf.Size = new System.Drawing.Size(145, 47);
             this.xuatpdf.TabIndex = 190;
-            this.xuatpdf.Text = "PDF";
+            this.xuatpdf.Text = "Xuất PDF";
             this.xuatpdf.UseVisualStyleBackColor = true;
             this.xuatpdf.Click += new System.EventHandler(this.xuatpdf_Click);
             // 
@@ -328,12 +341,12 @@ namespace QuanLyNhanVien3
             // 
             this.xuatexcel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.xuatexcel.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.xuatexcel.Location = new System.Drawing.Point(22, 258);
+            this.xuatexcel.Location = new System.Drawing.Point(30, 308);
             this.xuatexcel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xuatexcel.Name = "xuatexcel";
             this.xuatexcel.Size = new System.Drawing.Size(145, 47);
             this.xuatexcel.TabIndex = 189;
-            this.xuatexcel.Text = "excel";
+            this.xuatexcel.Text = "Xuất excel";
             this.xuatexcel.UseVisualStyleBackColor = true;
             this.xuatexcel.Click += new System.EventHandler(this.xuatexcel_Click);
             // 
@@ -519,6 +532,84 @@ namespace QuanLyNhanVien3
             this.dtGridViewNhanVien.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewNhanVien_CellClick_2);
             this.dtGridViewNhanVien.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dtGridViewNhanVien_RowPostPaint);
             // 
+            // txtMKKhoiPhuc
+            // 
+            this.txtMKKhoiPhuc.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.txtMKKhoiPhuc.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMKKhoiPhuc.Location = new System.Drawing.Point(129, 132);
+            this.txtMKKhoiPhuc.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtMKKhoiPhuc.Name = "txtMKKhoiPhuc";
+            this.txtMKKhoiPhuc.Size = new System.Drawing.Size(209, 30);
+            this.txtMKKhoiPhuc.TabIndex = 195;
+            this.txtMKKhoiPhuc.UseSystemPasswordChar = true;
+            // 
+            // checkshowpassword
+            // 
+            this.checkshowpassword.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.checkshowpassword.AutoSize = true;
+            this.checkshowpassword.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkshowpassword.Location = new System.Drawing.Point(145, 173);
+            this.checkshowpassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkshowpassword.Name = "checkshowpassword";
+            this.checkshowpassword.Size = new System.Drawing.Size(184, 26);
+            this.checkshowpassword.TabIndex = 194;
+            this.checkshowpassword.Text = "Hiển Thị Mật Khẩu";
+            this.checkshowpassword.UseVisualStyleBackColor = true;
+            this.checkshowpassword.CheckedChanged += new System.EventHandler(this.checkshowpassword_CheckedChanged);
+            // 
+            // label8
+            // 
+            this.label8.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(164, 103);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(128, 22);
+            this.label8.TabIndex = 193;
+            this.label8.Text = "MK Khôi Phục";
+            // 
+            // buttonkhoiphuc
+            // 
+            this.buttonkhoiphuc.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.buttonkhoiphuc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonkhoiphuc.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.buttonkhoiphuc.Location = new System.Drawing.Point(188, 214);
+            this.buttonkhoiphuc.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonkhoiphuc.Name = "buttonkhoiphuc";
+            this.buttonkhoiphuc.Size = new System.Drawing.Size(120, 36);
+            this.buttonkhoiphuc.TabIndex = 192;
+            this.buttonkhoiphuc.Text = "Khôi phục";
+            this.buttonkhoiphuc.UseVisualStyleBackColor = true;
+            this.buttonkhoiphuc.Click += new System.EventHandler(this.buttonkhoiphuc_Click);
+            // 
+            // buttonhienthidaxoa
+            // 
+            this.buttonhienthidaxoa.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.buttonhienthidaxoa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonhienthidaxoa.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.buttonhienthidaxoa.Location = new System.Drawing.Point(50, 214);
+            this.buttonhienthidaxoa.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonhienthidaxoa.Name = "buttonhienthidaxoa";
+            this.buttonhienthidaxoa.Size = new System.Drawing.Size(120, 36);
+            this.buttonhienthidaxoa.TabIndex = 191;
+            this.buttonhienthidaxoa.Text = "Đã xóa";
+            this.buttonhienthidaxoa.UseVisualStyleBackColor = true;
+            this.buttonhienthidaxoa.Click += new System.EventHandler(this.buttonhienthidaxoa_Click);
+            // 
+            // buttonlamsach
+            // 
+            this.buttonlamsach.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.buttonlamsach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonlamsach.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.buttonlamsach.Location = new System.Drawing.Point(325, 214);
+            this.buttonlamsach.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonlamsach.Name = "buttonlamsach";
+            this.buttonlamsach.Size = new System.Drawing.Size(120, 36);
+            this.buttonlamsach.TabIndex = 196;
+            this.buttonlamsach.Text = "Làm sạch";
+            this.buttonlamsach.UseVisualStyleBackColor = true;
+            this.buttonlamsach.Click += new System.EventHandler(this.buttonlamsach_Click);
+            // 
             // F_NhanVien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -539,6 +630,7 @@ namespace QuanLyNhanVien3
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel6.ResumeLayout(false);
@@ -587,5 +679,11 @@ namespace QuanLyNhanVien3
         private System.Windows.Forms.Label lblTongNhanVien;
         private System.Windows.Forms.Button xuatexcel;
         private System.Windows.Forms.Button xuatpdf;
+        private System.Windows.Forms.TextBox txtMKKhoiPhuc;
+        private System.Windows.Forms.CheckBox checkshowpassword;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button buttonkhoiphuc;
+        private System.Windows.Forms.Button buttonhienthidaxoa;
+        private System.Windows.Forms.Button buttonlamsach;
     }
 }

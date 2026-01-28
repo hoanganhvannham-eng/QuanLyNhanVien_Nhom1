@@ -55,6 +55,7 @@
             this.btnThoat = new System.Windows.Forms.Button();
             this.panelGrid = new System.Windows.Forms.Panel();
             this.dtGridViewChamCong = new System.Windows.Forms.DataGridView();
+            this.buttonlamsach = new System.Windows.Forms.Button();
             this.panelHeader.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -74,14 +75,15 @@
             this.panelHeader.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelHeader.Name = "panelHeader";
             this.panelHeader.Padding = new System.Windows.Forms.Padding(19, 10, 19, 10);
-            this.panelHeader.Size = new System.Drawing.Size(1540, 78);
+            this.panelHeader.Size = new System.Drawing.Size(1800, 78);
             this.panelHeader.TabIndex = 0;
+            this.panelHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.panelHeader_Paint);
             // 
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.button1.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(1126, 5);
+            this.button1.Location = new System.Drawing.Point(1386, 5);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(163, 50);
             this.button1.TabIndex = 170;
@@ -109,11 +111,12 @@
             this.panelTop.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelTop.Name = "panelTop";
             this.panelTop.Padding = new System.Windows.Forms.Padding(12);
-            this.panelTop.Size = new System.Drawing.Size(1540, 286);
+            this.panelTop.Size = new System.Drawing.Size(1800, 286);
             this.panelTop.TabIndex = 1;
             // 
             // panelRight
             // 
+            this.panelRight.Controls.Add(this.buttonlamsach);
             this.panelRight.Controls.Add(this.txtMKKhoiPhuc);
             this.panelRight.Controls.Add(this.checkshowpassword);
             this.panelRight.Controls.Add(this.label5);
@@ -129,26 +132,28 @@
             this.panelRight.Location = new System.Drawing.Point(743, 12);
             this.panelRight.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelRight.Name = "panelRight";
-            this.panelRight.Size = new System.Drawing.Size(785, 262);
+            this.panelRight.Size = new System.Drawing.Size(1045, 262);
             this.panelRight.TabIndex = 1;
+            this.panelRight.Paint += new System.Windows.Forms.PaintEventHandler(this.panelRight_Paint);
             // 
             // txtMKKhoiPhuc
             // 
             this.txtMKKhoiPhuc.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.txtMKKhoiPhuc.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMKKhoiPhuc.Location = new System.Drawing.Point(588, 91);
+            this.txtMKKhoiPhuc.Location = new System.Drawing.Point(718, 91);
             this.txtMKKhoiPhuc.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtMKKhoiPhuc.Name = "txtMKKhoiPhuc";
             this.txtMKKhoiPhuc.Size = new System.Drawing.Size(209, 30);
             this.txtMKKhoiPhuc.TabIndex = 41;
             this.txtMKKhoiPhuc.UseSystemPasswordChar = true;
+            this.txtMKKhoiPhuc.TextChanged += new System.EventHandler(this.txtMKKhoiPhuc_TextChanged);
             // 
             // checkshowpassword
             // 
             this.checkshowpassword.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.checkshowpassword.AutoSize = true;
             this.checkshowpassword.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkshowpassword.Location = new System.Drawing.Point(604, 132);
+            this.checkshowpassword.Location = new System.Drawing.Point(734, 132);
             this.checkshowpassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkshowpassword.Name = "checkshowpassword";
             this.checkshowpassword.Size = new System.Drawing.Size(184, 26);
@@ -162,18 +167,19 @@
             this.label5.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(623, 62);
+            this.label5.Location = new System.Drawing.Point(753, 62);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(128, 22);
             this.label5.TabIndex = 39;
             this.label5.Text = "MK Khôi Phục";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // buttonkhoiphuc
             // 
             this.buttonkhoiphuc.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.buttonkhoiphuc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonkhoiphuc.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.buttonkhoiphuc.Location = new System.Drawing.Point(697, 170);
+            this.buttonkhoiphuc.Location = new System.Drawing.Point(762, 170);
             this.buttonkhoiphuc.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonkhoiphuc.Name = "buttonkhoiphuc";
             this.buttonkhoiphuc.Size = new System.Drawing.Size(120, 36);
@@ -187,7 +193,7 @@
             this.buttonhienthidaxoa.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.buttonhienthidaxoa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonhienthidaxoa.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.buttonhienthidaxoa.Location = new System.Drawing.Point(559, 170);
+            this.buttonhienthidaxoa.Location = new System.Drawing.Point(624, 170);
             this.buttonhienthidaxoa.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonhienthidaxoa.Name = "buttonhienthidaxoa";
             this.buttonhienthidaxoa.Size = new System.Drawing.Size(120, 36);
@@ -411,8 +417,9 @@
             this.panelAction.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelAction.Name = "panelAction";
             this.panelAction.Padding = new System.Windows.Forms.Padding(12);
-            this.panelAction.Size = new System.Drawing.Size(1540, 60);
+            this.panelAction.Size = new System.Drawing.Size(1800, 60);
             this.panelAction.TabIndex = 2;
+            this.panelAction.Paint += new System.Windows.Forms.PaintEventHandler(this.panelAction_Paint);
             // 
             // btnThem
             // 
@@ -523,7 +530,7 @@
             this.panelGrid.Location = new System.Drawing.Point(0, 424);
             this.panelGrid.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelGrid.Name = "panelGrid";
-            this.panelGrid.Size = new System.Drawing.Size(1540, 296);
+            this.panelGrid.Size = new System.Drawing.Size(1800, 296);
             this.panelGrid.TabIndex = 3;
             // 
             // dtGridViewChamCong
@@ -538,16 +545,30 @@
             this.dtGridViewChamCong.ReadOnly = true;
             this.dtGridViewChamCong.RowHeadersWidth = 51;
             this.dtGridViewChamCong.RowTemplate.Height = 24;
-            this.dtGridViewChamCong.Size = new System.Drawing.Size(1540, 296);
+            this.dtGridViewChamCong.Size = new System.Drawing.Size(1800, 296);
             this.dtGridViewChamCong.TabIndex = 0;
             this.dtGridViewChamCong.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewChamCong_CellClick);
+            // 
+            // buttonlamsach
+            // 
+            this.buttonlamsach.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.buttonlamsach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonlamsach.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.buttonlamsach.Location = new System.Drawing.Point(901, 170);
+            this.buttonlamsach.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonlamsach.Name = "buttonlamsach";
+            this.buttonlamsach.Size = new System.Drawing.Size(120, 36);
+            this.buttonlamsach.TabIndex = 197;
+            this.buttonlamsach.Text = "Làm sạch";
+            this.buttonlamsach.UseVisualStyleBackColor = true;
+            this.buttonlamsach.Click += new System.EventHandler(this.buttonlamsach_Click);
             // 
             // F_ChamCongChiTiet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(1540, 720);
+            this.ClientSize = new System.Drawing.Size(1800, 720);
             this.Controls.Add(this.panelGrid);
             this.Controls.Add(this.panelAction);
             this.Controls.Add(this.panelTop);
@@ -621,5 +642,6 @@
         private System.Windows.Forms.CheckBox checkshowpassword;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonlamsach;
     }
 }

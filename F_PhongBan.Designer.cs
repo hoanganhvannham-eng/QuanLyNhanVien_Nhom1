@@ -58,6 +58,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.dataGridViewPhongBan = new System.Windows.Forms.DataGridView();
+            this.buttonlamsach = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -202,6 +203,7 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.buttonlamsach);
             this.panel4.Controls.Add(this.checkshowpassword);
             this.panel4.Controls.Add(this.label8);
             this.panel4.Controls.Add(this.tbMKkhoiphuc);
@@ -220,7 +222,7 @@
             this.checkshowpassword.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.checkshowpassword.AutoSize = true;
             this.checkshowpassword.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkshowpassword.Location = new System.Drawing.Point(212, 136);
+            this.checkshowpassword.Location = new System.Drawing.Point(168, 88);
             this.checkshowpassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkshowpassword.Name = "checkshowpassword";
             this.checkshowpassword.Size = new System.Drawing.Size(150, 23);
@@ -234,7 +236,7 @@
             this.label8.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(172, 75);
+            this.label8.Location = new System.Drawing.Point(178, 24);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(112, 19);
             this.label8.TabIndex = 128;
@@ -244,7 +246,7 @@
             // 
             this.tbMKkhoiphuc.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.tbMKkhoiphuc.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbMKkhoiphuc.Location = new System.Drawing.Point(42, 101);
+            this.tbMKkhoiphuc.Location = new System.Drawing.Point(76, 57);
             this.tbMKkhoiphuc.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbMKkhoiphuc.Name = "tbMKkhoiphuc";
             this.tbMKkhoiphuc.Size = new System.Drawing.Size(320, 27);
@@ -280,12 +282,12 @@
             // 
             this.btnKhoiPhucPhongBan.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnKhoiPhucPhongBan.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnKhoiPhucPhongBan.Location = new System.Drawing.Point(42, 214);
+            this.btnKhoiPhucPhongBan.Location = new System.Drawing.Point(182, 140);
             this.btnKhoiPhucPhongBan.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnKhoiPhucPhongBan.Name = "btnKhoiPhucPhongBan";
-            this.btnKhoiPhucPhongBan.Size = new System.Drawing.Size(320, 33);
+            this.btnKhoiPhucPhongBan.Size = new System.Drawing.Size(122, 38);
             this.btnKhoiPhucPhongBan.TabIndex = 124;
-            this.btnKhoiPhucPhongBan.Text = "Khôi Phục Phòng Ban Cũ";
+            this.btnKhoiPhucPhongBan.Text = "Khôi phục";
             this.btnKhoiPhucPhongBan.UseVisualStyleBackColor = true;
             this.btnKhoiPhucPhongBan.Click += new System.EventHandler(this.btnKhoiPhucPhongBan_Click_1);
             // 
@@ -293,12 +295,12 @@
             // 
             this.btnHienThiPhongBanCu.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnHienThiPhongBanCu.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnHienThiPhongBanCu.Location = new System.Drawing.Point(42, 168);
+            this.btnHienThiPhongBanCu.Location = new System.Drawing.Point(42, 140);
             this.btnHienThiPhongBanCu.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnHienThiPhongBanCu.Name = "btnHienThiPhongBanCu";
-            this.btnHienThiPhongBanCu.Size = new System.Drawing.Size(320, 33);
+            this.btnHienThiPhongBanCu.Size = new System.Drawing.Size(122, 38);
             this.btnHienThiPhongBanCu.TabIndex = 123;
-            this.btnHienThiPhongBanCu.Text = "Hiển Thị Phòng Ban Cũ";
+            this.btnHienThiPhongBanCu.Text = "Đã xóa";
             this.btnHienThiPhongBanCu.UseVisualStyleBackColor = true;
             this.btnHienThiPhongBanCu.Click += new System.EventHandler(this.btnHienThiPhongBanCu_Click_1);
             // 
@@ -438,6 +440,20 @@
             this.dataGridViewPhongBan.TabIndex = 119;
             this.dataGridViewPhongBan.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewPhongBan_CellClick_1);
             // 
+            // buttonlamsach
+            // 
+            this.buttonlamsach.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.buttonlamsach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonlamsach.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.buttonlamsach.Location = new System.Drawing.Point(327, 142);
+            this.buttonlamsach.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonlamsach.Name = "buttonlamsach";
+            this.buttonlamsach.Size = new System.Drawing.Size(120, 36);
+            this.buttonlamsach.TabIndex = 198;
+            this.buttonlamsach.Text = "Làm sạch";
+            this.buttonlamsach.UseVisualStyleBackColor = true;
+            this.buttonlamsach.Click += new System.EventHandler(this.buttonlamsach_Click);
+            // 
             // F_PhongBan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -498,5 +514,6 @@
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.DataGridView dataGridViewPhongBan;
         private System.Windows.Forms.Button btnThoat;
+        private System.Windows.Forms.Button buttonlamsach;
     }
 }
