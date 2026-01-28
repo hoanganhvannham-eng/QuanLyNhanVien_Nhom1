@@ -176,34 +176,17 @@ namespace QuanLyNhanVien3
             }
         }
 
-        private void cbMaNV_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cbMaNV.SelectedIndex != -1)
-            {
-                try
-                {
-                    DataRowView drv = (DataRowView)cbMaNV.SelectedItem;
-                    tbTenNhanVien.Text = drv["HoTen_TuanhCD233018"].ToString();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi: " + ex.Message);
-                }
-            }
-            else
-            {
-                tbTenNhanVien.Clear();
-            }
-        }
 
         private void btnThemDA_Click(object sender, EventArgs e)
         {
             try
             {
-                // KIỂM TRA - Sử dụng SelectedIndex == -1
-                if (cbTimDA.SelectedIndex == -1)
+                // KIỂM TRA - Lấy text từ ComboBox (có thể là text mới hoặc text đã chọn)
+                string maDA = cbTimDA.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(maDA))
                 {
-                    MessageBox.Show("Vui lòng chọn mã dự án!", "Thông báo",
+                    MessageBox.Show("Vui lòng nhập mã dự án!", "Thông báo",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -225,15 +208,16 @@ namespace QuanLyNhanVien3
 
                 cn.connect();
 
+                // Kiểm tra mã dự án đã tồn tại chưa
                 string checkMaDA = @"
             SELECT COUNT(*) 
             FROM tblDuAn_KienCD233824  
             WHERE MaDA_KienCD233824 = @MaDA  
               AND DeletedAt_KienCD233824 = 0";
+
                 using (SqlCommand cmd = new SqlCommand(checkMaDA, cn.conn))
                 {
-                    // LẤY GIÁ TRỊ - Sử dụng SelectedValue (KHÔNG dùng SelectedIndex == -1)
-                    cmd.Parameters.AddWithValue("@MaDA", cbTimDA.SelectedValue);
+                    cmd.Parameters.AddWithValue("@MaDA", maDA);
                     int count = (int)cmd.ExecuteScalar();
 
                     if (count > 0)
@@ -244,6 +228,7 @@ namespace QuanLyNhanVien3
                     }
                 }
 
+                // Insert dự án mới
                 string sqlInsert = @"
             INSERT INTO tblDuAn_KienCD233824 
                 (MaDA_KienCD233824, TenDA_KienCD233824, MoTa_KienCD233824, 
@@ -254,8 +239,7 @@ namespace QuanLyNhanVien3
 
                 using (SqlCommand cmd = new SqlCommand(sqlInsert, cn.conn))
                 {
-                    // LẤY GIÁ TRỊ - Sử dụng SelectedValue
-                    cmd.Parameters.AddWithValue("@MaDA", cbTimDA.SelectedValue);
+                    cmd.Parameters.AddWithValue("@MaDA", maDA);
                     cmd.Parameters.AddWithValue("@TenDA", tbTenDA.Text.Trim());
                     cmd.Parameters.AddWithValue("@MoTa", tbMota.Text.Trim());
                     cmd.Parameters.AddWithValue("@NgayBatDau", DatePickerNgayBatDau.Value);
@@ -431,7 +415,9 @@ namespace QuanLyNhanVien3
             int i = e.RowIndex;
             if (i >= 0)
             {
-                string maDA = dgvDA.Rows[i].Cells[0].Value.ToString(); cbTimDA.SelectedValue = dgvDA.Rows[i].Cells[0].Value.ToString();tbTenDA.Text = dgvDA.Rows[i].Cells[1].Value.ToString();
+                string maDA = dgvDA.Rows[i].Cells[0].Value.ToString();
+                cbMaDuAn.SelectedValue = dgvDA.Rows[i].Cells[0].Value.ToString();
+                tbTenDA.Text = dgvDA.Rows[i].Cells[1].Value.ToString();
                 tbMota.Text = dgvDA.Rows[i].Cells[2].Value.ToString();
                 DatePickerNgayBatDau.Value = Convert.ToDateTime(dgvDA.Rows[i].Cells[3].Value);
                 DatePickerNgayKetThuc.Value = Convert.ToDateTime(dgvDA.Rows[i].Cells[4].Value);
@@ -969,7 +955,7 @@ namespace QuanLyNhanVien3
         }
         private void btnXuatPDF_Click(object sender, EventArgs e)
         {
-            if (dgvDA.Rows.Count == 0)
+             if (dgvDA.Rows.Count == 0)
             {
                 MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1261,6 +1247,7 @@ namespace QuanLyNhanVien3
             WHERE MaDA_KienCD233824 = @MaDA
               AND DeletedAt_KienCD233824 = 0";
 
+                // FIX: Missing SqlCommand creation!
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
                     cmd.Parameters.AddWithValue("@MaDA", cbTimDA.SelectedValue.ToString());
@@ -1273,6 +1260,48 @@ namespace QuanLyNhanVien3
             {
                 MessageBox.Show("Lỗi load tên dự án: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                cn.disconnect();
+            }
+        }
+
+        private void cbTimDA_TextChanged(object sender, EventArgs e) // Đổi tên event
+        {
+            string maDA = cbTimDA.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(maDA))
+            {
+                tbTenDA.Clear();
+                return;
+            }
+
+            try
+            {
+                cn.connect();
+
+                string sql = @"
+            SELECT TenDA_KienCD233824
+            FROM tblDuAn_KienCD233824
+            WHERE MaDA_KienCD233824 = @MaDA
+              AND DeletedAt_KienCD233824 = 0";
+
+                using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaDA", maDA);
+
+                    object result = cmd.ExecuteScalar();
+
+                    // Nếu tìm thấy dự án cũ, tự động fill tên
+                    // Nếu không tìm thấy, để trống để user nhập mới
+                    tbTenDA.Text = result != null ? result.ToString() : "";
+                }
+            }
+            catch //(Exception ex)
+            {
+                // Không cần hiện lỗi khi đang gõ
+                tbTenDA.Clear();
             }
             finally
             {

@@ -34,15 +34,47 @@ namespace QuanLyNhanVien3
             LoadDataChucVu();
             tbMaChuVu.ReadOnly = true;
             tbMaChuVu.Text = TaoMaChucVuTuDong();
-            dgvHienThiChucVu.RowPostPaint += dgvHienThiChucVu_RowPostPaint;
-            if (LoginInfo.CurrentUserRole.ToLower() == "user")
+
+            // Phân quyền dựa trên RoleId
+            if (LoginInfo.CurrentRoleId == 1) // Admin
             {
+                // Admin có full quyền
+                btnThem.Enabled = true;
+                btnSua.Enabled = true;
+                btnXoa.Enabled = true;
+                btnHienThiNVNghiViec.Enabled = true;
+                btnKhoiPhucNV.Enabled = true;
+
+                // Hiển thị controls liên quan đến khôi phục
+                txtMKKhoiPhuc.Visible = false; // Không cần mật khẩu nữa
+                checkshowpassword.Visible = false; // Không cần checkbox
+            }
+            else if (LoginInfo.CurrentRoleId == 2) // Manager
+            {
+                // Manager có một số quyền
+                btnThem.Enabled = true;
+                btnSua.Enabled = true;
+                btnXoa.Enabled = true;
+                btnHienThiNVNghiViec.Enabled = true;
+                btnKhoiPhucNV.Enabled = false; // Manager không được khôi phục
+
+                txtMKKhoiPhuc.Visible = false;
+                checkshowpassword.Visible = false;
+            }
+            else // User hoặc role khác
+            {
+                // User không có quyền gì
                 btnThem.Enabled = false;
                 btnSua.Enabled = false;
                 btnXoa.Enabled = false;
                 btnHienThiNVNghiViec.Enabled = false;
                 btnKhoiPhucNV.Enabled = false;
+
+                txtMKKhoiPhuc.Visible = false;
+                checkshowpassword.Visible = false;
             }
+
+            txtMKKhoiPhuc.UseSystemPasswordChar = true;
         }
 
         private string TaoMaChucVuTuDong()
@@ -189,14 +221,6 @@ namespace QuanLyNhanVien3
         }
         private void checkshowpassword_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkshowpassword.Checked)
-            {
-                txtMKKhoiPhuc.UseSystemPasswordChar = false;
-            }
-            else
-            {
-                txtMKKhoiPhuc.UseSystemPasswordChar = true;
-            }
         }
 
         private void panel3_Paint(object sender, PaintEventArgs e)
@@ -255,25 +279,6 @@ namespace QuanLyNhanVien3
 
         private void dgvHienThiChucVu_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
-
-            isEditingChucVu = true;
-            isLoadingChucVu = true;
-
-            int i = dgvHienThiChucVu.CurrentRow.Index;
-            tbMaChuVu.Text = dgvHienThiChucVu.Rows[i].Cells[1].Value?.ToString() ?? "";
-            txtTenChucVu.Text = dgvHienThiChucVu.Rows[i].Cells[2].Value?.ToString() ?? "";
-            txtGhiChu.Text = dgvHienThiChucVu.Rows[i].Cells[3].Value?.ToString() ?? "";
-
-            // Tự động chọn phòng ban tương ứng
-            string maPB = dgvHienThiChucVu.Rows[i].Cells[3].Value?.ToString() ?? "";
-            if (!string.IsNullOrEmpty(maPB))
-            {
-                cbbMaPB.SelectedValue = maPB;
-            }
-
-            isLoadingChucVu = false;
-            tbMaChuVu.ReadOnly = true;
         }
 
         private void btnThem_Click_1(object sender, EventArgs e)
@@ -521,6 +526,14 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
+                // Kiểm tra quyền dựa trên RoleId
+                if (LoginInfo.CurrentRoleId != 1) // Chỉ Admin (RoleId = 1) mới được khôi phục
+                {
+                    MessageBox.Show("Bạn không có quyền khôi phục chức vụ!\nChỉ Admin mới có quyền này.",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 c.connect();
                 string query = "SELECT COUNT(*) FROM tblChucVu_KhangCD233181 WHERE MaCV_KhangCD233181 = @MaCV AND DeletedAt_KhangCD233181 = 1";
                 using (SqlCommand cmdcheckPB = new SqlCommand(query, c.conn))
@@ -537,29 +550,6 @@ namespace QuanLyNhanVien3
                     }
                 }
 
-                if (txtMKKhoiPhuc.Text == "")
-                {
-                    MessageBox.Show("Vui lòng nhập mật khẩu để khôi phục", "Thông báo", MessageBoxButtons.OK,
-                    MessageBoxIcon.Question);
-                    return;
-                }
-
-                string sqMKKhoiPhuc = "SELECT * FROM tblTaiKhoan_KhangCD233181 WHERE Quyen_KhangCD233181 = @Quyen AND MatKhau_KhangCD233181 = @MatKhau";
-                SqlCommand cmdkhoiphuc = new SqlCommand(sqMKKhoiPhuc, c.conn);
-                cmdkhoiphuc.Parameters.AddWithValue("@Quyen", "Admin");
-                cmdkhoiphuc.Parameters.AddWithValue("@MatKhau", txtMKKhoiPhuc.Text);
-                SqlDataReader reader = cmdkhoiphuc.ExecuteReader();
-
-                if (reader.Read() == false)
-                {
-                    MessageBox.Show("Mật khẩu không đúng! Vui lòng nhập lại mật khẩu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Question);
-                    txtMKKhoiPhuc.Text = "";
-                    reader.Close();
-                    c.disconnect();
-                    return;
-                }
-                reader.Close();
-
                 DialogResult confirm = MessageBox.Show(
                     "Bạn có chắc chắn muốn khôi phục chức vụ này không?",
                     "Xác nhận khôi phục",
@@ -569,7 +559,6 @@ namespace QuanLyNhanVien3
 
                 if (confirm == DialogResult.Yes)
                 {
-                    txtMKKhoiPhuc.Text = "";
                     string querytblChucVu = "UPDATE tblChucVu_KhangCD233181 SET DeletedAt_KhangCD233181 = 0 WHERE MaCV_KhangCD233181 = @MaCV";
                     using (SqlCommand cmd = new SqlCommand(querytblChucVu, c.conn))
                     {
@@ -767,7 +756,7 @@ namespace QuanLyNhanVien3
                             // Đặt chiều rộng cho cột STT (cột đầu tiên)
                             if (dgvHienThiChucVu.Columns.Count > 0 && dgvHienThiChucVu.Columns[0].Name == "STT")
                             {
-                                ws.Column(1).Width = 6; // Cột STT chỉ cần rộng 6
+                                ws.Column(1).Width = 12; // Cột STT chỉ cần rộng 6
                             }
 
                             // Đặt chiều rộng tối thiểu cho các cột còn lại
@@ -1004,21 +993,56 @@ namespace QuanLyNhanVien3
                 }
             }
         }
-        private void dgvHienThiChucVu_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+
+        private void dgvHienThiChucVu_CellClick_2(object sender, DataGridViewCellEventArgs e)
         {
-            // Vẽ số thứ tự ở đầu mỗi row
-            var grid = sender as DataGridView;
-            var rowIdx = (e.RowIndex + 1).ToString();
+            if (e.RowIndex < 0) return;
 
-            var centerFormat = new StringFormat()
+            isEditingChucVu = true;
+            isLoadingChucVu = true;
+
+            int i = dgvHienThiChucVu.CurrentRow.Index;
+            tbMaChuVu.Text = dgvHienThiChucVu.Rows[i].Cells[1].Value?.ToString() ?? "";
+            txtTenChucVu.Text = dgvHienThiChucVu.Rows[i].Cells[2].Value?.ToString() ?? "";
+            txtGhiChu.Text = dgvHienThiChucVu.Rows[i].Cells[3].Value?.ToString() ?? "";
+
+            // Tự động chọn phòng ban tương ứng
+            string maPB = dgvHienThiChucVu.Rows[i].Cells[3].Value?.ToString() ?? "";
+            if (!string.IsNullOrEmpty(maPB))
             {
-                Alignment = StringAlignment.Center,
-                LineAlignment = StringAlignment.Center
-            };
+                cbbMaPB.SelectedValue = maPB;
+            }
 
-            var headerBounds = new System.Drawing.Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
-
-            e.Graphics.DrawString(rowIdx, grid.Font, SystemBrushes.ControlText, headerBounds, centerFormat);
+            isLoadingChucVu = false;
+            tbMaChuVu.ReadOnly = true;
         }
+
+        private void checkshowpassword_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (checkshowpassword.Checked)
+            {
+                txtMKKhoiPhuc.UseSystemPasswordChar = false;
+            }
+            else
+            {
+                txtMKKhoiPhuc.UseSystemPasswordChar = true;
+            }
+        }
+        //private void dgvHienThiChucVu_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        //{
+        //    // Vẽ số thứ tự ở đầu mỗi row
+        //    var grid = sender as DataGridView;
+        //    var rowIdx = (e.RowIndex + 1).ToString();
+
+        //    var centerFormat = new StringFormat()
+        //    {
+        //        Alignment = StringAlignment.Center,
+        //        LineAlignment = StringAlignment.Center
+        //    };
+
+        //    var headerBounds = new System.Drawing.Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
+
+        //    e.Graphics.DrawString(rowIdx, grid.Font, SystemBrushes.ControlText, headerBounds, centerFormat);
+        //}
     }
 }
