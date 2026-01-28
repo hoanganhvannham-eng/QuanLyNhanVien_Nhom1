@@ -29,6 +29,7 @@
             this.btnSua = new System.Windows.Forms.Button();
             this.btnTimKiem = new System.Windows.Forms.Button();
             this.gbRight = new System.Windows.Forms.GroupBox();
+            this.btnXuatPDF = new System.Windows.Forms.Button();
             this.labelAdminMK = new System.Windows.Forms.Label();
             this.tbMKkhoiphuc = new System.Windows.Forms.TextBox();
             this.checkshowpassword = new System.Windows.Forms.CheckBox();
@@ -48,7 +49,6 @@
             this.panelGrid = new System.Windows.Forms.Panel();
             this.gbGrid = new System.Windows.Forms.GroupBox();
             this.dataGridViewTaiKhoan = new System.Windows.Forms.DataGridView();
-            this.btnXuatPDF = new System.Windows.Forms.Button();
             this.panelHeader.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.gbMiddle.SuspendLayout();
@@ -67,7 +67,7 @@
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(0, 0);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(1280, 80);
+            this.panelHeader.Size = new System.Drawing.Size(1295, 80);
             this.panelHeader.TabIndex = 2;
             // 
             // lblTitle
@@ -102,7 +102,7 @@
             this.panelTop.Location = new System.Drawing.Point(0, 80);
             this.panelTop.Name = "panelTop";
             this.panelTop.Padding = new System.Windows.Forms.Padding(12);
-            this.panelTop.Size = new System.Drawing.Size(1280, 320);
+            this.panelTop.Size = new System.Drawing.Size(1295, 320);
             this.panelTop.TabIndex = 1;
             // 
             // gbMiddle
@@ -119,7 +119,7 @@
             this.gbMiddle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.gbMiddle.Location = new System.Drawing.Point(412, 12);
             this.gbMiddle.Name = "gbMiddle";
-            this.gbMiddle.Size = new System.Drawing.Size(436, 296);
+            this.gbMiddle.Size = new System.Drawing.Size(451, 296);
             this.gbMiddle.TabIndex = 0;
             this.gbMiddle.TabStop = false;
             this.gbMiddle.Text = "Bảo mật và phân quyền";
@@ -199,12 +199,21 @@
             this.gbRight.Controls.Add(this.btnxuatExcel);
             this.gbRight.Dock = System.Windows.Forms.DockStyle.Right;
             this.gbRight.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.gbRight.Location = new System.Drawing.Point(848, 12);
+            this.gbRight.Location = new System.Drawing.Point(863, 12);
             this.gbRight.Name = "gbRight";
             this.gbRight.Size = new System.Drawing.Size(420, 296);
             this.gbRight.TabIndex = 1;
             this.gbRight.TabStop = false;
             this.gbRight.Text = "Khôi phục tài khoản (Admin)";
+            // 
+            // btnXuatPDF
+            // 
+            this.btnXuatPDF.Location = new System.Drawing.Point(286, 205);
+            this.btnXuatPDF.Name = "btnXuatPDF";
+            this.btnXuatPDF.Size = new System.Drawing.Size(122, 32);
+            this.btnXuatPDF.TabIndex = 7;
+            this.btnXuatPDF.Text = "Xuất PDF";
+            this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
             // 
             // labelAdminMK
             // 
@@ -355,7 +364,7 @@
             this.panelGrid.Location = new System.Drawing.Point(0, 400);
             this.panelGrid.Name = "panelGrid";
             this.panelGrid.Padding = new System.Windows.Forms.Padding(12);
-            this.panelGrid.Size = new System.Drawing.Size(1280, 400);
+            this.panelGrid.Size = new System.Drawing.Size(1295, 400);
             this.panelGrid.TabIndex = 0;
             // 
             // gbGrid
@@ -365,7 +374,7 @@
             this.gbGrid.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.gbGrid.Location = new System.Drawing.Point(12, 12);
             this.gbGrid.Name = "gbGrid";
-            this.gbGrid.Size = new System.Drawing.Size(1256, 376);
+            this.gbGrid.Size = new System.Drawing.Size(1271, 376);
             this.gbGrid.TabIndex = 0;
             this.gbGrid.TabStop = false;
             this.gbGrid.Text = "Danh sách tài khoản";
@@ -379,22 +388,13 @@
             this.dataGridViewTaiKhoan.Name = "dataGridViewTaiKhoan";
             this.dataGridViewTaiKhoan.ReadOnly = true;
             this.dataGridViewTaiKhoan.RowHeadersWidth = 51;
-            this.dataGridViewTaiKhoan.Size = new System.Drawing.Size(1250, 347);
+            this.dataGridViewTaiKhoan.Size = new System.Drawing.Size(1265, 347);
             this.dataGridViewTaiKhoan.TabIndex = 0;
             this.dataGridViewTaiKhoan.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTaiKhoan_CellClick_1);
             // 
-            // btnXuatPDF
-            // 
-            this.btnXuatPDF.Location = new System.Drawing.Point(286, 205);
-            this.btnXuatPDF.Name = "btnXuatPDF";
-            this.btnXuatPDF.Size = new System.Drawing.Size(122, 32);
-            this.btnXuatPDF.TabIndex = 7;
-            this.btnXuatPDF.Text = "Xuất PDF";
-            this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
-            // 
             // F_TaiKhoan
             // 
-            this.ClientSize = new System.Drawing.Size(1280, 800);
+            this.ClientSize = new System.Drawing.Size(1295, 800);
             this.Controls.Add(this.panelGrid);
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelHeader);

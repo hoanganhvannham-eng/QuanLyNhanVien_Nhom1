@@ -78,55 +78,74 @@ namespace QuanLyNhanVien3
 
 
         // ================= LOAD HỢP ĐỒNG HIỆN TẠI =================
-        private void LoadHopDongHienTai()
-        {
-            string sql = @"
-                SELECT TOP 1 
-                    NgayBatDau_ChienCD232928 AS NgayBatDau,
-                    NgayKetThuc_ChienCD232928 AS NgayKetThuc
-                FROM tblHopDong_ChienCD232928
-                WHERE MaNV_TuanhCD233018 = @MaNV
-                ORDER BY NgayKetThuc_ChienCD232928 DESC";
+private void LoadHopDongHienTai()
+{
+    string sql = @"
+        SELECT TOP 1 
+            NgayBatDau_ChienCD232928 AS NgayBatDau,
+            NgayKetThuc_ChienCD232928 AS NgayKetThuc
+        FROM tblHopDong_ChienCD232928
+        WHERE MaNV_TuanhCD233018 = @MaNV
+        ORDER BY 
+            CASE WHEN NgayKetThuc_ChienCD232928 IS NULL THEN 1 ELSE 0 END,
+            NgayKetThuc_ChienCD232928 DESC";
 
-            cn.connect();
+    cn.connect();
 
-            SqlDataAdapter da = new SqlDataAdapter(sql, cn.conn);
-            da.SelectCommand.Parameters.AddWithValue("@MaNV", _maNV);
+    SqlDataAdapter da = new SqlDataAdapter(sql, cn.conn);
+    da.SelectCommand.Parameters.AddWithValue("@MaNV", _maNV);
 
-            DataTable dt = new DataTable();
-            da.Fill(dt);
+    DataTable dt = new DataTable();
+    da.Fill(dt);
 
-            cn.disconnect();
+    cn.disconnect();
 
-            if (dt.Rows.Count == 0)
-            {
-                txtTrangThaiHD.Text = "Chưa có hợp đồng";
-                txtTrangThaiHD.BackColor = Color.LightGray;
-                return;
-            }
+    if (dt.Rows.Count == 0)
+    {
+        txtTrangThaiHD.Text = "Chưa có hợp đồng";
+        txtTrangThaiHD.BackColor = Color.LightGray;
+        return;
+    }
 
-            DateTime ngayBD = Convert.ToDateTime(dt.Rows[0]["NgayBatDau"]);
-            DateTime ngayKT = Convert.ToDateTime(dt.Rows[0]["NgayKetThuc"]);
+    DataRow r = dt.Rows[0];
 
-            dtpNgayBD.Value = ngayBD;
-            dtpNgayKT.Value = ngayKT;
+    // ===== NGÀY BẮT ĐẦU (KHÔNG ĐƯỢC NULL) =====
+    DateTime ngayBD = Convert.ToDateTime(r["NgayBatDau"]);
+    dtpNgayBD.Value = ngayBD;
 
-            if (ngayKT < DateTime.Now)
-            {
-                txtTrangThaiHD.Text = "Hết hạn";
-                txtTrangThaiHD.BackColor = Color.MistyRose;
-            }
-            else if ((ngayKT - DateTime.Now).TotalDays <= 30)
-            {
-                txtTrangThaiHD.Text = "Sắp hết hạn";
-                txtTrangThaiHD.BackColor = Color.LemonChiffon;
-            }
-            else
-            {
-                txtTrangThaiHD.Text = "Còn hiệu lực";
-                txtTrangThaiHD.BackColor = Color.Honeydew;
-            }
-        }
+    // ===== NGÀY KẾT THÚC (CÓ THỂ NULL) =====
+    DateTime? ngayKT = r["NgayKetThuc"] == DBNull.Value
+        ? (DateTime?)null
+        : Convert.ToDateTime(r["NgayKetThuc"]);
+
+    if (ngayKT.HasValue)
+        dtpNgayKT.Value = ngayKT.Value;
+    else
+        dtpNgayKT.Value = dtpNgayKT.MaxDate;
+
+    // ===== XÁC ĐỊNH TRẠNG THÁI =====
+    if (!ngayKT.HasValue)
+    {
+        txtTrangThaiHD.Text = "Không xác định thời hạn";
+        txtTrangThaiHD.BackColor = Color.LightBlue;
+    }
+    else if (ngayKT.Value < DateTime.Today)
+    {
+        txtTrangThaiHD.Text = "Hết hạn";
+        txtTrangThaiHD.BackColor = Color.MistyRose;
+    }
+    else if ((ngayKT.Value - DateTime.Today).TotalDays <= 30)
+    {
+        txtTrangThaiHD.Text = "Sắp hết hạn";
+        txtTrangThaiHD.BackColor = Color.LemonChiffon;
+    }
+    else
+    {
+        txtTrangThaiHD.Text = "Còn hiệu lực";
+        txtTrangThaiHD.BackColor = Color.Honeydew;
+    }
+}
+
 
         // ================= LOAD LỊCH SỬ HỢP ĐỒNG =================
         private void LoadLichSuHopDong()
