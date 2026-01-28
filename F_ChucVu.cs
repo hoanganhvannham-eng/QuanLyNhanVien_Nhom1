@@ -35,46 +35,46 @@ namespace QuanLyNhanVien3
             tbMaChuVu.ReadOnly = true;
             tbMaChuVu.Text = TaoMaChucVuTuDong();
 
-            //// Phân quyền dựa trên RoleId
-            //if (LoginInfo.CurrentRoleId == 1) // Admin
-            //{
-            //    // Admin có full quyền
-            //    btnThem.Enabled = true;
-            //    btnSua.Enabled = true;
-            //    btnXoa.Enabled = true;
-            //    btnHienThiNVNghiViec.Enabled = true;
-            //    btnKhoiPhucNV.Enabled = true;
+            // Phân quyền dựa trên RoleId
+            if (LoginInfo.CurrentRoleId == 1) // Admin
+            {
+                // Admin có full quyền
+                btnThem.Enabled = true;
+                btnSua.Enabled = true;
+                btnXoa.Enabled = true;
+                btnHienThiNVNghiViec.Enabled = true;
+                btnKhoiPhucNV.Enabled = true;
 
-            //    // Hiển thị controls liên quan đến khôi phục
-            //    txtMKKhoiPhuc.Visible = false; // Không cần mật khẩu nữa
-            //    checkshowpassword.Visible = false; // Không cần checkbox
-            //}
-            //else if (LoginInfo.CurrentRoleId == 2) // Manager
-            //{
-            //    // Manager có một số quyền
-            //    btnThem.Enabled = true;
-            //    btnSua.Enabled = true;
-            //    btnXoa.Enabled = true;
-            //    btnHienThiNVNghiViec.Enabled = true;
-            //    btnKhoiPhucNV.Enabled = false; // Manager không được khôi phục
+                // Hiển thị controls liên quan đến khôi phục
+                txtMKKhoiPhuc.Visible = false; // Không cần mật khẩu nữa
+                checkshowpassword.Visible = false; // Không cần checkbox
+            }
+            else if (LoginInfo.CurrentRoleId == 2) // Manager
+            {
+                // Manager có một số quyền
+                btnThem.Enabled = true;
+                btnSua.Enabled = true;
+                btnXoa.Enabled = true;
+                btnHienThiNVNghiViec.Enabled = true;
+                btnKhoiPhucNV.Enabled = false; // Manager không được khôi phục
 
-            //    txtMKKhoiPhuc.Visible = false;
-            //    checkshowpassword.Visible = false;
-            //}
-            //else // User hoặc role khác
-            //{
-            //    // User không có quyền gì
-            //    btnThem.Enabled = false;
-            //    btnSua.Enabled = false;
-            //    btnXoa.Enabled = false;
-            //    btnHienThiNVNghiViec.Enabled = false;
-            //    btnKhoiPhucNV.Enabled = false;
+                txtMKKhoiPhuc.Visible = false;
+                checkshowpassword.Visible = false;
+            }
+            else // User hoặc role khác
+            {
+                // User không có quyền gì
+                btnThem.Enabled = false;
+                btnSua.Enabled = false;
+                btnXoa.Enabled = false;
+                btnHienThiNVNghiViec.Enabled = false;
+                btnKhoiPhucNV.Enabled = false;
 
-            //    txtMKKhoiPhuc.Visible = false;
-            //    checkshowpassword.Visible = false;
-            //}
+                txtMKKhoiPhuc.Visible = false;
+                checkshowpassword.Visible = false;
+            }
 
-            //txtMKKhoiPhuc.UseSystemPasswordChar = true;
+            txtMKKhoiPhuc.UseSystemPasswordChar = true;
         }
 
         private string TaoMaChucVuTuDong()
