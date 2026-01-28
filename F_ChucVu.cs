@@ -34,15 +34,47 @@ namespace QuanLyNhanVien3
             LoadDataChucVu();
             tbMaChuVu.ReadOnly = true;
             tbMaChuVu.Text = TaoMaChucVuTuDong();
-            //dgvHienThiChucVu.RowPostPaint += dgvHienThiChucVu_RowPostPaint;
-            if (LoginInfo.CurrentUserRole.ToLower() == "user")
-            {
-                btnThem.Enabled = false;
-                btnSua.Enabled = false;
-                btnXoa.Enabled = false;
-                btnHienThiNVNghiViec.Enabled = false;
-                btnKhoiPhucNV.Enabled = false;
-            }
+
+            //// Phân quyền dựa trên RoleId
+            //if (LoginInfo.CurrentRoleId == 1) // Admin
+            //{
+            //    // Admin có full quyền
+            //    btnThem.Enabled = true;
+            //    btnSua.Enabled = true;
+            //    btnXoa.Enabled = true;
+            //    btnHienThiNVNghiViec.Enabled = true;
+            //    btnKhoiPhucNV.Enabled = true;
+
+            //    // Hiển thị controls liên quan đến khôi phục
+            //    txtMKKhoiPhuc.Visible = false; // Không cần mật khẩu nữa
+            //    checkshowpassword.Visible = false; // Không cần checkbox
+            //}
+            //else if (LoginInfo.CurrentRoleId == 2) // Manager
+            //{
+            //    // Manager có một số quyền
+            //    btnThem.Enabled = true;
+            //    btnSua.Enabled = true;
+            //    btnXoa.Enabled = true;
+            //    btnHienThiNVNghiViec.Enabled = true;
+            //    btnKhoiPhucNV.Enabled = false; // Manager không được khôi phục
+
+            //    txtMKKhoiPhuc.Visible = false;
+            //    checkshowpassword.Visible = false;
+            //}
+            //else // User hoặc role khác
+            //{
+            //    // User không có quyền gì
+            //    btnThem.Enabled = false;
+            //    btnSua.Enabled = false;
+            //    btnXoa.Enabled = false;
+            //    btnHienThiNVNghiViec.Enabled = false;
+            //    btnKhoiPhucNV.Enabled = false;
+
+            //    txtMKKhoiPhuc.Visible = false;
+            //    checkshowpassword.Visible = false;
+            //}
+
+            //txtMKKhoiPhuc.UseSystemPasswordChar = true;
         }
 
         private string TaoMaChucVuTuDong()
@@ -189,14 +221,6 @@ namespace QuanLyNhanVien3
         }
         private void checkshowpassword_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkshowpassword.Checked)
-            {
-                txtMKKhoiPhuc.UseSystemPasswordChar = false;
-            }
-            else
-            {
-                txtMKKhoiPhuc.UseSystemPasswordChar = true;
-            }
         }
 
         private void panel3_Paint(object sender, PaintEventArgs e)
@@ -502,6 +526,14 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
+                // Kiểm tra quyền dựa trên RoleId
+                if (LoginInfo.CurrentRoleId != 1) // Chỉ Admin (RoleId = 1) mới được khôi phục
+                {
+                    MessageBox.Show("Bạn không có quyền khôi phục chức vụ!\nChỉ Admin mới có quyền này.",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 c.connect();
                 string query = "SELECT COUNT(*) FROM tblChucVu_KhangCD233181 WHERE MaCV_KhangCD233181 = @MaCV AND DeletedAt_KhangCD233181 = 1";
                 using (SqlCommand cmdcheckPB = new SqlCommand(query, c.conn))
@@ -518,29 +550,6 @@ namespace QuanLyNhanVien3
                     }
                 }
 
-                if (txtMKKhoiPhuc.Text == "")
-                {
-                    MessageBox.Show("Vui lòng nhập mật khẩu để khôi phục", "Thông báo", MessageBoxButtons.OK,
-                    MessageBoxIcon.Question);
-                    return;
-                }
-
-                string sqMKKhoiPhuc = "SELECT * FROM tblTaiKhoan_KhangCD233181 WHERE Quyen_KhangCD233181 = @Quyen AND MatKhau_KhangCD233181 = @MatKhau";
-                SqlCommand cmdkhoiphuc = new SqlCommand(sqMKKhoiPhuc, c.conn);
-                cmdkhoiphuc.Parameters.AddWithValue("@Quyen", "Admin");
-                cmdkhoiphuc.Parameters.AddWithValue("@MatKhau", txtMKKhoiPhuc.Text);
-                SqlDataReader reader = cmdkhoiphuc.ExecuteReader();
-
-                if (reader.Read() == false)
-                {
-                    MessageBox.Show("Mật khẩu không đúng! Vui lòng nhập lại mật khẩu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Question);
-                    txtMKKhoiPhuc.Text = "";
-                    reader.Close();
-                    c.disconnect();
-                    return;
-                }
-                reader.Close();
-
                 DialogResult confirm = MessageBox.Show(
                     "Bạn có chắc chắn muốn khôi phục chức vụ này không?",
                     "Xác nhận khôi phục",
@@ -550,7 +559,6 @@ namespace QuanLyNhanVien3
 
                 if (confirm == DialogResult.Yes)
                 {
-                    txtMKKhoiPhuc.Text = "";
                     string querytblChucVu = "UPDATE tblChucVu_KhangCD233181 SET DeletedAt_KhangCD233181 = 0 WHERE MaCV_KhangCD233181 = @MaCV";
                     using (SqlCommand cmd = new SqlCommand(querytblChucVu, c.conn))
                     {
@@ -1007,6 +1015,18 @@ namespace QuanLyNhanVien3
 
             isLoadingChucVu = false;
             tbMaChuVu.ReadOnly = true;
+        }
+
+        private void checkshowpassword_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (checkshowpassword.Checked)
+            {
+                txtMKKhoiPhuc.UseSystemPasswordChar = false;
+            }
+            else
+            {
+                txtMKKhoiPhuc.UseSystemPasswordChar = true;
+            }
         }
         //private void dgvHienThiChucVu_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         //{

@@ -226,6 +226,7 @@
             this.checkshowpassword.TabIndex = 37;
             this.checkshowpassword.Text = "Hiển Thị Mật Khẩu";
             this.checkshowpassword.UseVisualStyleBackColor = true;
+            this.checkshowpassword.CheckedChanged += new System.EventHandler(this.checkshowpassword_CheckedChanged_1);
             // 
             // label5
             // 
