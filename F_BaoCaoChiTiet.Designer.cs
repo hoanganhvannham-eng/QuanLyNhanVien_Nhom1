@@ -30,6 +30,8 @@
             this.panelContent = new System.Windows.Forms.Panel();
             this.dgvChiTiet = new System.Windows.Forms.DataGridView();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.btnXuatExcel = new System.Windows.Forms.Button();
+            this.btnXuatPDF = new System.Windows.Forms.Button();
             this.btnDong = new System.Windows.Forms.Button();
             this.panelHeader.SuspendLayout();
             this.panelSummary.SuspendLayout();
@@ -51,7 +53,7 @@
             this.panelHeader.Location = new System.Drawing.Point(0, 0);
             this.panelHeader.Name = "panelHeader";
             this.panelHeader.Padding = new System.Windows.Forms.Padding(20, 12, 20, 12);
-            this.panelHeader.Size = new System.Drawing.Size(1196, 90);
+            this.panelHeader.Size = new System.Drawing.Size(1200, 90);
             this.panelHeader.TabIndex = 3;
             // 
             // lblTitle
@@ -87,7 +89,7 @@
             this.panelSummary.Location = new System.Drawing.Point(0, 90);
             this.panelSummary.Name = "panelSummary";
             this.panelSummary.Padding = new System.Windows.Forms.Padding(16);
-            this.panelSummary.Size = new System.Drawing.Size(1196, 80);
+            this.panelSummary.Size = new System.Drawing.Size(1200, 80);
             this.panelSummary.TabIndex = 2;
             // 
             // pnlTong
@@ -178,7 +180,7 @@
             this.panelContent.Location = new System.Drawing.Point(0, 170);
             this.panelContent.Name = "panelContent";
             this.panelContent.Padding = new System.Windows.Forms.Padding(16);
-            this.panelContent.Size = new System.Drawing.Size(1196, 430);
+            this.panelContent.Size = new System.Drawing.Size(1200, 430);
             this.panelContent.TabIndex = 0;
             // 
             // dgvChiTiet
@@ -189,12 +191,13 @@
             this.dgvChiTiet.ColumnHeadersHeight = 29;
             this.dgvChiTiet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvChiTiet.Location = new System.Drawing.Point(16, 16);
+            this.dgvChiTiet.MultiSelect = false;
             this.dgvChiTiet.Name = "dgvChiTiet";
             this.dgvChiTiet.ReadOnly = true;
             this.dgvChiTiet.RowHeadersVisible = false;
             this.dgvChiTiet.RowHeadersWidth = 51;
             this.dgvChiTiet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvChiTiet.Size = new System.Drawing.Size(1164, 398);
+            this.dgvChiTiet.Size = new System.Drawing.Size(1168, 398);
             this.dgvChiTiet.TabIndex = 0;
             this.dgvChiTiet.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvChiTiet_CellDoubleClick);
             this.dgvChiTiet.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.dgvChiTiet_RowPrePaint);
@@ -202,14 +205,38 @@
             // panelBottom
             // 
             this.panelBottom.BackColor = System.Drawing.Color.White;
+            this.panelBottom.Controls.Add(this.btnXuatExcel);
+            this.panelBottom.Controls.Add(this.btnXuatPDF);
             this.panelBottom.Controls.Add(this.btnDong);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelBottom.Location = new System.Drawing.Point(0, 600);
             this.panelBottom.MinimumSize = new System.Drawing.Size(0, 60);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Padding = new System.Windows.Forms.Padding(16);
-            this.panelBottom.Size = new System.Drawing.Size(1196, 60);
+            this.panelBottom.Size = new System.Drawing.Size(1200, 60);
             this.panelBottom.TabIndex = 1;
+            // 
+            // btnXuatExcel
+            // 
+            this.btnXuatExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXuatExcel.Location = new System.Drawing.Point(756, 12);
+            this.btnXuatExcel.Name = "btnXuatExcel";
+            this.btnXuatExcel.Size = new System.Drawing.Size(140, 36);
+            this.btnXuatExcel.TabIndex = 2;
+            this.btnXuatExcel.Text = "Xuất Excel";
+            this.btnXuatExcel.UseVisualStyleBackColor = true;
+            this.btnXuatExcel.Click += new System.EventHandler(this.btnXuatExcel_Click);
+            // 
+            // btnXuatPDF
+            // 
+            this.btnXuatPDF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXuatPDF.Location = new System.Drawing.Point(902, 12);
+            this.btnXuatPDF.Name = "btnXuatPDF";
+            this.btnXuatPDF.Size = new System.Drawing.Size(140, 36);
+            this.btnXuatPDF.TabIndex = 1;
+            this.btnXuatPDF.Text = "Xuất PDF";
+            this.btnXuatPDF.UseVisualStyleBackColor = true;
+            this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
             // 
             // btnDong
             // 
@@ -271,6 +298,7 @@
 
         private System.Windows.Forms.Panel panelBottom;
         private System.Windows.Forms.Button btnDong;
-
+        private System.Windows.Forms.Button btnXuatExcel;
+        private System.Windows.Forms.Button btnXuatPDF;
     }
 }

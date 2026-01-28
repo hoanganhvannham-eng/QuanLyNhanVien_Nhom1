@@ -278,7 +278,7 @@
             this.txtTrangThaiLamViec.Location = new System.Drawing.Point(130, 127);
             this.txtTrangThaiLamViec.Name = "txtTrangThaiLamViec";
             this.txtTrangThaiLamViec.ReadOnly = true;
-            this.txtTrangThaiLamViec.Size = new System.Drawing.Size(111, 27);
+            this.txtTrangThaiLamViec.Size = new System.Drawing.Size(100, 27);
             this.txtTrangThaiLamViec.TabIndex = 7;
             // 
             // groupHopDong
@@ -344,7 +344,7 @@
             this.txtTrangThaiHD.Location = new System.Drawing.Point(918, 31);
             this.txtTrangThaiHD.Name = "txtTrangThaiHD";
             this.txtTrangThaiHD.ReadOnly = true;
-            this.txtTrangThaiHD.Size = new System.Drawing.Size(109, 27);
+            this.txtTrangThaiHD.Size = new System.Drawing.Size(100, 27);
             this.txtTrangThaiHD.TabIndex = 5;
             // 
             // groupLichSuHD
