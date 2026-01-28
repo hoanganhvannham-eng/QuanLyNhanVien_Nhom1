@@ -16,6 +16,7 @@
         private void InitializeComponent()
         {
             this.panelHeader = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.lblTitle = new System.Windows.Forms.Label();
             this.panelTop = new System.Windows.Forms.Panel();
             this.panelRight = new System.Windows.Forms.Panel();
@@ -54,7 +55,6 @@
             this.btnThoat = new System.Windows.Forms.Button();
             this.panelGrid = new System.Windows.Forms.Panel();
             this.dtGridViewChamCong = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             this.panelHeader.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.panelRight.SuspendLayout();
@@ -77,6 +77,18 @@
             this.panelHeader.Size = new System.Drawing.Size(1540, 78);
             this.panelHeader.TabIndex = 0;
             // 
+            // button1
+            // 
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.button1.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(1126, 5);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(163, 50);
+            this.button1.TabIndex = 170;
+            this.button1.Text = "Thoát";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
@@ -96,7 +108,7 @@
             this.panelTop.Location = new System.Drawing.Point(0, 78);
             this.panelTop.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Padding = new System.Windows.Forms.Padding(12, 12, 12, 12);
+            this.panelTop.Padding = new System.Windows.Forms.Padding(12);
             this.panelTop.Size = new System.Drawing.Size(1540, 286);
             this.panelTop.TabIndex = 1;
             // 
@@ -398,7 +410,7 @@
             this.panelAction.Location = new System.Drawing.Point(0, 364);
             this.panelAction.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelAction.Name = "panelAction";
-            this.panelAction.Padding = new System.Windows.Forms.Padding(12, 12, 12, 12);
+            this.panelAction.Padding = new System.Windows.Forms.Padding(12);
             this.panelAction.Size = new System.Drawing.Size(1540, 60);
             this.panelAction.TabIndex = 2;
             // 
@@ -529,18 +541,6 @@
             this.dtGridViewChamCong.Size = new System.Drawing.Size(1540, 296);
             this.dtGridViewChamCong.TabIndex = 0;
             this.dtGridViewChamCong.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtGridViewChamCong_CellClick);
-            // 
-            // button1
-            // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.button1.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(992, 15);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(163, 50);
-            this.button1.TabIndex = 170;
-            this.button1.Text = "Thoát";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // F_ChamCongChiTiet
             // 

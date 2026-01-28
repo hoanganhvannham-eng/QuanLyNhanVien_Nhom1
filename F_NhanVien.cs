@@ -224,7 +224,6 @@ namespace QuanLyNhanVien3
             // ⭐ BẬT LẠI SỰ KIỆN
             cbBoxMaPB.SelectedIndexChanged += cbBoxMaPB_SelectedIndexChanged_1;
             cbBoxChucVu.SelectedIndexChanged += cbBoxChucVu_SelectedIndexChanged;
-
             dtGridViewNhanVien.RowPostPaint += dtGridViewNhanVien_RowPostPaint;
 
             if (LoginInfo.CurrentUserRole.ToLower() == "user")

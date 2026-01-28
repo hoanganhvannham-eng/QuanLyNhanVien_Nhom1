@@ -663,6 +663,48 @@ namespace QuanLyNhanVien3
                 btnHienThiPhongBanCu.Enabled = false;
                 btnKhoiPhucPhongBan.Enabled = false;
             }
+
+            // Phân quyền dựa trên RoleId
+            if (F_FormMain.LoginInfo.CurrentRoleId == 1) // Admin
+            {
+                // Admin có full quyền
+                btnThem.Enabled = true;
+                btnSua.Enabled = true;
+                btnXoa.Enabled = true;
+                btnHienThiPhongBanCu.Enabled = true;
+                btnKhoiPhucPhongBan.Enabled = true;
+
+                // Hiển thị controls liên quan đến khôi phục
+                // Giả sử bạn có textbox tên txtMKKhoiPhuc và checkbox tên checkshowpassword
+                // txtMKKhoiPhuc.Visible = true;
+                // checkshowpassword.Visible = true;
+            }
+            else if (F_FormMain.LoginInfo.CurrentRoleId == 2) // Manager
+            {
+                // Manager có một số quyền
+                btnThem.Enabled = true;
+                btnSua.Enabled = true;
+                btnXoa.Enabled = true;
+                btnHienThiPhongBanCu.Enabled = false;
+                btnKhoiPhucPhongBan.Enabled = false; // Manager không được khôi phục
+
+                // txtMKKhoiPhuc.Visible = false;
+                // checkshowpassword.Visible = false;
+            }
+            else // User hoặc role khác
+            {
+                // User không có quyền gì
+                btnThem.Enabled = false;
+                btnSua.Enabled = false;
+                btnXoa.Enabled = false;
+                btnHienThiPhongBanCu.Enabled = false;
+                btnKhoiPhucPhongBan.Enabled = false;
+
+                // txtMKKhoiPhuc.Visible = false;
+                // checkshowpassword.Visible = false;
+            }
+
+             tbMKkhoiphuc.UseSystemPasswordChar = true;
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)

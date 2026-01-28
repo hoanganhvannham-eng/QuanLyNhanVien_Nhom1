@@ -55,7 +55,7 @@ namespace QuanLyNhanVien3
                 btnThem.Enabled = true;
                 btnSua.Enabled = true;
                 btnXoa.Enabled = true;
-                btnHienThiNVNghiViec.Enabled = true;
+                btnHienThiNVNghiViec.Enabled = false;
                 btnKhoiPhucNV.Enabled = false; // Manager không được khôi phục
 
                 txtMKKhoiPhuc.Visible = false;

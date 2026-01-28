@@ -83,7 +83,7 @@
             // 
             this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThoat.Location = new System.Drawing.Point(978, 32);
+            this.btnThoat.Location = new System.Drawing.Point(1118, 43);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(163, 50);
             this.btnThoat.TabIndex = 169;

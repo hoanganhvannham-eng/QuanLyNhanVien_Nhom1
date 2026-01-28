@@ -16,6 +16,7 @@
         private void InitializeComponent()
         {
             this.pnlHeader = new System.Windows.Forms.Panel();
+            this.btnThoat = new System.Windows.Forms.Button();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblSubTitle = new System.Windows.Forms.Label();
             this.cbBoxChucVu = new System.Windows.Forms.ComboBox();
@@ -37,9 +38,6 @@
             this.pnlResult = new System.Windows.Forms.Panel();
             this.dtGridViewBCChamCong = new System.Windows.Forms.DataGridView();
             this.lblResult = new System.Windows.Forms.Label();
-
-            this.btnThoat = new System.Windows.Forms.Button();
-
             this.pnlHeader.SuspendLayout();
             this.pnlControl.SuspendLayout();
             this.grpTime.SuspendLayout();
@@ -60,6 +58,18 @@
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(1821, 80);
             this.pnlHeader.TabIndex = 2;
+            // 
+            // btnThoat
+            // 
+            this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThoat.Location = new System.Drawing.Point(1393, 12);
+            this.btnThoat.Name = "btnThoat";
+            this.btnThoat.Size = new System.Drawing.Size(163, 50);
+            this.btnThoat.TabIndex = 170;
+            this.btnThoat.Text = "Thoát";
+            this.btnThoat.UseVisualStyleBackColor = true;
+            this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
             // lblTitle
             // 
@@ -289,20 +299,6 @@
             this.lblResult.TabIndex = 1;
             this.lblResult.Text = "KẾT QUẢ BÁO CÁO";
             // 
-
-            // btnThoat
-            // 
-            this.btnThoat.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThoat.Location = new System.Drawing.Point(1239, 12);
-            this.btnThoat.Name = "btnThoat";
-            this.btnThoat.Size = new System.Drawing.Size(163, 50);
-            this.btnThoat.TabIndex = 170;
-            this.btnThoat.Text = "Thoát";
-            this.btnThoat.UseVisualStyleBackColor = true;
-            this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
-            // 
-
             // F_BaoCaoChamCong
             // 
             this.ClientSize = new System.Drawing.Size(1821, 670);
