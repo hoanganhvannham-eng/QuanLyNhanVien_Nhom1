@@ -2,211 +2,247 @@
 {
     partial class F_BaoCaoLuong
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.btnXuatExcel = new System.Windows.Forms.Button();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.panelHeader = new System.Windows.Forms.Panel();
+            this.lblSubTitle = new System.Windows.Forms.Label();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.gbFilter = new System.Windows.Forms.GroupBox();
             this.btnTongLuongPhongBan = new System.Windows.Forms.Button();
             this.btnNVTongLuongCaoNhat = new System.Windows.Forms.Button();
             this.btnLuongHangThang = new System.Windows.Forms.Button();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.gbContent = new System.Windows.Forms.GroupBox();
             this.dtGridViewBCLuong = new System.Windows.Forms.DataGridView();
+            this.panelAction = new System.Windows.Forms.Panel();
             this.btnXuatPDF = new System.Windows.Forms.Button();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.btnXuatExcel = new System.Windows.Forms.Button();
+            this.panelHeader.SuspendLayout();
+            this.panelTop.SuspendLayout();
+            this.gbFilter.SuspendLayout();
+            this.gbContent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtGridViewBCLuong)).BeginInit();
+            this.panelAction.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel1
+            // panelHeader
             // 
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1570, 152);
-            this.panel1.TabIndex = 3;
+            this.panelHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(58)))), ((int)(((byte)(138)))));
+            this.panelHeader.Controls.Add(this.lblSubTitle);
+            this.panelHeader.Controls.Add(this.lblTitle);
+            this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelHeader.Location = new System.Drawing.Point(0, 0);
+            this.panelHeader.Name = "panelHeader";
+            this.panelHeader.Padding = new System.Windows.Forms.Padding(18, 10, 18, 10);
+            this.panelHeader.Size = new System.Drawing.Size(1315, 78);
+            this.panelHeader.TabIndex = 2;
             // 
-            // label1
+            // lblSubTitle
             // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Times New Roman", 25.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(562, 70);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(358, 60);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Báo Cáo Lương";
+            this.lblSubTitle.AutoSize = true;
+            this.lblSubTitle.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblSubTitle.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lblSubTitle.Location = new System.Drawing.Point(20, 48);
+            this.lblSubTitle.Name = "lblSubTitle";
+            this.lblSubTitle.Size = new System.Drawing.Size(199, 23);
+            this.lblSubTitle.TabIndex = 0;
+            this.lblSubTitle.Text = "Theo tháng / phòng ban";
             // 
-            // panel2
+            // lblTitle
             // 
-            this.panel2.Controls.Add(this.btnXuatPDF);
-            this.panel2.Controls.Add(this.btnXuatExcel);
-            this.panel2.Controls.Add(this.dateTimePicker1);
-            this.panel2.Controls.Add(this.btnTongLuongPhongBan);
-            this.panel2.Controls.Add(this.btnNVTongLuongCaoNhat);
-            this.panel2.Controls.Add(this.btnLuongHangThang);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 152);
-            this.panel2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1570, 326);
-            this.panel2.TabIndex = 4;
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.ForeColor = System.Drawing.Color.White;
+            this.lblTitle.Location = new System.Drawing.Point(18, 10);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(397, 37);
+            this.lblTitle.TabIndex = 1;
+            this.lblTitle.Text = "BÁO CÁO LƯƠNG NHÂN VIÊN";
             // 
-            // btnXuatExcel
+            // panelTop
             // 
-            this.btnXuatExcel.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnXuatExcel.Location = new System.Drawing.Point(622, 195);
-            this.btnXuatExcel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnXuatExcel.Name = "btnXuatExcel";
-            this.btnXuatExcel.Size = new System.Drawing.Size(181, 52);
-            this.btnXuatExcel.TabIndex = 4;
-            this.btnXuatExcel.Text = "Xuất Excel";
-            this.btnXuatExcel.UseVisualStyleBackColor = true;
-            this.btnXuatExcel.Click += new System.EventHandler(this.btnXuatExcel_Click);
+            this.panelTop.Controls.Add(this.gbFilter);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 78);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Padding = new System.Windows.Forms.Padding(12);
+            this.panelTop.Size = new System.Drawing.Size(1315, 140);
+            this.panelTop.TabIndex = 1;
             // 
-            // dateTimePicker1
+            // gbFilter
             // 
-            this.dateTimePicker1.Font = new System.Drawing.Font("Times New Roman", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTimePicker1.Location = new System.Drawing.Point(583, 36);
-            this.dateTimePicker1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(331, 32);
-            this.dateTimePicker1.TabIndex = 3;
+            this.gbFilter.Controls.Add(this.btnTongLuongPhongBan);
+            this.gbFilter.Controls.Add(this.btnNVTongLuongCaoNhat);
+            this.gbFilter.Controls.Add(this.btnLuongHangThang);
+            this.gbFilter.Controls.Add(this.dateTimePicker1);
+            this.gbFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbFilter.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.gbFilter.Location = new System.Drawing.Point(12, 12);
+            this.gbFilter.Name = "gbFilter";
+            this.gbFilter.Padding = new System.Windows.Forms.Padding(12);
+            this.gbFilter.Size = new System.Drawing.Size(1291, 116);
+            this.gbFilter.TabIndex = 0;
+            this.gbFilter.TabStop = false;
+            this.gbFilter.Text = "Chọn loại báo cáo";
             // 
             // btnTongLuongPhongBan
             // 
-            this.btnTongLuongPhongBan.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTongLuongPhongBan.Location = new System.Drawing.Point(1040, 110);
-            this.btnTongLuongPhongBan.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnTongLuongPhongBan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTongLuongPhongBan.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnTongLuongPhongBan.Location = new System.Drawing.Point(1040, 30);
             this.btnTongLuongPhongBan.Name = "btnTongLuongPhongBan";
-            this.btnTongLuongPhongBan.Size = new System.Drawing.Size(348, 56);
-            this.btnTongLuongPhongBan.TabIndex = 2;
+            this.btnTongLuongPhongBan.Size = new System.Drawing.Size(240, 40);
+            this.btnTongLuongPhongBan.TabIndex = 0;
             this.btnTongLuongPhongBan.Text = "Tổng lương theo phòng ban";
-            this.btnTongLuongPhongBan.UseVisualStyleBackColor = true;
             this.btnTongLuongPhongBan.Click += new System.EventHandler(this.btnTongLuongPhongBan_Click);
             // 
             // btnNVTongLuongCaoNhat
             // 
-            this.btnNVTongLuongCaoNhat.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNVTongLuongCaoNhat.Location = new System.Drawing.Point(469, 110);
-            this.btnNVTongLuongCaoNhat.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnNVTongLuongCaoNhat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNVTongLuongCaoNhat.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnNVTongLuongCaoNhat.Location = new System.Drawing.Point(600, 30);
             this.btnNVTongLuongCaoNhat.Name = "btnNVTongLuongCaoNhat";
-            this.btnNVTongLuongCaoNhat.Size = new System.Drawing.Size(548, 56);
+            this.btnNVTongLuongCaoNhat.Size = new System.Drawing.Size(420, 40);
             this.btnNVTongLuongCaoNhat.TabIndex = 1;
-            this.btnNVTongLuongCaoNhat.Text = "Nhân viên có tổng lương cao nhất trong tháng";
-            this.btnNVTongLuongCaoNhat.UseVisualStyleBackColor = true;
+            this.btnNVTongLuongCaoNhat.Text = "Nhân viên có tổng lương cao nhất";
             this.btnNVTongLuongCaoNhat.Click += new System.EventHandler(this.btnNVTongLuongCaoNhat_Click);
             // 
             // btnLuongHangThang
             // 
-            this.btnLuongHangThang.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLuongHangThang.Location = new System.Drawing.Point(120, 110);
-            this.btnLuongHangThang.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnLuongHangThang.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLuongHangThang.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnLuongHangThang.Location = new System.Drawing.Point(320, 30);
             this.btnLuongHangThang.Name = "btnLuongHangThang";
-            this.btnLuongHangThang.Size = new System.Drawing.Size(318, 56);
-            this.btnLuongHangThang.TabIndex = 0;
+            this.btnLuongHangThang.Size = new System.Drawing.Size(260, 40);
+            this.btnLuongHangThang.TabIndex = 2;
             this.btnLuongHangThang.Text = "Bảng lương hàng tháng";
-            this.btnLuongHangThang.UseVisualStyleBackColor = true;
             this.btnLuongHangThang.Click += new System.EventHandler(this.btnLuongHangThang_Click);
             // 
-            // panel3
+            // dateTimePicker1
             // 
-            this.panel3.Controls.Add(this.dtGridViewBCLuong);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 478);
-            this.panel3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1570, 452);
-            this.panel3.TabIndex = 5;
+            this.dateTimePicker1.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.dateTimePicker1.Location = new System.Drawing.Point(18, 32);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(280, 30);
+            this.dateTimePicker1.TabIndex = 3;
+            // 
+            // gbContent
+            // 
+            this.gbContent.Controls.Add(this.dtGridViewBCLuong);
+            this.gbContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbContent.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.gbContent.Location = new System.Drawing.Point(0, 218);
+            this.gbContent.Name = "gbContent";
+            this.gbContent.Padding = new System.Windows.Forms.Padding(10);
+            this.gbContent.Size = new System.Drawing.Size(1315, 442);
+            this.gbContent.TabIndex = 0;
+            this.gbContent.TabStop = false;
+            this.gbContent.Text = "Bảng dữ liệu";
             // 
             // dtGridViewBCLuong
             // 
             this.dtGridViewBCLuong.AllowUserToAddRows = false;
+            this.dtGridViewBCLuong.AllowUserToDeleteRows = false;
             this.dtGridViewBCLuong.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dtGridViewBCLuong.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtGridViewBCLuong.ColumnHeadersHeight = 32;
             this.dtGridViewBCLuong.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dtGridViewBCLuong.Location = new System.Drawing.Point(0, 0);
-            this.dtGridViewBCLuong.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dtGridViewBCLuong.Location = new System.Drawing.Point(10, 33);
             this.dtGridViewBCLuong.Name = "dtGridViewBCLuong";
             this.dtGridViewBCLuong.ReadOnly = true;
+            this.dtGridViewBCLuong.RowHeadersVisible = false;
             this.dtGridViewBCLuong.RowHeadersWidth = 51;
-            this.dtGridViewBCLuong.RowTemplate.Height = 24;
-            this.dtGridViewBCLuong.Size = new System.Drawing.Size(1570, 452);
-            this.dtGridViewBCLuong.TabIndex = 122;
+            this.dtGridViewBCLuong.RowTemplate.Height = 28;
+            this.dtGridViewBCLuong.Size = new System.Drawing.Size(1295, 399);
+            this.dtGridViewBCLuong.TabIndex = 0;
+            // 
+            // panelAction
+            // 
+            this.panelAction.Controls.Add(this.btnXuatPDF);
+            this.panelAction.Controls.Add(this.btnXuatExcel);
+            this.panelAction.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelAction.Location = new System.Drawing.Point(0, 660);
+            this.panelAction.Name = "panelAction";
+            this.panelAction.Padding = new System.Windows.Forms.Padding(12);
+            this.panelAction.Size = new System.Drawing.Size(1315, 60);
+            this.panelAction.TabIndex = 3;
             // 
             // btnXuatPDF
             // 
-            this.btnXuatPDF.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnXuatPDF.Location = new System.Drawing.Point(868, 195);
-            this.btnXuatPDF.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnXuatPDF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXuatPDF.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnXuatPDF.Location = new System.Drawing.Point(168, 12);
             this.btnXuatPDF.Name = "btnXuatPDF";
-            this.btnXuatPDF.Size = new System.Drawing.Size(181, 52);
-            this.btnXuatPDF.TabIndex = 5;
+            this.btnXuatPDF.Size = new System.Drawing.Size(140, 36);
+            this.btnXuatPDF.TabIndex = 0;
             this.btnXuatPDF.Text = "Xuất PDF";
-            this.btnXuatPDF.UseVisualStyleBackColor = true;
             this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
+            // 
+            // btnXuatExcel
+            // 
+            this.btnXuatExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXuatExcel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnXuatExcel.Location = new System.Drawing.Point(16, 12);
+            this.btnXuatExcel.Name = "btnXuatExcel";
+            this.btnXuatExcel.Size = new System.Drawing.Size(140, 36);
+            this.btnXuatExcel.TabIndex = 1;
+            this.btnXuatExcel.Text = "Xuất Excel";
+            this.btnXuatExcel.Click += new System.EventHandler(this.btnXuatExcel_Click);
             // 
             // F_BaoCaoLuong
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1570, 930);
-            this.Controls.Add(this.panel3);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.ClientSize = new System.Drawing.Size(1315, 720);
+            this.Controls.Add(this.gbContent);
+            this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.panelHeader);
+            this.Controls.Add(this.panelAction);
             this.Name = "F_BaoCaoLuong";
-            this.Text = "F_BaoCaoLuong";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "git";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.F_BaoCaoLuong_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
+            this.panelHeader.ResumeLayout(false);
+            this.panelHeader.PerformLayout();
+            this.panelTop.ResumeLayout(false);
+            this.gbFilter.ResumeLayout(false);
+            this.gbContent.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtGridViewBCLuong)).EndInit();
+            this.panelAction.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel2;
+
+        private System.Windows.Forms.Panel panelHeader;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblSubTitle;
+
+        private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.GroupBox gbFilter;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
-        private System.Windows.Forms.Button btnTongLuongPhongBan;
-        private System.Windows.Forms.Button btnNVTongLuongCaoNhat;
         private System.Windows.Forms.Button btnLuongHangThang;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button btnNVTongLuongCaoNhat;
+        private System.Windows.Forms.Button btnTongLuongPhongBan;
+
+        private System.Windows.Forms.GroupBox gbContent;
         private System.Windows.Forms.DataGridView dtGridViewBCLuong;
+
+        private System.Windows.Forms.Panel panelAction;
         private System.Windows.Forms.Button btnXuatExcel;
         private System.Windows.Forms.Button btnXuatPDF;
     }

@@ -134,7 +134,7 @@
             // 
             // lblSDT
             // 
-            this.lblSDT.Location = new System.Drawing.Point(299, 27);
+            this.lblSDT.Location = new System.Drawing.Point(314, 27);
             this.lblSDT.Name = "lblSDT";
             this.lblSDT.Size = new System.Drawing.Size(54, 23);
             this.lblSDT.TabIndex = 4;
@@ -142,7 +142,7 @@
             // 
             // lblEmail
             // 
-            this.lblEmail.Location = new System.Drawing.Point(299, 59);
+            this.lblEmail.Location = new System.Drawing.Point(314, 59);
             this.lblEmail.Name = "lblEmail";
             this.lblEmail.Size = new System.Drawing.Size(54, 23);
             this.lblEmail.TabIndex = 5;
@@ -153,7 +153,7 @@
             this.txtMaNV.Location = new System.Drawing.Point(100, 27);
             this.txtMaNV.Name = "txtMaNV";
             this.txtMaNV.ReadOnly = true;
-            this.txtMaNV.Size = new System.Drawing.Size(166, 27);
+            this.txtMaNV.Size = new System.Drawing.Size(193, 27);
             this.txtMaNV.TabIndex = 6;
             // 
             // txtHoTen
@@ -161,7 +161,7 @@
             this.txtHoTen.Location = new System.Drawing.Point(100, 57);
             this.txtHoTen.Name = "txtHoTen";
             this.txtHoTen.ReadOnly = true;
-            this.txtHoTen.Size = new System.Drawing.Size(166, 27);
+            this.txtHoTen.Size = new System.Drawing.Size(193, 27);
             this.txtHoTen.TabIndex = 7;
             // 
             // dtpNgaySinh
@@ -170,7 +170,7 @@
             this.dtpNgaySinh.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpNgaySinh.Location = new System.Drawing.Point(100, 87);
             this.dtpNgaySinh.Name = "dtpNgaySinh";
-            this.dtpNgaySinh.Size = new System.Drawing.Size(166, 27);
+            this.dtpNgaySinh.Size = new System.Drawing.Size(193, 27);
             this.dtpNgaySinh.TabIndex = 8;
             // 
             // txtGioiTinh
@@ -183,7 +183,7 @@
             // 
             // txtSDT
             // 
-            this.txtSDT.Location = new System.Drawing.Point(359, 24);
+            this.txtSDT.Location = new System.Drawing.Point(374, 24);
             this.txtSDT.Name = "txtSDT";
             this.txtSDT.ReadOnly = true;
             this.txtSDT.Size = new System.Drawing.Size(187, 27);
@@ -191,7 +191,7 @@
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new System.Drawing.Point(359, 56);
+            this.txtEmail.Location = new System.Drawing.Point(374, 56);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.ReadOnly = true;
             this.txtEmail.Size = new System.Drawing.Size(187, 27);
@@ -278,7 +278,7 @@
             this.txtTrangThaiLamViec.Location = new System.Drawing.Point(130, 127);
             this.txtTrangThaiLamViec.Name = "txtTrangThaiLamViec";
             this.txtTrangThaiLamViec.ReadOnly = true;
-            this.txtTrangThaiLamViec.Size = new System.Drawing.Size(100, 27);
+            this.txtTrangThaiLamViec.Size = new System.Drawing.Size(111, 27);
             this.txtTrangThaiLamViec.TabIndex = 7;
             // 
             // groupHopDong
@@ -344,7 +344,7 @@
             this.txtTrangThaiHD.Location = new System.Drawing.Point(918, 31);
             this.txtTrangThaiHD.Name = "txtTrangThaiHD";
             this.txtTrangThaiHD.ReadOnly = true;
-            this.txtTrangThaiHD.Size = new System.Drawing.Size(100, 27);
+            this.txtTrangThaiHD.Size = new System.Drawing.Size(109, 27);
             this.txtTrangThaiHD.TabIndex = 5;
             // 
             // groupLichSuHD
