@@ -46,8 +46,8 @@ namespace QuanLyNhanVien3
                 btnKhoiPhucNV.Enabled = true;
 
                 // Hiển thị controls liên quan đến khôi phục
-                txtMKKhoiPhuc.Visible = false; // Không cần mật khẩu nữa
-                checkshowpassword.Visible = false; // Không cần checkbox
+                txtMKKhoiPhuc.Visible = true;  // Thay đổi từ false -> true
+                checkshowpassword.Visible = true;  // Thay đổi từ false -> true
             }
             else if (LoginInfo.CurrentRoleId == 2) // Manager
             {
@@ -522,36 +522,76 @@ namespace QuanLyNhanVien3
             {
                 if (string.IsNullOrEmpty(tbMaChuVu.Text.Trim()))
                 {
-                    MessageBox.Show("Vui lòng chọn hoặc nhập mã Chức Vụ để tìm Chức vụ cần khôi phục!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // Kiểm tra quyền dựa trên RoleId
-                if (LoginInfo.CurrentRoleId != 1) // Chỉ Admin (RoleId = 1) mới được khôi phục
-                {
-                    MessageBox.Show("Bạn không có quyền khôi phục chức vụ!\nChỉ Admin mới có quyền này.",
+                    MessageBox.Show("Vui lòng chọn hoặc nhập mã Chức Vụ để tìm Chức vụ cần khôi phục!",
                         "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                c.connect();
-                string query = "SELECT COUNT(*) FROM tblChucVu_KhangCD233181 WHERE MaCV_KhangCD233181 = @MaCV AND DeletedAt_KhangCD233181 = 1";
-                using (SqlCommand cmdcheckPB = new SqlCommand(query, c.conn))
+                // Yêu cầu nhập mật khẩu xác nhận
+                if (string.IsNullOrEmpty(txtMKKhoiPhuc.Text))
                 {
-                    cmdcheckPB.Parameters.AddWithValue("@MaCV", tbMaChuVu.Text.Trim());
-                    int emailCount = (int)cmdcheckPB.ExecuteScalar();
+                    MessageBox.Show("Vui lòng nhập mật khẩu để xác nhận khôi phục!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                    if (emailCount == 0)
+                string matKhauNhap = txtMKKhoiPhuc.Text.Trim();
+
+                // Kiểm tra mật khẩu với RoleId = 1 (Admin)
+                c.connect();
+
+                string sqlCheckPassword = @"
+            SELECT COUNT(*) 
+            FROM tblTaiKhoan_KhangCD233181 
+            WHERE MatKhau_KhangCD233181 = @MatKhau 
+            AND RoleId_ThuanCD233318 = 1 
+            AND DeletedAt_KhangCD233181 = 0";
+
+                bool isValidAdmin = false;
+
+                using (SqlCommand cmdCheck = new SqlCommand(sqlCheckPassword, c.conn))
+                {
+                    cmdCheck.Parameters.AddWithValue("@MatKhau", matKhauNhap);
+                    int count = (int)cmdCheck.ExecuteScalar();
+
+                    if (count > 0)
                     {
-                        MessageBox.Show("Không tìm thấy chức vụ đã xóa với mã này!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        isValidAdmin = true;
+                    }
+                }
+
+                if (!isValidAdmin)
+                {
+                    MessageBox.Show("Mật khẩu không đúng hoặc bạn không có quyền Admin để khôi phục!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    c.disconnect();
+                    txtMKKhoiPhuc.Clear();
+                    return;
+                }
+
+                // Kiểm tra xem chức vụ có tồn tại trong danh sách đã xóa không
+                string checkDeletedSql = @"
+            SELECT COUNT(*) 
+            FROM tblChucVu_KhangCD233181 
+            WHERE MaCV_KhangCD233181 = @MaCV 
+            AND DeletedAt_KhangCD233181 = 1";
+
+                using (SqlCommand cmdCheckDeleted = new SqlCommand(checkDeletedSql, c.conn))
+                {
+                    cmdCheckDeleted.Parameters.AddWithValue("@MaCV", tbMaChuVu.Text.Trim());
+                    int deletedCount = (int)cmdCheckDeleted.ExecuteScalar();
+
+                    if (deletedCount == 0)
+                    {
+                        MessageBox.Show("Chức vụ này không tồn tại trong danh sách đã xóa!",
+                            "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         c.disconnect();
                         return;
                     }
                 }
 
                 DialogResult confirm = MessageBox.Show(
-                    "Bạn có chắc chắn muốn khôi phục chức vụ này không?",
+                    "Bạn có chắc chắn muốn khôi phục Chức Vụ này không?",
                     "Xác nhận khôi phục",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question
@@ -559,18 +599,28 @@ namespace QuanLyNhanVien3
 
                 if (confirm == DialogResult.Yes)
                 {
-                    string querytblChucVu = "UPDATE tblChucVu_KhangCD233181 SET DeletedAt_KhangCD233181 = 0 WHERE MaCV_KhangCD233181 = @MaCV";
-                    using (SqlCommand cmd = new SqlCommand(querytblChucVu, c.conn))
+                    // Khôi phục: Cập nhật DeletedAt = 0
+                    string query = @"
+                UPDATE tblChucVu_KhangCD233181 
+                SET DeletedAt_KhangCD233181 = 0 
+                WHERE MaCV_KhangCD233181 = @MaCV 
+                AND DeletedAt_KhangCD233181 = 1";
+
+                    using (SqlCommand cmd = new SqlCommand(query, c.conn))
                     {
                         cmd.Parameters.AddWithValue("@MaCV", tbMaChuVu.Text.Trim());
                         int rowsAffected = cmd.ExecuteNonQuery();
+
                         if (rowsAffected > 0)
                         {
-                            MessageBox.Show("Khôi phục Chức Vụ thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Khôi phục Chức Vụ thành công!", "Thông báo",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            c.disconnect();
 
                             // Clear inputs và reset
                             ClearAllInputs(this);
                             tbMaChuVu.Text = TaoMaChucVuTuDong();
+                            txtMKKhoiPhuc.Clear();
                             isEditingChucVu = false;
 
                             // Load lại dữ liệu (hiển thị chức vụ đang hoạt động)
@@ -578,15 +628,22 @@ namespace QuanLyNhanVien3
                         }
                         else
                         {
-                            MessageBox.Show("Không tìm thấy Chức Vụ để khôi phục!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show("Không thể khôi phục Chức Vụ!", "Thông báo",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            c.disconnect();
                         }
                     }
                 }
-                c.disconnect();
+                else
+                {
+                    c.disconnect();
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi " + ex.Message);
+                try { c.disconnect(); } catch { }
+                MessageBox.Show("Lỗi khi khôi phục chức vụ: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
