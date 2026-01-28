@@ -148,7 +148,7 @@
             // 
             this.PDF.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.PDF.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PDF.Location = new System.Drawing.Point(270, 261);
+            this.PDF.Location = new System.Drawing.Point(390, 225);
             this.PDF.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PDF.Name = "PDF";
             this.PDF.Size = new System.Drawing.Size(114, 32);

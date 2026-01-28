@@ -40,6 +40,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.buttonlamsach = new System.Windows.Forms.Button();
             this.checkshowpassword = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.tbMKkhoiphuc = new System.Windows.Forms.TextBox();
@@ -58,7 +59,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.dataGridViewPhongBan = new System.Windows.Forms.DataGridView();
-            this.buttonlamsach = new System.Windows.Forms.Button();
+            this.buttonxuatpdf = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -203,6 +204,7 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.buttonxuatpdf);
             this.panel4.Controls.Add(this.buttonlamsach);
             this.panel4.Controls.Add(this.checkshowpassword);
             this.panel4.Controls.Add(this.label8);
@@ -216,6 +218,20 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(478, 409);
             this.panel4.TabIndex = 124;
+            // 
+            // buttonlamsach
+            // 
+            this.buttonlamsach.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.buttonlamsach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonlamsach.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.buttonlamsach.Location = new System.Drawing.Point(327, 142);
+            this.buttonlamsach.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonlamsach.Name = "buttonlamsach";
+            this.buttonlamsach.Size = new System.Drawing.Size(120, 36);
+            this.buttonlamsach.TabIndex = 198;
+            this.buttonlamsach.Text = "Làm sạch";
+            this.buttonlamsach.UseVisualStyleBackColor = true;
+            this.buttonlamsach.Click += new System.EventHandler(this.buttonlamsach_Click);
             // 
             // checkshowpassword
             // 
@@ -256,7 +272,7 @@
             // 
             this.btnxuatExcel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.btnxuatExcel.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnxuatExcel.Location = new System.Drawing.Point(228, 261);
+            this.btnxuatExcel.Location = new System.Drawing.Point(184, 263);
             this.btnxuatExcel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnxuatExcel.Name = "btnxuatExcel";
             this.btnxuatExcel.Size = new System.Drawing.Size(134, 44);
@@ -440,19 +456,18 @@
             this.dataGridViewPhongBan.TabIndex = 119;
             this.dataGridViewPhongBan.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewPhongBan_CellClick_1);
             // 
-            // buttonlamsach
+            // buttonxuatpdf
             // 
-            this.buttonlamsach.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.buttonlamsach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonlamsach.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.buttonlamsach.Location = new System.Drawing.Point(327, 142);
-            this.buttonlamsach.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.buttonlamsach.Name = "buttonlamsach";
-            this.buttonlamsach.Size = new System.Drawing.Size(120, 36);
-            this.buttonlamsach.TabIndex = 198;
-            this.buttonlamsach.Text = "Làm sạch";
-            this.buttonlamsach.UseVisualStyleBackColor = true;
-            this.buttonlamsach.Click += new System.EventHandler(this.buttonlamsach_Click);
+            this.buttonxuatpdf.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.buttonxuatpdf.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonxuatpdf.Location = new System.Drawing.Point(327, 263);
+            this.buttonxuatpdf.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonxuatpdf.Name = "buttonxuatpdf";
+            this.buttonxuatpdf.Size = new System.Drawing.Size(134, 44);
+            this.buttonxuatpdf.TabIndex = 199;
+            this.buttonxuatpdf.Text = "Xuất PDF";
+            this.buttonxuatpdf.UseVisualStyleBackColor = true;
+            this.buttonxuatpdf.Click += new System.EventHandler(this.buttonxuatpdf_Click);
             // 
             // F_PhongBan
             // 
@@ -515,5 +530,6 @@
         private System.Windows.Forms.DataGridView dataGridViewPhongBan;
         private System.Windows.Forms.Button btnThoat;
         private System.Windows.Forms.Button buttonlamsach;
+        private System.Windows.Forms.Button buttonxuatpdf;
     }
 }

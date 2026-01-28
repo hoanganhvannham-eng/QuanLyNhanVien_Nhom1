@@ -24,6 +24,7 @@ namespace QuanLyNhanVien3
             InitializeComponent();
         }
 
+        bool isViewingDeletedRecords = false;
         string nguoiDangNhap = F_FormMain.LoginInfo.CurrentUserName;
         private void F_ChamCongChiTiet_Load(object sender, EventArgs e)
         {
@@ -224,6 +225,9 @@ namespace QuanLyNhanVien3
             }
         }
         // ===== LOAD TOÀN BỘ CHẤM CÔNG =====
+
+
+        // ==================== LOAD TOÀN BỘ CHẤM CÔNG (RESET FLAG) ====================
         private void LoadAllChamCong()
         {
             try
@@ -231,25 +235,25 @@ namespace QuanLyNhanVien3
                 cn.connect();
 
                 string sql = @"
-            SELECT 
-                ROW_NUMBER() OVER (ORDER BY cc.Ngay_TuanhCD233018 DESC, nv.HoTen_TuanhCD233018) AS [STT],
-                cc.Id_TuanhCD233018 AS [ID],
-                cc.MaChamCong_TuanhCD233018 AS [Mã chấm công],
-                nv.MaNV_TuanhCD233018 AS [Mã NV],
-                nv.HoTen_TuanhCD233018 AS [Họ tên],
-                pb.TenPB_ThuanCD233318 AS [Phòng ban],
-                cv.TenCV_KhangCD233181 AS [Chức vụ],
-                cc.Ngay_TuanhCD233018 AS [Ngày],
-                CONVERT(VARCHAR(8), cc.GioVao_TuanhCD233018, 108) AS [Giờ vào],
-                CONVERT(VARCHAR(8), cc.GioVe_TuanhCD233018, 108) AS [Giờ về],
-                cc.Ghichu_TuanhCD233018 AS [Ghi chú]
-            FROM tblChamCong_TuanhCD233018 cc
-            INNER JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-            INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
-            INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
-            WHERE cc.DeletedAt_TuanhCD233018 = 0
-              AND nv.DeletedAt_TuanhCD233018 = 0
-            ORDER BY cc.Ngay_TuanhCD233018 DESC, nv.HoTen_TuanhCD233018";
+        SELECT 
+            ROW_NUMBER() OVER (ORDER BY cc.Ngay_TuanhCD233018 DESC, nv.HoTen_TuanhCD233018) AS [STT],
+            cc.Id_TuanhCD233018 AS [ID],
+            cc.MaChamCong_TuanhCD233018 AS [Mã chấm công],
+            nv.MaNV_TuanhCD233018 AS [Mã NV],
+            nv.HoTen_TuanhCD233018 AS [Họ tên],
+            pb.TenPB_ThuanCD233318 AS [Phòng ban],
+            cv.TenCV_KhangCD233181 AS [Chức vụ],
+            cc.Ngay_TuanhCD233018 AS [Ngày],
+            CONVERT(VARCHAR(8), cc.GioVao_TuanhCD233018, 108) AS [Giờ vào],
+            CONVERT(VARCHAR(8), cc.GioVe_TuanhCD233018, 108) AS [Giờ về],
+            cc.Ghichu_TuanhCD233018 AS [Ghi chú]
+        FROM tblChamCong_TuanhCD233018 cc
+        INNER JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+        INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+        INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+        WHERE cc.DeletedAt_TuanhCD233018 = 0
+          AND nv.DeletedAt_TuanhCD233018 = 0
+        ORDER BY cc.Ngay_TuanhCD233018 DESC, nv.HoTen_TuanhCD233018";
 
                 using (SqlCommand cmd = new SqlCommand(sql, cn.conn))
                 {
@@ -258,14 +262,15 @@ namespace QuanLyNhanVien3
                     da.Fill(dt);
                     dtGridViewChamCong.DataSource = dt;
 
-                    // Ẩn cột ID
                     if (dtGridViewChamCong.Columns["ID"] != null)
                         dtGridViewChamCong.Columns["ID"].Visible = false;
 
-                    // Đặt độ rộng cột STT
                     if (dtGridViewChamCong.Columns["STT"] != null)
                         dtGridViewChamCong.Columns["STT"].Width = 50;
                 }
+
+                // ⭐ RESET FLAG = FALSE
+                isViewingDeletedRecords = false;
 
                 ClearInputs();
             }
@@ -279,6 +284,7 @@ namespace QuanLyNhanVien3
                 cn.disconnect();
             }
         }
+
         // ===== LOAD CHẤM CÔNG THEO NGÀY =====
         private void LoadChamCongTheoNgay(DateTime ngay)
         {
@@ -837,14 +843,11 @@ namespace QuanLyNhanVien3
         }
 
         // ===== XUẤT PDF =====
-        // ===== XUẤT PDF =====
-        // ===== XUẤT PDF =====
-        // ===== XUẤT PDF =====
+        // ==================== XUẤT PDF ====================
         private void xuatpdf_Click(object sender, EventArgs e)
         {
             try
             {
-                // Kiểm tra có dữ liệu không
                 if (dtGridViewChamCong.Rows.Count == 0)
                 {
                     MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
@@ -852,10 +855,12 @@ namespace QuanLyNhanVien3
                     return;
                 }
 
-                // Tạo tên file tự động
-                string fileName = $"BaoCaoChamCong_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+                // ⭐ XÁC ĐỊNH TIÊU ĐỀ DỰA VÀO FLAG
+                string reportTitle = isViewingDeletedRecords ? "DANH SÁCH CHẤM CÔNG ĐÃ XÓA" : "BÁO CÁO CHẤM CÔNG NHÂN VIÊN";
+                string fileName = isViewingDeletedRecords
+                    ? $"ChamCongDaXoa_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
+                    : $"BaoCaoChamCong_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
 
-                // Chọn nơi lưu file
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "PDF Files|*.pdf";
                 saveFileDialog.Title = "Lưu báo cáo chấm công";
@@ -864,7 +869,6 @@ namespace QuanLyNhanVien3
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
                     return;
 
-                // Tạo PDF
                 Document document = new Document(PageSize.A4.Rotate(), 25, 25, 30, 30);
                 PdfWriter.GetInstance(document, new FileStream(saveFileDialog.FileName, FileMode.Create));
                 document.Open();
@@ -894,9 +898,8 @@ namespace QuanLyNhanVien3
                 company.SpacingAfter = 5;
                 document.Add(company);
 
-                // ===== TIÊU ĐỀ =====
-                Paragraph title = new Paragraph(
-                    "BÁO CÁO CHẤM CÔNG NHÂN VIÊN", titleFont);
+                // ===== TIÊU ĐỀ ĐỘNG =====
+                Paragraph title = new Paragraph(reportTitle, titleFont);
                 title.Alignment = Element.ALIGN_CENTER;
                 title.SpacingAfter = 10;
                 document.Add(title);
@@ -908,20 +911,28 @@ namespace QuanLyNhanVien3
                 date.SpacingAfter = 10;
                 document.Add(date);
 
-                // ===== PHÒNG BAN =====
-                Paragraph pb = new Paragraph(
-                    "Phòng Ban: " + cbBoxMaPB.Text, normalFont);
-                pb.Alignment = Element.ALIGN_LEFT;
-                pb.SpacingAfter = 10;
-                document.Add(pb);
+                // ⭐ CHỈ HIỂN THỊ THÔNG TIN LỌC KHI KHÔNG PHẢI DANH SÁCH ĐÃ XÓA
+                if (!isViewingDeletedRecords)
+                {
+                    // ===== PHÒNG BAN =====
+                    Paragraph pb = new Paragraph("Phòng Ban: " + cbBoxMaPB.Text, normalFont);
+                    pb.Alignment = Element.ALIGN_LEFT;
+                    pb.SpacingAfter = 10;
+                    document.Add(pb);
 
-                // ===== CHỨC VỤ =====
-                Paragraph cv = new Paragraph(
-                    "Chức vụ: " + (cbBoxChucVu.Text != "" ? cbBoxChucVu.Text : "Tất cả"),
-                    normalFont);
-                cv.Alignment = Element.ALIGN_LEFT;
-                cv.SpacingAfter = 10;
-                document.Add(cv);
+                    // ===== CHỨC VỤ =====
+                    Paragraph cv = new Paragraph(
+                        "Chức vụ: " + (cbBoxChucVu.Text != "" ? cbBoxChucVu.Text : "Tất cả"),
+                        normalFont);
+                    cv.Alignment = Element.ALIGN_LEFT;
+                    cv.SpacingAfter = 10;
+                    document.Add(cv);
+                }
+                else
+                {
+                    // Thêm khoảng trắng
+                    document.Add(new Paragraph("\n"));
+                }
 
                 // ===== TẠO BẢNG =====
                 int visibleColumns = dtGridViewChamCong.Columns
@@ -932,12 +943,8 @@ namespace QuanLyNhanVien3
                 table.WidthPercentage = 100;
                 table.SpacingBefore = 20f;
 
-                // ===== CĂN ĐỘ RỘNG CỘT STT (ĐÃ SỬA CHUẨN) =====
-                int maxSTT = dtGridViewChamCong.Rows.Count;
-                int sttDigits = maxSTT.ToString().Length;
-                // ===== CỐ ĐỊNH ĐỘ RỘNG CỘT STT =====
-                float sttWidth = 64f;   // 🔒 STT LUÔN LUÔN = 5f
-
+                // Cố định độ rộng cột STT
+                float sttWidth = 64f;
                 float[] columnWidths = new float[visibleColumns];
                 int colIndex = 0;
 
@@ -947,18 +954,17 @@ namespace QuanLyNhanVien3
 
                     if (col.HeaderText == "STT")
                     {
-                        columnWidths[colIndex] = sttWidth;   // ⭐ STT cố định
+                        columnWidths[colIndex] = sttWidth;
                     }
                     else
                     {
-                        columnWidths[colIndex] = col.Width;  // Các cột khác giữ nguyên
+                        columnWidths[colIndex] = col.Width;
                     }
 
                     colIndex++;
                 }
 
                 table.SetWidths(columnWidths);
-
 
                 // ===== HEADER =====
                 foreach (DataGridViewColumn col in dtGridViewChamCong.Columns)
@@ -1057,188 +1063,192 @@ namespace QuanLyNhanVien3
 
         // ===== XUẤT EXCEL =====
 
-        // ===== XUẤT EXCEL =====
+        // ==================== XUẤT EXCEL ====================
         private void xuatexcel_Click(object sender, EventArgs e)
         {
-            if (dtGridViewChamCong.Rows.Count > 0)
+            if (dtGridViewChamCong.Rows.Count == 0)
             {
-                // Tạo tên file tự động
-                string fileName = $"BaoCaoChamCong_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel Workbook|*.xlsx" })
+            // ⭐ XÁC ĐỊNH TIÊU ĐỀ DỰA VÀO FLAG
+            string reportTitle = isViewingDeletedRecords ? "DANH SÁCH CHẤM CÔNG ĐÃ XÓA" : "BÁO CÁO CHẤM CÔNG NHÂN VIÊN";
+            string fileName = isViewingDeletedRecords
+                ? $"ChamCongDaXoa_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"
+                : $"BaoCaoChamCong_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+
+            using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel Workbook|*.xlsx" })
+            {
+                sfd.FileName = fileName;
+
+                if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    sfd.FileName = fileName;
-
-                    if (sfd.ShowDialog() == DialogResult.OK)
+                    try
                     {
-                        try
+                        using (XLWorkbook wb = new XLWorkbook())
                         {
-                            using (XLWorkbook wb = new XLWorkbook())
+                            var ws = wb.Worksheets.Add("ChamCong");
+
+                            // ===== TÊN CÔNG TY =====
+                            ws.Cell(1, 1).Value = "CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM";
+                            ws.Range(1, 1, 1, 11).Merge();
+                            ws.Cell(1, 1).Style.Font.Bold = true;
+                            ws.Cell(1, 1).Style.Font.FontSize = 14;
+                            ws.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            ws.Cell(1, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+                            // ===== TIÊU ĐỀ ĐỘNG =====
+                            ws.Cell(2, 1).Value = reportTitle;
+                            ws.Range(2, 1, 2, 11).Merge();
+                            ws.Cell(2, 1).Style.Font.Bold = true;
+                            ws.Cell(2, 1).Style.Font.FontSize = 16;
+                            ws.Cell(2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            ws.Cell(2, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+                            // ===== NGÀY XUẤT =====
+                            ws.Cell(3, 1).Value = "Ngày xuất báo cáo: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                            ws.Cell(3, 1).Style.Font.Italic = true;
+
+                            int startRow;
+
+                            // ⭐ CHỈ HIỂN THỊ THÔNG TIN LỌC KHI KHÔNG PHẢI DANH SÁCH ĐÃ XÓA
+                            if (!isViewingDeletedRecords)
                             {
-                                var ws = wb.Worksheets.Add("ChamCong");
-
-                                // ===== TÊN CÔNG TY =====
-                                ws.Cell(1, 1).Value = "CÔNG TY TNHH WISTRON INFOCOMM VIỆT NAM";
-                                ws.Range(1, 1, 1, 11).Merge();
-                                ws.Cell(1, 1).Style.Font.Bold = true;
-                                ws.Cell(1, 1).Style.Font.FontSize = 14;
-                                ws.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                                ws.Cell(1, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-
-                                // ===== TIÊU ĐỀ CHÍNH =====
-                                ws.Cell(2, 1).Value = "BÁO CÁO CHẤM CÔNG NHÂN VIÊN";
-                                ws.Range(2, 1, 2, 11).Merge();
-                                ws.Cell(2, 1).Style.Font.Bold = true;
-                                ws.Cell(2, 1).Style.Font.FontSize = 16;
-                                ws.Cell(2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                                ws.Cell(2, 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-
-                                // ===== NGÀY XUẤT (THỜI GIAN HIỆN TẠI) =====
-                                ws.Cell(3, 1).Value = "Ngày xuất báo cáo: " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-                                ws.Cell(3, 1).Style.Font.Italic = true;
-
                                 // ===== THÔNG TIN PHÒNG BAN & CHỨC VỤ =====
                                 ws.Cell(5, 1).Value = "Phòng Ban";
                                 ws.Cell(5, 2).Value = cbBoxMaPB.Text;
                                 ws.Cell(6, 1).Value = "Chức vụ";
                                 ws.Cell(6, 2).Value = cbBoxChucVu.Text != "" ? cbBoxChucVu.Text : "Tất cả";
 
-                                // ===== HEADER BẢNG DỮ LIỆU =====
-                                int startRow = 7;
-                                ws.Cell(startRow, 1).Value = "DANH SÁCH CHẤM CÔNG";
-                                ws.Range(startRow, 1, startRow, 11).Merge();
-                                ws.Cell(startRow, 1).Style.Font.Bold = true;
-                                ws.Cell(startRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                                ws.Cell(startRow, 1).Style.Fill.BackgroundColor = XLColor.LightGray;
+                                startRow = 7;
+                            }
+                            else
+                            {
+                                startRow = 5;
+                            }
 
-                                // ===== TIÊU ĐỀ CỘT =====
-                                int headerRow = startRow + 1;
+                            // ===== HEADER BẢNG DỮ LIỆU =====
+                            ws.Cell(startRow, 1).Value = reportTitle;
+                            ws.Range(startRow, 1, startRow, 11).Merge();
+                            ws.Cell(startRow, 1).Style.Font.Bold = true;
+                            ws.Cell(startRow, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            ws.Cell(startRow, 1).Style.Fill.BackgroundColor = XLColor.LightGray;
 
-                                int colIndex = 1;
-                                for (int i = 0; i < dtGridViewChamCong.Columns.Count; i++)
+                            // ===== TIÊU ĐỀ CỘT =====
+                            int headerRow = startRow + 1;
+
+                            int colIndex = 1;
+                            for (int i = 0; i < dtGridViewChamCong.Columns.Count; i++)
+                            {
+                                if (dtGridViewChamCong.Columns[i].Visible)
                                 {
-                                    if (dtGridViewChamCong.Columns[i].Visible)
-                                    {
-                                        ws.Cell(headerRow, colIndex).Value = dtGridViewChamCong.Columns[i].HeaderText;
-                                        ws.Cell(headerRow, colIndex).Style.Font.Bold = true;
-                                        ws.Cell(headerRow, colIndex).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                                        ws.Cell(headerRow, colIndex).Style.Fill.BackgroundColor = XLColor.LightGray;
-                                        colIndex++;
-                                    }
+                                    ws.Cell(headerRow, colIndex).Value = dtGridViewChamCong.Columns[i].HeaderText;
+                                    ws.Cell(headerRow, colIndex).Style.Font.Bold = true;
+                                    ws.Cell(headerRow, colIndex).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                                    ws.Cell(headerRow, colIndex).Style.Fill.BackgroundColor = XLColor.LightGray;
+                                    colIndex++;
                                 }
+                            }
 
-                                // ===== GHI DỮ LIỆU =====
-                                int dataStartRow = headerRow + 1;
-                                for (int i = 0; i < dtGridViewChamCong.Rows.Count; i++)
-                                {
-                                    colIndex = 1;
-                                    for (int j = 0; j < dtGridViewChamCong.Columns.Count; j++)
-                                    {
-                                        if (dtGridViewChamCong.Columns[j].Visible)
-                                        {
-                                            var cellValue = dtGridViewChamCong.Rows[i].Cells[j].Value;
-
-                                            if (cellValue is DateTime)
-                                            {
-                                                ws.Cell(dataStartRow + i, colIndex).Value = ((DateTime)cellValue).ToString("dd/MM/yyyy");
-                                            }
-                                            else
-                                            {
-                                                ws.Cell(dataStartRow + i, colIndex).Value = cellValue?.ToString();
-                                            }
-
-                                            // Căn giữa cho cột STT
-                                            if (dtGridViewChamCong.Columns[j].HeaderText == "STT")
-                                            {
-                                                ws.Cell(dataStartRow + i, colIndex).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                                            }
-
-                                            ws.Cell(dataStartRow + i, colIndex).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                                            colIndex++;
-                                        }
-                                    }
-                                }
-
-                                // ===== BORDER CHO BẢNG DỮ LIỆU =====
-                                int lastDataRow = dataStartRow + dtGridViewChamCong.Rows.Count - 1;
-                                int totalColumns = dtGridViewChamCong.Columns.Cast<DataGridViewColumn>().Count(c => c.Visible);
-                                var tableRange = ws.Range(startRow, 1, lastDataRow, totalColumns);
-                                tableRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                                tableRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-
-                                // ===== PHẦN CHỮ KÝ =====
-                                int signatureRow = lastDataRow + 2;
-                                ws.Cell(signatureRow, 9).Value = "Hà Nội, ngày " + DateTime.Now.Day + " tháng " + DateTime.Now.Month + " năm " + DateTime.Now.Year;
-                                ws.Cell(signatureRow, 9).Style.Font.Italic = true;
-                                ws.Cell(signatureRow, 9).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                                ws.Range(signatureRow, 9, signatureRow, 11).Merge();
-
-                                ws.Cell(signatureRow + 1, 9).Value = "Người lập báo cáo";
-                                ws.Cell(signatureRow + 1, 9).Style.Font.Bold = true;
-                                ws.Cell(signatureRow + 1, 9).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                                ws.Range(signatureRow + 1, 9, signatureRow + 1, 11).Merge();
-
-                                ws.Cell(signatureRow + 4, 9).Value = nguoiDangNhap;
-                                ws.Cell(signatureRow + 4, 9).Style.Font.Bold = true;
-                                ws.Cell(signatureRow + 4, 9).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                                ws.Range(signatureRow + 4, 9, signatureRow + 4, 11).Merge();
-
-                                // ===== TỰ ĐỘNG ĐIỀU CHỈNH ĐỘ RỘNG CỘT =====
-                                // Đầu tiên tự động điều chỉnh tất cả các cột
-                                ws.Columns().AdjustToContents();
-
-                                // ===== TINH CHỈNH ĐỘ RỘNG CỤ THỂ =====
+                            // ===== GHI DỮ LIỆU =====
+                            int dataStartRow = headerRow + 1;
+                            for (int i = 0; i < dtGridViewChamCong.Rows.Count; i++)
+                            {
                                 colIndex = 1;
-                                for (int i = 0; i < dtGridViewChamCong.Columns.Count; i++)
+                                for (int j = 0; j < dtGridViewChamCong.Columns.Count; j++)
                                 {
-                                    if (dtGridViewChamCong.Columns[i].Visible)
+                                    if (dtGridViewChamCong.Columns[j].Visible)
                                     {
-                                        if (dtGridViewChamCong.Columns[i].HeaderText == "STT")
+                                        var cellValue = dtGridViewChamCong.Rows[i].Cells[j].Value;
+
+                                        if (cellValue is DateTime)
                                         {
-                                            // Tự động điều chỉnh độ rộng STT dựa trên nội dung
-                                            double autoWidth = ws.Column(colIndex).Width;
-                                            // Đặt tối thiểu 5, tối đa 8 để không quá rộng
-                                            ws.Column(colIndex).Width = Math.Max(5, Math.Min(autoWidth, 12));
+                                            ws.Cell(dataStartRow + i, colIndex).Value = ((DateTime)cellValue).ToString("dd/MM/yyyy");
                                         }
                                         else
                                         {
-                                            // Các cột khác tối thiểu width = 12
-                                            if (ws.Column(colIndex).Width < 12)
-                                            {
-                                                ws.Column(colIndex).Width = 12;
-                                            }
+                                            ws.Cell(dataStartRow + i, colIndex).Value = cellValue?.ToString();
                                         }
+
+                                        if (dtGridViewChamCong.Columns[j].HeaderText == "STT")
+                                        {
+                                            ws.Cell(dataStartRow + i, colIndex).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                                        }
+
+                                        ws.Cell(dataStartRow + i, colIndex).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                                         colIndex++;
                                     }
                                 }
-
-                                ws.Row(1).Height = 20;
-                                ws.Row(2).Height = 25;
-                                ws.Row(startRow).Height = 20;
-                                ws.Row(headerRow).Height = 20;
-
-                                // Lưu file
-                                wb.SaveAs(sfd.FileName);
                             }
 
-                            MessageBox.Show("Xuất Excel thành công!", "Thông báo",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            // ===== BORDER CHO BẢNG DỮ LIỆU =====
+                            int lastDataRow = dataStartRow + dtGridViewChamCong.Rows.Count - 1;
+                            int totalColumns = dtGridViewChamCong.Columns.Cast<DataGridViewColumn>().Count(c => c.Visible);
+                            var tableRange = ws.Range(startRow, 1, lastDataRow, totalColumns);
+                            tableRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                            tableRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 
-                            // Mở file tự động
-                            System.Diagnostics.Process.Start(sfd.FileName);
+                            // ===== PHẦN CHỮ KÝ =====
+                            int signatureRow = lastDataRow + 2;
+                            ws.Cell(signatureRow, 9).Value = "Hà Nội, ngày " + DateTime.Now.Day + " tháng " + DateTime.Now.Month + " năm " + DateTime.Now.Year;
+                            ws.Cell(signatureRow, 9).Style.Font.Italic = true;
+                            ws.Cell(signatureRow, 9).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            ws.Range(signatureRow, 9, signatureRow, 11).Merge();
+
+                            ws.Cell(signatureRow + 1, 9).Value = "Người lập báo cáo";
+                            ws.Cell(signatureRow + 1, 9).Style.Font.Bold = true;
+                            ws.Cell(signatureRow + 1, 9).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            ws.Range(signatureRow + 1, 9, signatureRow + 1, 11).Merge();
+
+                            ws.Cell(signatureRow + 4, 9).Value = nguoiDangNhap;
+                            ws.Cell(signatureRow + 4, 9).Style.Font.Bold = true;
+                            ws.Cell(signatureRow + 4, 9).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            ws.Range(signatureRow + 4, 9, signatureRow + 4, 11).Merge();
+
+                            // ===== TỰ ĐỘNG ĐIỀU CHỈNH ĐỘ RỘNG CỘT =====
+                            ws.Columns().AdjustToContents();
+
+                            colIndex = 1;
+                            for (int i = 0; i < dtGridViewChamCong.Columns.Count; i++)
+                            {
+                                if (dtGridViewChamCong.Columns[i].Visible)
+                                {
+                                    if (dtGridViewChamCong.Columns[i].HeaderText == "STT")
+                                    {
+                                        double autoWidth = ws.Column(colIndex).Width;
+                                        ws.Column(colIndex).Width = Math.Max(5, Math.Min(autoWidth, 12));
+                                    }
+                                    else
+                                    {
+                                        if (ws.Column(colIndex).Width < 12)
+                                        {
+                                            ws.Column(colIndex).Width = 12;
+                                        }
+                                    }
+                                    colIndex++;
+                                }
+                            }
+
+                            ws.Row(1).Height = 20;
+                            ws.Row(2).Height = 25;
+                            ws.Row(startRow).Height = 20;
+                            ws.Row(headerRow).Height = 20;
+
+                            wb.SaveAs(sfd.FileName);
                         }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Lỗi xuất Excel: " + ex.Message, "Lỗi",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+
+                        MessageBox.Show("Xuất Excel thành công!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        System.Diagnostics.Process.Start(sfd.FileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi xuất Excel: " + ex.Message, "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-            }
-            else
-            {
-                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -1257,6 +1267,7 @@ namespace QuanLyNhanVien3
             
         }
 
+        // ==================== SỰ KIỆN NÚT HIỂN THỊ ĐÃ XÓA ====================
         private void buttonhienthidaxoa_Click(object sender, EventArgs e)
         {
             try
@@ -1264,24 +1275,24 @@ namespace QuanLyNhanVien3
                 cn.connect();
 
                 string query = @"
-            SELECT 
-                ROW_NUMBER() OVER (ORDER BY cc.Ngay_TuanhCD233018 DESC, nv.HoTen_TuanhCD233018) AS [STT],
-                cc.Id_TuanhCD233018 AS [ID],
-                cc.MaChamCong_TuanhCD233018 AS [Mã chấm công],
-                nv.MaNV_TuanhCD233018 AS [Mã NV],
-                nv.HoTen_TuanhCD233018 AS [Họ tên],
-                pb.TenPB_ThuanCD233318 AS [Phòng ban],
-                cv.TenCV_KhangCD233181 AS [Chức vụ],
-                cc.Ngay_TuanhCD233018 AS [Ngày],
-                CONVERT(VARCHAR(8), cc.GioVao_TuanhCD233018, 108) AS [Giờ vào],
-                CONVERT(VARCHAR(8), cc.GioVe_TuanhCD233018, 108) AS [Giờ về],
-                cc.Ghichu_TuanhCD233018 AS [Ghi chú]
-            FROM tblChamCong_TuanhCD233018 cc
-            INNER JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
-            INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
-            INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
-            WHERE cc.DeletedAt_TuanhCD233018 = 1
-            ORDER BY cc.Ngay_TuanhCD233018 DESC, nv.HoTen_TuanhCD233018";
+        SELECT 
+            ROW_NUMBER() OVER (ORDER BY cc.Ngay_TuanhCD233018 DESC, nv.HoTen_TuanhCD233018) AS [STT],
+            cc.Id_TuanhCD233018 AS [ID],
+            cc.MaChamCong_TuanhCD233018 AS [Mã chấm công],
+            nv.MaNV_TuanhCD233018 AS [Mã NV],
+            nv.HoTen_TuanhCD233018 AS [Họ tên],
+            pb.TenPB_ThuanCD233318 AS [Phòng ban],
+            cv.TenCV_KhangCD233181 AS [Chức vụ],
+            cc.Ngay_TuanhCD233018 AS [Ngày],
+            CONVERT(VARCHAR(8), cc.GioVao_TuanhCD233018, 108) AS [Giờ vào],
+            CONVERT(VARCHAR(8), cc.GioVe_TuanhCD233018, 108) AS [Giờ về],
+            cc.Ghichu_TuanhCD233018 AS [Ghi chú]
+        FROM tblChamCong_TuanhCD233018 cc
+        INNER JOIN tblNhanVien_TuanhCD233018 nv ON cc.NhanVienId_TuanhCD233018 = nv.Id_TuanhCD233018
+        INNER JOIN tblChucVu_KhangCD233181 cv ON nv.MaCV_KhangCD233181 = cv.MaCV_KhangCD233181
+        INNER JOIN tblPhongBan_ThuanCD233318 pb ON cv.MaPB_ThuanCD233318 = pb.MaPB_ThuanCD233318
+        WHERE cc.DeletedAt_TuanhCD233018 = 1
+        ORDER BY cc.Ngay_TuanhCD233018 DESC, nv.HoTen_TuanhCD233018";
 
                 using (SqlDataAdapter da = new SqlDataAdapter(query, cn.conn))
                 {
@@ -1290,11 +1301,9 @@ namespace QuanLyNhanVien3
 
                     dtGridViewChamCong.DataSource = dt;
 
-                    // Ẩn cột ID
                     if (dtGridViewChamCong.Columns["ID"] != null)
                         dtGridViewChamCong.Columns["ID"].Visible = false;
 
-                    // Đặt độ rộng cột STT
                     if (dtGridViewChamCong.Columns["STT"] != null)
                     {
                         dtGridViewChamCong.Columns["STT"].Width = 50;
@@ -1308,6 +1317,9 @@ namespace QuanLyNhanVien3
                     }
                 }
 
+                // ⭐ ĐẶT FLAG = TRUE
+                isViewingDeletedRecords = true;
+
                 cn.disconnect();
             }
             catch (Exception ex)
@@ -1317,7 +1329,6 @@ namespace QuanLyNhanVien3
                 cn.disconnect();
             }
         }
-
         private void buttonkhoiphuc_Click(object sender, EventArgs e)
         {
             try
